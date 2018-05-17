@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- res.company form view -->
+        <record model="ir.ui.view" id="view_company_inherit_group_email">
+            <field name="name">res.company.group_email.form.inherit</field>
+            <field name="inherit_id" ref="base.view_company_form" />
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="Group Emails" name="group_emails">
+                        <group col="4" colspan="4">
+                            <field name="hr_group_email"/>
+                            <field name="fi_group_email"/>
+                            <field name="prcrmnt_group_email"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

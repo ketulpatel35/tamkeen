@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_order_line_budget,purchase.order.line,purchase.model_purchase_order_line,purchase_config.group_budget_approval_po,1,1,0,0
+access_stock_picking_type_user,stock.picking.type user,stock.model_stock_picking_type,purchase_config.group_budget_approval_po,1,0,0,0
+access_account_invoice_line_purchase,account_invoice.line purchase,account.model_account_invoice_line,purchase_config.group_budget_approval_po,1,1,1,1
+access_account_invoice_purchase,account_invoice purchase,account.model_account_invoice,purchase_config.group_budget_approval_po,1,1,1,1
+access_account_invoice_tax_purchase,account_invoice.tax purchase,account.model_account_invoice_tax,purchase_config.group_budget_approval_po,1,1,1,1
+access_purchase_order_line,purchase.order.line,purchase.model_purchase_order_line,account.group_account_manager,1,1,0,0
+
+access_purchase_order_ceo,purchase.order.ceo,purchase.model_purchase_order,purchase_config.group_ceo_approval_po,1,1,0,0
+access_purchase_order_line_ceo,purchase.order.line.ceo,purchase.model_purchase_order_line,purchase_config.group_ceo_approval_po,1,1,0,0
+access_purchase_order_budget,purchase.order.budget,purchase.model_purchase_order,purchase_config.group_budget_approval_po,1,1,0,0
+access_purchase_order_line_budget,purchase.order.line.budget,purchase.model_purchase_order_line,purchase_config.group_budget_approval_po,1,1,0,0
+
+access_purchase_order_view_all,purchase.order.view.all,purchase.model_purchase_order,purchase_config.group_view_all_po,1,0,0,0
+access_purchase_order_line_view_all,purchase.order.line.view.all,purchase.model_purchase_order_line,purchase_config.group_view_all_po,1,0,0,0
+account_partial_reconcile_purchase_user,account.partial.reconcile.purchase.user,account.model_account_partial_reconcile,purchase.group_purchase_user,1,1,1,0

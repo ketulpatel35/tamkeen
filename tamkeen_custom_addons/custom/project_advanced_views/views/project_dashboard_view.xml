@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <template id="assets_backend" name="project_management_assets"
+              inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link
+                    href="/project_advanced_views/static/src/less/project_dashboard.less"
+                  rel="stylesheet"/>
+        </xpath>
+    </template>
+
+    <record id="view_project_kanban_inherited_for_new_dashboard"
+            model="ir.ui.view">
+        <field name="name">project.project.kanban.inherited</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="replace">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban" on_create="project.open_create_project">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="use_tasks"/>
+                    <field name="color"/>
+                    <field name="task_count"/>
+                    <field name="task_needaction_count"/>
+                    <field name="label_tasks"/>
+                    <field name="alias_id"/>
+                    <field name="alias_name"/>
+                    <field name="alias_domain"/>
+                    <field name="doc_count"/>
+                    <field name="is_favorite"/>
+                    <field name="control_project_manager_id"/>
+                    <field name="project_sponsor_id"/>
+                    <field name="partner_id"/>
+                    <field name="spi"/>
+                    <field name="avg_progress_percentage"/>
+                    <field name="milestones_schedule_ids"/>
+                    <field name="issue_ids" invisible="1"/>
+                    <field name="risks_ids" invisible="1"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                                <div class="o_project_kanban_main">
+                                    <div class="o_kanban_card_content o_visible">
+                                        <div class="o_kanban_primary_left">
+                                            <div class="o_primary">
+                                                <a type="open">
+                                                    <span><b>P Name</b>: <field
+                                                            name="code"/> <t
+                                                            t-esc="record.name.value"/></span>
+                                                </a>
+                                            </div>
+                                            <div class="o_primary">
+                                                <span><b>PM</b>: <field
+                                                        name="user_id"/>
+                                                </span>
+                                            </div>
+                                            <div class="o_primary">
+                                                <span><b>Control PM</b>: <field
+                                                        name="control_project_manager_id"/>
+                                                </span>
+                                            </div>
+                                            <div class="o_primary">
+                                                <span><b>Sponsor</b>: <field
+                                                        name="project_sponsor_id"/>
+                                                </span>
+                                            </div>
+                                            <div class="o_primary">
+                                                <span><b>Customer</b>: <field
+                                                        name="partner_id"/>
+                                                </span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <span><b>SPI</b>: <field
+                                                            name="spi"/></span><span><b>Completion %</b>:
+                                                    <field
+                                                            name="avg_progress_percentage"/>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_manage_pane o_invisible">
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                            <div groups="project.group_project_manager">
+                                                <a type="edit"><b>Settings</b></a>
+                                            </div>
+                                                 <a
+                                                        name="%(project.action_project_task_user_tree_filtered)d" type="action"><b>Milestones</b></a>
+                                        </div>
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                                <a
+                                                        name="%(action_project_risk_user_tree)d" type="action"><b>Risks</b></a>
+                                        </div>
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                                <a
+                                                        name="%(project_issue.action_project_issue_report_filtered)d" type="action"><b>Issues</b></a>
+                                        </div>
+                                        <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                                <a name="%(project.action_project_task_user_tree_filtered)d" type="action"><b>Tasks</b></a>
+                                        </div>
+                                        <div t-if="widget.editable" class="o_project_kanban_colorpicker">
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_project_kanban_manage o_invisible">
+                                        <a class="o_kanban_manage_toggle_button o_left" href="#">More <i class="fa fa-caret-down"/></a>
+                                        <a type="object" name="toggle_favorite" class="o_right"><i t-attf-class="oe_inline fa o_dashboard_star #{record.is_favorite.raw_value ? 'fa-star' : 'fa-star-o'}" title="Add/remove from favorite"/></a>
+                                    </div>
+                                </div>
+
+                                <div class="o_project_kanban_boxes">
+                                    <div class="o_project_kanban_box">
+                                        <a
+                                                name="%(project_milstone_schedule.action_view_project_milestones_from_project)d" type="action">
+                                            <span class="o_value"><t t-raw="record.milestones_schedule_ids.raw_value.length"/></span>
+                                            <span class="o_label"><b>Milestones</b></span>
+                                        </a>
+                                    </div>
+                                    <div  class="o_project_kanban_box">
+                                        <a
+                                                name="%(project_management.action_view_project_risks_from_project)d" type="action">
+                                            <span class="o_value"><t t-raw="record.risks_ids.raw_value.length"/></span>
+                                            <span class="o_label"><b>Risks</b></span>
+                                        </a>
+                                    </div>
+                                    <div class="o_project_kanban_box">
+                                        <a
+                                                name="%(project_issue.act_project_project_2_project_issue_all)d" type="action">
+                                            <span class="o_value"><t t-raw="record.issue_ids.raw_value.length"/></span>
+                                            <span class="o_label"><b>Issues</b></span>
+                                        </a>
+                                    </div>
+                                    <div class="o_project_kanban_box">
+                                        <a
+                                                name="%(project.act_project_project_2_project_task_all)d" type="action">
+                                            <span class="o_value"><t t-esc="record.task_count.value"/></span>
+                                            <span
+                                                    class="o_label"><b>Tasks</b></span>
+                                        </a>
+                                        <a t-if="record.task_needaction_count.raw_value" class="o_needaction" name="%(project.act_project_project_2_project_task_all)d" type="action" context="{'search_default_message_needaction': 1}">
+                                            <t t-esc="record.task_needaction_count.raw_value"/>
+                                        </a>
+                                    </div>
+                                    <div t-if="record.doc_count.raw_value" class="o_project_kanban_box">
+                                        <a name="attachment_tree_view" type="object">
+                                            <span class="o_value"><t t-esc="record.doc_count.value"/></span>
+                                            <span class="o_label"><b>Documents</b></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+
+                </kanban>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

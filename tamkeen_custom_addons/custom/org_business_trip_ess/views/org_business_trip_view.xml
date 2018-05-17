@@ -1,0 +1,62 @@
+<odoo>
+
+    <!-- Business Trip Search View -->
+    <record id="org_business_trip_search_view_ess" model="ir.ui.view">
+        <field name="name">org.business.trip.search.view.ess</field>
+        <field name="model">org.business.trip</field>
+        <field name="inherit_id"
+               ref="org_business_trip.org_business_trip_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter" position="after">
+                <!-- Pending Approval -->
+                <filter string="Pending Approval" name="bt_pending_approval"
+                        domain="['|','&amp;',('employee_id.bt_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.bt_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.bt_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action for ESS -->
+    <record id="action_bt_requests_ess" model="ir.actions.act_window">
+        <field name="name">Business Trip Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="context">
+            {'readonly_by_pass': True}
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Business Trip Request.
+            </p>
+            <p>
+                Press create button to apply for any Business Trip request,
+                The system will take care from the approval.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for MSS -->
+    <record id="action_bt_requests_approval_mss"
+            model="ir.actions.act_window">
+        <field name="name">Business Trip Request To Approve</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field
+                name="context">{'search_default_bt_pending_approval':1,'readonly_by_pass': True}</field>
+        <field name="domain">['|',('employee_id.bt_manager_id.user_id.id','=',uid),'|',('employee_id.bt_vp_id.user_id.id','=',uid),('employee_id.bt_ceo_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+	 <record id="login_attempt_view_form" model="ir.ui.view">
+            <field name="name">login.attempt.view.form</field>
+            <field name="model">login.attempt</field>
+            <field name="arch" type="xml">
+                <form string="Login attempts">
+                    <sheet>
+                        <group colspan="4" col="4">
+                        	<field name="remote_address" readonly="True"
+                                   colspan="2"/>
+                            <field name="login_datetime" readonly="True"
+                                   colspan="2"/>
+                            <field name="failed_user_id" readonly="True"
+                                   colspan="2"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="login_attempt_view_tree" model="ir.ui.view">
+            <field name="name">login.attempt.view.tree</field>
+            <field name="model">login.attempt</field>
+            <field name="arch" type="xml">
+                <tree string="Login attempts">
+                	<field name="remote_address"/>
+                    <field name="login_datetime"/>
+                    <field name="failed_user_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="login_attempt_view_search" model="ir.ui.view">
+            <field name="name">login.attempt.view.search</field>
+            <field name="model">login.attempt</field>
+            <field name="arch" type="xml">
+                <search string="Login attempts">
+                	<field name="remote_address"/>
+                    <field name="login_datetime"/>
+                    <field name="failed_user_id" />
+                </search>
+            </field>
+        </record>
+
+        <record id="action_login_attempt" model="ir.actions.act_window">
+            <field name="name">Login Attempt</field>
+            <field name="res_model">login.attempt</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="login_attempt_view_search"/>
+        </record>
+
+
+	</data>
+</openerp>

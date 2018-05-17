@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem id="menu_shift_timeline"
+              name="Shift Timeline"
+              parent="organization_structure.menu_org_configuration"
+              action="action_shift_timeline_template"
+              sequence="4"/>
+</odoo>

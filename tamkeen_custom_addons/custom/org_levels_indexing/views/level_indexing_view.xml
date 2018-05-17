@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Level Indexing Tree View-->
+    <record id="level_indexing_tree_view" model="ir.ui.view">
+        <field name="name">level.indexing.tree.view</field>
+        <field name="model">level.indexing</field>
+        <field name="arch" type="xml">
+            <tree string="Level Indexing">
+                <field name="name"/>
+                <field name="short_name"/>
+                <field name="code"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="model_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Level Indexing Form View-->
+    <record id="level_indexing_form_view" model="ir.ui.view">
+        <field name="name">level.indexing.form.view</field>
+        <field name="model">level.indexing</field>
+        <field name="arch" type="xml">
+            <form string="Level Indexing">
+                <sheet string="Level Indexing">
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="short_name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="model_id"/>
+                        <field name="valid_from"/>
+                        <field name="valid_to"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Level Indexing Search-->
+    <record id="level_indexing_search_view" model="ir.ui.view">
+        <field name="name">level.indexing.search.view</field>
+        <field name="model">level.indexing</field>
+        <field name="arch" type="xml">
+            <search string="Employment Contract">
+                <field name="name" string="Reference"/>
+                <field name="short_name"/>
+                <field name="code"/>
+                <field name="model_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Level Indexing Action -->
+    <record id="level_indexing_action"
+            model="ir.actions.act_window">
+        <field name="name">Level Indexing</field>
+        <field name="res_model">level.indexing</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

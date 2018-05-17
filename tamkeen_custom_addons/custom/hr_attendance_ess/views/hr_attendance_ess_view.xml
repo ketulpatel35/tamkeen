@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+         <!--Employee create own Appriasal -->
+        <!--<menuitem name="Employee Appraisal"-->
+                  <!--id="employee_appraisal_mian_ess_menu"-->
+                  <!--parent="emp_self_services.sub_mian_ess_menu"-->
+                  <!--groups="base.group_user"/>-->
+
+        <menuitem name="Attendance" id="attendance_employee_main_menu"
+                  parent="emp_self_services.sub_mian_ess_menu" sequence="280"/>
+
+        <menuitem name="Attendance" id="attendance_manager_main_menu"
+                  parent="emp_self_services.sub_mian_mss_menu" sequence="280"/>
+
+        <menuitem name="My Attendance" id="attendance_employee_menu_id"
+                  parent="attendance_employee_main_menu"
+                  action="hr_attendance_employee_action" sequence="300"/>
+
+        <menuitem name="Employee Attendance" id="attendance_manager_menu_id"
+                  parent="attendance_manager_main_menu"
+                  action="hr_attendance_manager_action" sequence="500"/>
+
+        <menuitem action="change_request_employee_action"
+              id="change_request_employee_menu_id"
+              parent="attendance_employee_main_menu"
+              sequence="310"/>
+
+        <menuitem action="change_request_manager_action"
+              id="change_request_manager_menu_id"
+                  parent="attendance_manager_main_menu"
+              sequence="310"/>
+    </data>
+</odoo>

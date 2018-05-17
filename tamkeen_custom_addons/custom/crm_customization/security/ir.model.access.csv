@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink","active"
+view_all_opportunity_crm,view.all.opportunity.crm,crm.model_crm_lead,crm_customization.group_all_opportunity,1,0,0,0
+view_all_sale_order_crm,view.all.sale.order.opportunity.crm,sale.model_sale_order,crm_customization.group_all_opportunity,1,0,0,0
+normal_user_crm_attachment,normal.user.crm.attachment,model_crm_attachment,sales_team.group_sale_salesman_all_leads,1,1,1,1
+normal_user_crm_proposal,normal.user.crm.proposal,model_crm_proposal,sales_team.group_sale_salesman_all_leads,1,1,1,1
+normal_user_crm_bidding,normal.user.crm.bidding,model_crm_bidding,sales_team.group_sale_salesman_all_leads,1,1,1,1
+

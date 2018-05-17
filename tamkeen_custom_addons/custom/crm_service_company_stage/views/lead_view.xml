@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_qualification.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="stage_state" invisible="True"></field>
+                </field>
+                <page name="qualification" position="attributes">
+                    <attribute name="attrs">{'invisible': [('stage_state', '!=','qualification')]}</attribute>
+                </page>
+            </field>
+        </record>
+
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_proposal.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="stage_state" invisible="True"></field>
+                </field>
+                <page name="proposition" position="attributes">
+                    <attribute name="attrs">{'invisible': [('stage_state', '!=','proposition')]}</attribute>
+                </page>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

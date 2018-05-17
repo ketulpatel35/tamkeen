@@ -1,0 +1,121 @@
+<odoo>
+    <!-- form view -->
+    <record id="print_payroll_register_wiz" model="ir.ui.view">
+        <field name="name">print.payroll.report.wiz.form</field>
+        <field name="model">print.payroll.report.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Payroll Register">
+                <group>
+                    <field name="is_payroll_register_report" invisible="1"/>
+                    <field name="is_payslip_details_report" invisible="1"/>
+                    <field name="is_summary_report" invisible="1"/>
+                    <field name="payroll_period_id"
+                           context="{'order_display': 'date_start desc'}"
+                           required="1"/>
+                    <field name="report_format"
+                           attrs="{'invisible':[('is_summary_report','!=',True)]}"/>
+                </group>
+                <group col="4" colspan="4"
+                       attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}">
+                    <field name="date_start" readonly="1"
+                           attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="date_end" readonly="1"
+                           attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                </group>
+                <group col="4" colspan="4" string="Columns To Display"
+                       attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}">
+                    <field name="is_cost_center" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_basic" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_rate_allowance" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_other_earnings" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_transport_allowance" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_housing_allowance" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_other_allowances" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_gosi_deduction" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_other_deductions" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_total_deductions" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_total_gross" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_total_net_salary" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                    <field name="is_cost_of_living_allowance" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                </group>
+                <group>
+                    <field name="is_has_no_child" attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>
+                </group>
+                <notebook attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}">
+                    <!--<page string="Filter by Department"-->
+                          <!--attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}">-->
+                        <!--<field name="department_ids"-->
+                               <!--attrs="{'invisible':['|', ('is_summary_report','!=',True), ('report_format', '!=', 'xls')]}"/>-->
+                    <!--</page>-->
+                </notebook>
+                <footer>
+                    <button string="Print" name="print_report" type="object"
+                            attrs="{'invisible':[('report_format', '!=', 'pdf')]}"/>
+                    <button string="Print XLS" name="print_xls_report"
+                            attrs="{'invisible':[('report_format', '!=', 'xls')]}"
+                            type="object"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- payroll register report Menu Action -->
+    <record model="ir.actions.act_window"
+            id="action_print_payroll_register_wiz">
+        <field name="name">Print Payroll Register</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">print.payroll.report.wiz</field>
+        <field name="view_id" ref="print_payroll_register_wiz"/>
+        <field name="context">{'default_is_payroll_register_report':1}</field>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- payroll register report sub menu -->
+    <menuitem name="Print Payroll Register"
+              id="print_payroll_register_wiz_menu"
+              parent="main_payroll_reports_menu" sequence="3"
+              action="action_print_payroll_register_wiz"/>
+
+    <!-- payroll report payslip detail menu action -->
+    <record model="ir.actions.act_window"
+            id="action_print_pay_slip_detail_wiz">
+        <field name="name">Print Pay Slip Details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">print.payroll.report.wiz</field>
+        <field name="view_id" ref="print_payroll_register_wiz"/>
+        <field name="context">{'default_is_payslip_details_report':1}</field>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- payroll report payslip detail sub menu -->
+    <menuitem name="Print Pay Slip Details"
+              id="print_pay_slip_detail_wiz_menu"
+              parent="main_payroll_reports_menu" sequence="4"
+              action="action_print_pay_slip_detail_wiz"/>
+
+
+    <!-- payroll summary report menu action -->
+    <record model="ir.actions.act_window"
+            id="action_print_summary_report_wiz">
+        <field name="name">Print Payroll Summary</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">print.payroll.report.wiz</field>
+        <field name="view_id" ref="print_payroll_register_wiz"/>
+        <field name="context">{'default_is_summary_report':1}</field>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- Print Payroll Summary report sub menu -->
+    <menuitem name="Print Payroll Summary"
+              id="print_summary_report_wiz_menu"
+              parent="main_payroll_reports_menu" sequence="5"
+              action="action_print_summary_report_wiz"/>
+
+</odoo>

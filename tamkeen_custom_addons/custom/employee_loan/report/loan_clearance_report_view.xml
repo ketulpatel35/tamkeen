@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="loan_clearance_report">
+            <t t-call="employee_loan.loan_clearance_report_header_footer">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <t t-if="o.state != 'closed'">
+                                <div class="row">
+                                    You will be eligible to print this
+                                    report after closing your loan request.
+                                </div>
+                            </t>
+                            <t t-if="o.state == 'closed'">
+                                <div class="row">
+                                    <center>
+                                        <div style="font-size:14px">
+                                            <b>To Whom It May Concern</b>
+                                        </div>
+                                    </center>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <!-- Employee Info -->
+                                    <table class="table table-bordered"
+                                           width="100%" height="100%"
+                                           style="border: 1px solid #000000;font-size:12px">
+                                        <tbody>
+                                            <tr>
+                                                <td height="10%">
+                                                    <b>Employee Name</b>
+                                                </td>
+                                                <td height="10%">
+                                                    <t t-if="o.employee_id">
+                                                        <span t-esc="o.employee_id.name"/>
+                                                    </t>
+                                                </td>
+                                                <td height="10%">
+                                                    <t t-if="o.employee_id.identification_id">
+                                                        <b>Identity Number</b>
+                                                    </t>
+                                                    <t t-if="o.employee_id.iqama_number">
+                                                        <b>Iqama Number</b>
+                                                    </t>
+                                                    <t t-if="not o.employee_id.identification_id and not o.employee_id.iqama_number">
+                                                        <b>Identity/Iqama Number
+                                                        </b>
+                                                    </t>
+                                                </td>
+                                                <td height="10%" colspan="3">
+                                                    <t t-if="o.employee_id.identification_id">
+                                                        <span t-esc="o.employee_id.identification_id"/>
+                                                    </t>
+                                                    <t t-if="o.employee_id.iqama_number">
+                                                        <span t-esc="o.employee_id.iqama_number"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%">
+                                                    <b>Installment Amount</b>
+                                                </td>
+                                                <td height="10%">
+                                                    <t t-if="o.loan_installment_ids">
+                                                        <span t-esc="o.loan_installment_ids[0].amount"/>
+                                                    </t>
+                                                </td>
+                                                <td height="10%">
+                                                    <b>Total Loan Amount</b>
+                                                </td>
+                                                <td height="10%" colspan="3">
+                                                    <span t-esc="o.loan_amount"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%">
+                                                    <b>Start of Re-Payment</b>
+                                                </td>
+                                                <td height="10%">
+                                                    <t t-if="o.loan_installment_ids">
+                                                        <span t-esc="o.loan_installment_ids[0].due_date"/>
+                                                    </t>
+                                                </td>
+                                                <td height="10%">
+                                                    <b>End of Re-Payment</b>
+                                                </td>
+                                                <td height="10%" colspan="3">
+                                                    <span t-esc="o.loan_installment_ids[-1].due_date"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br/>
+                                    <br/>
+                                    <div>
+                                        We hereby inform you that the employee
+                                        described above has completed his
+                                        obligation to pay the loan amount. This
+                                        certificate does not cancel any future
+                                        obligation on the employee and he/she is
+                                        given this certificate upon his/her
+                                        request without any responsibility from the
+                                        company.
+                                    </div>
+                                    <br/><br/>
+                                    <h5>
+                                        <center>
+                                            <b>HR Department</b>
+                                        </center>
+                                    </h5>
+                                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                                    <div>
+                                        This certificate has been issued
+                                        electronically and is valid for
+                                        <span t-esc="o.loan_approval_policy_id.clearance_report_valid"/>
+                                        <span t-esc="o.loan_approval_policy_id.clearance_report_valid_unit"/>
+                                        from the issuing date.<br/>
+                                        For further information, Kindly contact:
+                                        <span t-esc="o.loan_approval_policy_id.clearance_report_contact"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="loan_clearance_report_header_footer">
+            <t
+                    t-call="employee_loan.loan_clearance_report_template_header"/>
+            <t t-raw="0"/>
+        </template>
+
+        <template id="loan_clearance_report_template_header">
+            <div class="header">
+                <div align="right">
+                    <img class="img-responsive"
+                         src="/employee_loan/static/description/icon.png"
+                         width="200px" height="75px"/>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

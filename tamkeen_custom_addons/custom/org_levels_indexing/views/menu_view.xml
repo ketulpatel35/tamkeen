@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem id="menu_level_indexing"
+              name="Level Indexing"
+              parent="organization_structure.menu_org_configuration"
+              action="level_indexing_action"
+              sequence="200" groups="organization_structure.group_planning_head"/>
+
+</odoo>

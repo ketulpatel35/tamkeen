@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                id="salary_certificate_detail_report"
+                model="hr.payslip"
+                string="Salary Certification"
+                report_type="qweb-pdf"
+                name="salary_certificate_report.salary_certificate_detail_report_template_id"
+                file="salary_certificate_report.salary_certificate_detail_report_template_id"
+                menu="False"
+        />
+        <act_window name="Salary Certification"
+            res_model="hr.payslip.wizard"
+            src_model="hr.payslip"
+             view_mode="form" target="new"
+            id="act_destination_wizard"/>
+
+        <report
+                id="salary_certificate_embassy_report"
+                model="hr.payslip"
+                string="Salary Certification Embassy"
+                report_type="qweb-pdf"
+                name="salary_certificate_report.salary_certificate_embassy_report_template_id"
+                file="salary_certificate_report.salary_certificate_embassy_report_template_id"
+                menu="False"
+        />
+
+        <report
+                id="salary_certificate_gross_report"
+                model="hr.payslip"
+                string="Salary Certification Gross"
+                report_type="qweb-pdf"
+                name="salary_certificate_report.salary_certificate_gross_report_template_id"
+                file="salary_certificate_report.salary_certificate_gross_report_template_id"
+                menu="False"
+        />
+
+        <report
+                id="salary_certificate_no_report"
+                model="hr.payslip"
+                string="Salary Certification No"
+                report_type="qweb-pdf"
+                name="salary_certificate_report.salary_certificate_no_report_template_id"
+                file="salary_certificate_report.salary_certificate_no_report_template_id"
+                menu="False"
+        />
+
+        <record id="payslip_destination_wizard_form_view" model="ir.ui.view">
+            <field name="name">Destination Payslip</field>
+            <field name="model">hr.payslip.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Destination Payslip">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="destination_english"/>
+                            <field name="destination_arabic"/>
+                            <field name="report_selection"/>
+                        </group>
+                        <group>
+                        <footer>
+                            <button type="object" name="generate_report"
+                                    string="Generate Report" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

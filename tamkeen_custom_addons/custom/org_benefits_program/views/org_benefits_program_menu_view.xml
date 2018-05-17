@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Benefits Program Main Menu Root -->
+    <menuitem id="org_benefits_program_root_menu"
+              name="Benefits Program"
+              web_icon="org_benefits_program,static/description/root_icon.png"/>
+
+    <!-- Benefits Program main Menu -->
+    <menuitem id="org_benefits_program_main_menu"
+              name="Benefits Program"
+              parent="org_benefits_program_root_menu"
+              sequence="1"/>
+
+    <!-- Benefits Program Sub main menu -->
+    <menuitem id="org_benefits_program_request_menu"
+              name="Benefits Program Request"
+              parent="org_benefits_program_main_menu"
+              sequence="1"/>
+
+    <!-- Benefits Program Request -->
+    <menuitem id="org_bp_request_menu"
+              name="Benefits Program Request"
+              groups="org_benefits_program.group_bp_normal_user"
+              parent="org_benefits_program_request_menu"
+              action="org_benefits_program_req_action_view"
+              sequence="1"/>
+
+    <!-- Hr Approval -->
+    <menuitem id="org_bp_request_hr_approval_menu"
+              action="action_bp_request_for_hr_approval"
+              parent="org_benefits_program_request_menu"
+              groups="org_benefits_program.group_bp_hr_approval"
+              name="HR Approval"
+              sequence="2"/>
+
+    <!-- Finance Approval -->
+    <menuitem id="org_bp_request_finance_approval_menu"
+              action="action_bp_request_for_finance_approval"
+              parent="org_benefits_program_request_menu"
+              groups="org_benefits_program.group_bp_finance_approval"
+              name="Finance Approval"
+              sequence="3"/>
+
+    <!-- View All -->
+    <menuitem id="org_bp_request_view_all_menu"
+              action="action_bp_request_for_view_all"
+              parent="org_benefits_program_request_menu"
+              name="View All Requests"
+              groups="org_benefits_program.group_bp_view_all"
+              sequence="4"/>
+
+    <!-- C Configuration -->
+    <!-- C Benefits Program Configuration main menu -->
+    <menuitem name="Configuration"
+              id="org_benefits_program_configuration_menu"
+              groups="org_benefits_program.group_bp_configuration"
+              sequence="2"
+              parent="org_benefits_program_root_menu"/>
+
+    <!-- C service panel -->
+    <menuitem id="org_benefits_program_panel_menu"
+              name="Benefits Program Type"
+              groups="org_benefits_program.group_bp_configuration"
+              action="action_service_panel_benefits_program"
+              parent="org_benefits_program_configuration_menu"
+              sequence="1"/>
+
+    <!-- C Service Panel Stages -->
+    <menuitem id="org_benefits_program_stages_menu"
+              name="Stages"
+              groups="org_benefits_program.group_bp_configuration"
+              action="action_displayed_stages_benefits_program"
+              parent="org_benefits_program_configuration_menu"
+              sequence="2"/>
+
+    <!-- C Sub Benefits -->
+    <menuitem id="sub_benefits_stages_menu"
+              name="Sub Benefits"
+              groups="org_benefits_program.group_bp_configuration"
+              action="bp_sub_benefits_action_views"
+              parent="org_benefits_program_configuration_menu"
+              sequence="3"/>
+
+    <!-- C Proofs -->
+    <menuitem id="sub_benefits_proof_menu"
+              name="Benefits Program Proofs"
+              groups="org_benefits_program.group_bp_configuration"
+              action="action_bp_proof_view"
+              parent="org_benefits_program_configuration_menu"
+              sequence="4"/>
+
+</odoo>

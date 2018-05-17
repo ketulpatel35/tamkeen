@@ -1,0 +1,76 @@
+<odoo>
+
+    <!-- Action for ESS -->
+    <record id="open_loan_pre_ess_requests" model="ir.actions.act_window">
+        <field name="name">Loan Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee.loan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="context">
+            {'readonly_by_pass': True}
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Loan Request.
+            </p>
+            <p>
+                Press create button to apply for any loan request, The system
+                will take care from the approval.
+            </p>
+        </field>
+    </record>
+
+    <record id="loan_request_search_view_inherit_for_ess"
+            model="ir.ui.view">
+        <field name="name">loan.request.search.view.inherit.for.ess</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="inherit_id"
+               ref="employee_loan.loan_pre_request_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter" position="after">
+                <!-- Pending Approval -->
+                <filter string="Pending Approval" name="loan_pending_approval"
+                        domain="['|','&amp;',('employee_id.loan_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.loan_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.loan_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')]"/>
+                <!-- Manager Approval -->
+                <filter string="Manager Approval" name="pending_approval"
+                        domain="[('employee_id.loan_manager_id.user_id.id','=',uid),('state','=','mngr_approval')]"/>
+                <!-- VP Approval -->
+                <filter string="VP Approval" name="vp_pending_approval"
+                        domain="[('employee_id.loan_vp_id.user_id.id','=',uid),('state','=','vp_approval')]"/>
+                <!-- CEO Approval -->
+                <filter string="CEO Approval" name="ceo_pending_approval"
+                        domain="[('employee_id.loan_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')]"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Action for MSS -->
+    <record id="open_loan_mngr_request_approval"
+            model="ir.actions.act_window">
+        <field name="name">Loan Request To Approve</field>
+        <field name="res_model">hr.employee.loan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_loan_pending_approval':1,'readonly_by_pass': True}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.loan_manager_id.user_id.id','=',uid),'|',('employee_id.loan_vp_id.user_id.id','=',uid),('employee_id.loan_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <!-- Appraisal Performance -->
+            <t t-if="widget.employee_data.is_bprta">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-money"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">
+                                Appraisal Performance
+                            </span>
+                            <div class="dash-btn">
+                                <t t-if="widget.employee_data.is_bprta">
+                                    <button class="btn btn-info btn-xs performance_appraisal_request_to_approve">
+                                        Request to Approve
+                                    </button>
+                                    <span class="btn btn-info btn-xs-num performance_appraisal_request_to_approve">
+                                        <t t-esc="widget.employee_data.performance_appraisal_request_to_approve"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

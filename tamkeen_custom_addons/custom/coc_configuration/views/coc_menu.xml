@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="purchase.menu_purchase_config"
+                  name="Configuration"
+                  parent="purchase.menu_purchase_root"
+                  sequence="100"
+                  groups="certificate_of_completion.group_coc_configuration,purchase.group_purchase_manager,purchase.group_purchase_user"/>
+
+        <!--Action for COC Configuration Panel-->
+        <record model="ir.actions.act_window" id="coc_configuration">
+            <field name="name">COC Service Congifuration Panel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.configuration.panel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'overtime_rquest': 1}</field>
+            <field name="domain">[('model_id.model','in',['certificate.of.completion'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new service.
+                </p>
+                <p>
+                    Press create button to create a new service.
+                </p>
+            </field>
+        </record>
+
+        <!--Action for coc stage configuration-->
+        <record model="ir.actions.act_window"
+                id="coc_stage_configuration">
+            <field name="name">COC Stages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.panel.displayed.states</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_model_id': 1,
+                'overtime_request': True
+                }
+            </field>
+            <field name="domain">[('model_id.model','in',['certificate.of.completion'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new stage.
+                </p>
+                <p>
+                    Press create button to create a new stage.
+                </p>
+            </field>
+        </record>
+
+        <!--Menu for COC Configuration-->
+        <menuitem
+                action="coc_configuration"
+                id="coc_configuration_menu"
+                parent="purchase.menu_purchase_config" sequence="16"
+                groups="certificate_of_completion.group_coc_configuration"/>
+
+        <!--Menu for COC stage onfiguration-->
+        <menuitem
+                action="coc_stage_configuration"
+                id="coc_stages_configuration_menu"
+                parent="purchase.menu_purchase_config" sequence="17"
+                groups="certificate_of_completion.group_coc_configuration"/>
+
+    </data>
+</odoo>

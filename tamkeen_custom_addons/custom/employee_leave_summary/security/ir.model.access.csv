@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_work_resumption_employee,access.work.resumption.employee,model_work_resumption,hr_holidays_extension.group_leave_manage_normal_user,1,1,0,0
+access_work_resumption_user,access.work.resumption.user,model_work_resumption,hr_holidays.group_hr_holidays_user,1,1,1,0
+access_work_resumption_manager,access.work.resumption.manager,model_work_resumption,hr_holidays_extension.group_leave_bu_manager_approval,1,1,1,0
+access_work_resumption_admin,access.work.resumption.admin,model_work_resumption,hr_admin.group_hr_admin,1,1,1,1
+
+access_work_resumption_ceo,access.work.resumption.ceo,model_work_resumption,hr_holidays_extension.group_leave_ceo_approval,1,1,1,0

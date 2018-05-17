@@ -1,0 +1,78 @@
+<odoo>
+    <data>
+
+        <record id="overtime_report_print_link_view" model="ir.ui.view">
+            <field name="name">overtime.report.print.link</field>
+            <field name="model">overtime.report.print.link</field>
+            <field name="arch" type="xml">
+                <form string="Excel Output">
+                    <separator colspan="4" string="Please save file as .xls excel format"/>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <field name="overtime_xls_output" filename='name' readonly='1'/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--=============== Overtime XLS Report Wizard==================-->
+        <record id="hr_overtime_report_xls_view" model="ir.ui.view">
+            <field name="name">hr.overtime.report.xls.view</field>
+            <field name="model">hr.overtime.report.xls</field>
+            <field name="arch" type="xml">
+                <form string="Overtime Report Generation Wizard">
+                    <group colspan="2" col="4">
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                        <field name="sort_by"/>
+                        <field name="overtime_claim_policy_id" invisible="1"/>
+                    </group>
+                    <separator string="Columns To Display"/>
+                    <group colspan="4" col="4">
+                        <field name="is_cost_center"/>
+                        <field name="is_day_type"/>
+
+                        <field name="is_pre_requested_hours"/>
+                        <field name="is_status"/>
+
+                        <field name="is_actual_taken_hours"/>
+                        <field name="is_employee_hourly_rate"
+                               groups="hr_overtime.group_display_overtime_cost"/>
+
+                        <field name="is_attendance_hours"/>
+                    </group>
+                    <separator string="Filter By"/>
+                    <group>
+                        <field name="employee_ids"/>
+                        <field name="cost_center_ids"/>
+                        <field name="stage_id" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button type="object" name="print_overtime_report"
+                                    string="Generate XLS Report" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--Overtime Report Menu Action-->
+        <record model="ir.actions.act_window"
+                id="wizard_print_overtime_xls_report">
+            <field name="name">Overtime Report Generation Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.overtime.report.xls</field>
+            <field name="view_id" ref="hr_overtime_report_xls_view"/>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</odoo>

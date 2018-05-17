@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_reset_approval_line_wizard_form" model="ir.ui.view">
+            <field name="name">view.reset.approval.line.wizard.form</field>
+            <field name="model">default.employee.approval.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Approval Line">
+                    <sheet>
+                        <field name="name" invisible="True"/>
+                        <div>
+                            This wizard helps to:
+                            <br/>
+                            <br/>
+                            - Convert all the employees who is marked as "Is
+                            Manager" to the director role by pressing the
+                            "Fix Directors Roles" button.
+                            <br/>
+                            <br/>
+                            - After making sure that all employees roles has
+                            been correctly set, Press on the "Reset Default
+                            Approval Line" button to link the employees with
+                            each other.
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_fix_directors_roles"
+                                string="Fix Directors Roles" type="object"/>
+                        or
+                        <button
+                                name="action_reset_default_employee_approval_line"
+                                string="Reset Default Approval Line"
+                                type="object"/>
+                        or
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_reset_default_employee_approval_line"
+                model="ir.actions.act_window">
+            <field name="name">Default Employee Approval Line</field>
+            <field name="res_model">default.employee.approval.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_reset_approval_line_wizard_form"/>
+            <field name="target">new</field>
+            <field name="context">{'model':'default.employee.approval.line'}
+            </field>
+        </record>
+
+        <menuitem id="reset_employee_approval_line_menu"
+                  name="Employees Approval Line"
+                  parent="base.menu_administration" sequence="5"/>
+
+        <menuitem id="menu_reset_default_employee_approval_line"
+                  name="Reset Employees Approval Line"
+                  parent="reset_employee_approval_line_menu"
+                  action="act_reset_default_employee_approval_line"
+                  sequence="51"/>
+
+    </data>
+</odoo>

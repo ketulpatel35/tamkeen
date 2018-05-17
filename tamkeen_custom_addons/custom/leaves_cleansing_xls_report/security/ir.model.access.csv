@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cleansing_xls_report,access.cleansing.xls.report,model_cleansing_xls_report,,1,1,1,0
+access_leave_cleansing_xls_report,access_leave_cleansing_xls_report,model_leave_cleansing_xls_report,,1,1,1,0

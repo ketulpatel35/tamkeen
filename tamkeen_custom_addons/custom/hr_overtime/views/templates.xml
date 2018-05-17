@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- pre request send for Manager Approval -->
+        <record id="overtime_pre_req_send_manager" model="mail.template">
+            <field name="name">Overtime Pre-Request Manager Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_manager_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Pre-Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_manager_id.user_id.name or '')|safe},
+<br>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending overtime pre-request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- pre request send for VP Approval -->
+        <record id="overtime_pre_req_send_to_vp" model="mail.template">
+            <field name="name">Overtime Pre-Request VP Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_vp_id.work_email | safe}</field>
+            <field name="subject">Overtime Pre-Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_vp_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending overtime pre-request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- pre request send for CEO Approval -->
+        <record id="overtime_pre_req_send_to_ceo" model="mail.template">
+            <field name="name">Overtime Request CEO Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_ceo_id.work_email | safe}</field>
+            <field name="subject">Overtime Pre-Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_ceo_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending overtime pre-request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- pre request send for HR Approval -->
+        <record id="overtime_pre_req_send_to_hr" model="mail.template">
+            <field name="name">Overtime Request HR Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.pre_approval_policy_id.hr_email | safe}</field>
+            <field name="subject">Overtime Pre-Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending overtime pre-request.
+</p>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Budget -->
+        <record id="overtime_pre_req_send_to_budget" model="mail.template">
+            <field name="name">Overtime Pre-Request Budget Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.pre_approval_policy_id.budget_email | safe}</field>
+            <field name="subject">Overtime Pre-Request Budget Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Budget Team,
+<br>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending overtime pre-request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- Pre-Request Approved -->
+        <record id="overtime_pre_req_approved" model="mail.template">
+            <field name="name">Overtime Pre-Request to be Approved</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Pre-Request Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.name or '')|safe},
+<br>
+<p style="padding-left: 4em;">
+Your Overtime pre-request has been approved.
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Rejected -->
+        <record id="email_template_pre_overtime_reject" model="mail.template">
+            <field name="name">Overtime Pre-Request Rejected
+            </field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Pre-Request Rejected</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your Overtime pre-request has been rejected.
+</p>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+% if ctx["reason"]:
+Refuse Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Cancelled -->
+        <record id="email_template_pre_overtime_cancelled"
+                model="mail.template">
+            <field name="name">Overtime Pre-Request Cancelled</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Pre-Request Cancelled</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your Overtime pre-request has been cancelled.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Closed -->
+        <record id="email_template_pre_overtime_closed" model="mail.template">
+            <field name="name">Overtime Request Closed</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Pre-Request Closed</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your Overtime pre-request has been closed.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Locked -->
+        <record id="email_template_pre_overtime_locked" model="mail.template">
+            <field name="name">Overtime Pre-Request Locked</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Pre-Request Locked</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your Overtime pre-request has been locked.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Draft -->
+        <record id="email_template_pre_overtime_draft" model="mail.template">
+            <field name="name">Overtime Request Return</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Pre-Request Returned</field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your overtime pre-request has been returned back to draft state.
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+	To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+
+            </field>
+        </record>
+
+        <!-- Claim-->
+        <!-- statement send for Manager Approval -->
+        <record id="overtime_request_send_to_manager" model="mail.template">
+            <field name="name">Overtime Request Manager Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_manager_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_manager_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, please approve the overtime request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- statement send for Hr Approval -->
+        <record id="overtime_claim_send_to_hr" model="mail.template">
+            <field name="name">Overtime Request HR Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.overtime_claim_policy_id.hr_email | safe}</field>
+            <field name="subject">Overtime Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear HR team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, please approve the overtime request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- VP Approval -->
+        <record id="overtime_request_send_to_vp" model="mail.template">
+            <field name="name">Overtime Request VP Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_vp_id.work_email | safe}</field>
+            <field name="subject">Overtime Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_vp_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the pending overtime request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- CEO Approval -->
+        <record id="overtime_request_send_to_ceo" model="mail.template">
+            <field name="name">Overtime Request CEO Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.overtime_ceo_id.work_email | safe}</field>
+            <field name="subject">Overtime Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.overtime_ceo_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the overtime request.
+</p>
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Budget -->
+        <record id="overtime_request_send_to_budget" model="mail.template">
+            <field name="name">Overtime Request Budget Approval</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.overtime_claim_policy_id.budget_email | safe}</field>
+            <field name="subject">Overtime Request Budget Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Budget Team,
+<br>
+<p style="padding-left: 4em;">
+Kindly, approve the pending overtime request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Request Approved -->
+        <record id="overtime_request_approved" model="mail.template">
+            <field name="name">Overtime Request Approved</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Request Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.name or '')|safe},
+<br>
+<p style="padding-left: 4em;">
+Your overtime request has been approved.
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+            </field>
+        </record>
+
+        <!--TO HR FOR approve-->
+        <record id="hr_overtime_request_approved" model="mail.template">
+            <field name="name">Overtime Request Approved</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.overtime_claim_policy_id.hr_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Request Approved</field>
+            <field name="body_html"><![CDATA[
+<p style="padding-left: 4em;">
+Overtime request has been approved.
+Request Number: ${object.name}
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+</p>
+<br>
+Kindly Start process for payslip amendment.
+<br>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+            </field>
+        </record>
+
+
+        <!-- Rejected -->
+        <record id="email_template_overtime_request_reject"
+                model="mail.template">
+            <field name="name">Overtime Request Rejected
+            </field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Request Rejected</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Your overtime request has been rejected.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+<br/>
+</p>
+% if ctx["reason"]:
+Refuse Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Cancelled -->
+        <record id="email_template_overtime_request_cancel"
+                model="mail.template">
+            <field name="name">Overtime Request Cancelled</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Request Cancelled</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your overtime request has been cancelled.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Closed -->
+        <record id="email_template_overtime_request_closed"
+                model="mail.template">
+            <field name="name">Overtime Request Closed</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Request Closed</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your overtime request has been closed.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Locked -->
+        <record id="email_template_overtime_locked" model="mail.template">
+            <field name="name">Overtime Request Locked</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Overtime Request Locked</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your pre-approval request has been locked.
+</p>
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Draft -->
+        <record id="email_template_overtime_draft" model="mail.template">
+            <field name="name">Overtime Request Returned</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Request Returned</field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your service request has been returned back to draft state.
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+	To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+
+            </field>
+        </record>
+
+        <!-- Payroll Processing -->
+        <record id="email_template_payroll_processing" model="mail.template">
+            <field name="name">Overtime Processing In Payroll Template</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Overtime Processing In Payroll</field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your Overtime Request has been processing in payroll. It's automatic closed once HR can confirm for payslip.
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+</p>
+% if ctx["display_link"]:
+	To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+
+            </field>
+        </record>
+
+         <!-- Payroll Processing for HR-->
+        <record id="hr_email_template_payroll_processing"
+                model="mail.template">
+            <field name="name">Need to confirm payslip amendment</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.overtime_claim_policy_id.hr_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Need to confirm payslip amendment</field>
+            <field name="body_html"><![CDATA[
+
+<p>
+<p style="padding-left: 4em;">
+Overtime Request has been processing in payroll.
+<br>
+Request Number: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+</p>
+You need to confirm the payslip amendment to close this overtime request.
+</p>
+% if ctx["display_link"]:
+	To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

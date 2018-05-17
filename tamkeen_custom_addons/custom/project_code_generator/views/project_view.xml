@@ -1,0 +1,35 @@
+<odoo>
+    <!-- Project Management Form View -->
+    <record id="project_management_form_view_inherit" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_management.project_management_form_view"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <h2>
+                    <field name="project_code" readonly="1"/>
+                </h2>
+                <h5>
+                    <label for="code" string="Auto Generated Sequence"
+                           attrs="{'invisible': [('code','=',False)]}"/>
+                    <field name="code" readonly="1"/>
+                </h5>
+            </field>
+        </field>
+    </record>
+
+
+      <!-- Project Tree View -->
+    <record id="tree_view_project_management_for project_code"
+            model="ir.ui.view">
+        <field name="name">tree.view.project.management</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_management.tree_view_project_management"/>
+        <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='code']" position="after">
+                        <field name="project_code"/>
+
+                </xpath>
+        </field>
+    </record>
+</odoo>

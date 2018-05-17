@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Certificate of Completion main menu -->
+        <menuitem id="root_certificate_of_completion_menu"
+                  name="Certificate Of Completion"
+                  web_icon="certificate_of_completion,static/description/coc_icon.png"
+                  groups="certificate_of_completion.group_coc_configuration,certificate_of_completion.group_coc_procurement_first_review,certificate_of_completion.group_coc_business_owner_approval,certificate_of_completion.group_coc_procurement_second_review,certificate_of_completion.group_coc_pmo_approval,certificate_of_completion.group_coc_finance_processing"/>
+
+        <!-- Certificate of Completion -->
+        <menuitem id="main_certificate_of_completion_view_menu"
+                  name="Certificate of Completion"
+                  parent="root_certificate_of_completion_menu"
+                  sequence="1"
+                  groups="certificate_of_completion.group_coc_procurement_first_review,certificate_of_completion.group_coc_business_owner_approval,certificate_of_completion.group_coc_procurement_second_review,certificate_of_completion.group_coc_pmo_approval,certificate_of_completion.group_coc_finance_processing"/>
+
+        <!-- COC Procurement First Review -->
+        <menuitem id="certificate_of_completion_pro_first_review_menu"
+                  name="Procurement First Review"
+                  action="coc_action_procurement_first_review"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="1"
+                  groups="certificate_of_completion.group_coc_procurement_first_review"/>
+
+        <!-- COC Business Owner Approval -->
+        <menuitem id="certificate_of_completion_business_owner_approval_menu"
+                  name="Business Owner Approval"
+                  action="coc_action_business_owner_approval"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="2"
+                  groups="certificate_of_completion.group_coc_business_owner_approval"/>
+
+        <!-- COC Procurement Second Review -->
+        <menuitem id="certificate_of_completion_pro_second_review_menu"
+                  name="Procurement Second Review"
+                  action="coc_action_procurement_second_review"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="3"
+                  groups="certificate_of_completion.group_coc_procurement_second_review"/>
+
+        <!-- COC PMO Approval -->
+        <menuitem id="certificate_of_completion_pmo_approval_menu"
+                  name="PMO Approval"
+                  action="coc_action_pmo_approval"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="4"
+                  groups="certificate_of_completion.group_coc_pmo_approval"/>
+
+        <!-- COC finance processing Approval -->
+        <menuitem id="certificate_of_completion_finance_processing_menu"
+                  name="Finance Processing"
+                  action="coc_action_finance_processing"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="5"
+                  groups="certificate_of_completion.group_coc_finance_processing"/>
+
+        <!-- COC View All -->
+        <menuitem id="certificate_of_completion_view_all_menu"
+                  name="View All Request"
+                  action="coc_action_view_all"
+                  parent="main_certificate_of_completion_view_menu"
+                  sequence="5"
+                  groups="certificate_of_completion.group_coc_view_all_coc"/>
+
+        <!-- Configuration -->
+        <!-- Purchase Configuration add coc group -->
+        <!--<menuitem id="purchase.menu_purchase_config" name="Configuration"-->
+        <!--parent="purchase.menu_purchase_root" sequence="100"-->
+        <!--groups="certificate_of_completion.group_coc_configuration,purchase.group_purchase_manager,purchase.group_purchase_user"/>-->
+
+        <menuitem id="coc_configuration_menu_main"
+                  name="Configuration"
+                  parent="root_certificate_of_completion_menu" sequence="2"
+                  groups="certificate_of_completion.group_coc_configuration"/>
+
+        <!-- COC Configuration -->
+        <menuitem action="coc_configuration"
+                  id="coc_service_configuration_panel_menu"
+                  name="Service Configuration Panel"
+                  parent="coc_configuration_menu_main" sequence="1"
+                  groups="certificate_of_completion.group_coc_configuration"/>
+
+        <!-- COC stage Configuration -->
+        <menuitem action="coc_stage_configuration" name="Stages"
+                  id="coc_stages_configuration_menu"
+                  parent="coc_configuration_menu_main" sequence="2"
+                  groups="certificate_of_completion.group_coc_configuration"/>
+
+        <!-- Proof -->
+        <menuitem action="action_certificate_of_completion_proof" name="Proof"
+                  id="coc_proof_menu"
+                  parent="coc_configuration_menu_main" sequence="3"
+                  groups="certificate_of_completion.group_coc_configuration"/>
+
+    </data>
+</odoo>

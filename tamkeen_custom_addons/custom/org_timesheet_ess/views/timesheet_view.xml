@@ -1,0 +1,54 @@
+<odoo>
+
+    <!-- Action for ESS -->
+    <record id="open_timesheet_ess_requests" model="ir.actions.act_window">
+        <field name="name">Timesheet Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr_timesheet_sheet.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="context">
+            {'readonly_by_pass': True}
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Timesheeet Request.
+            </p>
+            <p>
+                Press create button to apply for any timesheet request, The
+                system
+                will take care from the approval.
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- Action for MSS -->
+    <record id="open_timesheet_mngr_request_approval"
+            model="ir.actions.act_window">
+        <field name="name">Timesheet Request To Approve</field>
+        <field name="res_model">hr_timesheet_sheet.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_loan_pending_approval':1,'readonly_by_pass': True}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.timesheet_manager_id.user_id.id','=',uid),'|',('employee_id.timesheet_vp_id.user_id.id','=',uid),('employee_id.timesheet_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Analytic Account should be Cost center -->
+        <record
+                id="purchase_requisition_config.email_template_pr_update_manager" model="mail.template">
+            <field name="name">Approval of Purchase Requisition
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_ids.pr_manager_id.work_email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition To Be Approved.
+                : ${object.name} </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_ids.pr_manager_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}
+</p>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Analytic Account should be Cost center -->
+        <record id="purchase_requisition_config.email_template_manager_to_vp"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Requisition
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_ids.pr_vp_id.work_email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition To Be Approved.
+                : ${object.name}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_ids.pr_vp_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+    <!-- Analytic Account should be cost center -->
+        <record id="purchase_requisition_config.email_template_vp_to_budget_team"
+                model="mail.template">
+            <field name="name">Approval of Purchase Requisition</field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.company_id.budget_team_mail
+            |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition To Be Approved.: ${object.name}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Budget Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}
+<br/>
+<br/>
+<b>Budget Exception Reason: ${(object.budget_exception_reason or '')|safe}
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+    <!-- Analytic Account should be Cost center -->
+        <record id="purchase_requisition_config.email_template_budget_team_ceo"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Requisition
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_ids.pr_ceo_id.work_email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_ids.pr_ceo_id.name}
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}
+<br/>
+<br/>
+% if object.budget_exception_reason:
+<b>Budget Exception Reason: ${(object.budget_exception_reason or '')|safe}
+% endif
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Analitic Account should be Cost center -->
+<record id="purchase_requisition_config.email_template_budget_team_to_purchase_approval"
+        model="mail.template">
+            <field name="name"> Approval of Purchase Requisition
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.company_id.prcrmnt_group_email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Procurment Manager,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+    <!-- Analitic acc should be Cost center -->
+        <record id="purchase_requisition_config.email_template_ceo_to_purchase_approval"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Requisition
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.company_id.prcrmnt_group_email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Purchase Requisition Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Procurment Manager,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the procurement ${(object.name or '')|safe}.
+<br/>
+<br/>
+<b>Requester Name:</b> ${object.employee_ids.name}
+<br/>
+<br/>
+% if object.cost_centre_id:
+    <b>Cost Center :</b> ${object.cost_centre_id.name + '[' + object.cost_centre_id.code +']' or ''}
+    <br/>
+    <br/>
+% endif
+<b>Remark:</b> ${(object.remark or '')|safe}
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <record id="purchase_requisition_config.email_update_procurement_office"
+                model="mail.template">
+            <field name="name"> Update Procurment Office
+            </field>
+            <field name="model_id"
+                   ref="purchase_requisition.model_purchase_requisition" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.user_id.partner_id.email |safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Procurement officer changed</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.user_id.name},
+<br/>
+<p style="padding-left: 4em;">
+The ${(object.name or '')|safe} is assigned to you. Please proceed it.
+<br/>
+</p>
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--Action For Purchase Order Status Excel Report-->
+    <act_window id="action_purchase_order_status_report_wizard"
+                multi="True"
+                key2="client_action_multi" name="Purchase Order Status"
+                res_model="purchase.order.status.xls.report"
+                src_model="purchase.order"
+                view_mode="form" target="new" view_type="form"/>
+
+    <!--Form view of purchase order status for excel report-->
+
+    <record id="purchase_order_status_form_view" model="ir.ui.view">
+        <field name="name">Purchase Order Status</field>
+        <field name="model">purchase.order.status.xls.report</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Order Status">
+                <sheet>
+                    <group>
+                        <group string="Purchase Order Status Report" />
+                        <footer>
+                            <button type="object"
+                                    name="generate_po_status"
+                                    string="Generate PO Report"
+                                    class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

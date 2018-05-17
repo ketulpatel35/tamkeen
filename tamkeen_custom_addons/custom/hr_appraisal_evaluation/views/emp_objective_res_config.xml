@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <record id="view_emp_obj_configuration" model="ir.ui.view">
+            <field name="name">Employee Objective Config Settings</field>
+            <field name="model">emp.objective.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="Objective Configuration">
+                    <sheet>
+                        <group string="Objective Configuration">
+                            <group>
+                                <field name="min_weightage"/>
+                                <field name="max_weightage"/>
+                                <field name="min_obj"/>
+                                <field name="max_obj"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="act_emp_objective_configuration"
+                 model="ir.actions.act_window">
+            <field name="name">Employee Objective Configure</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">emp.objective.config.settings</field>
+            <field name="view_mode">tree,form</field>
+             <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Objective Configration"
+                  id="menu_emp_objective"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="act_emp_objective_configuration"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+    </data>
+</odoo>

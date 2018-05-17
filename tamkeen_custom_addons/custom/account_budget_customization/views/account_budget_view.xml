@@ -1,0 +1,32 @@
+<odoo>
+    <record id="crossovered_budget_view_form_inherit_for_arrangment"
+            model="ir.ui.view">
+        <field name="name">crossovered.budget.view.form.inherit.for
+            .arrangment</field>
+        <field name="model">crossovered.budget</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+            <xpath
+                    expr="//field[@name='crossovered_budget_line']/form//field[@name='general_budget_id']"
+                   position="after">
+                <field name="product_id" />
+            </xpath>
+            <xpath
+                    expr="//field[@name='crossovered_budget_line']/form//field[@name='planned_amount']"
+                   position="replace"/>
+            <xpath
+                    expr="//field[@name='crossovered_budget_line']/form//field[@name='analytic_account_id']"
+                   position="after">
+                <field name="planned_amount" widget="monetary" string="Allocated amount"/>
+            </xpath>
+
+            <xpath
+                    expr="//field[@name='crossovered_budget_line']/tree/field[@name='general_budget_id']"
+                   position="after">
+                <field name="product_id" />
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

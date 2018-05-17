@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_milestone_schedule_read,access.milestone.schedule.read,project_milstone_schedule.model_project_milestones_schedule,project.group_project_user,1,0,0,0
+access_milestone_schedule_update,access.milestone.schedule.update,project_milstone_schedule.model_project_milestones_schedule,project_management.group_update_project,1,1,1,0
+access_milestone_schedule_create,access.milestone.schedule.create,project_milstone_schedule.model_project_milestones_schedule,project_management.group_create_project,0,0,1,0
+access_purchase_order_line_read,access.purchase.order.line.read,purchase.model_purchase_order_line,project.group_project_user,1,0,0,0
+access_purchase_order_line_update,access.purchase.order.line.update,purchase.model_purchase_order_line,project_management.group_update_project,1,0,0,0
+access_purchase_order_line_create,access.purchase.order.line.create,purchase.model_purchase_order_line,project_management.group_create_project,0,0,1,0

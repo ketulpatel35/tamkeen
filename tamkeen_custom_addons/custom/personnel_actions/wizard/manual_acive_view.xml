@@ -1,0 +1,27 @@
+<odoo>
+    <record id="manual_active_wizard_view" model="ir.ui.view">
+        <field name="name">manual.active.wizard.view</field>
+        <field name="model">manual.active</field>
+        <field name="arch" type="xml">
+            <form string="Manual Active Wizard">
+                <p class="oe_grey">
+                    Are you sure you want to do this action?
+                </p>
+                <footer>
+                    <button string="Manual Active"
+                            name="manual_active" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="action_manual_active"
+                multi="True"
+                key2="client_action_multi" name="Manual Active"
+                res_model="manual.active"
+                src_model="personnel.actions"
+                view_mode="form" target="new" view_type="form"
+                groups="organization_structure.group_planning_head"/>
+</odoo>

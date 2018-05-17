@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="attendance_report_config_form_view" model="ir.ui.view">
+            <field name="name">attendance.report.config.form.view</field>
+            <field name="model">attendance.report.config</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Report Configuration">
+                    <group col="4" colspan="4">
+                        <field name="name" required="1"/>
+                        <field name="color_name"/>
+                        <field name="active"/>
+                        <field name="leave"/>
+                        <field name="absent"/>
+                        <field name="public_holidays"/>
+                        <field name="forget_check_in"/>
+                        <field name="forget_check_out"/>
+                        <field name="last_out_before_first_in"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="attendance_report_config_tree_view" model="ir.ui.view">
+            <field name="name">attendance.report.config.tree.view</field>
+            <field name="model">attendance.report.config</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance Report Configuration">
+                    <field name="name"/>
+                    <field name="color_name"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_attendance_report_config_form_view"
+                model="ir.actions.act_window">
+            <field name="name">Attendance Report Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">attendance.report.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

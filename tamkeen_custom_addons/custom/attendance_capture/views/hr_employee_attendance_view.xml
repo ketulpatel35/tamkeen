@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="hr_attendance.group_hr_attendance_manager" model="res.groups">
+        <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <!-- Inherit Form View -->
+    <record model="ir.ui.view" id="view_employee_inherit_attendance_cap">
+        <field name="name">view.employee.inherit.attendance.cap</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <group name="active_group" position="inside">
+                <field name="attendance_identifier"/>
+            </group>
+        </field>
+    </record>
+
+    <record id="view_attendance_tree_inherit_for_invisible" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.inherit.for.invisible</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_timesheet_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <field name="sheet_id" position="replace"/>
+        </field>
+    </record>
+
+    <!-- Attenance tree view inherit -->
+    <record id="view_attendance_capture" model="ir.ui.view">
+        <field name="name">hr.attendance.capture</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id"
+               ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <!--<xpath expr="//field[@name='employee_id']" position="replace"/>-->
+            <xpath expr="//tree/field[@name='check_in']" position="before">
+                <field name="date"/>
+            </xpath>
+            <xpath expr="//tree" position="inside">
+                <!--<field name="worked_hours" widget="float_time"/>-->
+                <field name="worked_hours_time"/>
+                <field name="status"/>
+                <field name="is_leave" invisible="1"/>
+                <!--<field name="is_absent"/>-->
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Attenance search view inherit -->
+    <record id="hr_attendance_view_filter_employee_id" model="ir.ui.view">
+        <field name="name">hr.attendance.view.filter.employee.id</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id"
+               ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="f_employee_no"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_attendance_form_view_inherit">
+        <field name="name">hr.attendance.form.view.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]" position="replace">
+                <h1>
+                    <field name="employee_id" readonly="1"/>
+                </h1>
+                <group>
+                    <group>
+                        <field name="date" readonly="1"/>
+                        <!--<field name="total_hours" widget="float_time"/>-->
+                        <field name="worked_hours" widget="float_time"/>
+                        <field name="worked_hours_time"/>
+                        <field name="is_leave" readonly="1" invisible="1"/>
+                        <field name="is_absent" readonly="1" invisible="1"/>
+                        <field name="status" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="check_in" readonly="1"/>
+                        <field name="check_out" readonly="1"/>
+                    </group>
+                </group>
+                <!--<notebook>-->
+                    <!--<page string="Alert" name='alert' groups="hr_attendance.group_hr_attendance_user">-->
+                        <!--<field name="alert_ids" nolabel="1" readonly="1"/>-->
+                    <!--</page>-->
+                <!--</notebook>-->
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

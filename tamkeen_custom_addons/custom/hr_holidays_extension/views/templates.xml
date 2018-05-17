@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Start EMP TO Manager Notification -->
+
+        <!--<record id="holidays_mgt" model="ir.filters">-->
+        <!--<field name="name">Manager Leave Submit for Approval</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[-->
+        <!--('state','=','confirm'),-->
+        <!--('type','=','remove'),-->
+        <!--('holiday_status_id.notif_mngr_approval','=',True)]</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <!-- Leave Request Reminder Template -->
+        <record id="leave_req_approval_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Leave Request Reminder</field>
+            <!--<field name="email_from">${object.loan_approval_policy_id.hr_email}</field>-->
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id"
+                   ref="hr_holidays_extension.model_hr_holidays" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+Dear ,
+<br>
+Please take a moment to approve the pending ${(object.name or '')|safe} Leave Request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Employee ID: ${object.emp_id}
+<br>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+
+        <record id="email_template_holidays_update_mgt" model="mail.template">
+            <field name="name">Manager Leave Submit for Approval</field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field
+                    name="email_to">${object.employee_id.leave_manager_id.work_email | safe}
+            </field>
+            <field name="email_cc">${object.alternative_emp_id.work_email |
+            safe}</field>
+            <field name="subject"> Leave Request To Be Approved </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.leave_manager_id.name},
+<br>
+<p style="padding-left: 4em;">
+${object.employee_id.name} has just requested
+(${object.holiday_status_id.name})
+<br/>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br/>
+Waiting for your kind approval.
+<br/>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+]]>
+            </field>
+        </record>
+
+        <record id="email_template_holidays_amend" model="mail.template">
+            <field name="name">Leave Amendement</field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.holiday_status_id.company_id.hr_group_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject"> Leave Amendement </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br>
+<p style="padding-left: 4em;">
+${object.employee_id.name} has just requested to Amend his/her request.
+(${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+</p>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+]]>
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_mgt_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">Manager Leave Submit for Approval</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_mgt" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_manager"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">Manager Leave Submit for Approval</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_mgt" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref('action_email_mgt_holidays_notification')])]" />-->
+        <!--</record>-->
+
+        <!-- End Manager Notification -->
+
+
+        <!-- Start HR Notification -->
+
+        <!--<record id="holidays_hr" model="ir.filters">-->
+        <!--<field name="name">(MNGR-VP) HR Leave Submit for Approval Filter-->
+        <!--</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[('state','=','validate1'),-->
+        <!--('type','=','remove'),-->
+        <!--('manager_id','!=',False),-->
+        <!--('holiday_status_id.hr_notify_approval','=',True)]</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_update_hr" model="mail.template">
+            <field name="name">(MNGR-VP) HR Leave Submit for Approval Template
+            </field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.holiday_status_id.hr_email | safe}</field>
+            <field name="email_cc">${object.employee_id.work_email | safe}</field>
+            <field name="subject"> Leave Request To Be Approved </field>
+            <field name="body_html"><![CDATA[
+            <p>
+Dear HR Admin,
+<br>
+<p style="padding-left: 4em;">
+${object.employee_id.name} has just requested
+(${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+Waiting for your kind approval.
+<br />
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]>
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_hr_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">HR Leave Submit for Approval</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition"></field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_hr" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_hr"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">HR Leave Submit for Approval</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_hr" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref(-->
+        <!--'action_email_hr_holidays_notification')])]" />-->
+        <!--</record>-->
+
+        <!-- End HR Notification -->
+
+        <!-- Start VP Notification -->
+
+        <!--<record id="holidays_vp" model="ir.filters">-->
+        <!--<field name="name">VP Approval Leave holidays workflow</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[('state','=','vp'),-->
+        <!--('type','=','remove'),-->
+        <!--('holiday_status_id.vp_notify_approval','=',True)]</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_update_vp" model="mail.template">
+            <field name="name">VP Notification Email Template</field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">
+                ${object.employee_id.leave_vp_id.work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.employee_id.work_email | safe},
+                ${object.employee_id.leave_manager_id.work_email | safe}
+            </field>
+            <field name="subject">Leave Request To Be Approved
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.leave_vp_id.name},
+</p>
+<p style="padding-left: 4em;">
+${object.employee_id.name} has just requested
+(${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+Waiting for your kind approval.
+<br />
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]>
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_vp_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">HR Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_vp" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_vp"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">VP Action Rule Leave</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_vp" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref('action_email_vp_holidays_notification')])]" />-->
+        <!--</record>-->
+
+        <!-- End VP Notification -->
+
+
+        <!-- Start CEO Notification -->
+
+        <!--<record id="holidays_ceo" model="ir.filters">-->
+        <!--<field name="name">CEO Approval Leave holidays workflow</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[('state','=','ceo'),-->
+        <!--('type','=','remove'),-->
+        <!--('holiday_status_id.notif_ceo_approval','=',True)]</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_update_ceo" model="mail.template">
+            <field name="name">CEO Notification Email Template</field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">
+                ${object.employee_id.leave_ceo_id.work_email | safe}
+            </field>
+            <field name="email_cc">${object.employee_id.work_email | safe},
+                ${object.employee_id.leave_manager_id.work_email | safe},
+                ${object.employee_id.leave_vp_id.work_email | safe}
+            </field>
+            <field name="subject">Leave Request To Be Approved
+            </field>
+            <field name="body_html"><![CDATA[
+
+
+<p>
+Dear ${object.employee_id.leave_ceo_id.name},
+<br>
+<p style="padding-left: 4em;">
+${object.employee_id.name} has just requested
+(${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br/>
+Waiting for your kind approval.
+<br />
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+]]>
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_ceo_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">CEO Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_ceo" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_ceo"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">CEO Action Rule Leave</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_ceo" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref('action_email_ceo_holidays_notification')])]" />-->
+        <!--</record>-->
+        <!-- End CEO Notification -->
+
+        <!-- Start Employee notification approved status -->
+
+        <!--<record id="holidays_emp" model="ir.filters">-->
+        <!--<field name="name">Approval Leave Employee notification Filter-->
+        <!--</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field-->
+        <!--name="domain">['|',('state','=','validate'),('state','=','leave_approved'),-->
+        <!--('type','=','remove')]-->
+        <!--</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_update_emp" model="mail.template">
+            <field name="name"> Approval Leave Employee notification Template
+            </field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field
+                    name="email_cc">${object.employee_id.leave_manager_id.work_email | safe},
+                ${object.alternative_emp_id.work_email | safe}
+            </field>
+            <field name="subject"> Leave Request Approved </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your (${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+has been approved.
+<br />
+<br />
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+% if ctx["wr_display_link"]:
+   Please, once you return back from your vacation, kindly submit this <a href="${ctx["base_url"]}/web#id=${object.work_resumption_id.id}&view_type=form&model=${ctx["wr_model"]}&action=${ctx["w_action_id"]}"> work resumption request </a>to notify the HR team that you come back to the work.
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+]]>
+            </field>
+        </record>
+        <!--<record id="action_email_emp_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">Approval Leave Employee Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_emp" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_emp"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">Approval Leave Employee Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_emp" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref('action_email_emp_holidays_notification')])]" />-->
+        <!--</record>-->
+
+        <!-- End Employee Notification -->
+        <!-- Start Employee notification refused status -->
+
+        <!--<record id="holidays_emp2" model="ir.filters">-->
+        <!--<field name="name">Refusal Leave Employee notification Filter-->
+        <!--</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[('state','=','refuse'),-->
+        <!--('type','=','remove'),-->
+        <!--('holiday_status_id.notif_leave_refuse','=',True)]</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_cancel"
+                model="mail.template">
+            <field name="name">Leave Cancel
+            </field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="subject"> Leave Request Cancelled</field>
+            <field name="body_html"><![CDATA[
+
+    <p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your (${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+has been cancelled by $(user.name).
+</p>
+<br/>
+% if ctx["reason"]:
+Cancel Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br />
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_holidays_update_emp2"
+                model="mail.template">
+            <field name="name">Refusal Leave Employee notification Template
+            </field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc">${object.employee_id.leave_manager_id.work_email | safe}
+                ${object.alternative_emp_id.work_email | safe}
+            </field>
+            <field name="subject"> Leave Request Refused </field>
+            <field name="body_html"><![CDATA[
+
+    <p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your (${object.holiday_status_id.name})
+<br>
+Starting from ${object.date_from.split(' ')[0]} to
+${object.date_to.split(' ')[0]} (${object.real_days} day/s).
+<br>
+has been refused.
+<br>
+% if ctx["reason"]:
+Refuse Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+</p>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_emp2_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name">Refusal Leave Employee Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_emp2" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_emp2"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">Refusal Leave Employee Notification</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_emp2" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref('action_email_emp2_holidays_notification')])]" />-->
+        <!--</record>-->
+
+
+        <!-- End Employee Notification -->
+
+        <!-- Start Employee notification set to draft  -->
+
+        <!--<record id="holidays_emp3" model="ir.filters">-->
+        <!--<field name="name">Draft leave Employee Notification Filter-->
+        <!--</field>-->
+        <!--<field name="model_id">hr.holidays</field>-->
+        <!--<field name="domain">[('state','=','draft'),-->
+        <!--('type','=','remove'), ('skip_notifications','=',False)]-->
+        <!--</field>-->
+        <!--<field name="user_id" eval="False" />-->
+        <!--<field name="context">{}</field>-->
+        <!--</record>-->
+
+        <record id="email_template_holidays_update_emp3"
+                model="mail.template">
+            <field name="name">Draft leave Employee Notification Email Template
+            </field>
+            <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc">${object.employee_id.parent_id.work_email | safe}
+            </field>
+            <field name="subject"> Leave Request Returned </field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name or ''},
+<br>
+<p style="padding-left: 4em;">
+Your (${object.holiday_status_id.name or ''})
+<br>
+% if object.date_from:
+    On date ${object.date_from.split(' ')[0]} (${object.real_days} day/s).
+    <br>
+% endif
+has been returned.
+<br/>
+% if ctx["reason"]:
+Returned Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+
+        <!--<record id="action_email_emp3_holidays_notification"-->
+        <!--model="ir.actions.server">-->
+        <!--<field name="name"> Draft Leave Employee Notification test</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="condition">True</field>-->
+        <!--<field name="type">ir.actions.server</field>-->
+        <!--<field name="state">email</field>-->
+        <!--<field name="template_id"-->
+        <!--ref="email_template_holidays_update_emp3" />-->
+        <!--</record>-->
+
+
+        <!--<record id="automated_action_email_holidays_creation_emp3"-->
+        <!--model="base.action.rule">-->
+        <!--<field name="name">Draft Leave Employee Notification r</field>-->
+        <!--<field name="model_id" ref="hr_holidays.model_hr_holidays" />-->
+        <!--<field name="active" eval="False" />-->
+        <!--<field name="kind">on_write</field>-->
+        <!--<field name="filter_id" ref="holidays_emp3" />-->
+        <!--<field name="server_action_ids"-->
+        <!--eval="[(6,0,[ref(-->
+        <!--'action_email_emp3_holidays_notification')])]" />-->
+        <!--</record>-->
+
+
+    </data>
+</odoo>

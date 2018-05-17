@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="purchase_view_for_ceo" model="ir.actions.act_window">
+            <field name="name">purchase.view.for.ceo</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_type">form</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                [('state','=','to approve')]
+            </field>
+            <field name="context">{}</field>
+        </record>
+    </data>
+</odoo>
+

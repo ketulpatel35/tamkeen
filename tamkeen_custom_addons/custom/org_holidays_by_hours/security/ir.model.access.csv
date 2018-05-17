@@ -1,0 +1,3 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_hr_holidays_monthly_partition,hr.holidays.monthly.partition,model_hr_holidays_monthly_partition,hr_holidays_extension.group_leave_manage_normal_user,1,1,1,1
+access_hr_payroll_period,hr.payroll.period,hr_payroll_period.model_hr_payroll_period,hr_holidays_extension.group_leave_manage_normal_user,1,0,0,0

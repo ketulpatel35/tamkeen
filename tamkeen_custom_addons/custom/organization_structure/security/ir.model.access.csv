@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink","active"
+employment_group_hr_officer,employment.group.hr.officer,model_hr_employee_group,organization_structure.group_planning_head,1,1,1,1
+personnel_area_hr_officer,personnel.area.hr.officer,model_personnel_area,organization_structure.group_planning_head,1,1,1,1
+hr_job_template_hr_officer,hr.job.template.hr.officer,model_hr_job_template,organization_structure.group_planning_head,1,1,1,1
+crossovered_structure_hr_officer,crossovered.structure.hr.officer,account_budget.model_crossovered_budget_lines,organization_structure.group_planning_head,1,1,1,1
+account_budget_post_hr_officer,account.budget.post.hr.officer,account_budget.model_account_budget_post,organization_structure.group_planning_head,1,1,1,1
+hr_job_hr_officer,hr.job.hr.officer,hr.model_hr_job,organization_structure.group_planning_head,1,1,1,1

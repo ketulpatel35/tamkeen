@@ -1,0 +1,49 @@
+<odoo>
+    <record id="project_schedule_print_link_view" model="ir.ui.view">
+        <field name="name">project.project.report.print.link</field>
+        <field name="model">project.project.report.print.link</field>
+        <field name="arch" type="xml">
+            <form string="Excel Output">
+                <separator colspan="4" string="Please save file as .xls excel format"/>
+                <group>
+                    <field name="name" invisible="1"/>
+                    <field name="project_xls_output" filename='name' readonly='1'/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="project_project_report_wizard_view" model="ir.ui.view">
+        <field name="name">project.project.report.wizard.view</field>
+        <field name="model">project.project.report</field>
+        <field name="arch" type="xml">
+            <form string="Project Progress Report (weekly/monthly/yearly)">
+                <!--<group>-->
+                <!--<field name="report_by" required="1"/>-->
+                <!--</group>-->
+                <!--<group colspan="2" col="4">-->
+                <!--<field name="date_from"/>-->
+                <!--<field name="date_to"/>-->
+                <!--</group>-->
+                <group string="Generate Project Schedule Report"/>
+                <footer>
+                    <button string="Print"
+                            name="print_report" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!--Action For Project Schedule  Excel Report-->
+    <act_window id="action_project_schedule_xls_report_wizard"
+                multi="False"
+                key2="client_action_multi" name="Project Schedule Report"
+                res_model="project.project.report"
+                src_model="project.project"
+                view_mode="form" target="new" view_type="form"/>
+
+</odoo>

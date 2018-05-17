@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="loan_rule_request_employee" model="ir.rule">
+            <field name="name">Normal User</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_normal_user'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+        <record id="loan_request_rule_request_manager" model="ir.rule">
+            <field name="name">Manager Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[('employee_id.loan_manager_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_manager_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_rule_request_vp" model="ir.rule">
+            <field name="name">VP Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[('employee_id.loan_vp_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_vp_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_rule_hr_approval_srvs" model="ir.rule">
+            <field name="name">HR Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_hr_approval'))]"/>
+        </record>
+        <record id="loan_rule_budget_approval_srvs" model="ir.rule">
+            <field name="name">Budget Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_budget_approval'))]"/>
+        </record>
+        <record id="loan_rule_finance_approval_srvs"
+                model="ir.rule">
+            <field name="name">Finance Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_finance_approval'))]"/>
+        </record>
+        <record id="loan_rule_ceo_approval_srvs" model="ir.rule">
+            <field name="name">CEO Approval</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[('employee_id.loan_ceo_id.user_id.id','=',user.id)]</field>
+            <!--<field name="domain_force">[('loan_approval_policy_id.ceo_approval','=',True),('employee_id.loan_ceo_id.user_id.id','=',user.id)]</field>-->
+            <field name="groups" eval="[(4,ref('group_loan_ceo_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_rule_all_srvs" model="ir.rule">
+            <field name="name">View All Loan Requests</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_view_all_loan'))]"/>
+        </record>
+        <record id="loan_rule_request_general_manager" model="ir.rule">
+            <field name="name">Services Configuration</field>
+            <field name="model_id" ref="model_hr_employee_loan"/>
+            <field name="groups" eval="[(4,ref('group_loan_config'))]"/>
+        </record>
+
+        <!-- Installment Rule -->
+        <record id="loan_installment_rule_request_employee" model="ir.rule">
+            <field name="name">Normal User</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_normal_user'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_installment_request_rule_request_manager"
+                model="ir.rule">
+            <field name="name">Manager Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[('employee_id.loan_manager_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_manager_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_installment_rule_request_vp" model="ir.rule">
+            <field name="name">VP Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[('employee_id.loan_vp_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_vp_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_installment_rule_ceo_approval_srvs" model="ir.rule">
+            <field name="name">CEO Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[('employee_id.loan_ceo_id.user_id.id','=',user.id)]</field>
+            <!--<field name="domain_force">[('loan_approval_policy_id.ceo_approval','=',True),('employee_id.loan_ceo_id.user_id.id','=',user.id)]</field>-->
+            <field name="groups" eval="[(4,ref('group_loan_ceo_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="loan_installments_rule_payroll_precess_srvs" model="ir.rule">
+            <field name="name">Installments Requests (Payroll Processing)</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_payroll_processing'))]"/>
+        </record>
+        <record id="loan_installments_rule_hr_approval_srvs" model="ir.rule">
+            <field name="name">HR Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_hr_approval'))]"/>
+        </record>
+        <record id="loan_installments_rule_budget_approval_srvs" model="ir.rule">
+            <field name="name">Budget Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_budget_approval'))]"/>
+        </record>
+        <record id="loan_installments_rule_finance_approval_srvs"
+                model="ir.rule">
+            <field name="name">Finance Approval</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_finance_approval'))]"/>
+        </record>
+        <record id="loan_installments_rule_all_srvs" model="ir.rule">
+            <field name="name">View All Installments</field>
+            <field name="model_id" ref="model_loan_installments"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_loan_view_all_loan'))]"/>
+        </record>
+
+    </data>
+</odoo>

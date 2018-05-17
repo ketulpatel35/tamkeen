@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_view_all_salary_breakup,access.view.all.salary.breakup,model_salary_breakup,hr_contract_init.group_view_all_contracts,1,0,0,0
+
+access_update_user_salary_breakup,access.update.user.salary.breakup,model_salary_breakup,hr_contract_init.group_update_contracts,1,1,1,1

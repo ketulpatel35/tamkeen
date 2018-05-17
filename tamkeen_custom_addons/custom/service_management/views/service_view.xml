@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_service_request_tree" model="ir.ui.view">
+            <field name="name">service.request.tree</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <tree string="Service Request">
+                    <field name="reference" />
+                    <field name="employee_id" />
+                    <field name="department_id"/>
+                    <field name="service_category_id"/>
+                    <field name="service_type_id" />
+                    <field name="submit_date"/>
+                    <field name="expected_approval_date_as_sla"/>
+                    <field name="final_approval_date"/>
+                    <field name="waiting_time"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_service_request_form" model="ir.ui.view">
+            <field name="name">service.request.form</field>
+            <field name="model">service.request</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Service Request" >
+                    <header>
+                        <button name="action_submit_for_approval"
+                                states="draft"
+                                string="Submit for Approval"
+                                type="object"
+                                groups="service_management.group_service_user"
+                                class="oe_highlight"/>
+
+                        <button name="action_mngr_validate"
+                                states="mngr_approval"
+                                string="Manager Approval"
+                                type="object"
+                                groups="service_management.group_service_bu_manager_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_vp_validate"
+                                states="vp_approval"
+                                string="VP Approval"
+                                type="object"
+                                groups="service_management.group_service_vp_approval"
+                                class="oe_highlight"/>
+
+                        <button name="validate_administration_validate"
+                                states="administration_approval"
+                                string="Admins Approval"
+                                type="object"
+                                groups="service_management.group_service_administration_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_oe_validate"
+                                states="oe_approval"
+                                string="OE Approval"
+                                type="object"
+                                groups="service_management.group_service_oe_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_ta_validate"
+                                states="ta_approval"
+                                string="TA Approval"
+                                type="object"
+                                groups="service_management.group_service_ta_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_hr_validate"
+                                states="hr_approval"
+                                string="HR Approval"
+                                type="object"
+                                groups="service_management.group_service_hr_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_finance_validate"
+                                states="finance_approval"
+                                string="Finance Approval"
+                                type="object"
+                                groups="service_management.group_service_finance_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_procurement_validate"
+                                states="procurement_approval"
+                                string="Procurement Approval"
+                                type="object"
+                                groups="service_management.group_service_prcrmnt_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_ss_vp_validate"
+                                states="ss_vp_approval"
+                                string="Shared Services VP Approval"
+                                type="object"
+                                groups="service_management.group_service_ss_vp_approval"
+                                class="oe_highlight"/>
+
+                        <button name="action_ceo_validate"
+                                states="ceo_approval"
+                                string="CEO Approval"
+                                type="object"
+                                groups="service_management.group_service_ceo_approval"
+                                class="oe_highlight"/>
+
+                        <button name="service_refused" type="object"
+                                states="ceo_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_ceo_approval"/>
+                        <button name="service_refused" type="object"
+                                states="procurement_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_prcrmnt_approval"/>
+                        <button name="service_refused" type="object"
+                                states="finance_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_finance_approval"/>
+                        <button name="service_refused" type="object"
+                                states="hr_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_hr_approval"/>
+                        <button name="service_refused" type="object"
+                                states="ta_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_ta_approval"/>
+                        <button name="service_refused" type="object"
+                                states="oe_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_oe_approval"/>
+                        <button name="service_refused" type="object"
+                                states="administration_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_administration_approval"/>
+                        <button name="service_refused" type="object"
+                                states="vp_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_vp_approval"/>
+
+                        <button name="service_refused" type="object"
+                                states="mngr_approval"
+                                string="Refuse"
+                                groups="service_management.group_service_bu_manager_approval"/>
+
+                        <button name="reset_to_draft"
+                                states="refused"
+                                string="Reset to Draft"
+                                type="object"
+                                groups="service_management.group_service_hr_approval,service_management.group_service_oe_approval,service_management.group_service_ta_approval,service_management.group_service_finance_approval,service_management.group_service_prcrmnt_approval"/>
+                        <field name="stage_id" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                            <p style="font-weight: bold;color: red;">
+                              Kindly, FYI.
+                              <br/>
+                              The request will not go to the approval cycle unless you pressed on "Submit for Approval" button. 
+                            </p>
+                        </div>
+                        <group colspan="4">
+                            <field name="reference"/>
+                            <field name="state" invisible="True"/>
+                        </group>
+                        <group colspan="4">
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':100}" readonly="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
+                            <field name="employee_id"
+                                   groups="service_management.group_service_on_behalf_approval_srvs" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="f_employee_no" attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('state', '=', 'draft')]}"/>
+                            <field name="employee_id_view" class="oe_read_only" groups="service_management.group_service_bu_manager_approval,service_management.group_service_vp_approval,service_management.group_service_ss_vp_approval,service_management.group_service_ceo_approval,service_management.group_service_hr_approval,service_management.group_service_administration_approval,service_management.group_service_config,service_management.group_service_all_requests,service_management.group_service_oe_approval,service_management.group_service_ta_approval,service_management.group_service_finance_approval,service_management.group_service_prcrmnt_approval" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+
+                            <field name="department_id" class="oe_read_only" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':100}"/>
+
+                            <field name="service_provider" invisible="True" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="service_category_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="service_type_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"
+                                   attrs="{'invisible':[('service_category_id','=',False)], 'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="about_service"
+                                   widget="html"
+                                   attrs="{'invisible':[('service_type_id','=',False)]}"/>
+                            <field name="details"
+                                   placeholder="Please, provide us more details about your request."
+                                   attrs="{'required':[('details_required','=',True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <notebook>
+                                <page string="Information">
+                                    <div>
+                                        The required fields which needs to be filled will be displayed here, if not it will be empty.
+                                    </div>
+
+                                    <group>
+                                        <field name="ar_destination_required" invisible="1" />
+                                        <field name="en_destination_required" invisible="1" />
+                                        <field name="ar_destination" attrs="{'invisible':[('ar_destination_required','=',False)],'required':[('ar_destination_required','=',True)], 'readonly': [('state', '!=', 'draft')]}"/>
+                                        <field name="en_destination" attrs="{'invisible':[('en_destination_required','=',False)],'required':[('en_destination_required','=',True)], 'readonly': [('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group col="4">
+                                        <field name="flight_option" attrs="{'invisible':[('flight_option_required','=',False)],'required':[('flight_option_required','=',True)], 'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                        <field name="flight_option_required"
+                                               invisible="1"/>
+                                        <field name="departure_from_required" invisible="1"/>
+                                        <field name="destination_required" invisible="1"/>
+                                        <field name="departure_from"
+                                               attrs="{'invisible':[('departure_from_required','=',False)],'required':[('departure_from_required','=',True)], 'readonly': [('state', '!=', 'draft')]}"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                               colspan="2"/>
+                                        <field name="destination"
+                                               attrs="{'invisible':[('destination_required','=',False)],'required':[('destination_required','=',True)], 'readonly': [('state', '!=', 'draft')]}"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                               colspan="2"/>
+                                        <field name="date_from_required" invisible="1"/>
+                                        <field name="date_to_required" invisible="1"/>
+                                        <field name="date_from" attrs="{'invisible':[('date_from_required','=',False)],'required':[('date_from_required','=',True)], 'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                        <field name="date_to"
+                                               attrs="{'invisible':['|', ('date_to_required','=',False), ('flight_option', '=', 'one_way')],'required':[('date_to_required','=',True),('flight_option', '=', 'round_trip')], 'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                    </group>
+                                    <group colspan="4" col="4">
+                                        <field name="quantity_required" invisible="1"/>
+                                        <field name="priority_required" invisible="1"/>
+                                        <field name="completion_date_required" invisible="1"/>
+                                        <field name="details_required" invisible="1"/>
+                                        <field name="quantity" attrs="{'invisible':[('quantity_required','=',False)],'required':[('quantity_required','=',True)],'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                        <field name="job_position_required" invisible="1"/>
+                                        <field name="priority"
+                                               attrs="{'invisible':[('priority_required','=',False)],'required':[('priority_required','=',True)]}" colspan="2"/>
+                                        <field name="completion_date" attrs="{'invisible':[('completion_date_required','=',False)],'required':[('completion_date_required','=',True)],'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                        <field name="job_id" attrs="{'invisible':[('job_position_required','=',False)],'required':[('job_position_required','=',True)],'readonly': [('state', '!=', 'draft')]}" colspan="2"/>
+                                    </group>
+                                    <group>
+                                        <field name="file_to_fill" attrs="{'invisible':[('file_to_fill','=',False)]}"/>
+                                        <field name="reference_id" readonly="1"/>
+                                    </group>
+                                </page>
+                                <page string="Endorsement" attrs="{'invisible':['|',('endorsement_required','=',False),('endorsement_text','=',False)]}">
+                                    <group>
+                                        <field name="endorsement_required" invisible="1"/>
+                                        <field name="endorsement_text" nolabel="1" widget="html"/>
+                                    </group>
+                                    <group>
+                                        <field name="endorsement_approved"/>
+                                    </group>
+                                </page>
+                                <page string="Approvals">
+                                    <div>
+                                        The approval/refusal information will be displayed here.
+                                    </div>
+                                    <group>
+                                        <group attrs="{'invisible':[('mngr_user_id','=',False)]}">
+                                            <field name="mngr_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" />
+                                            <field name="mngr_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('vp_user_id','=',False)]}">
+                                            <field name="vp_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="vp_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('adminis_user_id','=',False)]}">
+                                            <field name="adminis_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="adminis_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('oe_user_id','=',False)]}">
+                                            <field name="oe_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="oe_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('ta_user_id','=',False)]}">
+                                            <field name="ta_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="ta_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('hr_user_id','=',False)]}">
+                                            <field name="hr_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="hr_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('finance_user_id','=',False)]}">
+                                            <field name="finance_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="finance_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('procurement_user_id','=',False)]}">
+                                            <field name="procurement_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="procurement_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('ss_vp_user_id','=',False)]}">
+                                            <field name="ss_vp_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="ss_vp_approval_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('ceo_user_id','=',False)]}">
+                                            <field name="ceo_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="ceo_approval_date"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group attrs="{'invisible':[('refused_by','=',False)]}">
+                                            <field name="refused_by" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="refuse_date"/>
+                                        </group>
+                                        <group attrs="{'invisible':[('returned_by','=',False)]}">
+                                            <field name="returned_by" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="return_date"/>
+                                        </group>
+                                    </group>
+                                    <div>
+                                        <br />
+                                        <br />
+                                    </div>
+                                    <group attrs="{'invisible':[('submitted_by','=',False)]}" colspan="4" col="4">
+                                        <field name="submitted_by" colspan="2" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="submit_date" colspan="2"/>
+                                    </group>
+                                    <group attrs="{'invisible':[('final_approval_user_id','=',False)]}" colspan="4" col="4">
+                                        <field name="final_approval_user_id" colspan="2" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="final_approval_date" colspan="2"/>
+                                    </group>
+                                    <group attrs="{'invisible':[('submitted_by','=',False)]}" colspan="4" col="4">
+                                        <field name="waiting_time" colspan="2"/>
+                                        <field name="expected_approval_date_as_sla" attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                    </group>
+                                </page>
+                                <page string="Refuse Reason" attrs="{'invisible': [('state', '!=', 'refused')]}">
+                                    <field name="refuse_reason" nolabel="1" readonly="1" attrs="{'invisible':
+                                               [('refuse_reason', '=', 'False')]}"/>
+                                </page>
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_service_request_search" model="ir.ui.view">
+            <field name="name">service.request.search</field>
+            <field name="model">service.request</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <search string="Services Requests">
+                    <filter icon="terp-go-today" string="Current Month Submitted Requests" name="currentmonth" domain="[('submit_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('submit_date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]" help="Filter past groups" />
+                    <filter name="exceeds_sla_period" string="Pending and Exceeds SLA Period"
+                domain="[('state','not in',['draft','done','refused','approved']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00')) ]"/>
+                    <filter string="Submitted Today" domain="[('submit_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('submit_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                    <separator/>
+                    <filter string="Pending HR Approvals" name="pending_hr_approvals" domain="[('state','=','hr_approval')]"/>
+                    <filter string="Pending Recruitment Approvals" name="pending_recrtmnt_approvals" domain="[('state','in',['oe_approval','ta_approval'])]"/>
+                    <filter string="Pending Admin. Approvals" name="pending_adminis_approvals" domain="[('state','=','administration_approval')]"/>
+                    <filter string="Pending Manager Approvals" name="pending_mngr_approvals" domain="[('state','=','mngr_approval'),('employee_id.service_manager_id.user_id.id','=',uid)]"/>
+                    <separator/>
+                    <filter string="Active Employees Requests" name="active_employees_requests" domain="[('employee_id.active','=',True)]"/>
+                    <filter string="Inactive Employees Requests" name="inactive_employees_requests" domain="[('employee_id.active','=',False)]"/>
+                    <separator/>
+                    <field name="reference" />
+                    <field name="f_employee_no"/>
+                    <field name="employee_id" />
+                    <field name="service_type_id" />
+                    <field name="waiting_time" />
+                    <newline />
+                    <group expand="0" string="Group By...">
+                        <filter string="Service" domain="[]"
+                            context="{'group_by':'service_type_id'}" />
+                        <filter string="Service Category" domain="[]"
+                            context="{'group_by':'service_category_id'}" />
+                        <filter string="Status" domain="[]"
+                            context="{'group_by':'state'}" />
+                        <filter string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}" />
+                        <filter string="Department" domain="[]"
+                            context="{'group_by':'department_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_service_request_calendar" model="ir.ui.view">
+            <field name="name">General Services Requests Calendar</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <calendar string="General Services Requests" color="state" date_start="create_date" quick_add="False" >
+                    <field name="reference"/>
+                    <field name="employee_id"/>
+                    <field name="service_category_id"/>
+                    <field name="service_type_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!--  -->
+        <record id="act_all_services" model="ir.actions.act_window">
+            <field name="name">All Services Requests</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_service_provider': 'hr'}</field>
+            <field name="search_view_id" ref="view_service_request_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new request. 
+              </p><p>
+                Press create button to apply for your general services, The system will take care from the approval.
+              </p>
+            </field>
+        </record>
+
+        <record id="act_all_services_with_reference" model="ir.actions.act_window">
+            <field name="name">Services Requests</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_service_provider': 'hr'}</field>
+            <field name="domain">[('reference_id','=',context.get('default_reference_id'))]</field>
+            <field name="search_view_id" ref="view_service_request_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new request. 
+              </p><p>
+                Press create button to apply for your general services, The system will take care from the approval.
+              </p>
+            </field>
+        </record>
+    
+        <record id="action_request_hr_services" model="ir.actions.act_window">
+            <field name="name">HR Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('service_type_id.hr_approval','=',True)]</field>
+            <field name="context">{'search_default_pending_hr_approvals':1,'default_service_provider': 'hr'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new request. 
+              </p><p>
+                Press create button to apply for your hr services, The system will take care from the approval.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_request_rcrtmnt_services" model="ir.actions.act_window">
+            <field name="name">Recruitment Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">['|',('service_type_id.oe_approval','=',True),('service_type_id.ta_approval','=',True)]</field>
+            <field name="context">{'search_default_pending_recrtmnt_approvals':1,'default_service_provider': 'recruitment'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new request.
+              </p><p>
+                Press create button to apply for any recruitment service, The system will take care from the approval.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_request_administration_services" model="ir.actions.act_window">
+            <field name="name">Administration Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('service_type_id.administration_approval','=',True)]</field>
+            <field name="context">{'search_default_pending_adminis_approvals':1,'default_service_provider': 'administration'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new request. 
+              </p><p>
+                Press create button to apply for your administration services, The system will take care from the approval.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_request_tree_view1" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_service_request_tree"/>
+            <field name="act_window_id" ref="act_all_services"/>
+        </record>
+
+        <record id="action_request_form_view2" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_service_request_form"/>
+            <field name="act_window_id" ref="act_all_services"/>
+        </record>
+
+        <record id="action_services_requests_calendar_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_service_request_calendar"/>
+            <field name="act_window_id" ref="act_all_services"/>
+        </record>
+
+    </data>
+</odoo>

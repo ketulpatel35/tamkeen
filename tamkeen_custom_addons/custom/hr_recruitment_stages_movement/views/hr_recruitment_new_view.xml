@@ -1,0 +1,784 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="new_crm_case_form_view_job">
+        <field name="name">Jobs - Recruitment Form</field>
+        <field name="model">hr.applicant</field>
+        <field name="priority" eval="1" />
+        <field name="arch" type="xml">
+            <form string="Jobs - Recruitment Form">
+                <header>
+                    <field name="stage_id" widget="statusbar"
+                           clickable="True"/>
+                    <field name="stage_name_invisible" invisible="1" />
+                    <button name="confimation_send_email"
+                            string="Send Email" type="object"
+                            attrs="{'invisible': [('stage_id', '=', False)]}" class="oe_highlight"/>
+                    <button name="print_off_letter" string="Print Offer Letter" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', 'not in', ['approved']),'|',
+                                ('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <button name="send_off_letter" string="Send Offer Letter"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', 'not in', ['approved']),'|',
+                                ('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <button name="send_off_letter" string="Resend Offer Letter" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', 'not in', ['send_offer']),'|',
+                                ('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended','Job Offer Accepted'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <button name="rest_to_draft_fun" string="Reset to Draft" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|',('stage_name_invisible', 'not in', ['Under Job Offer']),
+                                ('state', 'in', ['draft'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <button name="send_to_approve"
+                            string="Send for Approval" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', 'not in', ['draft']),('stage_name_invisible', 'not in', ['Under Job Offer'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"
+                    />
+                    <button name="candidate_reject" string="Reject Candidate"
+                            type="object" class="oe_highlight"
+                            confirm="Are you sure that you want to reject the candidate?"
+                            attrs="{'invisible': ['|',
+                                ('stage_name_invisible', 'in', ['Candidate Rejected']),
+                                ('state', 'not in', ['draft'])]}"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+
+                    <!-- Compensation and Benefits -->
+                    <button name="comp_benefit_confirm" string="Confirm"
+                            type="object" states="comp_benefit"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_compensation" />
+
+                    <!-- Rec Manager  -->
+                    <button name="rec_manager_confirm"
+                            string="Recruitment Manager Approval"
+                            type="object" states="rec_manager"
+                            class="oe_highlight"
+                            groups="hr_recruitment.group_hr_recruitment_user" />
+
+                    <button name="refuses" string="Reject" type="object"
+                            states="rec_manager"
+                            class="oe_highlight"
+                            groups="hr_recruitment.group_hr_recruitment_user"/>
+
+                    <!-- HR Manager  -->
+                    <button name="hr_manager_confirm"
+                            string="HR Manager Approval" type="object"
+                            states="manager_app"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>
+
+                    <button name="refuses" string="Reject" type="object"
+                            states="manager_app"
+                            class="oe_highlight" groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>
+
+                    <!-- Dep Manager  -->
+                    <button name="dep_manager_confirm"
+                            string="Department Manager Approval"
+                            type="object" states="dep_manager"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_dep_manager" />
+
+                    <button name="refuses" string="Reject" type="object"
+                            states="dep_manager"
+                            class="oe_highlight" groups="hr_recruitment_stages_movement.group_dep_manager"/>
+
+                    <!-- Head of Unit  -->
+                    <button name="unit_head_confirm"
+                            string="Unit Head Approval"
+                            type="object" states="unit_head"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_unit_head" />
+
+                    <button name="refuses" string="Reject" type="object"
+                            states="unit_head"
+                            class="oe_highlight" groups="hr_recruitment_stages_movement.group_unit_head"/>
+
+                    <!-- CEO  -->
+                    <button name="ceo_manager_confirm" string="CEO Approval"
+                            type="object" states="ceo_approval"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_ceo_manager" />
+
+                    <button name="refuses" string="Reject" type="object"
+                            states="ceo_approval"
+                            class="oe_highlight"
+                            groups="hr_recruitment_stages_movement.group_ceo_manager"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="comp_benefit,rec_manager,manager_app,dep_manager,
+                        unit_head,ceo_approval,approved,send_offer"
+                           statusbar_colors='{"rec_manager":"blue","reject":"red","approved":"red"}'
+                           attrs="{'invisible': [('stage_name_invisible', 'not in', ['Under Job Offer'])]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_right oe_button_box">
+                        <button name="action_makeMeeting" class="oe_stat_button" icon="fa-calendar" type="object"
+                                help="Schedule interview with this applicant">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Schedule<br/>Meeting</span>
+                            </div>
+                        </button>
+                        <button name="action_viewMeeting" class="oe_stat_button" icon="fa-calendar" type="object"
+                                help="View schedule interview with this applicant">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">View<br/>Schedule</span>
+                            </div>
+                        </button>
+                        <button name="action_start_survey"
+                                class="oe_stat_button"
+                                icon="fa-user"
+                                type="object"
+                                help="Answer related job question"
+                                context="{'survey_id': survey_id}"
+                                attrs="{'invisible':[('survey_id','=',False)]}">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Start<br/>Interview</span>
+                            </div>
+                        </button>
+                        <br/>
+                        <button name="action_print_survey"
+                                class="oe_stat_button"
+                                icon="fa-print"
+                                type="object"
+                                help="Print interview report"
+                                attrs="{'invisible':[('survey_id','=',False)]}">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Print<br/>Interview</span>
+                            </div>
+                        </button>
+                        <button name="action_get_attachment_tree_view"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                type="object">
+                            <field name="attachment_number" widget="statinfo"
+                                   string="Documents"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/></h1>
+                        <label for="partner_name" class="oe_edit_only"/>
+                        <h2 style="display: inline-block;" attrs="{'invisible': [('stage_name_invisible', 'not in', ['On-Boarding'])]}">
+                            <field name="partner_name" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <button string="Create Employee Profile" name="create_employee_from_applicant"
+                                    type="object" class="oe_link oe_inline" style="margin-left: 8px;"/>
+                        </h2>
+                        <p>
+                            <label for="partner_name_ar"  class="oe_edit_only"/>
+                            <field name="partner_name_ar" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </p>
+                        <label for="emp_id" />
+                        <field name="emp_id" readonly="1" class="oe_inline" />
+                        <h4>
+                            <label for="user_id" />
+                            <field name="user_id" class="oe_inline"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </h4>
+                        <label for="title_action" />
+                        <div>
+                            <field name="date_action" class="oe_inline"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="title_action" class="oe_inline"
+                                   placeholder="e.g. Call for interview"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page string="General" >
+                            <group >
+                                <group string="Personal Information">
+                                    <field name="previous_stage_id"
+                                           invisible="1"/>
+                                    <field name="partner_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="email_from" widget="email"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="partner_phone"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="current_location"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                    <field name="partner_mobile"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="gender"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="marital"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="date_of_birth"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="date_of_birth_hijri"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="country_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="identification_type"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="identification_number"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group string="Job">
+                                    <field name="survey_id" invisible="1" />
+                                    <field name="response_id" invisible="1"/>
+                                    <field name="job_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="department_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="company_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <label for="availability"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <div>
+                                        <field name="availability" class="oe_inline"
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                        <label string="Day(s)" class="oe_inline"/>
+                                    </div>
+                                    <field name="categ_ids" widget="many2many_tags"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="source_id"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="reference"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="reference2" readonly="1"/>
+                                </group>
+                                <group string="Education">
+                                    <field name="university"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="uni_location"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="type_id" placeholder="Degree"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="major"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="other_major"
+                                           attrs="{'invisible': [('major', '!=', '26')],
+                                        'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="minor"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="gpa"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="gpa_max"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="expect_grad_year"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="expect_grad_month"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group string="Test Result">
+                                    <field name="overall_gia"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="qeyas_result"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="overall_eng"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Offer">
+                            <group>
+                                <group string="Contract">
+                                    <field name="joining_date"
+                                           attrs="{'invisible': [('stage_name_invisible', 'not in', ['Job Offer Accepted'])]}" />
+                                    <field name="current_salary"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <label for="salary_expected"/>
+                                    <div>
+                                        <field name="salary_expected" class="oe_inline"
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                        <span class="oe_inline"
+                                              attrs="{'invisible':[('salary_expected_extra','=',False)]}"> + </span>
+                                        <field name="salary_expected_extra"
+                                               class="oe_inline"
+                                               placeholder="Extra advantages..."
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    </div>
+                                    <field name="maximum_salary"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                           groups="hr_admin.group_hr_admin,hr_recruitment_stages_movement.group_ceo_manager,
+                                   hr_recruitment_stages_movement.group_compensation" />
+                                    <label for="salary_proposed"/>
+                                    <div>
+                                        <field name="salary_proposed" class="oe_inline"
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                        <span class="oe_inline"
+                                              attrs="{'invisible':[('salary_proposed_extra','=',False)]}"> + </span>
+                                        <field name="salary_proposed_extra"
+                                               class="oe_inline" placeholder="Extra advantages..."
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    </div>
+                                    <field name="basic_salary" />
+                                    <field name="housing_allowance" />
+                                    <field name="transport_allowance" />
+                                    <field name="gosi_salary" />
+                                    <field name="net_salary" />
+                                    <field name="grade"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="annual_leave_days" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group string="Compensation and Benefits" groups="hr_admin.group_hr_admin,
+                                hr_recruitment_stages_movement.group_ceo_manager,hr_recruitment_stages_movement.group_compensation">
+                                    <field name="compensation_benefits" readonly="1" />
+                                    <field name="comp_ben_comments"
+                                           attrs="{'required': [('compensation_benefits', '=', 'modify')]}"
+                                           readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Experience">
+                            <group string="Experience" colspan="4">
+                                <field name="experience_ids" required="1" nolabel="1" colspan="4" mode="tree"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="date_from" required="1"/>
+                                        <field name="date_to" required="1"/>
+                                        <field name="job_title" required="1"/>
+                                        <field name="current_job"/>
+                                        <field name="employer" required="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <label for="actual_experience_years"/>
+                                <div>
+                                    <field name="actual_experience_years" class="oe_inline" readonly="1"/>
+                                    <span class="oe_inline"> y </span>
+                                    <field name="actual_experience_months" class="oe_inline" readonly="1"/>
+                                    <span class="oe_inline"> m </span>
+                                </div>
+                                <field name="related_experience" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <button name="get_acctual_experience" string="Update" type="object" class="oe_link oe_inline"/>
+                            </group>
+                        </page>
+                        <page string="Assessmet">
+                            <group string="Assessmet">
+                                <field name="assessment_required" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="assessmnet_template_id"
+                                       attrs="{'required': [('stage_name_invisible', 'in', ['Under Assessment'])],
+                            'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="Reference">
+                            <group string="References" colspan="4">
+                                <field name="reference_ids" nolabel="1" colspan="4" mode="tree" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="reference" />
+                                        <field name="specification"/>
+                                        <field name="name"/>
+                                        <field name="job_title"/>
+                                        <field name="company"/>
+                                        <field name="mobile"/>
+                                        <field name="email"/>
+                                        <field name="date"/>
+                                        <field name="feedback"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Logs">
+                            <group string="Approval Logs" colspan="4">
+                                <field name="approval_logs" nolabel="1" colspan="4" mode="tree">
+                                    <tree create="false">
+                                        <field name="name" />
+                                        <field name="user_id"/>
+                                        <field name="approval"/>
+                                        <field name="date"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Stage Logs" colspan="4">
+                                <field name="stage_logs" nolabel="1" colspan="4" mode="tree">
+                                    <tree create="false">
+                                        <field name="stage_id" />
+                                        <field name="user_id"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="duration"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Questions">
+                            <group>
+                                <field name="question_1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="question_2"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="relative_name"
+                                       attrs="{'invisible': [('question_2', '!=', 'yes')],
+                                   'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="relative_degree"
+                                       attrs="{'invisible': [('question_2', '!=', 'yes')],
+                                   'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="relative_department"
+                                       attrs="{'invisible': [('question_2', '!=', 'yes')],
+                                   'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="Application Summary">
+                            <separator string="Application Summary"/>
+                            <field name="description" placeholder="Feedback of interviews..."
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!--&lt;!&ndash; Compensation and Benefit security on field level &ndash;&gt;-->
+    <record id="view_application_form_compensation_access" model="ir.ui.view">
+        <field name="name">hr.applicant.compensation</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment_stages_movement.new_crm_case_form_view_job"/>
+        <field name="groups_id" eval="[(4, ref('hr_recruitment_stages_movement.group_compensation'))]"/>
+        <field name="arch" type="xml">
+            <field name='compensation_benefits' position="replace">
+                <!--<field name="compensation_benefits"-->
+                       <!--attrs="{'readonly': ['|',('state', 'not in', ['draft', 'comp_benefit']),-->
+    <!--('compensation_benefits', '=', 'modify')]}" />-->
+                <field name="compensation_benefits"
+                       attrs="{'readonly': [('state', 'not in', ['draft', 'comp_benefit'])]}" />
+            </field>
+            <field name='comp_ben_comments' position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name='maximum_salary' position="replace">
+                <field name="maximum_salary"
+                       attrs="{'readonly': ['|',('state', 'not in', ['draft', 'comp_benefit']),
+    ('compensation_benefits', '!=', 'modify')]}" groups="hr_recruitment_stages_movement.group_compensation"/>
+            </field>
+            <field name='salary_proposed' position="replace">
+                <field name="salary_proposed" class="oe_inline"/>
+            </field>
+            <field name='related_experience' position="replace">
+                <field name="related_experience"
+                       attrs="{'readonly': ['|',('state', 'not in', ['draft', 'comp_benefit']),
+    ('compensation_benefits', '!=', 'modify')]}"/>
+            </field>
+            <field name='grade' position="replace">
+                <field name="grade"
+                       attrs="{'readonly': ['|',('state', 'not in', ['draft', 'comp_benefit']),
+    ('compensation_benefits', '!=', 'modify')]}"/>
+            </field>
+            <field name='job_id' position="replace">
+                <field name="job_id"
+                       attrs="{'readonly': ['|',('state', 'not in', ['draft', 'comp_benefit']),
+    ('compensation_benefits', '!=', 'modify')]}"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Overwrite default form in application action -->
+
+    <record model="ir.actions.act_window.view" id="hr_recruitment.action_hr_sec_form_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="hr_recruitment.crm_case_categ0_act_job"/>
+    </record>
+
+    <!-- Assessment form -->
+
+    <record model="ir.ui.view" id="assessment_template_form_view">
+        <field name="name">Assessment Template</field>
+        <field name="model">hr.applicant.assessment.template</field>
+        <field name="priority" eval="1" />
+        <field name="arch" type="xml">
+            <form string="Assessment Template">
+                <sheet>
+                    <group><field name="name" required="1" /></group>
+                    <group><field name="subject" required="1" /></group>
+                    <group colspan="4"><field name="body" required="1" /></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- New Application Action -->
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job2">
+        <field name="name">All Application</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">kanban,tree,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('stage_name_invisible', '!=','Job Application'),('stage_name_invisible', '!=','Job Offer Declined'),
+            ('stage_name_invisible', '!=','Candidate Rejected'),('stage_name_invisible', '!=','Future Talent Pipeline')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_all_application_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job2"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_all_application_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job2"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job3">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'rec_manager')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_rec_manager_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job3"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_rec_manager_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job3"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job4">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'manager_app')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_manager_app_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job4"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_manager_app_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job4"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job5">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'dep_manager')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_dep_manager_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job5"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_dep_manager_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job5"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job7">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'unit_head')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_unit_head_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job7"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_unit_head_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job7"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job6">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'ceo_approval')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_ceo_manager_tree_view_act_job">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job6"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_ceo_approval_view_act_job">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="new_crm_case_form_view_job"/>
+        <field name="act_window_id" ref="crm_case_categ0_act_job6"/>
+    </record>
+
+    <!-- Compensation and Benefit Action -->
+
+    <record model="ir.actions.act_window" id="crm_case_categ0_act_job8">
+        <field name="name">To be Approved</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">tree,kanban,form,graph,calendar</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'comp_benefit')]
+        </field>
+        <field name="help" type="html">
+            <p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+            Applicants and their attached CV are created automatically when an email is sent.
+            If you install the document management modules, all resumes are indexed automatically,
+            so that you can easily search through their content.
+        </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_case_tree_view_job">
+        <field name="name">Applicants</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job" />
+        <field name="arch" type="xml">
+            <field name="priority" position="replace">
+
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_hr_job_form_inherit_for_add_group">
+        <field name="name">view_hr_job_form_inherit_for_add_group</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form" />
+        <field name="arch" type="xml">
+            <button name="set_recruit" position="attributes">
+                <attribute name="groups">hr_recruitment.group_hr_recruitment_user</attribute>
+            </button>
+            <button name="set_open" position="attributes">
+                <attribute name="groups">hr_recruitment.group_hr_recruitment_user</attribute>
+            </button>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_confirmation_mail_send_form">
+        <field name="name">view.confirmation.mail.send.form</field>
+        <field name="model">confirmation.mail.send</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" invisible="1"/>
+                    <h3>Are you sure you want to Send Email</h3>
+                </group>
+                <footer>
+                    <button name="send_confirmation_email" string="Send"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

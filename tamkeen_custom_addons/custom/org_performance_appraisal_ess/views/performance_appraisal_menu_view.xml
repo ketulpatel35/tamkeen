@@ -1,0 +1,41 @@
+<odoo>
+
+    <!-- ESS Performance Appraisal Management-->
+    <menuitem id="pa_ess_main_menu"
+              name="Appraisal Performance Management"
+              groups="org_performance_appraisal.group_pa_normal_user"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="47"/>
+
+    <!-- Objectives -->
+    <menuitem id="pa_objectives_request_ess_menu"
+              name="Objectives"
+              groups="org_performance_appraisal.group_pa_normal_user"
+              parent="pa_ess_main_menu"
+              action="org_performance_appraisal.pa_objectives_action_view"
+              sequence="1"/>
+
+    <!-- Performance Appraisal Request -->
+    <menuitem id="performance_appraisal_request_ess_menu"
+              name="Appraisal Performance"
+              groups="org_performance_appraisal.group_pa_normal_user"
+              parent="pa_ess_main_menu"
+              action="pa_req_ess_action_view"
+              sequence="2"/>
+
+     <!--MSS Appraisal Performance -->
+    <menuitem id="pa_mss_approval_main_menu"
+              name="Appraisal Performance Management"
+              groups="org_performance_appraisal.group_pa_manager_approval,org_performance_appraisal.group_pa_vp_approval,org_performance_appraisal.group_pa_ceo_approval"
+              parent="emp_self_services.sub_mian_mss_menu"
+              sequence="1301"/>
+
+     <!--Appraisal Performance Request to be Approve -->
+    <menuitem id="pa_request_mss_approval_menu"
+              name="Appraisal Performance Requests To Approve"
+              groups="org_performance_appraisal.group_pa_manager_approval,org_performance_appraisal.group_pa_vp_approval,org_performance_appraisal.group_pa_ceo_approval"
+              parent="pa_mss_approval_main_menu"
+              action="action_pa_requests_approval_mss"
+              sequence="1"/>
+
+</odoo>

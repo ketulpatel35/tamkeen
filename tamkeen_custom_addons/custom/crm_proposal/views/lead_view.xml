@@ -1,0 +1,52 @@
+<odoo>
+    <data>
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_base.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <label for="next_activity_id" position="before">
+                    <field name="document_type" attrs="{'required':True}" />
+                </label>
+                <xpath expr="//notebook" position="inside">
+                    <page name="proposition" string="Proposition">
+                        <div class="oe_button_box" name="button_box">
+                            <div class="oe_clear"/>
+                            <button name="action_create_proposal"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-plus"
+                                string="Create Proposal"
+                                attrs="{'invisible': [('proposal_id','!=',False)]}">
+                            </button>
+                            
+                        </div>
+                        <group>
+                            <group>
+                                <field name="proposal_id" attrs="{}" />
+                            </group>
+                            <group>
+                            
+                            </group>
+                        </group>
+                        <group string="Schedule">
+                            <group>
+                                <field name="planned_review_duration" />
+                                <field name="actual_start_date" />
+                                <field name="actual_release_date" />
+                            </group>
+                            <group>
+                                <field name="proposal_writing_duration" />
+                                <field name="assignment_date" />
+                                <field name="planned_start_date" />
+                                <field name="planned_release_date" />
+                            </group>
+                        </group>
+                        <separator string="Proposals"></separator>
+                        <field name="proposal_ids" attrs="{'readonly':True}" />
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

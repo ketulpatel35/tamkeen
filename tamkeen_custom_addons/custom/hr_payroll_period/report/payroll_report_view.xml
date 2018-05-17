@@ -1,0 +1,97 @@
+<odoo>
+    <data>
+        <record id="payroll_report_print_link_view" model="ir.ui.view">
+            <field name="name">payroll.report.print.link</field>
+            <field name="model">payroll.report.print.link</field>
+            <field name="arch" type="xml">
+                <form string="Excel Output">
+                    <separator colspan="4" string="Please save file as .xls excel format"/>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <field name="payroll_xls_output" filename='name' readonly='1'/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--=============== payroll XLS Report Wizard==================-->
+        <record id="hr_payroll_report_xls_view_new" model="ir.ui.view">
+            <field name="name">payroll.report.xls.view</field>
+            <field name="model">payroll.period.report.xls</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Report Generation Wizard">
+                    <group col="1" colspan="2">
+                        <field name="payrol_period_id"
+                               context="{'order_display': 'date_start desc' }"/>
+                    </group>
+                    <group colspan="2" col="4">
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                    </group>
+                    <group>
+                        <field name="sort_by"/>
+                    </group>
+                    <separator string="Columns To Display"/>
+                    <group col="4" colspan="4">
+                        <field name="nationality"/>
+                        <field name="cost_center"/>
+                        <field name="working_days"/>
+                        <field name="hiring_date"/>
+                        <field name="net"/>
+                        <field name="notes"/>
+                        <field name="salary_information"/>
+                        <field name="overtime"/>
+                    </group>
+                    <separator string="Exclude From Net"/>
+                    <group colspan="4" col="4">
+                        <field name="exclude_overtime"/>
+                        <field name="exclude_loan"/>
+                    </group>
+                    <separator string="Filter By"/>
+                    <group>
+                        <field name="employee_ids"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button type="object" name="print_payroll_report"
+                                    string="Generate XLS Report" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--payroll Report Menu Action-->
+        <record model="ir.actions.act_window"
+                id="wizard_print_payroll_xls_report">
+            <field name="name">Payroll Report Generation Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payroll.period.report.xls</field>
+            <field name="view_id" ref="hr_payroll_report_xls_view_new"/>
+            <field name="target">new</field>
+            <field name="context">
+                {'readonly_by_pass': True}
+            </field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <!-- Report main menu -->
+        <menuitem name="Reports"
+                  id="main_payroll_reports_menu"
+                  parent="hr_payroll.menu_hr_payroll_root"
+                  sequence="101"/>
+
+        <!-- payroll report sub menu -->
+        <menuitem name="Payroll Report Generation"
+                  id="payroll_excel_report_generation"
+                  parent="main_payroll_reports_menu" sequence="2"
+                  action="wizard_print_payroll_xls_report"/>
+
+    </data>
+</odoo>

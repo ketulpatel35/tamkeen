@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+    
+       <!-- employee tree view for grade level -->
+       <record id="hr_employee_view_tree_grade_level" model="ir.ui.view">
+           <field name="name">hr.employee.tree.grade.level</field>
+           <field name="model">hr.employee</field>
+           <field name="inherit_id" ref="hr.view_employee_tree"/>
+           <field name="arch" type="xml">
+
+               <xpath expr="//field[@name='job_id']" position="after">
+                   <field name="grade_id"
+                          groups="hr.group_hr_user"/>
+               </xpath>
+
+           </field>
+       </record>
+        
+    </data>
+</openerp>

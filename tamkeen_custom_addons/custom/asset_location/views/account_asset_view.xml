@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_account_asset_asset_location_form" model="ir.ui.view">
+            <field name="name">view.account.asset.asset.location.form</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after">
+                    <field name="location_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_asset_location_form" model="ir.ui.view">
+            <field name="name">view.asset.location.form</field>
+            <field name="model">account.asset.location</field>
+            <field name="arch" type="xml">
+                <form string="Asset Location">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" required="1"/>
+                            <newline/>
+                            <field name="default_location"/>
+                            <field name="scrap_location"/>
+                        </group>
+                        <notebook>
+                            <page string="Assets">
+                                <field name="asset_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="category_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_asset_location_tree" model="ir.ui.view">
+            <field name="name">view.asset.location.tree</field>
+            <field name="model">account.asset.location</field>
+            <field name="arch" type="xml">
+                <tree string="Asset Location">
+                    <field name="name"/>
+                    <field name="default_location"/>
+                    <field name="scrap_location"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_asset_location_search" model="ir.ui.view">
+            <field name="name">view.asset.location.search</field>
+            <field name="model">account.asset.location</field>
+            <field name="arch" type="xml">
+                <search string="Asset Location">
+                    <field name="name"/>
+                    <field name="default_location"/>
+                    <field name="scrap_location"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_asset_location">
+            <field name="name">Asset Location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.asset.location</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Generate Asset Location.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Asset Location" id="menu_asset_location" action="action_asset_location"
+            parent="account.account_management_menu"
+            groups="asset_location.group_asset_location_master"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Document Attachment Form View-->
+        <record id="document_attachment_config_form_view" model="ir.ui.view">
+            <field name="name">document.attachment.config.form.view</field>
+            <field name="model">document.certificate.attachment</field>
+            <field name="arch" type="xml">
+                <form string="Document Certificate Configuration">
+                    <sheet string="Document Certificate Configuration">
+                        <group colspan="4" col="4">
+                            <field name="name" required="1"/>
+                            <field name="code"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Document Attachment Tree View-->
+        <record id="document_attachment_config_tree_view" model="ir.ui.view">
+            <field name="name">document_attachment.config.tree.view</field>
+            <field name="model">document.certificate.attachment</field>
+            <field name="arch" type="xml">
+                <tree string="Document Certificate Configuration">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vendor Registration Group Action -->
+        <record id="action_for_document_attachment_config"
+                model="ir.actions.act_window">
+            <field name="name">Document Certificate Configuration</field>
+            <field name="res_model">document.certificate.attachment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.ui.view" id="vendor_registration_kanban_view">
+            <field name="name">vendor.registration.kanban.view</field>
+            <field name="model">vendor.registration</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by='state'>
+                    <field name="color"/>
+                    <field name="title"/>
+                    <field name="email"/>
+                    <field name="parent_id"/>
+                    <field name="is_company"/>
+                    <field name="phone"/>
+                    <field name="street"/>
+                    <field name="street2"/>
+                    <field name="zip"/>
+                    <field name="city"/>
+                    <field name="country_id"/>
+                    <field name="mobile"/>
+                    <field name="state"/>
+                    <field name="state_id"/>
+                    <field name="image"/>
+                    <field name="type"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_tags_section"/>
+                                <div class="o_kanban_image">
+                                    <t t-if="record.image.raw_value">
+                                        <img t-att-src="kanban_image('res.partner', 'image', record.id.value)"
+                                             class="oe_avatar oe_kanban_avatar_smallbox"/>
+                                    </t>
+                                    <t t-if="!record.image.raw_value">
+                                        <t t-if="record.type.raw_value === 'delivery'">
+                                            <img t-att-src='_s + "/base/static/src/img/truck.png"'
+                                                 class="o_kanban_image oe_kanban_avatar_smallbox"/>
+                                        </t>
+                                        <t t-if="record.type.raw_value === 'invoice'">
+                                            <img t-att-src='_s + "/base/static/src/img/money.png"'
+                                                 class="o_kanban_image oe_kanban_avatar_smallbox"/>
+                                        </t>
+                                        <t t-if="record.type.raw_value != 'invoice' &amp;&amp; record.type.raw_value != 'delivery'">
+                                            <t t-if="record.is_company.raw_value === true">
+                                                <img t-att-src='_s + "/base/static/src/img/company_image.png"'/>
+                                            </t>
+                                            <t t-if="record.is_company.raw_value === false">
+                                                <img t-att-src='_s + "/base/static/src/img/avatar.png"'/>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="oe_partner_heading">
+                                        <field name="name"/>
+                                    </strong>
+                                    <ul>
+                                        <li t-if="record.city.raw_value and !record.country_id.raw_value">
+                                            <field name="city"/>
+                                        </li>
+                                        <li t-if="!record.city.raw_value and record.country_id.raw_value">
+                                            <field name="country_id"/>
+                                        </li>
+                                        <li t-if="record.city.raw_value and record.country_id.raw_value">
+                                            <field name="city"/>,
+                                            <field name="country_id"/>
+                                        </li>
+                                        <li t-if="record.email.raw_value"
+                                            class="o_text_overflow">
+                                            <field name="email"/>
+                                        </li>
+                                    </ul>
+                                    <div class="oe_kanban_partner_links"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vendor Registration Form View-->
+        <record id="vendor_registration_form_view" model="ir.ui.view">
+            <field name="name">vendor.registration.form.view</field>
+            <field name="model">vendor.registration</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Registration">
+                    <header>
+                        <!-- Draft -->
+                        <button name="confirm_vendor"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_management_normal_user"
+                                string="Confirm" states="draft"/>
+                        <button name="cancel_vendor"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_cancel"
+                                string="Cancel" states="draft"/>
+                        <!-- Review -->
+                        <button name="vendor_evaluation"
+                                type="object" class="oe_highlight"
+                                string="Reviewed" states="review"
+                                groups="vendor_registration.group_vendor_management_can_review"/>
+                        <button name="cancel_vendor"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_cancel"
+                                string="Cancel" states="review"/>
+                        <button name="reset_to_draft"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_return_to_draft"
+                                string="Reset to Draft" states="review"/>
+                        <button name="vendor_registered"
+                                type="object" class="oe_highlight"
+                                string="Register Vendor"
+                                states="evaluation"
+                                groups="vendor_registration.group_vendor_management_can_register"/>
+                        <button name="cancel_vendor"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_cancel"
+                                string="Cancel" states="evaluation"/>
+                        <button name="reset_to_draft"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_return_to_draft"
+                                string="Reset to Draft" states="evaluation"/>
+                        <button name="vendor_creation"
+                                type="object" class="oe_highlight"
+                                string="Qualified Vendor"
+                                groups="vendor_registration.group_manage_vendor"
+                                attrs="{'invisible':['|',('is_vendor','!=',False),
+                                ('state','!=','vendor_registered')]}"/>
+                        <button name="cancel_vendor"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_cancel"
+                                string="Cancel" attrs="{'invisible':['|',('is_vendor','!=',False),
+                                ('state','!=','vendor_registered')]}"/>
+                        <button name="reset_to_draft"
+                                type="object" class="oe_highlight"
+                                groups="vendor_registration.group_vendor_return_to_draft"
+                                string="Reset to Draft" attrs="{'invisible':['|',('is_vendor','!=',False),
+                                ('state','!=','vendor_registered')]}"/>
+                        <field name="state" widget="statusbar"
+                               attrs="{'invisible': [('company_type','=','person')]}"/>
+                    </header>
+                    <sheet string="Vendor Registration">
+                        <div name="button_box" class="oe_button_box">
+                            <button class="oe_stat_button" type="object"
+                                    name="open_survey_template"
+                                    string="Evalution"
+                                    groups="vendor_registration.group_manage_vendor"
+                                    icon="fa-pencil-square-o">
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                    name="set_active_inactive"
+                                    string="Blacklist"
+                                    attrs="{'invisible': ['|', '|', ('is_black_list', '=', False), ('state','=','draft'),
+                                    ('company_type', '!=', 'company')]}"
+                                    icon="fa-ban"
+                                    groups="vendor_registration.group_manage_vendor"
+                                    context="{'active': True}">
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                    name="set_active_inactive"
+                                    string="Un-Blacklist"
+                                    attrs="{'invisible': [('is_black_list', '!=', False)]}"
+                                    icon="fa-check-circle"
+                                    groups="vendor_registration.group_manage_vendor"
+                                    context="{'active': False}">
+                            </button>
+                        </div>
+                        <div attrs="{'invisible': [('is_black_list', '=', True)]}">
+                            <p style="font-weight: bold;color: red;">
+                                Blacklisted Vendor
+                            </p>
+                        </div>
+                        <field name="image" widget="image" class="oe_avatar"
+                               options="{'size': [90, 90]}"
+                               attrs="{'readonly':[('is_vendor', '=', True)]}"/>
+                        <div class="oe_title">
+                            <field name="company_type" widget="radio"
+                                   class="oe_edit_only" invisible="1"
+                                   options="{'horizontal': true}"
+                                   attrs="{'readonly':[('is_vendor', '=', True)]}"/>
+                            <h3>
+                                <field name="code" readonly="1"
+                                       attrs="{'invisible':[('code', '=', False)]}"/>
+                                <br/>
+                                <field name="name" default_focus="1"
+                                       placeholder="Name" required="1"
+                                       attrs="{'readonly':[('is_vendor', '=', True)]}"/>
+                                <br/>
+                                <field name="arabic_name"
+                                       placeholder="Arabic Name"
+                                       attrs="{'readonly':[('is_vendor', '=', True)]}"/>
+                            </h3>
+                            <group>
+                                <field name="partner_id"
+                                       readonly="1"
+                                       attrs="{'invisible':[('is_vendor', '=', False)]}"
+                                       groups="vendor_registration.group_manage_vendor"/>
+                                <field name="vendor_categorized"
+                                       attrs="{'required': [('state', '=', 'vendor_registered')]}"
+                                       string="Vendor Categorization"/>
+                            </group>
+                            <div class="o_row">
+                                <field name="parent_id"
+                                       placeholder="Company"
+                                       attrs="{'invisible': [('company_type', '=', 'company')], 'readonly':[('is_vendor', '=', True)]}"/>
+                                <field name="is_black_list" invisible="1"/>
+                                <field name="active" invisible="1"/>
+                                <field name="is_company" invisible="1"/>
+                                <field name="is_vendor" invisible="1"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type"
+                                       attrs="{'invisible': [('parent_id','=', False)]}"
+                                       groups="base.group_no_one"/>
+                                <label for="street" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street"
+                                           placeholder="Street..."
+                                           class="o_address_street"
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"/>
+                                    <field name="street2"
+                                           placeholder="Street 2..."
+                                           class="o_address_street"
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"/>
+                                    <field name="city" placeholder="City"
+                                           class="o_address_city"
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"/>
+                                    <field name="state_id"
+                                           class="o_address_state"
+                                           placeholder="State"
+                                           options='{"no_open": True}'
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"
+                                           context="{'country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP"
+                                           class="o_address_zip"
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"/>
+                                    <field name="country_id"
+                                           placeholder="Country"
+                                           class="o_address_country"
+                                           options='{"no_open": True, "no_create": True}'
+                                           attrs="{'readonly': ['|', ('type', '=', 'contact'), ('parent_id', '!=', False), ('is_vendor', '=', True)]}"/>
+                                </div>
+                                <field name="website" widget="url"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                placeholder="e.g. www.odoo.com"/>
+                                <field name="create_uid" readonly="1"/>
+                                <field name="commercial_registration"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>/>
+                            </group>
+                            <group>
+                                <field name="phone" widget="phone"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="mobile" widget="phone"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="fax"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="email" widget="email"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="survey_template_id"
+                                       invisible="1"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="title" options='{"no_open": True}'
+                                       attrs="{'invisible': [('is_company', '=', True)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                <field name="commercial_registration_expiry_date"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Contacts &amp; Addresses"
+                                  autofocus="autofocus"
+                                  name="contacts_address">
+                                <field name="child_ids" mode="kanban" attrs="{'readonly': [('is_vendor', '=', True)]}"
+                                       context="{'default_parent_id': active_id,
+                                       'default_company_type' : 'person',
+                                       'default_street': street,
+                                       'default_street2': street2,
+                                       'default_city': city,
+                                       'default_state_id': state_id,
+                                       'default_zip': zip,
+                                       'default_country_id': country_id,
+                                       'default_supplier': True,
+                                       'default_lang': lang}">
+                                    <kanban>
+                                        <field name="color"/>
+                                        <field name="name"/>
+                                        <field name="title"/>
+                                        <field name="type"/>
+                                        <field name="email"/>
+                                        <field name="parent_id"/>
+                                        <field name="is_company"/>
+                                        <field name="phone"/>
+                                        <field name="street"/>
+                                        <field name="street2"/>
+                                        <field name="zip"/>
+                                        <field name="city"/>
+                                        <field name="country_id"/>
+                                        <field name="mobile"/>
+                                        <field name="fax"/>
+                                        <field name="state_id"/>
+                                        <field name="image"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <t t-set="color"
+                                                   t-value="kanban_color(record.color.raw_value)"/>
+                                                <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '') + ' oe_kanban_global_click'">
+                                                    <a t-if="!read_only_mode"
+                                                       type="delete"
+                                                       class="fa fa-times pull-right"/>
+                                                    <div class="o_kanban_image">
+                                                        <img t-if="record.image.raw_value"
+                                                             t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                        <t t-if="!record.image.raw_value">
+                                                            <img t-if="record.type.raw_value === 'delivery'"
+                                                                 t-att-src='_s + "/base/static/src/img/truck.png"'/>
+                                                            <img t-if="record.type.raw_value === 'invoice'"
+                                                                 t-att-src='_s + "/base/static/src/img/money.png"'/>
+                                                            <t t-if="record.type.raw_value !== 'invoice' &amp;&amp; record.type.raw_value !== 'delivery'">
+                                                                <img t-if="record.is_company.raw_value === true"
+                                                                     t-att-src='_s + "/base/static/src/img/company_image.png"'/>
+                                                                <img t-if="record.is_company.raw_value === false"
+                                                                     t-att-src='_s + "/base/static/src/img/avatar.png"'/>
+                                                            </t>
+                                                        </t>
+                                                    </div>
+                                                    <div class="oe_kanban_details">
+                                                        <field name="name"/>
+                                                        <div t-if="record.email.raw_value">
+                                                            <field name="email"/>
+                                                        </div>
+                                                        <div t-if="record.type.raw_value != 'contact'">
+                                                            <div>
+                                                                <field name="zip"/>
+                                                                <field name="city"/>
+                                                            </div>
+                                                            <!--<field t-if="record.state_id.raw_value"-->
+                                                            <!--name="state_id"/>-->
+                                                            <field name="country_id"/>
+                                                        </div>
+                                                        <div t-if="record.phone.raw_value">
+                                                            Phone:
+                                                            <field name="phone"/>
+                                                        </div>
+                                                        <div t-if="record.mobile.raw_value">
+                                                            Mobile:
+                                                            <field name="mobile"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Contact / Address">
+                                        <sheet>
+                                            <field name="company_type"
+                                                   invisible="1"/>
+                                            <field name="type" required="1"
+                                                   widget="radio"
+                                                   options="{'horizontal': true}"/>
+                                            <hr/>
+                                            <group>
+                                                <group attrs="{'invisible': [('type','=', 'contact')]}">
+                                                    <label for="street"
+                                                           string="Address"/>
+                                                    <div>
+                                                        <div class="o_address_format"
+                                                             name="div_address">
+                                                            <field name="street"
+                                                                   placeholder="Street..."
+                                                                   class="o_address_street"/>
+                                                            <field name="street2"
+                                                                   placeholder="Street 2..."
+                                                                   class="o_address_street"/>
+                                                            <field name="city"
+                                                                   placeholder="City"
+                                                                   class="o_address_city"/>
+                                                            <field name="state_id"
+                                                                   class="o_address_state"
+                                                                   placeholder="State"
+                                                                   options='{"no_open": True}'
+                                                                   context="{'country_id': country_id, 'zip': zip}"/>
+                                                            <field name="zip"
+                                                                   placeholder="ZIP"
+                                                                   class="o_address_zip"/>
+                                                            <field name="country_id"
+                                                                   placeholder="Country"
+                                                                   class="o_address_country"
+                                                                   options='{"no_open": True, "no_create": True}'/>
+                                                        </div>
+                                                    </div>
+                                                </group>
+                                                <group>
+                                                    <field name="title"
+                                                           placeholder="e.g. Mr."
+                                                           attrs="{'invisible': [('type','&lt;&gt;', 'contact')]}"/>
+                                                    <field name="name"
+                                                           string="Contact Name"
+                                                           attrs="{'required' : [('type', '=', 'contact')]}"/>
+                                                    <field name="email"/>
+                                                    <field name="phone"
+                                                           widget="phone"/>
+                                                    <field name="mobile"
+                                                           widget="phone"/>
+                                                    <field name="comment"
+                                                           placeholder="internal note..."/>
+                                                </group>
+                                            </group>
+                                            <field name="image"
+                                                   invisible="True"/>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Ownership" name="ownership">
+                                <separator string="Ownership"/>
+                                <group>
+                                    <group>
+                                        <field name="national"
+                                               widget="radio"
+                                               attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                        <field name="number_of_employees"
+                                               attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="ownership_other_note"
+                                               attrs="{'invisible': [('national','!=','other')],
+                                           'required': [('national','=','other')],
+                                           'readonly': [('is_vendor', '=', True)]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="owner_partner_ids"
+                                           attrs="{'readonly': [('is_vendor', '=', True)]}"
+                                           nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="name_owner_id"
+                                                   required="1"
+                                                   options="{'no_create': True}"/>
+                                            <field name="country_id"/>
+                                            <field name="ownership"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Financial Statement"
+                                  name="financial_statement">
+                                <separator
+                                    string="Financial Statement Information for Past Years"/>
+                                <field name="financial_statement_information_ids"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}">
+                                    <tree string="Financial Statement Information for Past Years"
+                                          editable="bottom">
+                                        <field name="financial_statement_config_id"
+                                               required="1"/>
+                                        <field name="year" required="1"/>
+                                        <field name="revenue"/>
+                                        <field name="number_of_project"/>
+                                        <field name="doc_name" invisible="1"/>
+                                        <field name="financial_document"
+                                               filename="doc_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Plants &amp; Other Facilities"
+                                  name="plants_other_facilities"
+                                  invisible="1">
+                                <field name="plant_facilities_ids"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}">
+                                    <tree string="Plants &amp; Other Facilities"
+                                          editable="bottom">
+                                        <field name="serial_no"/>
+                                        <field name="plant_description"/>
+                                        <field name="main_activity"/>
+                                        <field name="location"/>
+                                        <field name="area_m2"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Equipment &amp; Machinery"
+                                  name="equipment_machinery"
+                                  invisible="1">
+                                <field name="equipment_machinary_ids"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}">
+                                    <tree string="Equipment &amp; Machinery"
+                                          editable="bottom">
+                                        <field name="serial_no"/>
+                                        <field name="desc_equip_machinery"/>
+                                        <field name="capacity_size"/>
+                                        <field name="model_year"/>
+                                        <field name="quantity"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Quality &amp; HSE"
+                                  name="quality_HSE">
+                                <group string="Quality &amp; HSE">
+                                    <field name="quality_hse_ids"
+                                           attrs="{'readonly': [('is_vendor', '=', True)]}"
+                                           nolabel="1">
+                                        <tree string="" editable="bottom">
+                                            <field name="quality_hse_id"
+                                                   options="{'no_create': True}"/>
+                                            <field name="serial_no"/>
+                                            <field name="quality_yes"/>
+                                            <field name="quality_no"/>
+                                            <field name="vendor_registration_id"
+                                                   invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Required Document"
+                                  name="required_document">
+                                <group string="Required Document">
+                                    <field name="required_document_ids"
+                                           nolabel="1"
+                                           attrs="{'readonly': [('is_vendor', '=', True)]}">
+                                        <tree string="Required Document"
+                                              editable="bottom">
+                                            <field name="serial_no"/>
+                                            <field name="date"/>
+                                            <field name="expiration_date"/>
+                                            <field name="document_certificate"/>
+                                            <field name="attachment_status"/>
+                                            <field name="attached_na"/>
+                                            <field name="attachment_name"
+                                                   invisible="1"/>
+                                            <field name="attachment"
+                                                   attrs="{'required': [('attachment_status', '=', 'required')]}"
+                                                   filename="attachment_name"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Activities" name="vendor_activities">
+                                <field name="vendor_activities_ids"
+                                       attrs="{'readonly': [('is_vendor', '=', True)]}"/>
+                            </page>
+                            <page string="Accounting Information"
+                                  name="accounting_information">
+                                    <field name="accounting_information_ids">
+                                    <tree string="Accounting Information"
+                                          editable="bottom">
+                                        <field name="currency_id" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="name"/>
+                                        <field name="bank_branch"/>
+                                        <field name="bank_address"/>
+                                        <field name="account_number"/>
+                                        <field name="iban_number"/>
+                                        <field name="swift_code"/>
+                                        <field name="vendor_reg_id"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes" name="notes">
+                                <group string="Remarks">
+                                    <field name="notes"
+                                           attrs="{'readonly': [('is_vendor', '=', True)]}"
+                                           nolabel="1"/>
+                                </group>
+                                <group string="Return Notes"
+                                       attrs="{'invisible':[('reset_reason','=',False)], 'readonly': [('is_vendor', '=', True)]}">
+                                    <field name="reset_reason"
+                                           readonly="1"
+                                           nolabel="1"/>
+                                </group>
+                            </page>
+                            <page string="Approvals" name="approvals"
+                                  invisible="1">
+                                <div>
+                                    The approval logs will be displayed here.
+                                </div>
+                                <group colspan="4" col="4">
+                                    <field name="reviewd_user_id"
+
+                                           readonly="1"
+                                           attrs="{'invisible':[('reviewd_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                    <field name="review_date" readonly="1"
+                                           attrs="{'invisible':[('reviewd_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                </group>
+                                <group colspan="4" col="4">
+                                    <field name="evaluated_user_id"
+                                           readonly="1"
+                                           attrs="{'invisible':[('evaluated_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                    <field name="evaluated_date"
+                                           readonly="1"
+                                           attrs="{'invisible':[('evaluated_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                </group>
+                                <group colspan="4" col="4">
+                                    <field name="registered_user_id"
+                                           readonly="1"
+                                           attrs="{'invisible':[('registered_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                    <field name="registered_date"
+                                           readonly="1"
+                                           attrs="{'invisible':[('registered_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                </group>
+                                <group colspan="4" col="4">
+                                    <field name="reset_user_id"
+                                           readonly="1"
+                                           attrs="{'invisible':[('reset_user_id','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                    <field name="reset_date"
+                                           readonly="1"
+                                           attrs="{'invisible':[('reset_date','=',False)], 'readonly': [('is_vendor', '=', True)]}"/>
+                                </group>
+                            </page>
+                            <page string="Stage Logs" name="stage_logs">
+                                <group string="Stage Logs" colspan="4">
+                                    <field name="stage_logs"
+                                           attrs="{'readonly': [('is_vendor', '=', True)]}"
+                                           nolabel="1" colspan="4" mode="tree">
+                                        <tree create="false">
+                                            <field name="stage" />
+                                            <field name="user_id"/>
+                                            <field name="date_from"/>
+                                            <field name="date_to"/>
+                                            <field name="duration"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- dummy view for dynamic activity -->
+        <record id="vendor_activity_dummy_form_view" model="ir.ui.view">
+            <field name="name">vendor.activity.dummy.form.view</field>
+            <field name="model">vendor.registration</field>
+            <field name="inherit_id"
+                   ref="vendor_registration_form_view"/>
+            <field name="arch" type="xml">
+                <!-- dummy, will be modified by activities -->
+                <field name="vendor_activities_ids" position="after"/>
+            </field>
+        </record>
+
+        <!-- Vendor Registration Tree View-->
+        <record id="vendor_registration_tree_view" model="ir.ui.view">
+            <field name="name">vendor.registration.tree.view</field>
+            <field name="model">vendor.registration</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Registration">
+                    <!--<field name="company_id"/>-->
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Procurement Department Search View-->
+        <record id="vendor_registration_search_view" model="ir.ui.view">
+            <field name="name">Procurement Department Search View</field>
+            <field name="model">vendor.registration</field>
+            <field name="arch" type="xml">
+                <search string="Search Procurement Department">
+                    <field name="name"/>
+                    <field name="arabic_name"/>
+                    <field name="active"/>
+                    <field name="company_type"/>
+                    <filter string="Blacklisted" name="blacklist"
+                            domain="[('is_black_list','=', False)]"/>
+                    <filter string="Un-Blacklisted" name="un_blacklist"
+                            domain="[('is_black_list','=', True)]"/>
+                    <filter string="Marked as Company" name="company"
+                            domain="[('company_type','=', 'company')]"/>
+                    <filter string="Marked as Individual" name="individual"
+                            domain="[('company_type','=', 'person')]"/>
+                    <filter string="Partner Created" name="partner_created"
+                            domain="[('is_vendor', '=', True)]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="stage" string="Stage"
+                                icon="terp-personal"
+                                domain="[]" context="{'group_by':'state'}" />
+                        <filter name="company_type" string="Company Type"
+                                icon="terp-personal"
+                                domain="[]" context="{'group_by':'company_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Procurement Department Group Action -->
+        <record id="action_for_vendor_registration"
+                model="ir.actions.act_window">
+            <field name="name">Vendor's</field>
+            <field name="res_model">vendor.registration</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_': 1,
+                'default_state': 'draft'}</field>
+            <field name="domain">[('company_type','=','company')]</field>
+        </record>
+
+        <!-- Procurement Department Group Action -->
+        <record id="action_for_vendor_contact"
+                model="ir.actions.act_window">
+            <field name="name">Vendor Contact</field>
+            <field name="res_model">vendor.registration</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_': 1}</field>
+            <field name="domain">[('company_type','=','person')]</field>
+        </record>
+
+    </data>
+</openerp>

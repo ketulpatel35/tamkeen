@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Personnel Actions View-->
+    <record id="personnel_action_tree_view" model="ir.ui.view">
+        <field name="name">personnel.action.tree.view</field>
+        <field name="model">personnel.actions</field>
+        <field name="arch" type="xml">
+            <tree string="Personnel Action">
+                <field name="name"/>
+                <field name="action_type_id"/>
+                <field name="employee_id"/>
+                <field name="prior_position_id"/>
+                <field name="new_position_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Personnel Actions Search view -->
+    <record id="personnel_action_search_view" model="ir.ui.view">
+        <field name="name">personnel.action.search.view</field>
+        <field name="model">personnel.actions</field>
+        <field name="arch" type="xml">
+            <search string="Personnel Action">
+                <field name="employee_id"/>
+                <field name="employee_company_id" />
+                <field name="name"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_action_type_id"
+                            string="Personnel Action Type"
+                            context="{'group_by':'action_type_id'}"/>
+                    <filter name="state" string="State" icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Personnel Actions Form view -->
+    <record id="personnel_action_form_view" model="ir.ui.view">
+        <field name="name">personnel.action.form.view</field>
+        <field name="model">personnel.actions</field>
+        <field name="arch" type="xml">
+            <form string="Personnel Action">
+                <header>
+                    <button name="submit_for_approval"
+                            string="Submit of Approval" type="object"
+                            class="btn-primary" states="planned"/>
+                    <button name="button_approved"
+                            string="Approved" type="object"
+                            class="btn-primary" states="submitted"/>
+                    <button name="button_rejected"
+                            string="Reject" type="object" states="submitted"/>
+                    <button name="button_active"
+                            string="Manual Activate" type="object"
+                            states="approved" class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet string="Personnel Action">
+                    <group>
+                        <field name="name" readonly="1"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <field name="action_type_id" required="1"
+                               attrs="{'readonly': [('state', '!=', 'planned')]}"/>
+                        <field name="reason_action_id"
+                               context="{'action_type_id': action_type_id}"
+                               required="1" attrs="{'readonly': [('state', '!=', 'planned')]}"/>
+                        <field name="employee_id" required="1"
+                               options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" attrs="{'readonly': [('state', '!=', 'planned')]}"/>
+                        <field name="employee_company_id" readonly="1"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <field name="prior_position_id"
+                               attrs="{'invisible': [('prior_position_required', '!=', True)], 'required': [('prior_position_required', '=', True)], 'readonly': [('prior_position_editable', '!=', True)]}" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" domain="[('employee_id', '=', employee_id)]"/>
+                        <field name="prior_org_unit"
+                               attrs="{'invisible': [('prior_position_id','=',False)]}" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="new_position_id"
+                               attrs="{'invisible': [('new_position_required', '!=', True)], 'required': [('new_position_required', '=', True)], 'readonly': [('state', '!=', 'planned')]}" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="new_org_unit"
+                               attrs="{'invisible': [('new_position_id','=',False)]}" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="prior_grade_level_id"
+                               attrs="{'invisible': [('prior_grade_required', '!=', True)], 'required': [('prior_grade_required', '=', True)]}" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="new_grade_level_id"
+                               attrs="{'invisible': [('new_grade_required', '!=', True)], 'required': [('new_grade_required', '=', True)], 'readonly': [('state', '!=', 'planned')]}" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="prior_basic_salary"
+                               attrs="{'invisible': [('prior_basic_salary_required', '!=', True)], 'required': [('prior_basic_salary_required', '=', True)]}" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="new_basic_salary"
+                               attrs="{'readonly': [('state', '!=', 'draft')],
+                                       'invisible': [('new_basic_salary_required', '!=', True)],
+                                       'required': [('new_basic_salary_required', '=', True)]}"
+                               options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="date_from" required="1" attrs="{'readonly': [('state', '!=', 'planned')]}"/>
+                        <field name="date_to" required="1" attrs="{'readonly': [('state', '!=', 'planned')]}"/>
+                        <field name="acting_percentage" invisible="1"/>
+                    </group>
+                    <field name="company_id"
+                           groups="base.group_multi_company"
+                           readonly="1" invisible="1"/>
+                    <field name="prior_position_required" invisible="1"/>
+                    <field name="new_position_required" invisible="1"/>
+                    <field name="prior_grade_required" invisible="1"/>
+                    <field name="new_grade_required" invisible="1"/>
+                    <field name="prior_basic_salary_required" invisible="1"/>
+                    <field name="new_basic_salary_required" invisible="1"/>
+                    <field name="prior_position_editable" invisible="1"/>
+                    <field name="contract_id" invisible="1"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Personnel Action -->
+    <record id="action_personnel_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Personnel Action</field>
+        <field name="res_model">personnel.actions</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'readonly_by_pass': True}
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to add new personnel action.
+            </p>
+        </field>
+    </record>
+
+    <act_window id="action_employee_leave_remove_wizard"
+                multi="True"
+                key2="client_action_multi" name="Delete My Own Request"
+                res_model="employee.leave.remove.wizard"
+                src_model="hr.holidays"
+                view_mode="form" target="new" view_type="form"
+                groups="hr_holidays_extension.group_leave_manage_normal_user"/>
+</odoo>

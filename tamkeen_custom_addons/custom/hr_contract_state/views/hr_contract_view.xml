@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_expiring_contracts_tree" model="ir.ui.view">
+            <field name="name">hr.contract.contract.expire.tree</field>
+            <field name="model">hr.contract</field>
+            <field name="arch" type="xml">
+                <tree string="Expiring Conracts">
+                    <field name="employee_id" required='1' readonly='1'/>
+                    <field name="job_id"/>
+                    <field name="trial_date_end"/>
+                    <field name="date_end"/>
+                    <field name="state" readonly='1'/>
+                </tree>
+            </field>
+        </record>
+        <record id="open_expiring_contracts" model="ir.actions.act_window">
+            <field name="name">Ending Trials &amp; Contracts</field>
+            <field name="res_model">hr.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_expiring_contracts_tree"/>
+            <field name="domain">['|',('state','in',['pending']),
+                ('state','in',['trial_ending'])]
+            </field>
+            <field name="help" type="html">
+                <p>
+                    There are currently no contracts or trial periods that
+                    are about
+                    to
+                    expire.
+                </p>
+            </field>
+        </record>
+        <!--<menuitem action="open_expiring_contracts" id="menu_expiring_contracts"-->
+                  <!--parent="hr_contract.hr_menu_contract" groups="hr.group_hr_user"-->
+                  <!--sequence="20"/>-->
+
+        <record id="view_draft_contracts_tree" model="ir.ui.view">
+            <field name="name">hr.contract.contract.draft.tree</field>
+            <field name="model">hr.contract</field>
+            <field name="arch" type="xml">
+                <tree string="Contracts to be Approved">
+                    <field name="employee_id" required='1' readonly='1'/>
+                    <field name="department_id" />
+                    <field name="job_id"/>
+                    <field name="date_start" required='1' readonly='1'/>
+                    <field name="trial_date_end"/>
+                    <field name="date_end"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="open_draft_contracts" model="ir.actions.act_window">
+            <field name="name">Contracts to be Approved</field>
+            <field name="res_model">hr.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_draft_contracts_tree"/>
+            <field name="domain">[('state','in',['draft'])]</field>
+            <field name="help" type="html">
+                <p>
+                    There are currently no contracts that need to be approved.
+                </p>
+            </field>
+        </record>
+        <!--<menuitem action="open_draft_contracts" id="menu_draft_contracts"-->
+                  <!--parent="hr_contract.hr_menu_contract" groups="hr.group_hr_user"-->
+                  <!--sequence="30"/>-->
+
+        <!-- HR Contract: Form View -->
+        <record id="view_contract_form" model="ir.ui.view">
+            <field name="name">hr.contract.form.inherit.state</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <!-- <xpath expr="//div[@class='oe_title']"
+                    position="before"> -->
+                    <header position="inside">
+                            <button name="signal_confirm" type="object"
+                                    string="Confirm"
+                                    groups="hr.group_hr_manager" states="draft"
+                                    class="oe_highlight"/>
+
+                            <button name="signal_open" type="object"
+                                    string="Trial Successfull"
+                                    groups="hr.group_hr_manager"
+                                    states="trial_ending"
+                                    class="oe_highlight"/>
+                            <button name="state_close" type="object"
+                                    string="End Contract"
+                                    groups="hr.group_hr_manager"
+                                    states="trial,trial_ending,open,
+                                    pending,pending_done"
+                                    class="oe_highlight"/>
+                            <button name="state_renew" type="object"
+                                    string="Renew" groups="hr.group_hr_manager"
+                                    states="contract_ending"/>
+                            <!--<field name="state" widget="statusbar" />-->
+                    </header>
+                    <!-- </xpath> -->
+                    <xpath expr="//field[@name='date_start']"
+                           position="replace">
+                        <field name="date_start" class="oe_inline" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+
+                    </xpath>
+                    <xpath expr="//field[@name='trial_date_end']"
+                           position="replace">
+                        <field name="trial_date_end" class="oe_inline"
+                               attrs="{'required':
+                               [('trial_date_start','!=',False)],
+                               'readonly': [('state','in',('close'))]}"/>
+                    </xpath>
+                    <xpath expr="//sheet" position="after">
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"
+                                   widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </xpath>
+                    <field name="wage" position="attributes">
+                        <attribute name="required">1</attribute>
+                        <attribute
+                                name="attrs">{'readonly':[('state','!=','draft')
+                            ]}</attribute>
+                    </field>
+                    <field name="type_id" position="attributes">
+                        <attribute name="required">1</attribute>
+                        <attribute
+                                name="attrs">{'readonly':[('state','!=','draft')
+                            ]}</attribute>
+                    </field>
+                    <xpath expr="//header/field[@name='state']"
+                           position="replace">
+                        <field name="state" widget="statusbar" readonly="1"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="contract_view_init_form" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.contract_init</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <!-- domain="[('department_id', '=', employee_dept_id)]" -->
+                <xpath expr="//field[@name='job_id']" position="replace">
+                    <field name="job_id" required="1"
+                           attrs="{'invisible': [('state','=','close')]}"/>
+                    <field name="end_job_id" readonly='1'
+                           attrs="{'invisible': [('state','!=','close')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='trial_date_start']"
+                       position="replace">
+                    <!--<field name="trial_date_start" class="oe_inline"-->
+                    <!--on_change="onchange_trial(trial_date_start)"
+                    attrs="{'required':[('trial_date_end','!=',False)]}" />-->
+                    <field name="trial_date_start" class="oe_inline"
+                           attrs="{'required':[('trial_date_end','!=',False)],
+                                    'readonly': [('state','in',('close'))]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

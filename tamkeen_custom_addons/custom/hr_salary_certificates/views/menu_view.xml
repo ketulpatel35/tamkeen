@@ -1,0 +1,85 @@
+<odoo>
+    <data>
+
+        <!-- Payroll Management root menu -->
+        <menuitem name="Payroll Management"
+                  id="hr_payroll_ess.payroll_main_menu_ess"
+                  parent="emp_self_services.sub_mian_ess_menu" sequence="2000"
+                  groups="hr_payroll_ess.group_payroll_normal_user,hr_salary_certificates.emp_salary_certificates_normal_user"/>
+
+        <!-- Employee Employment Certificates Menu -->
+        <menuitem id="menu_emp_salary_certificates_action"
+                  action="emp_salary_certificates_action"
+                  parent="hr_payroll_ess.payroll_main_menu_ess"
+                  groups="hr_salary_certificates.emp_salary_certificates_normal_user"
+                  sequence="2"/>
+
+        <menuitem id="main_menu_destination_organization_conf"
+                  name="Employment Certificate"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  parent="hr_payroll.menu_hr_payroll_configuration"
+                  sequence="100"/>
+
+        <!-- Destination Organization Type in payroll conf -->
+        <menuitem id="menu_destination_organization_type_conf"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  action="destination_organization_type_action"
+                  parent="main_menu_destination_organization_conf"
+                  sequence="1"/>
+
+        <!-- Destination Organization in payroll conf -->
+        <menuitem id="menu_destination_organization_conf"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  action="destination_organization_action"
+                  parent="main_menu_destination_organization_conf"
+                  sequence="2"/>
+
+        <menuitem id="menu_destination_organization_purpose_conf"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  action="destination_organization_purpose_action"
+                  parent="main_menu_destination_organization_conf"
+                  sequence="3"/>
+
+        <!-- Bank-->
+        <menuitem action="base.action_res_bank_form"
+                  id="menu_bank_for_salary_certificate"
+                  name="Bank"
+                  parent="main_menu_destination_organization_conf"
+                  sequence="4"/>
+
+        <!-- payslip amendment Menus-->
+        <menuitem id="hr_payslip_amendment.payroll_main_menu"
+                  parent="hr_payroll.menu_hr_payroll_root"
+                  name="Payslip Amendment" sequence="20"/>
+
+        <menuitem action="hr_payslip_amendment.action_payslip_amendment"
+                  id="hr_payslip_amendment.menu_payslip_amendment"
+                  parent="hr_payslip_amendment.payroll_main_menu"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  sequence="1"/>
+
+        <menuitem action="emp_salary_certificates_action_payroll_process"
+                  name="Employment Certificate Payslip Amendment"
+                  id="salary_certificates_payslip_amendment"
+                  parent="hr_payslip_amendment.payroll_main_menu"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  sequence="1"/>
+
+        <menuitem
+            id="menu_salary_certificates_main"
+            name="Employment Certificate"
+            groups="hr_salary_certificates.emp_salary_certificates_category_hr_approval"
+            parent="hr.menu_hr_root"
+            sequence="1"/>
+        <menuitem action="emp_salary_certificates_action_pending_hr_approvals"
+                  id="menu_salary_certificates_child"
+                  name="Employment Certificate/s To Approve"
+                  parent="hr_salary_certificates.menu_salary_certificates_main"
+                  groups="hr_salary_certificates.emp_salary_certificates_category_hr_approval"
+                  sequence="1"/>
+
+
+
+
+    </data>
+</odoo>

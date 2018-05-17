@@ -1,0 +1,14 @@
+<odoo>
+    <!-- Cron for timesheet record line create -->
+    <record model="ir.cron" id="timesheet_record_line_cron">
+        <field name="name">Timesheet Record Line</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model" eval="'sheet.time.recording.line'"/>
+        <field name="function" eval="'create_timesheet_record_line'"/>
+        <field name="args" eval="'()'"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,46 @@
+<odoo>
+
+    <!--Product menu-->
+    <menuitem id="parent_menu_product" name="Product" sequence="15" web_icon="product_extension,static/description/product.png" groups="product_extension.group_view_all_products"/>
+
+    <!-- Product menu-->
+    <menuitem name="Products" id="menu_product_master_view_all" action="purchase.product_normal_action_puchased"
+              parent="parent_menu_product" sequence="0"/>
+
+    <!--Configuration menu-->
+    <!--<menuitem id="product_configuration_custom" parent="parent_menu_product" sequence="100" name="Configuration" groups="product_extension.group_all_products_full_access"/>-->
+
+    <record model="ir.ui.menu" id="purchase.menu_procurement_partner_contact_form">
+        <field name="parent_id" ref="product_extension.parent_menu_product"></field>
+        <field name="name">Configuration</field>
+        <field name="groups_id" eval="[(6,0,[ref('product_extension.group_all_products_full_access')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="purchase.menu_purchase_uom_form_action">
+        <field name="parent_id" ref="purchase.menu_procurement_partner_contact_form"></field>
+    </record>
+
+    <record model="ir.ui.menu" id="purchase.menu_purchase_uom_categ_form_action">
+        <field name="parent_id" ref="purchase.menu_procurement_partner_contact_form"></field>
+    </record>
+    <record model="ir.ui.menu" id="purchase.menu_product_category_config_purchase">
+        <field name="parent_id" ref="purchase.menu_procurement_partner_contact_form"></field>
+    </record>
+    <menuitem id="menu_products_varient_master" action="product.product_normal_action_sell" parent="parent_menu_product" groups="product_extension.group_all_products_full_access" sequence="1"/>
+
+
+    <!-- Sellable Products -->
+    <record id="account.menu_product_template_action" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_view_all_products'))
+            ]"/>
+    </record>
+
+    <!-- Purchasable Products -->
+    <record id="purchase.menu_product_normal_action_puchased" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_view_all_products'))
+            ]"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="sales_team_form_view_in_crm" model="ir.ui.view">
+            <field name="name">crm.team.form.inherit</field>
+            <field name="model">crm.team</field>
+            <field name="inherit_id" ref="crm.sales_team_form_view_in_crm"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Stages Control">
+                        <separator string="Stages Control"></separator>
+                        <field name="stage_control_ids"></field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</odoo>

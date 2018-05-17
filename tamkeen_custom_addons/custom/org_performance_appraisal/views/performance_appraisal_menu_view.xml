@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Appraisal Performance Main Menu Root -->
+    <menuitem id="org_performance_appraisal_root_menu"
+              name="Appraisal Performance"
+              groups="org_performance_appraisal.group_pa_hr_approval,org_performance_appraisal.group_pa_budget_approval"
+              web_icon="org_performance_appraisal,static/description/app_icon.jpg"/>
+
+    <!-- Appraisal Performance main Menu -->
+    <menuitem id="org_performance_appraisal_main_menu"
+              name="Appraisal Performance"
+              groups="org_performance_appraisal.group_pa_hr_approval,org_performance_appraisal.group_pa_budget_approval"
+              parent="org_performance_appraisal_root_menu"
+              sequence="1"/>
+
+    <!-- Appraisal Performance Sub main menu -->
+    <menuitem id="org_performance_appraisal_request_menu"
+              name="Appraisal Performance Request"
+              groups="org_performance_appraisal.group_pa_hr_approval,org_performance_appraisal.group_pa_budget_approval"
+              parent="org_performance_appraisal_main_menu"
+              sequence="1"/>
+
+    <!-- Appraisal Performance Request -->
+    <menuitem id="org_pa_request_hr_approval_menu"
+              name="Appraisal Performance HR Approval"
+              groups="org_performance_appraisal.group_pa_hr_approval"
+              parent="org_performance_appraisal_request_menu"
+              action="performance_appraisal_req_hr_approval_action_view"
+              sequence="1"/>
+
+    <menuitem id="org_pa_all_request_menu"
+              name="View All Appraisal Performance"
+              parent="org_performance_appraisal_request_menu"
+              action="performance_appraisal_req_action_view"
+              sequence="2"/>
+
+    <!-- C Configuration -->
+    <!-- C Appraisal Performance Configuration main menu -->
+    <menuitem name="Configuration"
+              id="org_performance_appraisal_configuration_menu"
+              groups="org_performance_appraisal.group_pa_configuration"
+              sequence="2"
+              parent="org_performance_appraisal_root_menu"/>
+
+    <!-- C service panel -->
+    <menuitem id="org_performance_appraisal_panel_menu"
+              name="Appraisal Performance Template"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="action_service_panel_performance_appraisal"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="1"/>
+
+    <!-- C Service Panel Stages -->
+    <menuitem id="org_performance_appraisal_stages_menu"
+              name="Stages"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="action_displayed_stages_performance_appraisal"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="2"/>
+
+    <menuitem id="org_performance_appraisal_wizard_menu"
+              name="Appraisal Performance Wizard"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="act_open_appraisal_performance_wizard"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="3"/>
+
+    <menuitem id="rating_scale_menu"
+              name="Rating Scale"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="rating_scale_action_view"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="4"/>
+
+    <menuitem id="pa_value_menu"
+              name="Value"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="pa_value_action_view"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="5"/>
+
+    <menuitem id="personal_competency_menu"
+              name="Personal Competency"
+              groups="org_performance_appraisal.group_pa_configuration"
+              action="personal_competency_action_view"
+              parent="org_performance_appraisal_configuration_menu"
+              sequence="6"/>
+
+</odoo>

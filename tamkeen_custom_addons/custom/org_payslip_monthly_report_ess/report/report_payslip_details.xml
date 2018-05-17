@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--layout changes for payslip detail-->
+    <template id="minimal_layout" inherit_id="report.minimal_layout">
+        <xpath expr="//t[@t-if='subst is True']" position="replace">
+            <t t-if="subst is True">
+                <script>
+                    function subst() {
+                    var vars = {};
+                    var x = document.location.search.substring(1).split('&amp;');
+                    for (var i in x) {
+                    var z = x[i].split('=', 2);
+                    vars[z[0]] = unescape(z[1]);
+                    }
+                    var x=['frompage', 'topage', 'page', 'webpage', 'section', 'subsection', 'subsubsection'];
+                    for (var i in x) {
+                    var y = document.getElementsByClassName(x[i]);
+                    for (var j=0; j&lt;y.length; ++j)
+                    y[j].textContent = vars[x[i]];
+                    }
+                    var operations = {
+                    'payslip-not-first-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.frompage) ? "hidden" : "visible";
+                    },
+                    'payslip-not-last-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.topage) ? "hidden" : "visible";
+                    },
+                    'payslip-first-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.frompage) ? "visible" : "hidden";
+                    },
+                    'payslip-last-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.topage) ? "visible" : "hidden";
+                    },
+                    };
+                    for (var klass in operations) {
+                    var y = document.getElementsByClassName(klass);
+                    for (var j=0; j&lt;y.length; ++j)
+                    operations[klass](y[j]);
+                    }
+                    }
+                </script>
+            </t>
+        </xpath>
+    </template>
+
+
+    <!--Header footer for payslip details report-->
+    <template id="payslip_report_header_footer_new">
+        <t t-call="org_payslip_monthly_report_ess.payslip_detail_report_header"/>
+        <t t-raw="0"/>
+        <t t-call="org_payslip_monthly_report_ess.payslip_detail_report_footer"/>
+    </template>
+
+    <!--Header for payslip detail-->
+    <template id="org_payslip_monthly_report_ess.payslip_detail_report_header">
+        <div class="header">
+            <t t-foreach="docs" t-as="o">
+                <div align="right">
+                    <img class="img-responsive" src="/org_payslip_monthly_report_ess/static/src/img/Logo_English.jpg" width="230px" height="75px"/>
+                </div>
+                <div
+                        style="position:absolute;text-align:center;z-index:1000;border:0;opacity:0.1;padding-top:350px;margin-left:-15px;">
+                    <img
+                            t-att-src="'/org_payslip_monthly_report_ess/static/src/img/watermark_icon.png'"/>
+                </div>
+                <div style="text-align:center;">
+                    <b style="text-align:center;font-size:25px;">PaySlip Details</b>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-xs-6" style="font-size:20px;">
+                        For the Period of: <span
+                            t-field="o.date_from"
+                            t-field-options='{"format": "dd-MM-YYYY"}'/> - <span
+                            t-field="o.date_to"
+                            t-field-options='{"format": "dd-MM-YYYY"}'/>
+                    </div>
+                    <div class="col-xs-6 text-right" style="font-size:20px;">
+                        PaySlip Printing Date: <span
+                            t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+
+                    </div>
+                </div>
+            </t>
+        </div>
+    </template>
+
+    <!--footer for payslip detail-->
+    <template id="org_payslip_monthly_report_ess.payslip_detail_report_footer"
+              name="payslip_detail_report_footer">
+        <t t-foreach="docs" t-as="o">
+            <div class="footer">
+                <div class="payslip-last-page" style="font-size:14px;">
+                    If no company stamp available please confirm
+                    employment on company letter headed.<br/>
+                    For more details please contact:
+                    <!--<t t-if="o.destination_organization_type.contact_email">-->
+                    <span style="font-size:17px;"
+                          t-esc="o.employee_id.company_id.authorised_employee_email"/>
+                    <!--</t>-->
+                </div>
+                <div style="border-top: 1px solid #808080;font-size:12px;color:#808080;font-family: Sakkal Majalla;">
+                    <t t-if="o.employee_id.company_id">
+                        <b>Address:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.street">
+                                <span t-field="o.employee_id.company_id.street"/>
+                            </t>
+                            -
+                            <t t-if="o.employee_id.company_id.street2">
+                                <span t-field="o.employee_id.company_id.street2"/>
+                            </t>
+                        </span>
+                          <b>City:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.city">
+                                <span t-field="o.employee_id.company_id.city"/>
+                            </t>
+                        </span>
+                          <b>Tel:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.phone">
+                                <span t-field="o.employee_id.company_id.phone"/>
+                            </t>
+                        </span>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+</odoo>

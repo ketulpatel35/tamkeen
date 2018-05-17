@@ -1,0 +1,32 @@
+<odoo>
+
+    <!-- ESS Loan Management-->
+    <menuitem id="menu_employee_loan_for_ess_main"
+              name="Loan Management"
+              parent="emp_self_services.sub_mian_ess_menu"
+              groups="employee_loan.group_loan_normal_user"
+              sequence="40"/>
+    <!-- Loan Request -->
+    <menuitem id="menu_overtime_pre_request_ess"
+              name="Loan Request"
+              parent="menu_employee_loan_for_ess_main"
+              groups="employee_loan.group_loan_normal_user"
+              action="open_loan_pre_ess_requests"
+              sequence="25"/>
+
+    <!-- MSS Loan Management -->
+    <menuitem id="menu_manager_loan_for_ess_main"
+              name="Loan Management"
+              parent="emp_self_services.sub_mian_mss_menu"
+              groups="employee_loan.group_loan_manager_approval"
+              sequence="1300"/>
+
+    <!-- Loan Request to be Approve -->
+    <menuitem id="menu_overtime_pre_request_mss"
+              name="Loan Requests To Approve"
+              parent="menu_manager_loan_for_ess_main"
+              groups="employee_loan.group_loan_manager_approval"
+              action="open_loan_mngr_request_approval"
+              sequence="1"/>
+
+</odoo>

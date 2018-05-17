@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <t t-if="widget.employee_data.access_leave_manager">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-fw fa-calendar"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">Leave</span>
+                            <div class="dash-btn">
+                                <button
+                                        class="btn btn-info btn-xs leaves_to_approve">
+                                    Leave Requests to Approve
+                                </button>
+                                <span class="btn btn-info btn-xs-num leaves_to_approve">
+                                    <t t-esc="widget.employee_data.leaves_to_approve"/>
+                                </span>
+                                <button class="btn btn-info btn-xs leaves_calendar">
+                                    Leaves Calendar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

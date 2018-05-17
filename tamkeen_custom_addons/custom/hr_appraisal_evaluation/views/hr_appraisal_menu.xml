@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <menuitem name="Performance Appraisal" id="appraisal_menu_root"
+                  web_icon="hr_appraisal_evaluation,static/description/appraisal_icon.png"
+                  groups="hr_appraisal_evaluation.group_app_hr_approval,hr_appraisal_evaluation.group_all_app_conf"/>
+        <!-- menu categories -->
+        <!--<menuitem name="Report" id="hr_appraisal_evaluation_report"-->
+                  <!--parent="appraisal_menu_root" sequence="2"-->
+                  <!--groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager"/>-->
+
+        <!-- Configuration Menus -->
+        <menuitem name="Configuration" id="hr_appraisal_evaluation_configuration"
+                  parent="appraisal_menu_root" sequence="3"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <!--<menuitem name="Objective Types" id="objective_types" parent="hr_appraisal_evaluation_configuration"-->
+                  <!--action="objective_types_action"-->
+                  <!--groups="hr_appraisal_evaluation.group_all_app_conf"/>-->
+
+        <menuitem name="Behaviour Types" id="behaviour_types"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="behaviour_types_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <menuitem name="KPI Measurement" id="menu_kpi_measurement"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="kpi_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <menuitem name="Performance Appraisal Year" id="appraisal_year"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="appraisal_year_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <menuitem name="Category Master" id="category_id"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="requirement_category_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <menuitem name="Rating Master"
+                  id="rating_master"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="rating_master_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"/>
+
+        <!-- Employee Appraisal Menus -->
+        <menuitem name="Employee Appraisal"
+                  id="hr_appraisal_evaluation_employee"
+                  parent="appraisal_menu_root" sequence="1"
+                  groups="group_app_hr_approval"/>
+
+        <menuitem name="Employee Performance Appraisal" id="emp_appraisal"
+                  parent="hr_appraisal_evaluation_employee"
+                  action="apprisal_with_default_search_action"
+                  groups="group_app_hr_approval"/>
+
+    </data>
+</odoo>

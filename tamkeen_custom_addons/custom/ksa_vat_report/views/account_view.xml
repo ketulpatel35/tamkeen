@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_invoice_line_tax_tree" model="ir.ui.view">
+            <field name="name">view.invoice.line.tree</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <tree string="Invoice Lines" create="false" edit="false" delete="false">
+                    <field name="date_invoice"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <field name="account_analytic_id"/>
+                    <field name="price_subtotal"/>
+                    <field name="price_tax"/>
+                    <field name="invoice_line_tax_ids"/>
+                    <field name="price_total"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <act_window
+            id="act_account_tax_all_invoice_lines"
+            name="All Invoice Lines"
+            res_model="account.invoice.line"
+            context="{'search_default_invoice_line_tax_ids': [active_id]}"
+            src_model="account.tax"
+        />
+
+        <act_window
+            id="act_account_tax_validated_invoice_lines"
+            name="Validated/Paid Invoice Lines"
+            res_model="account.invoice.line"
+            context="{'search_default_invoice_line_tax_ids': [active_id],'validated':True}"
+            src_model="account.tax"
+        />
+
+        <record model="ir.actions.act_window.view" id="action_tax_invoice_line_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_invoice_line_tax_tree"/>
+            <field name="act_window_id" ref="act_account_tax_all_invoice_lines"/>
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_tax_invoice_line_tree_1">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_invoice_line_tax_tree"/>
+            <field name="act_window_id" ref="act_account_tax_validated_invoice_lines"/>
+        </record>
+
+    <act_window
+            id="account.act_account_tax_net_posted"
+            name="Net Tax Lines - Posted"
+            res_model="account.move.line"
+            context="{'search_default_tax_ids': [active_id], 'search_default_posted': 1}"
+            src_model="account.tax"/>
+
+    <act_window
+            id="account.act_account_tax_tax_posted"
+            name="Tax Lines - Posted"
+            res_model="account.move.line"
+            context="{'search_default_tax_line_id': [active_id], 'search_default_posted': 1}"
+            src_model="account.tax"/>
+
+    <record id="account.menu_finance_reports" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+           (4, ref('ksa_vat_report.group_vat_tax_report')),
+        ]"/>
+    </record>
+
+    <record id="account.menu_finance" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+           (4, ref('ksa_vat_report.group_vat_tax_report')),
+        ]"/>
+    </record>
+
+    </data>
+
+</odoo>

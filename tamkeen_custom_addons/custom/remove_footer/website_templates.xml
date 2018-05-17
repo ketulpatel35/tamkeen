@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--<template id="menu_secondary_inheret" inherit_id="web.menu_secondary"-->
+                  <!--customize_show="True" name="Show Logo">-->
+            <!--<xpath expr="//div[@class='o_sub_menu_footer']" position="replace">-->
+            <!--</xpath>-->
+        <!--</template>-->
+
+        <template id="company_identity_layout3" inherit_id="web.layout"
+                  name="Company Layout" priority="17">
+            <!-- 			<xpa++th expr="//head//link" position="after">
+                            <link rel="shortcut icon"
+                                href="/website_company_identity/static/src/img/favicon.ico" type="image/x-icon" />
+                        </xpath> -->
+            <xpath expr="//title" position="replace">
+                <title>Tamkeen</title>
+            </xpath>
+        </template>
+
+        <!-- addons => web => views => webclient_templates.xml <div class="oe_footer">
+            Powered by <a href="http://www.openerp.com" target="_blank"><span>Odoo</span></a>
+            </div> -->
+
+    </data>
+</openerp>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="attendance_change_request_form_view" model="ir.ui.view">
+        <field name="name">attendance.change.request.form.view</field>
+        <field name="model">attendance.change.request</field>
+        <field name="arch" type="xml">
+            <form string="Change Request">
+                <header>
+                    <!--groups="base.group_user,hr.group_hr_manager,hr_admin.group_hr_admin"-->
+                    <button name="sent_for_review"
+                            type="object" states="draft"
+                            string="Send for Review" class="oe_highlight"/>
+
+                    <button name="sent_for_hr_approval"
+                            type="object"
+                            string="Manager Approval"
+                            class="oe_highlight"
+                            attrs="{'invisible':['|', ('active','=',False), ('state', '!=', 'for_review')]}"
+                            groups="hr_attendance.group_hr_attendance_manager"/>
+
+                    <button name="set_to_approved"
+                            type="object"
+                            states="hr_review"
+                            string="Hr Approval" class="oe_highlight" groups="hr_attendance.group_hr_attendance_user"/>
+                    <button name="verify_attendance"
+                            type="object"
+                            string="Verify Attendance"
+                            class="oe_highlight"
+                            attrs="{'invisible':[('state','!=','waiting_for_attendnace'),('attendance_id','=',False)]}"/>
+
+                    <button name="request_cancel"
+                            type="object"
+                            string="Cancel"
+                             attrs="{'invisible':['|', ('active','=',False), ('state', '!=', 'for_review')]}"
+                            groups="hr_attendance.group_hr_attendance_manager"/>
+
+                    <button name="request_cancel"
+                            type="object"
+                            states="hr_review"
+                            string="Cancel" groups="hr_attendance.group_hr_attendance_user"/>
+
+                    <button name="set_state_to_draft"
+                            type="object"
+                            attrs="{'invisible':['|', ('active','=',False), ('state', '!=', 'for_review')]}"
+                            string="Set to Draft" groups="hr_attendance.group_hr_attendance_manager"/>
+                    <button name="set_state_to_draft"
+                            type="object"
+                            states="hr_review"
+                            string="Set to Draft" groups="hr_attendance.group_hr_attendance_user"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                     <div class="oe_button_box" name="button_box">
+                        <button name="action_view_attendance"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('attendance_id', '=', False)]}">
+                            <field name="attendance_count" widget="statinfo"
+                                   string="Attendance"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"
+                         attrs="{'invisible':[('ref','=',False)]}">
+                        <h1>
+                            <field name="ref" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group colspan="4" col="4">
+                            <field name="employee_id" required="1" readonly="1"/>
+                            <!--<field name="type" required="1"-->
+                            <!--attrs="{'readonly':[('state', '!=', 'draft')]}"/>-->
+                            <field name="departement_id" readonly="1"/>
+                            <field name="change_reason_id"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}" widget="selection" required="1"/>
+                            <field name="immediate_manager" readonly="1"
+                                   options="{'no_open': True}"
+                                   string="Immediate Manager" invisible="1"/>
+                            <field name='date' invisible="1"/>
+                            <field name="onsite" invisible="1"/>
+                            <field name="permission" invisible="1"/>
+                            <field name="sign_in" invisible="1"/>
+                            <field name="sign_out" invisible="1"/>
+                            <field name="attendance_id"
+                                   readonly="1"
+                                   attrs="{'invisible':[('state','!=','waiting_for_attendnace'),('attendance_id','=',False)]}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_from"
+                                   attrs="{'readonly':[('state', '!=', 'draft')], 'required': ['|', '|', ('onsite', '=', True), ('sign_in', '=', True), ('permission', '=', True)], 'invisible': [('sign_out', '=', True)]}"/>
+                            <field name="date_to"
+                                   attrs="{'readonly':[('state','!=','draft')], 'required': ['|', '|', ('onsite', '=', True), ('sign_out', '=', True), ('permission', '=', True)], 'invisible': [('sign_in', '=', True)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"
+                               attrs="{'readonly':[('state','!=','draft')]}"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="attendance_change_request_tree_view" model="ir.ui.view">
+        <field name="name">attendance.change.request.tree.view</field>
+        <field name="model">attendance.change.request</field>
+        <field name="arch" type="xml">
+            <tree string="Change Request">
+                <field name="ref"/>
+                <field name="employee_id"/>
+                <field name="change_reason_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="change_request_search_view" model="ir.ui.view">
+        <field name="name">attendance.change.request.search.view</field>
+        <field name="model">attendance.change.request</field>
+        <field name="arch" type="xml">
+            <search string="Change Request">
+                <field name="ref"/>
+                <field name="employee_id"/>
+                <field name="f_employee_no"/>
+                <filter string="Pending HR Approvals" name="pending_hr_approve"
+                        domain="[('state','=','hr_review')]"/>
+                <filter name="group_name" string="Status"
+                        context="{'group_by':'state'}"/>
+                <filter name="group_employee" string="Employee"
+                        context="{'group_by':'employee_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Attenance search view inherit -->
+    <record id="hr_attendance_view_filter_late_in" model="ir.ui.view">
+        <field name="name">hr.attendance.view.filter.late.in</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id"
+               ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <filter name="today" position="replace"/>
+            <filter name="groupby_name" position="replace"/>
+            <xpath expr="//group" position="inside">
+                <filter name="groupby_name" string="Month"
+                        context="{'group_by':'date'}"/>
+                <filter name="groupby_status" string="Status"
+                        context="{'group_by': 'status'}"/>
+            </xpath>
+            <field name="department_id" position="after">
+                <filter string="Late In/Out"
+                        domain="[('late_in_out_compute', '=', True)]"/>
+                <filter string="Pending Approvals"
+                        name="pending_approvals"
+                        domain="['|',('employee_id.attendance_manager_id.user_id.id','=',uid),'|',('employee_id.attendance_vp_id.user_id.id','=',uid),('employee_id.attendance_ceo_id.user_id.id','=',uid)]"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="attendance_change_request_action"
+            model="ir.actions.act_window">
+        <field name="name">Change Request</field>
+        <!--<field name="domain">-->
+        <!--[('state','in',['hr_review'])]-->
+        <!--</field>-->
+        <field name="context">{'search_default_pending_hr_approve':1,
+            'default_active':1}</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.change.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="attendance_change_reason_form_view" model="ir.ui.view">
+        <field name="name">attendance.change.reason.form.view</field>
+        <field name="model">attendance.change.reason</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Change Reason">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name" required="1"/>
+                        <field name="code" required="1"/>
+                        <field name="onsite"/>
+                        <field name="permission"/>
+                        <field name="sign_in"/>
+                        <field name="sign_out"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="attendance_change_reason_tree_view" model="ir.ui.view">
+        <field name="name">attendance.change.reason.tree.view</field>
+        <field name="model">attendance.change.reason</field>
+        <field name="arch" type="xml">
+            <tree string="Change Request">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="onsite"/>
+                <field name="permission"/>
+                <field name="sign_in"/>
+                <field name="sign_out"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="attendance_change_reason_action"
+            model="ir.actions.act_window">
+        <field name="name">Attendance Change Reason</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.change.reason</field>
+    </record>
+
+    <!-- Change Request Configuration -->
+    <record id="attendance_change_request_config_form_view" model="ir.ui.view">
+        <field name="name">attendance.change.request.config.form.view</field>
+        <field name="model">attendance.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Configuration">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="per_day_change_request"/>
+                        <field name="month_change_request"/>
+                    </group>
+                    <group string="Standard Working Time">
+                        <field name="work_from"/>
+                        <field name="work_to"/>
+                        <field name="buffer_hours"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="attendance_change_request_config_tree_view" model="ir.ui.view">
+        <field name="name">attendance.change.request.config.tree.view</field>
+        <field name="model">attendance.configuration</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Configuration">
+                <field name="per_day_change_request"/>
+                <field name="month_change_request"/>
+                <field name="work_from"/>
+                <field name="work_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="attendance_change_request_config_action"
+            model="ir.actions.act_window">
+        <field name="name">Attendance Configuration</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.configuration</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_attendance_form_view_inherit_for_permission">
+        <field name="name">hr.attendance.form.view.inherit.for.permission</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="attendance_capture.hr_attendance_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <field name="worked_hours" position="after">
+                <field name="permission_hours" readonly="1"
+                       widget="float_time"/>
+                <field name="manual_attendance"
+                       attrs="{'invisible':[('manual_attendance', '!=', True)]}"/>
+            </field>
+            <field name="check_out" position="after">
+                <field name="machine_sign_in" readonly="1"/>
+                <field name="machine_sign_out" readonly="1"/>
+                <field name="late_in_out"/>
+                <field name="late_in_out_compute" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_attendance_form_view_inherit_for_notebook">
+        <field name="name">hr.attendance.form.view.inherit.for.notebook</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]" position="inside">
+                <notebook>
+                    <page string="Change Request" autofocus="autofocus">
+                        <field name="attendance_change_request_ids" readonly="1"/>
+                    </page>
+                    <page string="Attendance History">
+                        <group>
+                            <field name="hr_attendance_history_ids" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="references"/>
+                                    <field name="old_checkin_date"/>
+                                    <field name="old_checkout_date"/>
+                                    <field name="new_checkin_date"/>
+                                    <field name="new_checkout_date"/>
+                                    <field name="updated_by"/>
+                                    <field name="updated_time"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+    <data noupdate="1">
+        <record id="seq_employee_change_request" model="ir.sequence">
+            <field name="name">Change Request</field>
+            <field name="code">seq.change.request</field>
+            <field name="prefix">CR</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+
+    <record id="attendance_change_request_form_view_on_behalf"
+            model="ir.ui.view">
+        <field name="name">attendance_change_request_form_view_on_behalf</field>
+        <field name="model">attendance.change.request</field>
+        <field name="inherit_id" ref="attendance_change_request.attendance_change_request_form_view" />
+        <field name="groups_id" eval="[(6, 0, [ref('hr_attendance_customization.group_attendance_self_approval_srvs')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="domain">[('id','!=',False)]</attribute>
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

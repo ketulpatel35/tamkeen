@@ -1,0 +1,8 @@
+<odoo>
+    <menuitem id="menu_working_schedule_template"
+              name="Working Schedule"
+              parent="organization_structure.menu_org_configuration"
+              action="hr_schedule.open_hr_schedule_template_view"
+              sequence="200"
+              groups="organization_structure.group_planning_head"/>
+</odoo>

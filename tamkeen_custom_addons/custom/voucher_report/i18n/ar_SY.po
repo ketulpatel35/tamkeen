@@ -1,0 +1,92 @@
+﻿# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* voucher_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-11 07:45+0000\n"
+"PO-Revision-Date: 2018-04-11 07:45+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Account"
+msgstr "الحساب"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Amount Currency"
+msgstr "المبلغ بالعملة"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Analytic Account"
+msgstr "مركز التكلفة"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Credit"
+msgstr "دائن"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Currency"
+msgstr "العملة"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Debit"
+msgstr "المدين"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Journal Entry"
+msgstr "قيد اليومية"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Journal Type"
+msgstr "نوع القيد"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Label"
+msgstr "البيان"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Partner"
+msgstr "المستفيد"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Product"
+msgstr "منتج"
+
+#. module: voucher_report
+#: model:ir.ui.view,arch_db:voucher_report.report_voucher_template_form_view_arabic
+msgid "Reference"
+msgstr "مرجع"
+
+#. module: voucher_report
+#: model:ir.actions.report.xml,name:voucher_report.report_account_move_form
+msgid "Voucher Report"
+msgstr "طباعة المستند"
+

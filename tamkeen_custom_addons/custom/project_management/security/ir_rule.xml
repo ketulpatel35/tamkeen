@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="project.project_public_members_rule"
+                model="ir.rule">
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_read" eval="False"/>
+        </record>
+
+        <record id="project_project_assign" model="ir.rule">
+            <field name="name">Assign Project</field>
+            <field name="model_id" ref="model_project_project"/>
+            <field name="domain_force">['|', '|', '|', '|',
+                ('user_id','=',user.id),
+                ('secondary_pm_id','=',user.id),
+                ('project_sponsor_id','=',user.id),
+                ('control_project_manager_id','=',user.id),
+                ('account_manager_id','=',user.id)]
+            </field>
+            <field name="groups"
+                   eval="[(4,ref('group_view_assigned_project'))]"/>
+        </record>
+
+        <record id="project_document_assign_project" model="ir.rule">
+            <field name="name">Project Document Assign Project</field>
+            <field name="model_id" ref="model_project_documents"/>
+            <field name="domain_force">['|', '|', '|', '|',
+                ('project_id.user_id','=',user.id),
+                ('project_id.secondary_pm_id','=',user.id),
+                ('project_id.project_sponsor_id','=',user.id),
+                ('project_id.control_project_manager_id','=',user.id),
+                ('project_id.account_manager_id','=',user.id)]
+            </field>
+            <field name="groups"
+                   eval="[(4,ref('group_view_assigned_project'))]"/>
+        </record>
+
+        <record id="project_document_all_project" model="ir.rule">
+            <field name="name">Project Document All Project</field>
+            <field name="model_id" ref="model_project_documents"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_view_all_project'))]"/>
+        </record>
+
+        <record id="project_issue_assign_project" model="ir.rule">
+            <field name="name">Project Issue Assign Project</field>
+            <field name="model_id" ref="model_project_issue"/>
+            <field name="domain_force">['|', '|', '|', '|',
+                ('project_id.user_id','=',user.id),
+                ('project_id.secondary_pm_id','=',user.id),
+                ('project_id.project_sponsor_id','=',user.id),
+                ('project_id.control_project_manager_id','=',user.id),
+                ('project_id.account_manager_id','=',user.id)]
+            </field>
+            <field name="groups"
+                   eval="[(4,ref('group_view_assigned_project'))]"/>
+        </record>
+
+        <record id="project_issue_all_project" model="ir.rule">
+            <field name="name">Project Issue All Project</field>
+            <field name="model_id" ref="model_project_issue"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_view_all_project'))]"/>
+        </record>
+
+        <record id="project_risk_assign_project" model="ir.rule">
+            <field name="name">Project Risk Assign Project</field>
+            <field name="model_id" ref="model_project_risks"/>
+            <field name="domain_force">['|', '|', '|', '|',
+                ('project_id.user_id','=',user.id),
+                ('project_id.secondary_pm_id','=',user.id),
+                ('project_id.project_sponsor_id','=',user.id),
+                ('project_id.control_project_manager_id','=',user.id),
+                ('project_id.account_manager_id','=',user.id)]
+            </field>
+            <field name="groups"
+                   eval="[(4,ref('group_view_assigned_project'))]"/>
+        </record>
+
+        <record id="project_risk_all_project" model="ir.rule">
+            <field name="name">Project Risk All Project</field>
+            <field name="model_id" ref="model_project_risks"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_view_all_project'))]"/>
+        </record>
+
+        <record id="project_task_all_project" model="ir.rule">
+            <field name="name">Project Task All Project</field>
+            <field name="model_id" ref="model_project_task"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_view_all_project'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,38 @@
+<odoo>
+    <!-- form view of Leave Linked With Payroll-->
+    <record id="leave_linked_amendment_wizard" model="ir.ui.view">
+        <field name="name">leave.linked.amendment.wizard</field>
+        <field name="model">hr.leave.linked.amendment</field>
+        <field name="arch" type="xml">
+            <form string="Leave Linked Amendment">
+                <group>
+                    <field name="monthly_partition_ids" nolabel="1">
+                        <tree string="Monthly Partition"
+                              editable="bottom">
+                            <field name="name"/>
+                            <field name="days"/>
+                            <field name="hours"/>
+                            <field name="payroll_period_id"/>
+                            <field name="amendment_created"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Confrim" name="confirm_by_hr" type="object"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action of Leave Linked With Payroll -->
+    <record model="ir.actions.act_window"
+            id="action_leave_linked_amendment_wizard">
+        <field name="name">Leave Linked Amendment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.leave.linked.amendment</field>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>

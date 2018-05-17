@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <delete model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_my_leaves" />
+    <delete model="ir.ui.menu" id="hr_holidays.menu_open_company_allocation" />
+
+    <record id="hr_holidays.menu_open_ask_holidays_new"
+            model="ir.ui.menu">
+        <field name="parent_id" ref="hr_holidays.menu_hr_holidays_report"/>
+        <field name="name">Leaves Calendar</field>
+    </record>
+
+    <record id="hr_holidays.menu_open_department_leave_allocation_approve"
+            model="ir.ui.menu">
+        <field name="parent_id" ref="hr_holidays.menu_hr_holidays_report"/>
+    </record>
+
+    <record model="ir.actions.report.xml" id="hr_holidays.report_holidays_summary">
+        <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root">
+        <field name="groups_id"
+               eval="[(4, ref('group_leave_all_requests')),(4, ref('hr_leave_allocation')), (4, ref('hr_holidays.group_hr_holidays_user'))]" />
+        <field name="name">Leaves Management</field>
+            <field name="web_icon">hr_holidays_extension,static/description/icon.png</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_holidays.act_hr_leave_request_to_meeting">
+        <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_dashboard">
+        <field name="sequence">98</field>
+    </record>
+
+    <record id="hr_holidays.act_hr_employee_holiday_request" model="ir.actions.act_window">
+        <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id, 'search_default_group_type': 1}</field>
+        <field name="domain">[('type', '=', 'remove')]</field>
+    </record>
+
+    <record id="hr_holidays.menu_hr_holidays_approvals" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_leave_all_requests'))
+            ]"/>
+        <field name="name">Leaves Management</field>
+    </record>
+
+    <record id="hr_holidays.menu_open_department_leave_approve" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_leave_all_requests'))
+            ]"/>
+        <field name="name">Leave Request/s</field>
+    </record>
+
+    <menuitem
+                id="menu_for_leave_proof"
+                name="Leave Proof"
+                parent="hr_holidays.menu_hr_holidays_configuration"
+                sequence="2"
+                action="hr_holidays_extension.leave_proof_action"/>
+
+</odoo>

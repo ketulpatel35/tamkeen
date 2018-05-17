@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Pay Slip Amendment -->
+        <record id="view_payslip_amendment_tree" model="ir.ui.view">
+            <field name="name">hr.payslip.amendment.tree</field>
+            <field name="model">hr.payslip.amendment</field>
+            <field name="arch" type="xml">
+                <tree string="Pay Slip Amendments">
+                    <!--<field name="name"/>-->
+                    <field name="type"/>
+                    <field name="employee_id"/>
+                    <field name="input_id"/>
+                    <field name="calculation_based_on"/>
+                    <field name="corresponding_rule"/>
+                    <field name="amendment_hours"/>
+                    <field name="number_of_days"/>
+                    <field name="amount"/>
+                    <field name="note"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_payslip_amendment_search" model="ir.ui.view">
+            <field name="name">hr.payslip.amendment.search</field>
+            <field name="model">hr.payslip.amendment</field>
+            <field name="arch" type="xml">
+                <search string="Pay Slip Amendments">
+                    <field name="employee_id"/>
+                    <field name="employee_company_id"/>
+                    <separator/>
+                    <filter string="Active Employees Amendments" name="active_employees_amendments" domain="[('employee_id.active','=',True)]"/>
+                    <filter string="Inactive Employees Amendments" name="inactive_employees_amendments" domain="[('employee_id.active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_payslip_addtion_inherit_for_note">
+            <field name="name">hr.payslip.additon.inherit.for.note</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='input_line_ids']//tree//field[@name='contract_id']" position="before">
+                    <field name="note"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_payslip_amendment_form" model="ir.ui.view">
+            <field name="name">hr.payslip.amendment.form</field>
+            <field name="model">hr.payslip.amendment</field>
+            <field name="arch" type="xml">
+                <form string="Pay Slip Amendment">
+                    <header>
+                        <button name="do_validate" class="oe_highlight"
+                                states="draft" type="object" string="Confirm"
+                                groups="hr_payroll.group_hr_payroll_user"/>
+                        <button name="do_done" type="object" states="validate" class="oe_highlight"
+                                string="Done" groups="hr_payroll.group_hr_payroll_user"/>
+                        <button name="do_cancel" type="object" states="draft,validate" class="oe_highlight"
+                                string="Cancel" groups="hr_payroll.group_hr_payroll_user"/>
+                        <button name="do_draft" type="object" states="cancel" class="oe_highlight"
+                                string="Set to Draft" groups="hr_payroll.group_hr_payroll_user"/>
+                        <field name="state" widget="statusbar" required="1" readonly="1"/>
+                    </header>
+                    <sheet string="Pay Slip Amendment">
+                        <group>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="code" readonly="1"/>
+                                </h1>
+                            </div>
+                            <newline/>
+                            <group>
+                                <field name="name" required="1" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <field name="employee_id" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="job_id" readonly="1" required="1"/>
+                                <field name="org_unit_type" readonly="1"
+                                       required="1"/>
+                                <field name="employee_company_id" readonly="1"
+                                       required="1"/>
+                                <field name="company_id" readonly="1"
+                                       groups="base.group_multi_company"/>
+                                <field name="department_id" readonly="1"
+                                       required="1"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <field name="calculation_based_on"
+                                       required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="type" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="corresponding_rule"
+                                       attrs="{'readonly': [('state','not in',('draft'))], 'invisible': [('calculation_based_on', '=', 'amount')], 'required': [('calculation_based_on', '=', 'days_hours')]}"/>
+                            </group>
+                            <newline/>
+                            <group col="4" colspan="4">
+                                <field name="number_of_days"
+                                       attrs="{'readonly': [('state','not in',('draft'))], 'invisible': [('calculation_based_on', '=', 'amount')], 'required': [('calculation_based_on', '=', 'days_hours')]}"/>
+                                <field name="amendment_hours"
+                                       attrs="{'readonly': [('state','not in',('draft'))], 'invisible': [('calculation_based_on', '=', 'amount')], 'required': [('calculation_based_on', '=', 'days_hours')]}"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <field name="input_id" widget="selection"
+                                       attrs="{'readonly': [('state','not in',('draft'))], 'invisible': [('calculation_based_on', '!=', 'amount')], 'required': [('calculation_based_on', '=', 'amount')]}"/>
+                                <field name="amount"
+                                       attrs="{'readonly': [('state','not in',('draft'))], 'invisible': [('calculation_based_on', '!=', 'amount')], 'required': [('calculation_based_on', '=', 'amount')]}"/>
+                                <field name="reference_id" readonly="1"/>
+                            </group>
+                            <newline/>
+                            <newline/>
+                        </group>
+                        <notebook>
+                            <page string="Note" name="note">
+                                <field name="note" nolabel="1" placeholder="Explain the reason for the amendment..." attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="action_payslip_amendment" model="ir.actions.act_window">
+            <field name="name">Pay Slip Amendments</field>
+            <field name="res_model">hr.payslip.amendment</field>
+            <field name="context">
+                {
+                'readonly_by_pass': True
+                }
+            </field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="payroll_main_menu" parent="hr.menu_hr_root"/>
+        <menuitem action="action_payslip_amendment"
+                  id="menu_payslip_amendment"
+                  parent="hr_payroll.menu_hr_payroll_root"
+                  groups="hr_payroll.group_hr_payroll_user"
+                  sequence="20"/>
+
+    </data>
+</odoo>

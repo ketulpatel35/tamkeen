@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="loan_proof_form_view" model="ir.ui.view">
+        <field name="name">Loan Proof</field>
+        <field name="model">service.proof.documents</field>
+        <field name="arch" type="xml">
+            <form string="Loan Proof">
+                <sheet>
+                    <group>
+                        <field name="model_id" readonly="1"/>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="mandatory"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="loan_proof_tree_view" model="ir.ui.view">
+        <field name="name">Loan Proof Tree</field>
+        <field name="model">service.proof.documents</field>
+        <field name="arch" type="xml">
+            <tree string="Loan Proof">
+                <field name="model_id"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="act_open_loan_proof_new">
+        <field name="name">Loan Proofs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.proof.documents</field>
+        <field name="view_type">form</field>
+        <field name="context">{'is_loan':True}</field>
+        <field name="view_mode">tree,form</field>
+        <field
+                name="domain">[('model_id.model','=',
+            'hr.employee.loan')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new proof.
+            </p>
+            <p>
+                Press create button to create a new stage.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="loan_proof_action">
+        <field name="name">Loan Proof</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.proof.documents</field>
+        <field name="view_type">form</field>
+        <field name="context">{'is_loan':True}</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new proof.
+            </p>
+            <p>
+                Press create button to create a new service.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view"
+            id="service_configuration_panel_form_inherit_for_loan">
+        <field name="name">service.configuration.panel.form.inherit.for
+            .loan</field>
+        <field name="model">service.configuration.panel</field>
+        <field name="inherit_id" ref="service_configuration_panel.service_configuration_panel_form" />
+        <field name="arch" type="xml">
+            <field name="valid_to_date" position="after">
+                <field name="is_loan" invisible="1"/>
+            </field>
+            <field name="ceo_approval" position="after">
+                <field name="employee_performance_evaluation"
+                       string="Employee Performance Evaluation Limit"
+                       attrs="{'invisible':[('is_loan', '!=', True)]}"/>
+            </field>
+            <notebook position="inside">
+                <page name="policy" string="Policy"
+                      attrs="{'invisible':[('is_loan', '!=', True)]}">
+                    <field name="service_policy_ids"  >
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="company_experience_from"/>
+                            <field name="company_experience_to"/>
+                            <field name="deserved_amount"/>
+                            <field name="deserved_amount_salary_rule_id"/>
+                            <field name="loan_deduction_period"/>
+                            <field name="notes"/>
+                            <!--<field name="installment_policy"/>-->
+                            <!--<field name="allow_multiple_loans"/>-->
+                            <!--<field name="repayement_method"/>-->
+                            <!--<field name="max_loans_per_year"/>-->
+
+                        </tree>
+                    </field>
+                </page>
+                <page string="Installments/Loan"
+                      attrs="{'invisible':[('is_loan', '!=', True)]}">
+                    <group colspan="4" col="4">
+                        <field name="loan_installment_policy"/>
+                        <field name="allow_multiple_active_loans"/>
+                        <field name="repayment_method"/>
+                        <field name="performance_evaluation_required"/>
+                        <field name="minimum_loan_amount"/>
+                        <field name="maximum_loan_per_calender_year"
+                               invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="ask_for_reschedule_email"/>
+                    </group>
+                    <group>
+                        <field name="employee_loan_rule_input"/>
+                    </group>
+                </page>
+                <page string="Report"
+                      attrs="{'invisible':[('is_loan', '!=', True)]}">
+                    <group colspan="4" col="4">
+                        <label for="clearance_report_valid"
+                               string="Clearance Report Validate up to"/>
+                        <div class="o_address_format">
+                            <field name="clearance_report_valid"
+                                   class="oe_inline"/>
+                            <field name="clearance_report_valid_unit" class="oe_inline"/>
+                        </div>
+                        <field name="clearance_report_contact"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- Inherit Form View to Modify it -->
+    <!--<record id="service_panel_displayed_states_form_inherit_loan"-->
+            <!--model="ir.ui.view">-->
+        <!--<field name="name">service.panel.displayed.states.form.inherit</field>-->
+        <!--<field name="model">service.panel.displayed.states</field>-->
+        <!--<field name="inherit_id" ref="service_configuration_panel.service_panel_displayed_states_form"/>-->
+        <!--<field name="arch" type="xml">-->
+
+            <!--<xpath expr="//field[@name='model_id']" position="after">-->
+                <!--<field name="is_loan" invisible="1"/>-->
+            <!--</xpath>-->
+            <!--<xpath expr="//field[@name='model_id']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly':-->
+                    <!--[('is_loan','!=',True)]}</attribute>-->
+            <!--</xpath>-->
+
+        <!--</field>-->
+    <!--</record>-->
+
+    <record model="ir.actions.act_window"
+            id="act_open_loan_configuration_panels_view">
+        <field name="name">Service Congifuration Panel</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.configuration.panel</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'loan_model': 1}</field>
+        <field
+                name="domain">[('model_id.model','=',
+            'hr.employee.loan')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new service.
+            </p>
+            <p>
+                Press create button to create a new service.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="act_open_loan_panel_displayed_stages_view">
+        <field name="name">Stages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.panel.displayed.states</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'loan_model': 1}</field>
+        <field
+                name="domain">[('model_id.model','=',
+            'hr.employee.loan')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new stage.
+            </p>
+            <p>
+                Press create button to create a new stage.
+            </p>
+        </field>
+    </record>
+</odoo>

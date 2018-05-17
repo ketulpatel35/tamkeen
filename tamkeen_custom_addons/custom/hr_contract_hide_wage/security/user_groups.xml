@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="group_hide_wage" model="res.groups">
+            <field name="name">Display Wage in Contract</field>
+            <field name="category_id"
+                   ref="hr_contract_init.contracts_management"/>
+        </record>
+
+    </data>
+</odoo>

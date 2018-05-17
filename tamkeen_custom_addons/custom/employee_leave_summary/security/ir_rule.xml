@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!--<record id="rule_leave_summary_for_employee" model="ir.rule">-->
+        <!--<field name="name">Employee Leave Summary</field>-->
+        <!--<field name="model_id" ref="model_employee_leave_summary"/>-->
+        <!--<field name="domain_force">[('employee_id.user_id','=',user.id)]</field>-->
+        <!--<field name="groups" eval="[(4,ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>-->
+    <!--</record>-->
+    <!--<record id="rule_leave_summary_for_officer" model="ir.rule">-->
+        <!--<field name="name">Officer Leaves Summary</field>-->
+        <!--<field name="model_id" ref="model_employee_leave_summary"/>-->
+        <!--<field name="domain_force">[(1,'=',1)]</field>-->
+        <!--<field name="groups" eval="[(4,ref('hr_holidays.group_hr_holidays_user'))]"/>-->
+    <!--</record>-->
+
+    <record id="property_rule_work_resumption_employee" model="ir.rule">
+        <field name="name">Normal Employee</field>
+        <field name="model_id" ref="model_work_resumption"/>
+        <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>
+    </record>
+
+    <record id="property_rule_wr_manager" model="ir.rule">
+        <field name="name">Manager Approval</field>
+        <field name="model_id" ref="model_work_resumption"/>
+        <field name="domain_force">[('employee_id.parent_id.user_id.id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('hr_holidays_extension.group_leave_bu_manager_approval'))]"/>
+    </record>
+
+    <record id="property_rule_hr_approval_wr" model="ir.rule">
+        <field name="name">HR Approval</field>
+        <field name="model_id" ref="model_work_resumption"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('hr_holidays.group_hr_holidays_user'))]"/>
+    </record>
+
+    <record id="wr_rule_ceo_approval_srvs" model="ir.rule">
+        <field name="name">CEO Approval</field>
+        <field name="model_id" ref="model_work_resumption"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('hr_holidays_extension.group_leave_ceo_approval'))]"/>
+    </record>
+</odoo>

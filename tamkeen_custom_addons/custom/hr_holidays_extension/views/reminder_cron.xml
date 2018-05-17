@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<odoo>
+    <data>
+
+        <!-- Cron for Send reminder for Leave Request -->
+        <record model="ir.cron" id="leave_request_reminder_cron">
+            <field name="name">Leave Request Approval Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'hr.holidays'"/>
+            <field name="function" eval="'send_reminder'"/>
+            <field name="args" eval="'()'"/>
+        </record>
+
+    </data>
+</odoo>

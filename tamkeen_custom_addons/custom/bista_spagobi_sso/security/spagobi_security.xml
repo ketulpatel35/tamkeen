@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.module.category" id="spagobi_group">
+		    <field name="name">Bista SpagoBI SSO</field>
+		    <field name="description">Helps you handle SpagoBI SSO menu and access right for User.</field>
+		    <field name="sequence">0</field>
+            <field name="visible" eval="0" />
+		</record>
+
+		<record id="spagobi_sso_group" model="res.groups">
+	        <field name="name">SpagoBI SSO Group</field>
+	        <field name="category_id" ref="spagobi_group"/>
+	    </record>
+	</data>
+</odoo>

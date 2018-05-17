@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_salary_rule_form" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form.inherit</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='quantity']" position="attributes">
+                    <attribute name="attrs">{'required':[('amount_select','!=','code')]}</attribute>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_filter_for_add_active" model="ir.ui.view">
+        <field name="name">hr.payslip.select.for.add.active</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payslip_run_id']" position="after">
+                <separator/>
+                <filter string="Active Employees Payslips" name="active_employees_payslips" domain="[('employee_id.active','=',True)]"/>
+                <filter string="Inactive Employees Payslips" name="inactive_employees_payslips" domain="[('employee_id.active','=',False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_purchase_requisition_close" model="ir.ui.view">
+            <field name="name">purchase_requisition_workflow</field>
+            <field name="model">purchase.requisition.line_purchase</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Requisition Workflow">
+                    <group>
+                        <field name="line_ids" nolabel="1" colspan="4">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="origin"/>
+                                <field name="po_company_number"/>
+                                <field name="state"/>
+                                <field name="amount_total"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="generate_po" string="Confirm"
+                                type="object" class="oe_highlight"
+                                confirm="Do you want to Close out?"/>
+                        or
+                        <button string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_purchase_requisition_close"
+                model="ir.actions.act_window">
+            <field name="name">Choose Supplier</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition.line_purchase</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

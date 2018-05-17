@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="attendance_summary_employee_form_view" model="ir.ui.view">
+        <field name="name">attendance.summary.employee.form.view</field>
+        <field name="model">attendance.summary.employee</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Summary">
+                <group col="4" colspan="4">
+                    <field name="date_from" required="1"/>
+                    <field name="date_to" required="1"/>
+                    <field name="employee_id"
+                           context="{}"
+                           domain =
+                                   "['|', ('user_id.id', '=', uid), '|',('attendance_manager_id.user_id','=', uid),'|',('attendance_vp_id.user_id','=',uid),('attendance_ceo_id.user_id','=',uid)]"
+                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                           groups="hr_attendance.group_hr_attendance_user,hr_attendance.group_hr_attendance_manager,hr_attendance_customization.group_hr_attendance_view_all" required="1"/>
+                </group>
+                <footer>
+                    <button name="print_report" string="Print" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="attendance_summary_employee_form_view_for_hr"
+            model="ir.ui.view">
+        <field name="name">attendance.summary.employee.form.view.for.hr</field>
+        <field name="model">attendance.summary.employee</field>
+        <field name="inherit_id" ref="attendance_summary_employee_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('hr_attendance_customization.group_hr_attendance_view_all')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']"
+                   position="attributes">
+                <attribute name="domain">[]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_summary_employee"
+            model="ir.actions.act_window">
+        <field name="name">Attendance Summary</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.summary.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="hr_attendance_summary_employee_value" model="ir.values">
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="name">Attendance Summary</field>
+        <field name="key2">client_print_multi</field>
+        <field name="value"
+               eval="'ir.actions.act_window,' + str(ref('action_hr_attendance_summary_employee'))"/>
+        <field name="key">action</field>
+        <field name="model">hr.employee</field>
+    </record>
+    <record id="attendance_summary_employee_form_view_pdf" model="ir.ui.view">
+        <field name="name">hr.attendance.report.pdf.form</field>
+        <field name="model">hr.attendance.report.pdf</field>
+        <field name="arch" type="xml">
+            <form string="Attendance XlS Report">
+                <group>
+                    <field name="department_ids" widget="many2many_tags"
+                           context="{'is_report': True, 'uid': uid}"
+                           required="1"
+                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                    <field name="date_from" required="1"/>
+                    <field name="date_to" required="1"/>
+                </group>
+                <group>
+                    <footer>
+                        <button type="object" name="print_pdf_report"
+                                string="Print Pdf" class="oe_highlight"/>
+                        <button name="cancel" string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="wizard_print_attendance_pdf_report">
+        <field name="name">Attendace Pdf Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.attendance.report.pdf</field>
+        <field name="view_id" ref="attendance_summary_employee_form_view_pdf"/>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+
+    <!--<menuitem id="attendance_summary_report_pdf"-->
+              <!--name="Attendance Summary"-->
+              <!--parent="hr_attendance_report_xls.attendance_report" sequence="1"-->
+              <!--action="wizard_print_attendance_pdf_report"/>-->
+
+    <!-- Inherit Form View to Modify it -->
+    <record id="hr_attendance_report_xls_form_inherit_for_pdf"
+            model="ir.ui.view">
+        <field name="name">hr.attendance.report.xls.view</field>
+        <field name="model">hr.attendance.report.xls</field>
+        <field name="inherit_id" ref="hr_attendance_report_xls.hr_attendance_report_xls_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//footer/button[@name='print_report']"
+                   position="after">
+                <button type="object" name="print_pdf_report"
+                        string="Print Pdf" class="oe_highlight"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

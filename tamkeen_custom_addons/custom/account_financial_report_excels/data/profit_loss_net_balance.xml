@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="account_financial_report_netbalance"
+                model="account.financial.report">
+            <field name="name">Net profit (loss)</field>
+            <field name="sign" eval="1" />
+            <field name="parent_id"
+                   ref="account.account_financial_report_profitandloss0"/>
+            <field name="display_detail">no_detail</field>
+            <field name="type">account_type</field>
+            <field name="account_type_ids"
+                   eval="[(4,ref('account.data_account_type_revenue')), (4,ref('account.data_account_type_other_income')), (4,ref('account.data_account_type_expenses')),(4,ref('account.data_account_type_depreciation')),(4,ref('account.data_account_type_direct_costs'))]"/>
+        </record>
+
+    </data>
+</openerp>

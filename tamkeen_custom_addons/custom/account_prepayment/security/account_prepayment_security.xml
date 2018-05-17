@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record model="ir.module.category" id="grp_prepayment_type">
+            <field name="name">PrePayment Type</field>
+            <field name="sequence">18</field>
+        </record>
+
+        <record id="group_prepayment_type_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="grp_prepayment_type"/>
+        </record>
+
+        <record id="group_prepayment_type_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="grp_prepayment_type"/>
+        </record>
+
+        <record id="group_prepayment_expense" model="res.groups">
+            <field name="name">Prepayment Expense</field>
+            <field name="category_id"
+                   ref="grp_prepayment_type"/>
+        </record>
+
+        <record id="group_deferred_revenue" model="res.groups">
+            <field name="name">Deferred Revenue</field>
+            <field name="category_id"
+                   ref="grp_prepayment_type"/>
+        </record>
+
+        <record id="prepayment_type_rule" model="ir.rule">
+            <field name="name">Expense: Prepayment Type</field>
+            <field name="model_id" ref="model_account_prepayment_type"/>
+            <field name="domain_force">[('type','=','expense')]</field>
+            <field name="groups" eval="[(4,ref('account_prepayment.group_prepayment_expense'))]"/>
+        </record>
+
+        <record id="prepayment_type_rule_revenue" model="ir.rule">
+            <field name="name">Revenue: Prepayment Type</field>
+            <field name="model_id" ref="model_account_prepayment_type"/>
+            <field name="domain_force">[('type','=','revenue')]</field>
+            <field name="groups" eval="[(4,ref('account_prepayment.group_deferred_revenue'))]"/>
+        </record>
+    </data>
+
+</odoo>
+

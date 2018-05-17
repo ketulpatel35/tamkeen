@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            string="Purchase Order Details"
+            id="action_po_report"
+            model="purchase.order"
+            name="purchase_order_report.po_view_report"
+            file="purchase_order_report.po_view_report"
+            report_type="qweb-pdf"
+        />
+
+        <record id="po_detail_report_paper_format"
+                model="report.paperformat">
+            <field name="name">PO Edit Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">115</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7 </field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">120</field>
+            <field name="dpi">90</field>
+            <field name="report_ids"
+                   eval="[(4, ref(
+       'purchase_order_report.action_po_report'))]"/>
+        </record>
+    </data>
+</odoo>

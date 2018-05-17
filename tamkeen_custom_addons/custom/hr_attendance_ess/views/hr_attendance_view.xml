@@ -1,0 +1,87 @@
+<odoo>
+
+    <record id="change_request_tree_view_employee" model="ir.ui.view">
+        <field name="name">change.request.tree.view.employee</field>
+        <field name="model">attendance.change.request</field>
+        <field name="arch" type="xml">
+            <tree string="Change Request">
+                <field name="employee_id"/>
+                <!--<field name="type"/>-->
+                <field name="change_reason_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="change_request_employee_action" model="ir.actions.act_window">
+        <field name="name">My Change Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="context">{'search_default_group_name': 1}</field>
+        <field name="domain">
+            [('employee_id.user_id','=',uid)]
+        </field>
+        <field name="res_model">attendance.change.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="change_request_tree_view_employee"/>
+    </record>
+
+    <record id="hr_attendance_employee_action" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="domain">
+            [('employee_id.user_id','=',uid)]
+        </field>
+        <field name="context">{'search_default_groupby_name': 1}</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="hr_attendance_manager_action" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="type">ir.actions.act_window</field>
+        <!--<field name="domain">-->
+        <!--['|','|',('employee_id.user_id','=',uid),('employee_id.parent_id.user_id','=',uid),('employee_id.parent_id.parent_id.user_id','=',uid)]-->
+        <!--</field>-->
+        <field name="domain">
+            ['|',('employee_id.attendance_manager_id.user_id.id','=',uid),'|',('employee_id.attendance_vp_id.user_id.id','=',uid),('employee_id.attendance_ceo_id.user_id.id','=',uid)]
+        </field>
+        <field name="context">{'search_default_employee': 1, 'search_default_pending_approvals':1}</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="change_request_search_view_for_mngr" model="ir.ui.view">
+        <field name="name">Change Request</field>
+        <field name="model">attendance.change.request</field>
+        <field name="inherit_id" ref="attendance_change_request.change_request_search_view"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <filter string="Pending Approvals" name="mngr_pr_to_approve" domain="[('state','in',['for_review'])]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="change_request_manager_action" model="ir.actions.act_window">
+        <field name="name"> Change Request to be Approved</field>
+        <field name="res_model">attendance.change.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('state','in',['for_review']), ('employee_id.attendance_manager_id.user_id.id','=',uid)]
+        </field>
+        <field name="context">{'search_default_group_name':1, 'search_default_mngr_pr_to_approve':1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new .
+            </p>
+            <p>
+
+            </p>
+        </field>
+    </record>
+</odoo>

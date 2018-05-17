@@ -1,0 +1,27 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_hr_payroll_structure_auditor,hr.payroll.structure.auditor,hr_payroll.model_hr_payroll_structure,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+access_hr_contribution_register_auditor,hr.contribution.register.auditor,hr_payroll.model_hr_contribution_register,hr_payroll.group_hr_payroll_user,1,0,0,0
+access_hr_salary_rule_category_auditor,hr.salary.rule.category.auditor,hr_payroll.model_hr_salary_rule_category,hr_payroll.group_hr_payroll_user,1,0,0,0
+
+access_hr_payslip_line_auditor,hr.payslip.line.auditor,hr_payroll.model_hr_payslip_line,hr_payroll.group_hr_payroll_user,1,0,0,0
+access_hr_payslip_input_user_auditor,hr.payslip.input.user.auditor,hr_payroll.model_hr_payslip_input,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+access_hr_salary_rule_user_auditor,hr.salary.rule.user.auditor,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_user,1,0,0,0
+
+hr_payroll.access_hr_payslip_worked_days ,hr.payslip.worked_days,hr_payroll.model_hr_payslip_worked_days,hr_payroll.group_hr_payroll_manager,0,0,0,0
+access_hr_payslip_worked_days_officer,hr.payslip.worked.days.officer,hr_payroll.model_hr_payslip_worked_days,hr_payroll.group_hr_payroll_user,1,1,1,1
+access_hr_payslip_worked_days_auditor,hr.payslip.worked.days.auditor,hr_payroll.model_hr_payslip_worked_days,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+
+hr_payroll.access_hr_payslip_run,hr.payslip.run,hr_payroll.model_hr_payslip_run,hr_payroll.group_hr_payroll_manager,0,0,0,0
+access_hr_payslip_run_officer,hr.payslip.run.officer,hr_payroll.model_hr_payslip_run,hr_payroll.group_hr_payroll_user,1,1,1,1
+
+hr_payroll.access_hr_payroll_structure,hr.payroll.structure,hr_payroll.model_hr_payroll_structure,hr_payroll.group_hr_payroll_manager,1,1,1,1
+hr_payroll.access_hr_salary_rule_category,hr.salary.rule.category,hr_payroll.model_hr_salary_rule_category,hr_payroll.group_hr_payroll_manager,1,1,1,1
+hr_payroll.access_hr_salary_rule_user,hr.salary.rule.user,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_manager,1,1,1,1
+hr_payroll.access_hr_contribution_register,hr.contribution.register,hr_payroll.model_hr_contribution_register,hr_payroll.group_hr_payroll_manager,1,1,1,1
+
+
+access_hr_payslip_auditor,hr.payslip.auditor,hr_payroll.model_hr_payslip,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+
+access_hr_payslip_line_auditor,hr.payslip.line.auditor,hr_payroll.model_hr_payslip_line,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+

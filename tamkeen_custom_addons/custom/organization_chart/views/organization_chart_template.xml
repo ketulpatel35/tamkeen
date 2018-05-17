@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <template id="assets_backend" inherit_id="website.assets_backend" name="Organization Structure">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/organization_chart/static/lib//getorgchart/getorgchart.js"></script>
+                <script type="text/javascript" src="/organization_chart/static/src/js/ctree.js"></script>
+            </xpath>
+        </template>
+
+        <template id="organization_chart" name="Tree Chart">&lt;!DOCTYPE html&gt;
+            <html>
+                <head>
+                    <title><t t-raw='tree_title'/></title>
+                    <script type="text/javascript">
+                        var odoo = {
+                            csrf_token: "<t t-esc="request.csrf_token(None)"/>",
+                            session_info: <t t-raw="session_info"/>,
+                        };
+                    </script>
+
+                    <t t-call-assets="web.assets_common" t-css="false"/>
+                    <t t-call-assets="web.assets_backend" t-css="false"/>
+                    <!-- <t t-call-assets="web_editor.editor" t-css="false"/> -->
+                    <t t-call-assets="web_editor.summernote" t-css="false"/>
+                    <!-- <t t-call-assets="web_editor.transcoder" t-css="false"/> -->
+                    <t t-call-assets="web_editor.assets_editor" t-css="false"/>
+                    <t t-call-assets="organization_chart.assets_backend"/>
+
+                    <link rel="shortcut icon" href="/organization_chart/static/src/img/favicon.ico" type="image/x-icon"/>
+                    <t t-call-assets="web.assets_common" t-css="false"/>
+                    <t t-call-assets="web.assets_backend" t-css="false" />
+                    <meta charset="utf-8"/>
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <meta name="description" content=""/>
+                    <meta name="author" content=""/>
+                    <link rel="stylesheet" href="/organization_chart/static/src/css/bootstrap.min.css" />
+                    <link rel="stylesheet" href="/organization_chart/static/src/css/sb-admin.css" />
+                    <link rel="stylesheet" type="text/css" href="/organization_chart/static/src/font-awesome/css/font-awesome.min.css"/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css" />
+                    <link rel='stylesheet' href='/organization_chart/static/src/css/getorgchart.css'/>
+                    <link rel='stylesheet' href='/organization_chart/static/src/css/ctree.css' />
+                    <script type="text/javascript" id="loading-script" t-raw="init">
+                        odoo.define('web.web_client', function (require) {
+                            var WebClient = require('web.AbstractWebClient');
+                            var web_client = new WebClient();
+                            web_client._title_changed = function() {};
+                            web_client.show_application = function() {
+                                return web_client.action_manager.do_action("act_organization_chart_tag");
+                            };
+                            $(function () {
+                                web_client.setElement($(document.body));
+                                web_client.start();
+                            });
+                            return web_client;
+                        });
+
+                    </script>
+                </head>
+                <body>
+                    <div id="dvLoading">
+                    </div>
+                    <div id="wrapper" class="chart_wrapper">
+                        <nav class="navbar navbar-inverse" role="navigation">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                </button>
+                                <a class="navbar-brand" href="#"><t t-raw='tree_title'/></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-user"></i>
+                                        <b class="caret"></b>
+                                        <b id="loggedin_username"><t t-raw='username'/></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-fw fa-power-off"></i>
+                                                <b class="js_pick_quit">Exit</b>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div id="org_structure"></div>
+                        <span style="visibility: hidden;" id='tree_id'><t t-raw='tree_id'/></span>
+                    </div>
+                </body>
+            </html>
+        </template>
+</odoo>

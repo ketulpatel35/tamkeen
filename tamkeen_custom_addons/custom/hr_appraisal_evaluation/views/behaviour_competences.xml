@@ -1,0 +1,157 @@
+<odoo>
+    <data>
+        <!--explicit list view definition-->
+        <record model="ir.ui.view" id="behaviour_types_tree">
+            <field name="name">behaviour.types.list</field>
+            <field name="model">behaviour.types</field>
+            <field name="arch" type="xml">
+                <tree string="Behavioural Type">
+                    <field name="behaviour_comp_type_id" invisible="1"/>
+                    <field name="behaviour_name"/>
+                    <field name="region"/>
+                    <field name="defination"/>
+                    <field name="weightage"/>
+                    <field name="expected_level"
+                           options="{'no_quick_create':True,'no_create_edit':True}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="behaviour_typess_form">
+            <field name="name">behaviour.types.form</field>
+            <field name="model">behaviour.types</field>
+            <field name="arch" type="xml">
+                <form string="Behaviour typess">
+                    <sheet>
+                        <group string="Behavioural Type">
+                            <field name="behaviour_comp_type_id" invisible="1"/>
+                            <field name="behaviour_name"/>
+                            <field name="region"/>
+                            <field name="defination"/>
+                            <field name="weightage"/>
+                            <field name="expected_level"
+                                   domain="[('type','=','behaviour')]"
+                                   options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="behaviour_types_action">
+            <field name="name">Behaviour types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">behaviour.types</field>
+            <field name="view_id" ref="behaviour_types_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the Behaviour Competences Type. \
+                    This will be used in the Behaviour Competenece Form when Employee will fill \
+                    it up and will select from this option in it.
+                </p>
+            </field>
+        </record>
+
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="behaviour_competence_tree">
+            <field name="name">behaviour.competence.list</field>
+            <field name="model">behaviour.competences</field>
+            <field name="arch" type="xml">
+                <tree string="Behavioural Competencies">
+                    <field name="behaviour_comp_id" invisible="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="region" readonly="1"/>
+                    <field name="definaition" readonly="1"/>
+                    <field name="weightage" readonly="1"/>
+                    <field name="expected_level" readonly="1"/>
+                    <field name="emp_behaviour_self_rating" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                    <field name="check_emp_evidence"/>
+                    <field name="emp_evidence_text" height="10px" attrs="{'invisible':[('check_emp_evidence', '=', False)]}"/>
+                    <field name="manager_behaviour_rating" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                    <field name="improvement_area"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="behaviour_competences_form">
+            <field name="name">behaviour.competences.form</field>
+            <field name="model">behaviour.competences</field>
+            <field name="arch" type="xml">
+                <form string="Behaviour Competences">
+                    <sheet>
+                        <group string="Behaviour Competencies">
+                            <group>
+                                <field name="behaviour_comp_id" invisible="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="region" height="10px;" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="weightage" readonly="1"/>
+                                <field name="definaition" height="10px;" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="For Employee">
+                                <field name="expected_level" readonly="1"/>
+                                <field name="emp_behaviour_self_rating"
+                                       domain="[('type','=','rating')]"
+                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                            </group>
+                            <group string="For Manager"
+                                   groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager">
+                                <field name="manager_behaviour_rating"
+                                       domain="[('type','=','rating')]"
+                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <field name="improvement_area"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Employee Evidence">
+                                <field name="emp_evidence"/>
+                                <field name="check_emp_evidence"/>
+                                <field name="emp_evidence_text" height="10px" attrs="{'invisible':[('check_emp_evidence', '=', False)]}"/>
+                            </group>
+                            <group string="Manager Evidence" groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager">
+                                <field name="check_manager_evidence"/>
+                                <field name="manager_evidence" height="10px" attrs="{'invisible':[('check_manager_evidence', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="behaviour_competences_action">
+            <field name="name">Behaviour Competences</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">behaviour.competences</field>
+            <field name="view_id" ref="behaviour_competence_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--&lt;!&ndash; server action to the one above &ndash;&gt;-->
+        <!--<record model="ir.actions.server" id="Text.action_server">-->
+        <!--<field name="name">Text server</field>-->
+        <!--<field name="model_id" ref="model_Text_Text"/>-->
+        <!--<field name="code">-->
+        <!--action = {-->
+        <!--"type": "ir.actions.act_window",-->
+        <!--"view_mode": "tree,form",-->
+        <!--"res_model": self._name,-->
+        <!--}-->
+        <!--</field>-->
+        <!--</record>-->
+
+        <!-- actions -->
+        <!--<menuitem name="Behaviour Types" id="behaviour_types" parent="hr_appraisal_evaluation_configuration"-->
+                  <!--action="behaviour_types_action"-->
+                  <!--groups="hr.group_hr_manager,hr_admin.group_hr_admin,hr_employee_customization.group_employee_manager"/>-->
+
+    </data>
+</odoo>

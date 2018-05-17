@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+base.access_ir_attachment_group_user,base.access_ir_attachment_group_user,base.model_ir_attachment,hr.group_hr_user,1,1,1,1
+attachment_pur,attachment_pur,base.model_ir_attachment,purchase.group_purchase_user,1,1,1,1
+attachment_sale,attachment_sale,base.model_ir_attachment,sales_team.group_sale_salesman,1,1,1,1
+attachment_account,attachment_account,base.model_ir_attachment,account.group_account_invoice,1,1,1,1
+base.access_ir_attachment_group_user,base.access_ir_attachment_group_user,base.model_ir_attachment,base.group_user,1,1,1,1

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_report_general_ledger_excel" model="ir.ui.view">
+        <field name="name">General Ledger Excel</field>
+        <field name="model">account.report.general.ledger</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="/form/footer/button[1]" position="after">
+                <button name="trial_report_excel" string="Print in Excel"
+                        type="object" class="oe_highlight"/>
+            </xpath>
+        </data>
+        </field>
+    </record>
+
+    <record id="action_account_general_ledger_excel"
+            model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.report.general.ledger</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_report_general_ledger_excel"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="account.menu_general_ledger"
+        name="General Ledger"
+        parent="account.menu_finance_legal_statement"
+        action="action_account_general_ledger_excel"
+       />
+
+</odoo>

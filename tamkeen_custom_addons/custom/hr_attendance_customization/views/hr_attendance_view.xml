@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.actions.report.xml" id="hr_attendance.hr_employee_print_badge">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_erp_manager')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_my_attendances">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_erp_manager')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_kiosk_mode">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_erp_manager')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_view_employees_kanban">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_erp_manager')])]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_view_attendances">
+        <field name="groups_id" eval="[(6,0,[ref('hr_attendance_customization.group_hr_attendance_view_all')])]" />
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_attendance.hr_attendance_action">
+        <field name="context">{'search_default_groupby_name': 1}</field>
+    </record>
+
+    <menuitem id="attendance_main_configuration" name="Configuration"
+              parent="hr_attendance.menu_hr_attendance_root"
+        sequence="99"
+              groups="hr_attendance_customization.group_hr_attendance_configuration"/>
+
+    <menuitem id="attendance_child_configuration" name="Attendance"
+              parent="attendance_main_configuration" groups="group_hr_attendance_configuration"/>
+
+    <record id="hr_attendance.menu_hr_attendance_settings"
+              model="ir.ui.menu">
+        <field name="parent_id" ref="attendance_child_configuration"/>
+        <field name="sequence">100</field>
+        <field name="groups_id" eval="[(6,0,[ref('hr_attendance_customization.group_hr_attendance_configuration')])]"/>
+    </record>
+
+    <menuitem id="menu_attendance_report_config" name="Attendance Report Configuration"
+              parent="attendance_child_configuration"
+              action="action_attendance_report_config_form_view"
+              sequence="120"
+              groups="hr_attendance_customization.group_hr_attendance_configuration"/>
+
+    <record model="ir.ui.view"
+            id="hr_attendance_form_view_inherit_for_follower">
+        <field name="name">hr.attendance.form.view.inherit.for.follower</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="sheet" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

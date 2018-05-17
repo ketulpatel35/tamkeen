@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Org Benefits Program Form View -->
+    <record id="org_benefits_program_form_views" model="ir.ui.view">
+        <field name="name">org.benefits.program.form.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="arch" type="xml">
+            <form string="Benefits Program" delete="false">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                    <!-- Submit -->
+                    <button name="action_submit_request" type="object"
+                            string="Submit" class="btn-primary"
+                            groups="org_benefits_program.group_bp_normal_user"
+                            states="draft"/>
+
+                    <!--Manager -->
+                    <button name="action_submit_to_vp_approval"
+                            type="object" string="Manager Approval"
+                            groups="org_benefits_program.group_bp_manager_approval"
+                            context="{'state': 'mngr_approval'}"
+                            class="btn-primary" states="mngr_approval"/>
+
+                    <!-- Manager Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_benefits_program.group_bp_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- Manager Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_benefits_program.group_bp_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- VP -->
+                    <button name="action_submit_to_hr_approval"
+                            type="object" states="vp_approval"
+                            context="{'state': 'vp_approval'}"
+                            groups="org_benefits_program.group_bp_vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+
+                    <!-- VP Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_benefits_program.group_bp_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- VP Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_benefits_program.group_bp_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- HR Locked -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Lock"
+                            groups="org_benefits_program.group_bp_locked_unlocked"
+                            states='hr_approval'
+                            context="{'trigger': 'Lock'}"/>
+
+                    <!-- HR -->
+                    <button name="action_submit_to_ceo_approval"
+                            type="object"
+                            string="Hr Approval" class="btn-primary"
+                            groups="org_benefits_program.group_bp_hr_approval"
+                            states="hr_approval"/>
+
+                    <!-- HR Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_benefits_program.group_bp_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- HR Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_benefits_program.group_bp_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="org_benefits_program.group_bp_hr_approval"
+                            states='hr_approval'/>
+
+                    <!-- Unlocked -->
+                    <button name="action_benefit_program_unlock"
+                            type="object"
+                            groups="org_benefits_program.group_bp_locked_unlocked"
+                            string="Unlocked" class="btn-primary"
+                            states="locked"/>
+
+                    <!-- CEO -->
+                    <button name="action_submit_to_finance_processing"
+                            type="object"
+                            groups="org_benefits_program.group_bp_ceo_approval"
+                            string="CEO Approval" class="btn-primary"
+                            states="ceo_approval"/>
+
+                    <!-- Financial Processing -->
+                    <button name="action_generate_journal_entry"
+                            type="object"
+                            groups="org_benefits_program.group_bp_finance_approval"
+                            attrs="{'invisible':['|', ('account_move_id', '!=', False), ('state', '!=', 'finance_processing')]}"
+                            string="Generate Journal Entry"
+                            class="btn-primary"/>
+
+                    <button name="action_submit_to_final_finance_processing"
+                            type="object"
+                            attrs="{'invisible':['|', ('account_move_id', '=', False), ('state', '!=', 'finance_processing')]}"
+                            groups="org_benefits_program.group_bp_finance_approval"
+                            string="Finance Approval" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <!--<button class="oe_stat_button" type="object"-->
+                        <!--name="action_service_management_request"-->
+                        <!--icon="fa-calendar">-->
+                        <!--<div class="o_stat_info">-->
+                        <!--<field name="service_request_count"-->
+                        <!--class="o_stat_value"/>-->
+                        <!--<span class="o_stat_text">-->
+                        <!--Service Request-->
+                        <!--</span>-->
+                        <!--</div>-->
+                        <!--</button>-->
+                        <button name="action_open_journal_entries"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                string="Accounting Entries"
+                                groups="org_benefits_program.group_bp_finance_approval"
+                                attrs="{'invisible': [('account_move_id', '=', False)]}"
+                                type="object">
+                        </button>
+                    </div>
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1"
+                               attrs="{'invisible':[('name', '=', False)]}"
+                               class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   readonly="1" required="1"/>
+                            <field name="job_id" readonly="1" required="1"/>
+                            <field name="org_unit_type" readonly="1"
+                                   required="1"/>
+                            <field name="company_id" readonly="1"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="employee_company_id" readonly="1"
+                                   required="1"/>
+                            <field name="calendar_year" readonly="1"/>
+                            <field name="department_id" readonly="1"
+                                   required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="benefits_program_policy_id"
+                                   context="{'benefits_program_policy': True}"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   domain="[('is_benefits_program', '=', True)]"
+                                   required="1"
+                                   attrs="{'readonly':[('state', 'in', ['mngr_approval','vp_approval', 'ceo_approval', 'hr_approval', 'finance_processing', 'final_hr_approval', 'approved', 'rejected'])]}"/>
+                            <field name="is_display_sub_benefits"
+                                   invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="account_analytic_id"
+                                   required="1"
+                                   readonly="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="is_display_dependents" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="about_service" widget='html'
+                           readonly="1"/>
+                    <!--<field name="about_service" widget='html' readonly="1"/>-->
+                    <notebook>
+                        <!-- Dependents -->
+                        <page name="dependents_sub_benefits" string="Details">
+                            <field name="bp_dependents_ids"
+                                   attrs="{'invisible': [('is_display_dependents', '=', False)], 'readonly':[('state', '!=', 'draft')]}">
+                                <tree string="Dependents"
+                                      editable="bottom">
+                                    <field name="benefits_program_id"
+                                           invisible="1"/>
+                                    <field name="child_id" required="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="birth_date" required="1"
+                                           readonly="1"/>
+                                    <field name="age" required="1"
+                                           readonly="1"/>
+                                    <field name="date_from" required="1"/>
+                                    <field name="date_to" required="1"/>
+                                    <field name="school_fee" required="1"/>
+                                    <field name="admission_fee" required="1"/>
+                                    <field name="total_fees"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                            <!-- Sub Benefits -->
+                            <field name="bp_sub_benefits_ids"
+                                   attrs="{'invisible': [('is_display_sub_benefits', '=', False)], 'readonly':[('state', '!=', 'draft')]}">
+                                <tree string="Sub Benefits"
+                                      editable="bottom">
+                                    <field name="benefits_program_id"
+                                           invisible="1"/>
+                                    <field name="name" required="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="date_from" required="1"/>
+                                    <field name="date_to" required="1"/>
+                                    <field name="amount" required="1"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_benefit"
+                                       widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"
+                                       class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <!-- Endorsement -->
+                        <page string="Endorsement"
+                              name="endorsement"
+                              attrs="{'invisible':[('endorsement_for_bp','=',False)]}">
+                            <group>
+                                <field name="endorsement_text" nolabel="1"
+                                       widget="html"/>
+                            </group>
+                            <group>
+                                <field name="endorsement_required"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <field name="endorsement_for_bp"
+                                   invisible="1"/>
+                        </page>
+                        <page name="accounting_information"
+                              string="Accounting Information"
+                              groups="org_benefits_program.group_bp_hr_approval,org_benefits_program.group_bp_finance_approval">
+                            <group>
+                                <group>
+                                    <field name="accounting_date"
+                                           attrs="{'readonly':[('state', 'not in', ['hr_approval', 'finance_processing'])], 'required':[('state', 'in', ['hr_approval', 'finance_processing'])]}"/>
+                                    <field name="debit_account_id"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="product_id"
+                                           readonly="1"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="journal_id"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="credit_account_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                           readonly="1"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="paid_to_employee"
+                                           attrs="{'readonly':[('state', 'not in', ['finance_processing', 'hr_approval'])]}"/>
+                                    <field name="account_move_id"
+                                           invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!--Approvals Page-->
+                        <page string="Approvals" name="approvals">
+                            <div>
+                                The approval/refusal information will be
+                                displayed here.
+                            </div>
+                            <group>
+                                <group
+                                        attrs="{'invisible':[('bp_manager_user_id','=',False)]}">
+                                    <field name="bp_manager_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_manager_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bp_vp_user_id','=',False)]}">
+                                    <field name="bp_vp_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_vp_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bp_hr_user_id','=',False)]}">
+                                    <field name="bp_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_hr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bp_ceo_user_id','=',False)]}">
+                                    <field name="bp_ceo_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_ceo_approval_date"/>
+                                </group>
+                                <group attrs="{'invisible':[('bp_finance_user_id','=',False)]}">
+                                    <field name="bp_finance_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_finance_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bp_rejected_user_id','=',False)]}">
+                                    <field name="bp_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_rejected_date"/>
+                                </group>
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('bp_submitted_by','=',False)]}">
+                                    <field name="bp_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bp_submit_date"
+                                           colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('bp_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="bp_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="service_logs" string="Service Logs">
+                            <field name="service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="benefits_program_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="benefits_program_proofs"
+                              string="Attachment/s"
+                              attrs="{'invisible': [('proof_required', '!=', True)]}">
+                            <field name="proof_required" invisible="1"/>
+                            <group>
+                                <field name="benefits_proof_ids" nolabel="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" delete="false"
+                                          create="false">
+                                        <field name="name" readonly="1"/>
+                                        <field name="description"
+                                               readonly="1"/>
+                                        <field name="mandatory" readonly="1"/>
+                                        <field name="document"
+                                               filename="document_file_name"/>
+                                        <field name="document_file_name"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="allocated_budget"
+                               readonly="1"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+                        <field name="pre_requested_total_value"
+                               readonly="1"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+                        <field name="remain_allocated_budget"
+                               readonly="1"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                               class="oe_subtotal_footer_separator"/>
+                    </group>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Benefits Program Form View Send Request behalf of other Employee -->
+    <record id="benefits_program_req_behalf_form_view" model="ir.ui.view">
+        <field name="name">benefits.program.req.behalf.form.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="inherit_id" ref="org_benefits_program_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_benefits_program.group_bp_on_behalf_of_other'))]"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{'readonly':[('state', '!=',
+                    'draft')]}
+                </attribute>
+                <attribute name="domain">[(1,'=',1)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- for finance group -->
+    <record id="benefits_program_req_finance_form_view" model="ir.ui.view">
+        <field name="name">benefits.program.req.finance.form.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="inherit_id" ref="org_benefits_program_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_benefits_program.group_bp_finance_approval'))]"/>
+        <field name="arch" type="xml">
+            <field name="debit_account_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name="product_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name="journal_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name="credit_account_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Benefits Program Form View for HR -->
+    <record id="benefits_program_req_hr_form_view" model="ir.ui.view">
+        <field name="name">benefits.program.req.hr.form.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="inherit_id" ref="org_benefits_program_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_benefits_program.group_bp_hr_approval'))]"/>
+        <field name="arch" type="xml">
+            <field name="account_analytic_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">
+                    {'readonly':[('state', '!=', 'hr_approval')]}
+                </attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Benefits Program Tree View -->
+    <record id="org_benefits_program_tree_view" model="ir.ui.view">
+        <field name="name">org.benefits.program.tree.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="arch" type="xml">
+            <tree string="Benefits Program" delete="false">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="job_id"/>
+                <field name="benefits_program_policy_id"
+                       string="Benefit Type"/>
+                <field name="calendar_year"/>
+                <field name="account_analytic_id"/>
+                <field name="total_benefit" sum="Total Value"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Benefits Program Search View -->
+    <record id="org_benefits_program_search_view" model="ir.ui.view">
+        <field name="name">org.benefits.program.search.view</field>
+        <field name="model">org.benefits.program</field>
+        <field name="arch" type="xml">
+            <search string="Benefits Program">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+                <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                <filter name="pending_finance_approval"
+                        string="Pending Finance Approval"
+                        domain="[('state','in',['finance_processing'])]"/>
+                <filter name="exceeds_sla_period"
+                        string="Pending and Exceeds SLA Period"
+                        domain="[('state','not in',['draft','rejected', 'approved']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00'))]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_calendar_year" string="Calendar Year"
+                            context="{'group_by':'calendar_year'}"/>
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_department_id" string="Department"
+                            context="{'group_by':'department_id'}"/>
+                    <filter name="state" string="State" icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Benefits Program Action view -->
+    <record id="org_benefits_program_req_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Benefits Program</field>
+        <field name="res_model">org.benefits.program</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+    <!-- View All Benefits Program -->
+    <record id="action_bp_request_for_view_all"
+            model="ir.actions.act_window">
+        <field name="name">Benefits Program</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">org.benefits.program</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_group_calendar_year': True,'readonly_by_pass':
+            True}
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to add new document
+            </p>
+        </field>
+    </record>
+
+    <!-- action hr approval benefits program -->
+    <record id="action_bp_request_for_hr_approval"
+            model="ir.actions.act_window">
+        <field name="name">HR Approval</field>
+        <field name="res_model">org.benefits.program</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_group_calendar_year': True,
+            'search_default_pending_hr_approval':1,'readonly_by_pass': True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+    <!-- action finance approval Benefits Program -->
+    <record id="action_bp_request_for_finance_approval"
+            model="ir.actions.act_window">
+        <field name="name">Finance Approval</field>
+        <field name="res_model">org.benefits.program</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_group_calendar_year': True,
+            'search_default_pending_finance_approval':1, 'readonly_by_pass':
+            True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Vendor Registration main menu -->
+        <menuitem id="root_vendor_registration_menu"
+                  name="Vendor Registration"
+                  web_icon="vendor_registration,static/description/icon.png"
+                  groups="vendor_registration.group_vendor_management_normal_user,vendor_registration.group_manage_vendor_conf"/>
+
+        <!-- Vendor Registration -->
+        <menuitem id="main_vendor_registration_view_menu"
+                  name="Vendor Registration"
+                  parent="root_vendor_registration_menu"
+                  sequence="1"
+                  groups="vendor_registration.group_vendor_management_normal_user"/>
+        <menuitem id="sub_vendor_registration_view_menu"
+                  name="Vendors"
+                  action="action_for_vendor_registration"
+                  parent="main_vendor_registration_view_menu"
+                  sequence="1"
+                  groups="vendor_registration.group_vendor_management_normal_user"/>
+        <menuitem id="sub_vendor_contact_menu"
+                  name="Vendors Contacts"
+                  action="action_for_vendor_contact"
+                  parent="main_vendor_registration_view_menu"
+                  sequence="2"
+                  groups="vendor_registration.group_vendor_management_normal_user"/>
+
+        <!-- Configuration menu -->
+        <menuitem id="vendor_registration_configuration_menu"
+                  name="Configuration"
+                  parent="root_vendor_registration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <!-- Configuration sub menus -->
+        <menuitem id="financial_statement_config_menu"
+                  action="action_for_financial_statement_config"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <menuitem id="document_attachment_config_menu"
+                  action="action_for_document_attachment_config"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <menuitem id="procrument_template_menu_config"
+                  action="action_for_procrument_template"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <menuitem id="quality_hse_config_menu"
+                  action="action_for_quality_hse_conf"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <!-- vendor activities categories menu -->
+        <menuitem id="vendor_activities_categories_menu"
+                  action="action_vendor_activities_categories"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+        <!-- vendor activities menu -->
+        <menuitem id="vendor_activities_menu"
+                  action="action_vendor_activities"
+                  parent="vendor_registration_configuration_menu"
+                  groups="vendor_registration.group_manage_vendor_conf"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        
+        <record id="hr_salary_rule_allowance_fxsalw" model="hr.salary.rule">
+            <field name="code">FXDALW</field>
+            <field name="name">Fixed Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = round(contract.fixed_allowance)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="30"/>
+            <field name="note"></field>
+        </record>
+        
+        
+        <record id="hr_salary_rule_ded_fxded" model="hr.salary.rule">
+            <field name="code">FXDALWDED</field>
+            <field name="name">Fixed Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * FXDALW * -1
+else:
+    prorata_calc = 0
+result = round(inputs.FXDALWDEDI.amount + FXDALW * (NUPL / 30) * -1 + prorata_calc,2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="40"/>
+            <field name="note"></field>
+        </record>
+        
+        
+        <record id="hr_salary_rule_basic_fxdalwnet" model="hr.salary.rule">
+            <field name="code">FXDALWNET</field>
+            <field name="name">Fixed Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_rules.hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = round(FXDALW + FXDALWDED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="50"/>
+            <field name="note"></field>
+        </record>
+        
+        
+        <record id="hr_salary_rule_basic_fxdalwnetd" model="hr.salary.rule">
+            <field name="code">HADNET</field>
+            <field name="name">Fixed Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_rules.hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = FXDALWNET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="60"/>
+            <field name="note"></field>
+        </record>
+        
+        
+        <record id="hr_salary_rule_basic_fxdalwneti" model="hr.salary.rule">
+            <field name="code">FXDALWNET</field>
+            <field name="name">Fixed Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_rules.hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = FXDALWNET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="60"/>
+            <field name="note"></field>
+        </record>
+        
+ 
+		
+        <!-- Salary Rules Inputs  -->
+     
+        <record id="hr_salary_rule_input_fxdalwdedi" model="hr.rule.input">
+            <field name="name">Fixed Allowance Adjustment</field>
+            <field name="code">FXDALWDEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_fxded"/>
+        </record>
+        
+    </data>
+</openerp>

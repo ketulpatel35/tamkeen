@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="white_mimetype_tree_view">
+            <field name="name">white.mimetype.tree</field>
+            <field name="model">white.mimetype</field>
+            <field name="arch" type="xml">
+                <tree string="White Mimetype">
+                    <field name="name"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="white_mimetype_form_view">
+            <field name="name">white.mimetype.form</field>
+            <field name="model">white.mimetype</field>
+            <field name="arch" type="xml">
+                <form string="White Mimetype">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" colspan="2"/>
+                            <field name="active" colspan="2"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="white_mimetype_search_view">
+            <field name="name">white.mimetype.search</field>
+            <field name="model">white.mimetype</field>
+            <field name="arch" type="xml">
+                <search string="White Mimetype">
+                    <field name="name"/>
+                    <field name="active"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="white_mimetype_action">
+            <field name="name">White Mimetype</field>
+            <field name="res_model">white.mimetype</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="white_mimetype_search_view"/>
+        </record>
+
+        <menuitem id="menu_setting_attachment" name="Settings Attachment"
+                  parent="base.menu_administration" sequence="30" />
+        <menuitem id="menu_white_mimetype_sub" name="White Mimetypes"
+                  action="white_mimetype_action"
+                  parent="menu_setting_attachment" sequence="10" />
+
+    </data>
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Stages Creation -->
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job1">
+            <field name="name">Job Application</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job2">
+            <field name="name">CV Screening</field>
+            <field name="sequence">2</field>
+            <field name="template_id" eval="False"/>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_interview_progress">
+            <field name="name">Interview in Progress</field>
+            <field name="sequence">3</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_f_interview">
+            <field name="name">First Interview</field>
+            <field name="sequence">4</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_under_assessment">
+            <field name="name">Under Assessment</field>
+            <field name="sequence">5</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_s_interview">
+            <field name="name">Second Interview</field>
+            <field name="sequence">6</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_t_interview">
+            <field name="name">Third Interview</field>
+            <field name="sequence">7</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job6">
+            <field name="name">Under Reference Check</field>
+            <field name="sequence">8</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job3">
+            <field name="name">Under Job Offer</field>
+            <field name="sequence">9</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job4">
+            <field name="name">Job Offer Extended</field>
+            <field name="sequence">10</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="hr_recruitment.stage_job5">
+            <field name="name">Job Offer Accepted</field>
+            <field name="sequence">11</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage"
+                id="hr_recruitment.stage_job_boarding">
+            <field name="name">On-Boarding</field>
+            <field name="sequence">12</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_job_offer_d">
+            <field name="name">Job Offer Declined</field>
+            <field name="sequence">13</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_candidate_r">
+            <field name="name">Candidate Rejected</field>
+            <field name="sequence">14</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+        <record model="hr.recruitment.stage" id="stage_future_talent">
+            <field name="name">Future Talent Pipeline</field>
+            <field name="sequence">15</field>
+            <field name="fold" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

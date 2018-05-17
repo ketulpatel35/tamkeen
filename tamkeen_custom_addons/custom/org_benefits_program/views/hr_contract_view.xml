@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Contract -->
+    <record id="hr_contract_benefits_program_view_form" model="ir.ui.view">
+        <field name="name">hr.contract.benefits.program.view.form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='information']/group"
+                       position="after">
+                    <group name="benefits_program" string="Benefits Program">
+                        <group>
+                            <field name="entitled_manual_benefits"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="education_benefit"
+                                   attrs="{'invisible':[('entitled_manual_benefits', '=', False)]}"
+                                   readonly="1"/>
+                            <field name="flexible_benefit"
+                                   attrs="{'invisible':[('entitled_manual_benefits', '=', False)]}"
+                                   readonly="1"/>
+                            <field name="wellness_program"
+                                   attrs="{'invisible':[('entitled_manual_benefits', '=', False)]}"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <!-- Contract Master -->
+    <record id="hr_contract_master_benefits_program_view_form"
+            model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id"
+               ref="org_benefits_program.hr_contract_benefits_program_view_form"/>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('hr_contract_init.group_contracts_master')])]"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="entitled_manual_benefits" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="education_benefit" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="flexible_benefit" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="wellness_program" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </data>
+        </field>
+    </record>
+
+</odoo>

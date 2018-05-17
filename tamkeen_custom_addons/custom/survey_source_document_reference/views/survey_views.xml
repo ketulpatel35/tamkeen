@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- SURVEY -->
+        <record model="ir.ui.view" id="survey_reference_form">
+            <field name="name">form.view.survey.reference</field>
+            <field name="model">survey.survey</field>
+            <field name="inherit_id" ref="survey.survey_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='quizz_mode']" position="after">
+                    <field name="reference_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_survey_form_with_reference">
+            <field name="name">Surveys Requests</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('reference_id','=',context.get('default_reference_id'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Click to add a survey.</p>
+                <p>You can create surveys for different purposes: customer
+                    opinion, services feedback, recruitment interviews,
+                    employee's periodical evaluations, marketing campaigns,
+                    etc.</p>
+                <p>Design easily your survey, send invitations to answer by
+                    email and analyse answers.</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

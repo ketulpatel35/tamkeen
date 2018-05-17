@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!--<menuitem id="hr_attendance.menu_hr_attendance_root"-->
+          <!--name="Attendances" sequence="90"-->
+          <!--groups="hr_attendance_customization.group_hr_attendance_view_all,hr_attendance_customization.group_hr_attendance_configuration"-->
+          <!--web_icon="hr_attendance,static/description/icon.png"/>-->
+
+
+    <!--<menuitem name="Time and Attendance" id="hr_schedule.menu_time_attendance"-->
+              <!--parent="hr_attendance_customization.attendance_main_configuration"-->
+              <!--groups="hr_attendance_customization.group_hr_attendance_configuration"-->
+              <!--sequence="2" />-->
+
+    <!--<menuitem name="Scheduling" id="hr_schedule.menu_hr_root_schedule"-->
+              <!--parent="hr_schedule.menu_time_attendance"-->
+              <!--groups="hr_attendance_customization.group_hr_attendance_configuration"-->
+              <!--sequence="20"/>-->
+
+    <!--<menuitem action="attendance_change_request_action"-->
+              <!--id="hr_schedule.menu_schedule_request_view"-->
+              <!--parent="hr_attendance.menu_hr_attendance_manage_attendances"-->
+              <!--sequence="20"-->
+              <!--groups="hr_attendance_customization.group_hr_attendance_view_all"/>-->
+
+    <!--<menuitem id="attendance_change_reason_menu"-->
+          <!--name="Attendances Reason"-->
+              <!--parent="hr_attendance_customization.attendance_child_configuration" action="attendance_change_reason_action" sequence="10" groups="hr_attendance_customization.group_hr_attendance_configuration"/>-->
+
+    <!--<menuitem id="attendance_change_request_config_menu"-->
+          <!--name="Attendances Configuration"-->
+              <!--parent="hr_attendance_customization.attendance_child_configuration" action="attendance_change_request_config_action" sequence="20" groups="hr_attendance_customization.group_hr_attendance_configuration"/>-->
+
+</odoo>

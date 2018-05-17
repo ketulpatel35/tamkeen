@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="view_gradelevel_form_recurment">
+			<field name="name">grade.level.form</field>
+			<field name="model">grade.level</field>
+			<field name="inherit_id" ref="hr_contract_grade_level.view_gradelevel_form" />
+			<field name="arch" type="xml">
+				<field name="wage" position="after" >
+					<field name="policy_group_id" />	
+				</field>					
+			</field>
+		</record>		
+	</data>
+</openerp>

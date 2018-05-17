@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="invoice_supplier_form_seg_inherits" model="ir.ui.view">
+            <field name="name">invoice.supplier.form.inherits</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_due']" position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']"
+                       position="attributes">
+                    <attribute name="context">{'cost_centre_id': cost_centre_id}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_supplier_seg_line" model="ir.ui.view">
+            <field name="name">invoice.supplier.seg.line</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('account_segments.acc_seg_line_level')])]" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                   <field name="cost_centre_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

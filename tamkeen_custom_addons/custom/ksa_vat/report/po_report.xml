@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- po report header update with vat -->
+        <template id="po_report_template_header_vat"
+                  inherit_id="purchase_order_report.po_view_report_report_template_header_template_id">
+
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                    <t t-if="o.state == 'draft' or o.state == 'sent'">
+                    </t>
+                    <t t-if="o.state != 'draft' and o.state != 'sent'">
+                        <style type="text/css">
+                            td, tr, th {
+                            border: 1px solid black;
+                            padding:4px;
+                            font-size:15px;
+                            font-family:Sakkal Majalla;
+                            }
+                            span,p,div{
+                            font-family:Sakkal Majalla;
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-xs-8"
+                                 style="padding-top: 8%;overflow:hidden;text-overflow: ellipsis;">
+                                P.O.#:<t t-if="o.name != 'False'"><span
+                                    t-field="o.name"/></t>
+                            </div>
+                            <div class="col-xs-4 text-right"
+                                 style="padding-bottom:15px;">
+                                <img class="img-responsive"
+                                     src="/purchase_order_report/static/description/Logo_English.jpg" width="230px" height="75px"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1-5" align="center">
+                                <div class="text-center">
+                                    <h3><b>Purchase Order</b></h3>
+                                </div>
+                            </div>
+                            <div class="col-xs-4"/>
+                        </div>
+                        <br/>
+                        <table style="width:100%; border: 0px;">
+                            <tr style="border: 0px;">
+                                <td style="border: 0px;">
+
+                                    Printing Date: <span
+                                        t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+
+                                </td>
+                                <td style="border: 0px; text-align:right;">
+                                    Order Date:<![CDATA[&nbsp;&nbsp;]]><span
+                                        t-field="o.date_order"
+                                        t-field-options='{"format": "dd-MM-YYYY"}'/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="border: 1px solid black; width:100%;">
+                            <tr>
+                                <th width="50%">Deliver To: <t
+                                        t-esc="o.company_id.name"/></th>
+                                <th width="50%">Supplier Information</th>
+                            </tr>
+                            <tr>
+                                <td><t t-esc="o.company_id.street"/></td>
+                                <td><span t-field="o.partner_id"/></td>
+                            </tr>
+                            <tr>
+                                <td><t t-esc="o.company_id.street2"/></td>
+                                <td>VAT Reg.# :<t t-esc="o.partner_id.vat"/></td>
+                            </tr>
+                            <tr>
+                                <td>Phone:<t t-esc="o.company_id.phone"/></td>
+                                <td><span t-field="o.partner_id.street"/> <br/> <span t-field="o.partner_id.city"/> <br/> <span t-field="o.partner_id.country_id"/> </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="border: 1px solid black; width:100%;">
+                            <tr>
+                                <th style="text-align:center;">Payment terms</th>
+                                <th style="text-align:center;">Delivery terms</th>
+                                <th style="text-align:center;">Supplier reference</th>
+                                <th style="text-align:center;">PR#</th>
+                            </tr>
+                            <tr>
+                                <td><t t-if="o.payment_term_id"><span t-field="o.payment_term_id"/></t></td>
+                                <td></td>
+                                <td><t t-if="o.partner_ref"><span t-field="o.partner_ref"/></t></td>
+                                <td><t t-if="o.requisition_id"><span t-field="o.requisition_id"/></t></td>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+
+        <template id='po_view_report'
+                  inherit_id="purchase_order_report.po_view_report">
+            <!--<xpath expr="//table[1]" position="before">-->
+            <!--<br/>-->
+            <!--</xpath>-->
+            <xpath expr="//table[1]" position="replace">
+                <table style="border: 1px solid black; width:100%;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th style="text-align:center;">Item description</th>
+                            <th style="text-align:center;">Qty</th>
+                            <th style="text-align:center;">UOM</th>
+                            <th style="text-align:center;">Unit price</th>
+                            <th style="text-align:center;">TAXES</th>
+                            <th style="text-align:center;">Total price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach = "o.order_line" t-as="orderline" >
+                            <t t-set="count" t-value='count + 1' />
+                            <td><t t-esc="count"/></td>
+                            <td><span t-field="orderline.name"/></td>
+                            <t t-set="product_qty" t-value="orderline.product_qty"/>
+                            <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(product_qty))"/></td>
+                            <td style="text-align:right;"><span t-field="orderline.product_uom"/></td>
+                            <t t-set="price_unit" t-value="orderline.price_unit"/>
+                            <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(price_unit))"/></td>
+                            <t t-set="co" t-value="orderline.product_qty"/>
+                            <t t-set="this_count" t-value="orderline.price_unit"/>
+                            <t t-set="total" t-value="co * this_count"/>
+                            <td style="text-align:left;">
+                                <t t-esc="','.join(map(str, [tax.name for tax in orderline.taxes_id]))"/>
+                            </td>
+                            <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(total))"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

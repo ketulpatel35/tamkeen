@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem name="Prepayments" parent="account.menu_finance_entries" id="menu_prepayment_header" sequence="1000"
+        groups="account_prepayment.group_deferred_revenue,account_prepayment.group_prepayment_expense"/>
+
+    <!-- PrePayment Type -->
+    <record id="account_prepayment_type_form_view" model="ir.ui.view">
+        <field name="name">account.prepayment.type.form.view</field>
+        <field name="model">account.prepayment.type</field>
+        <field name="arch" type="xml">
+            <form string="Prepayment Type">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name" required="1"/>
+                        <field name="type" required="1"/>
+                    </group>
+                    <group>
+                        <group string="Account Information" name="account_info">
+                            <field name="prepaid_account_id" required="1"
+                                domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                            <field name="entry_account_id" required="1" 
+                                domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                            <field name="account_id" required="1" domain="[('internal_type', '=', 'other')]"/>
+                            <field name="amount" required="1"/>
+                        </group>
+                        <group string="Periodicity" name="periodicity">
+                            <field name="no_of_entries" required="1"/>
+                            <field name="journal_id" required="1"/>
+                            <field name="months" required="1"/>
+                            <field name="auto_post"/>
+                            <field name="auto_generate_entry" help="Auto generation of Journal Entry at end of month"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_prepayment_type_tree_view" model="ir.ui.view">
+        <field name="name">account.prepayment.type.tree.view</field>
+        <field name="model">account.prepayment.type</field>
+        <field name="arch" type="xml">
+            <tree string="Prepayment Type">
+                <field name="name" />
+                <field name="type" />
+                <field name="prepaid_account_id" />
+                <field name="entry_account_id" />
+                <field name="account_id" />
+                <field name="amount" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_prepayment_type_search_view" model="ir.ui.view">
+        <field name="name">account.prepayment.type.search.view</field>
+        <field name="model">account.prepayment.type</field>
+        <field name="arch" type="xml">
+            <search string="Prepayment Type">
+                <field name="name" />
+                <field name="type" />
+                <field name="prepaid_account_id" />
+                <field name="entry_account_id" />
+                <field name="account_id" />
+                <field name="amount" requred="1"/>
+                <field name="no_of_entries" />
+                <field name="months" />
+                <group expand="0" string="Group By">
+                    <filter name="type" string="Type" context="{'group_by':'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_prepayment_type" model="ir.actions.act_window">
+        <field name="name">Prepeyment Type</field>
+        <field name="res_model">account.prepayment.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_type':1}</field>
+        <field name="search_view_id" ref="account_prepayment_type_search_view"/>
+    </record>
+
+    <menuitem action="action_account_prepayment_type" id="menu_account_prepayment_type" parent="account.account_account_menu"
+        groups="account_prepayment.group_prepayment_expense,account_prepayment.group_deferred_revenue,account_prepayment.group_prepayment_type_user,account_prepayment.group_prepayment_type_manager"/>
+
+    <!-- Prepaid Expense -->
+    <record id="view_prepaid_expense_form" model="ir.ui.view">
+        <field name="name">view.prepaid.expense.form</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <form string="Prepaid Expense">
+                <header>
+                    <button name="generate_schedule" type="object" string="Generate Schedule" states="draft"/>
+                    <button name="set_confirm" type="object" string="Confirm" states="draft"/>
+                    <button name="set_draft" type="object" string="Set To Draft" states="running"
+                        confirm="All your posted entries will be unposted. Are you sure you want to continue?"/>
+                    <button name="to_be_closed" type="object" string="To Be Closed" states="running"/>
+                    <button name="set_to_running" type="object" string="Set To Running" states="to_be_closed"/>
+                    <button name="set_to_close" type="object" string="Close" states="to_be_closed"/>
+                    <field name="state" readonly="1" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="open_entries"  type="object" icon="fa-pencil">
+                            <field string="Items" name="entry_count" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prepayment_type_id" required="1" domain="[('type','=','expense')]"/>
+                            <field name="invoice_id" domain="[('type', 'in', [('in_invoice')])]"/>
+                            <field name="partner_id" string="Vendor"/>
+                            <field name="reference"/>
+                            <field name="account_analytic_id"/>
+                            <field name="partner_reference" string="Vendor Reference"/>
+                            <field name="product_id" context="{'prepayment_invoice_id':invoice_id}"/>
+                            <field name="prepayment_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date" required="1"/>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="value" required="1"/>
+                            <field name="value_residual" required="1" string="Amount To Be Expensed"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Amortize Schedule">
+                            <field name="prepayment_line_ids" readonly="1">
+                                <tree editable="top">
+                                    <field name="date" string="Amortize Date"/>
+                                    <field name="cumulative"/>
+                                    <field name="amount" string="Amortize Amount"/>
+                                    <field name="balance"/>
+                                    <field name="move_check" invisible="1"/>
+                                    <field name="move_posted_check" invisible="1"/>
+                                    <field name="parent_state" invisible="1"/>
+                                    <field name="state" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Extra Information">
+                            <group string="Periodicity" name="periodicity" col="4" colspan="4">
+                                <field name="no_of_entries" required="1"/>
+                                <field name="entry_account_id" 
+                                    domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                                <field name="months" required="1"/>
+                                <field name="account_id" string="Entry: Expense Account"
+                                    domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                                <field name="journal_id"/>
+                                <field name="auto_generate_entry" help="Auto generation of Journal Entry at end of month"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_prepaid_expense_tree" model="ir.ui.view">
+        <field name="name">view.prepaid.expense.tree</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <tree string="Prepaid Expense">
+                <field name="name"/>
+                <field name="prepayment_type_id"/>
+                <field name="date"/>
+                <field name="start_date"/>
+                <field name="invoice_id"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="value"/>
+                <field name="value_residual" string="Amount To Be Expensed"/>
+                <field name="prepayment_type" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_prepaid_expense_search" model="ir.ui.view">
+        <field name="name">view.prepaid.expense.search</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <search string="Prepaid Expense">
+                <field name="name"/>
+                <field name="prepayment_type_id"/>
+                <field name="date"/>
+                <field name="start_date"/>
+                <field name="invoice_id"/>
+                <field name="partner_id" string="Vendor"/>
+                <group expand="0" string="Group By">
+                    <filter name="invoice" string="Invoice" context="{'group_by':'invoice_id'}"/>
+                    <filter name="prepayment_type_id" string="PrePayment Type" context="{'group_by':'prepayment_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_prepaid_expense" model="ir.actions.act_window">
+        <field name="name">Prepaid Expense</field>
+        <field name="res_model">account.prepayment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('prepayment_type','=','expense')]</field>
+        <field name="search_view_id" ref="view_prepaid_expense_search"/>
+    </record>
+
+    <record id="action_prepaid_expense_tree" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_prepaid_expense_tree"/>
+        <field name="act_window_id" ref="action_prepaid_expense"/>
+    </record>
+
+    <record id="action_prepaid_expense_form" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_prepaid_expense_form"/>
+        <field name="act_window_id" ref="action_prepaid_expense"/>
+    </record>
+
+    <menuitem action="action_prepaid_expense" id="menu_prepaid_expense" parent="menu_prepayment_header"
+        groups="account_prepayment.group_prepayment_expense"/>
+
+    <!-- Deferred Revenue -->
+    <record id="view_deferred_revenue_form" model="ir.ui.view">
+        <field name="name">view.deferred.revenue.form</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <form string="Deferred Revenue">
+                <header>
+                    <button name="generate_schedule" type="object" string="Generate Schedule" states="draft"/>
+                    <button name="set_confirm" type="object" string="Confirm" states="draft"/>
+                    <button name="to_be_closed" type="object" string="To Be Closed" states="running"/>
+                    <button name="set_to_running" type="object" string="Set To Running" states="to_be_closed"/>
+                    <button name="set_to_close" type="object" string="Close" states="to_be_closed"/>
+                    <field name="state" readonly="1" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="open_entries"  type="object" icon="fa-pencil">
+                            <field string="Items" name="entry_count" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prepayment_type_id" required="1" domain="[('type','=','revenue')]"/>
+                            <field name="invoice_id" domain="[('type', 'in', [('out_invoice')])]"/>
+                            <field name="partner_id" string="Customer"/>
+                            <field name="reference"/>
+                            <field name="account_analytic_id"/>
+                            <field name="partner_reference" string="Customer Reference"/>
+                            <field name="product_id" context="{'prepayment_invoice_id':invoice_id}"/>
+                            <field name="prepayment_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date" required="1"/>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="value" required="1"/>
+                            <field name="value_residual" required="1" string="Amount To Be Revenued"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Recognizeation Schedule">
+                            <field name="prepayment_line_ids" readonly="1">
+                                <tree editable="top">
+                                    <field name="date" string="Recognizeation Date"/>
+                                    <field name="cumulative"/>
+                                    <field name="amount" string="Recognizeation Amount"/>
+                                    <field name="balance"/>
+                                    <field name="move_check" invisible="1"/>
+                                    <field name="move_posted_check" invisible="1"/>
+                                    <field name="parent_state" invisible="1"/>
+                                    <field name="state" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Extra Information">
+                            <group string="Periodicity" name="periodicity" col="4" colspan="4">
+                                <field name="no_of_entries" required="1"/>
+                                <field name="entry_account_id" 
+                                    domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                                <field name="months" required="1"/>
+                                <field name="account_id" string="Entry: Revenue Account"
+                                    domain="[('user_type_id','in',(%(account.data_account_type_prepayments)d,%(account.data_account_type_current_assets)d))]"/>
+                                <field name="journal_id"/>
+                                <field name="auto_generate_entry" help="Auto generation of Journal Entry at end of month"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_deferred_revenue_tree" model="ir.ui.view">
+        <field name="name">view.deferred.revenue.tree</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <tree string="Deferred Revenue">
+                <field name="name"/>
+                <field name="prepayment_type_id"/>
+                <field name="date"/>
+                <field name="start_date"/>
+                <field name="invoice_id"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="value" required="1"/>
+                <field name="value_residual" required="1" string="Amount To Be Revenued"/>
+                <field name="prepayment_type" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_deferred_revenue_search" model="ir.ui.view">
+        <field name="name">view.deferred.revenue.search</field>
+        <field name="model">account.prepayment</field>
+        <field name="arch" type="xml">
+            <search string="Deferred Revenue">
+                <field name="name"/>
+                <field name="prepayment_type_id"/>
+                <field name="date"/>
+                <field name="start_date"/>
+                <field name="invoice_id"/>
+                <field name="partner_id" string="Customer"/>
+                <group expand="0" string="Group By">
+                    <filter name="invoice" string="Invoice" context="{'group_by':'invoice_id'}"/>
+                    <filter name="prepayment_type_id" string="PrePayment Type" context="{'group_by':'prepayment_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_deferred_revenue" model="ir.actions.act_window">
+        <field name="name">Deferred Revenue</field>
+        <field name="res_model">account.prepayment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('prepayment_type','=','revenue')]</field>
+        <field name="search_view_id" ref="view_deferred_revenue_search"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_deferred_revenue_tree_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_deferred_revenue_tree"/>
+        <field name="act_window_id" ref="action_deferred_revenue"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_deferred_revenue_form_view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_deferred_revenue_form"/>
+        <field name="act_window_id" ref="action_deferred_revenue"/>
+    </record>
+
+    <menuitem action="action_deferred_revenue" id="menu_deferred_revenue" parent="menu_prepayment_header"
+        groups="account_prepayment.group_deferred_revenue"/>
+
+
+</odoo>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit account ivoice Form View -->
+        <!--<record id="coc_invoice_form_inherit" model="ir.ui.view">-->
+            <!--<field name="name">coc.invoice.form.inherit</field>-->
+            <!--<field name="model">account.invoice</field>-->
+            <!--<field name="inherit_id" ref="account.invoice_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!---->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!-- Inherit account invoice Form view from account segment -->
+        <record id="invoice_supplier_form_seg_coc_inherit" model="ir.ui.view">
+            <field name="name">invoice.supplier.form.seg.coc.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_segments.invoice_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']"
+                       position="after">
+                    <field name="certificate_of_completion_id" readonly="1"
+                           attrs="{'invisible':[('certificate_of_completion_id', '=', False)]}"/>
+                </xpath>
+                <!-- Invoice line -->
+                <xpath expr="//field[@name='invoice_line_ids']/tree"
+                       position="inside">
+                    <field name="certificate_of_completion_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_analytic_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='quantity']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='uom_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='cost_centre_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='currency_id']"
+                       position="attributes">
+                    <attribute name="attrs">
+                        {'readonly':[('certificate_of_completion_id', '!=', False)]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='cost_centre_id']" position="attributes">
+                    <attribute name="attrs">{'readonly':[('certificate_of_completion_id', '!=', False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

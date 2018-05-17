@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- timesheet request send for Manager Approval -->
+        <record id="timesheet_request_send_manager" model="mail.template">
+            <field name="name">Employee Timesheet Manager Approval</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.timesheet_manager_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Timesheet Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.timesheet_manager_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Timesheet request.
+<br/>
+    <br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- timesheet request send for VP Approval -->
+        <record id="timesheet_pre_req_send_to_vp" model="mail.template">
+            <field name="name">Timesheet VP Approval</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.timesheet_vp_id
+            .work_email | safe}</field>
+            <field name="email_cc">${object.employee_id.work_email | safe}</field>
+            <field name="subject">Timesheet Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.timesheet_vp_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Timesheet request.
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+
+        <!-- Timesheet request send for HR Approval -->
+        <record id="timesheet_pre_req_send_to_hr" model="mail.template">
+            <field name="name">Timesheet HR Approval</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.timesheet_approval_policy_id
+            .hr_email | safe}</field>
+            <field name="subject">Timesheet Request To Be Approved</field>
+            <field name="email_cc">${object.employee_id.work_email | safe}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Timesheet request.
+<br/>
+    <br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- Timesheet request send for CEO Approval -->
+        <record id="timesheet_req_send_to_ceo" model="mail.template">
+            <field name="name">Timesheet CEO Approval</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.timesheet_ceo_id
+            .work_email | safe}</field>
+            <field name="subject">Timesheet Request To Be Approved</field>
+            <field name="email_cc">${object.employee_id.work_email | safe}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.loan_ceo_id.user_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Timesheet request.
+</p>
+<br/>
+    <br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- Timesheet Request Approved -->
+        <record id="timesheet_req_approved" model="mail.template">
+            <field name="name">Timesheet Request Approved</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="subject">Timesheet Request has been Approved</field>
+            <field name="email_cc">${object.employee_id.work_email | safe}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Timesheet request has been approved.
+<br/>
+    <br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Timesheet Closed -->
+        <record id="timesheet_req_closed"
+                model="mail.template">
+            <field name="name">Timesheet Request Closed
+            </field>
+            <field name="model_id"
+                    ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Timesheet Request Closed</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your timesheet request has been Closed.
+<br/>
+% endif
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+
+          <!-- Timesheet Rejected -->
+        <record id="timesheet_req_rejected"
+                model="mail.template">
+            <field name="name">Timesheet Request Rejected
+            </field>
+            <field name="model_id"
+                    ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Timesheet Request Rejected</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your timesheet request has been rejected.
+<br/>
+% if ctx["reason"]:
+Refuse Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+            <!-- Timesheet Request Reminder Template -->
+        <record id="timesheet_req_approval_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Timesheet Request Reminder</field>
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+Dear ,
+<br>
+Please take a moment to approve the pending ${(object.name or '')|safe} Timesheet Request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Number: ${object.name}
+<br>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+
+        <!-- Draft -->
+        <record id="email_template_timesheeet_draft" model="mail.template">
+            <field name="name">Timesheet Request Return</field>
+            <field name="model_id"
+                   ref="org_timesheet_extension.model_hr_timesheet_sheet_sheet" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Timesheet Request Returned</field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your Timesheet request has been returned back to draft state.
+<br>
+% if ctx["reason"]:
+Refuse Reason: <br/>
+" ${ctx["reason"]} "
+% endif
+<br/>
+</p>
+</p>
+% if ctx["display_link"]:
+	To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+
+			   ]]>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

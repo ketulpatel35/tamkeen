@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_base.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[last()]" position="before">
+                    <page name="qualification" string="Qualification">
+                        <group>
+                            <group>
+                                <field name="qualification_status" required="True" />
+                                <field name="qualification_survey_id" readonly="True" widget="selection" domain="[('for_lead', '=', True)]" />
+                                <button class="oe_highlight" type="object" string="Start Qualification" name="action_start_qualification_survey"></button>
+                            </group>
+                            <group>
+                                <field name="qualification_result_id" readonly="True" />
+                                <field name="qualification_score" readonly="True" />
+                                <field name="qualification_result_state" invisible="True" />
+                                <button
+                                    attrs="{'invisible':[('qualification_result_state', 'not in', ['done', 'partial'])]}"
+                                    class="oe_highlight" type="object" string="View Result" name="action_qualification_survey_results"></button>
+                            </group>
+                            
+                        </group>
+                        
+                        
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_opportunity_tree" model="ir.ui.view">
+            <field name="name">crm.lead.tree</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="." position="inside">
+                    <field name="qualification_status"></field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

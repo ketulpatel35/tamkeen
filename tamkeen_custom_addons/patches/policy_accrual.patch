@@ -1,0 +1,188 @@
+diff --git a/custom/employee_leave_summary/models/employee_leave_summary.py b/custom/employee_leave_summary/models/employee_leave_summary.py
+index 35884fd..8a3fe25 100644
+--- a/custom/employee_leave_summary/models/employee_leave_summary.py
++++ b/custom/employee_leave_summary/models/employee_leave_summary.py
+@@ -20,6 +20,17 @@ from odoo import models, fields, api
+ class EmployeeLeaveSummary(models.Model):
+     _name = 'employee.leave.summary'
+ 
++    @api.multi
++    def _get_allocate_leave(self):
++        for rec in self:
++            holidays_rec = self.env['hr.holidays'].search([('employee_id', '=', rec.employee_id.id),
++                                            ('holiday_status_id', '=', rec.holiday_status_id.id),
++                                            ('state', '=', 'validate')
++                                            ])
++            for holidays in holidays_rec:
++                if holidays.number_of_days_temp:
++                    rec.allocate_leave += holidays.number_of_days_temp
++
+     employee_id = fields.Many2one('hr.employee', string='Employee')
+     holiday_status_id = fields.Many2one('hr.holidays.status',
+                                         string='Leave Type')
+@@ -29,7 +40,7 @@ class EmployeeLeaveSummary(models.Model):
+                                   help='Latest contract of the employee')
+     opening_balance = fields.Float(string='Opening Balance')
+     yearly_allocate_leave = fields.Float(string='Yearly Allocate')
+-    allocate_leave = fields.Float(string='Allocated Leave')
++    allocate_leave = fields.Float(compute='_get_allocate_leave', string='Allocated Leave')
+     approved_leave = fields.Float(string='Approved Leave')
+     availed_leave = fields.Float(string='Availed Leave')
+     balance_allocate = fields.Float(string='Balance Allocate')
+@@ -44,10 +55,10 @@ class EmployeeLeaveSummary(models.Model):
+         employee_lst = list(set(employee_lst))
+         employee_rec = self.env['hr.employee']\
+             .search([('id', 'not in', employee_lst)])
+-        holiday_status_rec = self.env['hr.holidays.status'].search([])
+         for employee in employee_rec:
+-            if employee.contract_id:
+-                for holiday in holiday_status_rec:
++            if employee.contract_id and employee.contract_id.grade_level:
++                for holiday in \
++                        employee.contract_id.grade_level.holidays_status_ids:
+                     self.create({'employee_id': employee.id,
+                                  'contract_id': employee.contract_id.id,
+                                  'holiday_status_id': holiday.id})
+diff --git a/custom/hr_contract_grade_level/__manifest__.py b/custom/hr_contract_grade_level/__manifest__.py
+index 383b52e..2c9b208 100755
+--- a/custom/hr_contract_grade_level/__manifest__.py
++++ b/custom/hr_contract_grade_level/__manifest__.py
+@@ -17,6 +17,7 @@
+     'depends': [
+         'hr_contract',
+         'menu_sequence',
++        'hr',
+         # 'hr_contract_state'
+     ],
+     'data': [
+diff --git a/custom/hr_contract_grade_level/models/hr_contract.py b/custom/hr_contract_grade_level/models/hr_contract.py
+index 68b4057..6d603fb 100755
+--- a/custom/hr_contract_grade_level/models/hr_contract.py
++++ b/custom/hr_contract_grade_level/models/hr_contract.py
+@@ -56,3 +56,9 @@ class grade_level(models.Model):
+     name = fields.Char('Grade', help='The salary structure grade.')
+     level = fields.Integer('Level', help='The grade level.')
+     wage = fields.Float('Wage', help="Basic Salary for this grade")
++    holidays_status_ids = fields.\
++        Many2many('hr.holidays.status',
++                  'hr_holidays_status_grade_rel',
++                  'grade_id',
++                  'holiday_status_id',
++                  string='Leave Types')
+diff --git a/custom/hr_contract_grade_level/views/hr_contract_view.xml b/custom/hr_contract_grade_level/views/hr_contract_view.xml
+index da39fa0..573fb70 100755
+--- a/custom/hr_contract_grade_level/views/hr_contract_view.xml
++++ b/custom/hr_contract_grade_level/views/hr_contract_view.xml
+@@ -14,6 +14,10 @@
+                             <field name="level" required="1"/>
+                             <field name="wage" required="1"/>
+                         </group>
++                        <group>
++                            <separator string="Leave Types" colspan="4"/>
++                            <field name="holidays_status_ids" nolabel="1" colspan="4"/>
++                        </group>
+                     </sheet>
+                 </form>
+             </field>
+diff --git a/custom/hr_policy_absence/hr_policy_absence.py b/custom/hr_policy_absence/hr_policy_absence.py
+index 6c36342..0743eec 100644
+--- a/custom/hr_policy_absence/hr_policy_absence.py
++++ b/custom/hr_policy_absence/hr_policy_absence.py
+@@ -71,7 +71,7 @@ class policy_line_absence(models.Model):
+     def onchange_holiday(self):
+         if self.holiday_status_id:
+             self.name = self.holiday_status_id.name
+-            # rec.code = data.code
++            self.code = self.holiday_status_id.code
+ 
+ 
+ class policy_group(models.Model):
+diff --git a/custom/hr_policy_accrual/models/hr_policy_accrual.py b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+index 09804ad..80f97a4 100644
+--- a/custom/hr_policy_accrual/models/hr_policy_accrual.py
++++ b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+@@ -87,11 +87,10 @@ class hr_policy(models.Model):
+         }
+ 
+         srvc_months, dHire = \
+-            self.env['hr.employee'].get_months_service_to_date()
++            employee.get_months_service_to_date()[employee.id]
+         srvc_months = int(srvc_months)
+         if not dToday:
+             dToday = date.today()
+-
+         if line.type != 'calendar':
+             return
+ 
+@@ -274,7 +273,7 @@ class hr_policy(models.Model):
+                 for dJob in line_jobs[line.id]:
+                     job_vals = {
+                         'name': dJob.strftime(OE_DATEFORMAT),
+-                        'exececution_time': datetime.now().strftime(
++                        'execution_time': datetime.now().strftime(
+                             OE_DATETIMEFORMAT),
+                         'policy_line_id': line.id,
+                     }
+diff --git a/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml b/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
+index c085f8e..dbc698c 100644
+--- a/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
++++ b/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
+@@ -213,7 +213,7 @@
+             <field name="arch" type="xml">
+                 <xpath expr="//group" position="inside">
+                     <group col="2" colspan="2">
+-                        <separator string="Accr Policy"/>
++                        <separator string="Accrual Policy"/>
+                         <br/>
+                         <group col="2" colspan="2">
+                             <field name="accr_policy_ids" nolabel="1"/>
+diff --git a/custom/hr_policy_ot/hr_policy_ot_view.xml b/custom/hr_policy_ot/hr_policy_ot_view.xml
+index 43cfd4b..c950d79 100644
+--- a/custom/hr_policy_ot/hr_policy_ot_view.xml
++++ b/custom/hr_policy_ot/hr_policy_ot_view.xml
+@@ -117,7 +117,7 @@
+             <field name="arch" type="xml">
+                 <xpath expr="//group" position="inside">
+                     <group col="2" colspan="2">
+-                        <separator string="Ot Policy"/>
++                        <separator string="Overtime Policy"/>
+                         <br/>
+                         <group col="2" colspan="2">
+                             <field name="ot_policy_ids" nolabel="1"/>
+diff --git a/custom/hr_wage_increment/models/wage_increment.py b/custom/hr_wage_increment/models/wage_increment.py
+index 8f8a8b4..83fba7d 100755
+--- a/custom/hr_wage_increment/models/wage_increment.py
++++ b/custom/hr_wage_increment/models/wage_increment.py
+@@ -202,7 +202,9 @@ class wage_increment(models.Model):
+                 notes = notes + '\nSuperceded (for wage adjustment) ' \
+                                 'by contract: ' + wage_inc_rec.contract_id.name
+                 vals = {'notes': notes,
+-                        'date_end': False}
++                        'date_end': False,
++                        'from_amend': 'Wage Adjustment'
++                        }
+                 # Set the new contract to the appropriate state
+                 new_contract_rec.signal_confirm_all()
+                 # Terminate the current contract (and trigger appropriate state
+@@ -357,6 +359,7 @@ class hr_contract(models.Model):
+                                             'new_c_id', 'old_c_id',
+                                             string='Wage Increment History')
+     is_active = fields.Boolean('Active', default=True)
++    from_amend = fields.Char(string='From Amendment')
+ 
+     @api.multi
+     def state_renew(self):
+diff --git a/custom/hr_wage_increment/views/hr_contract_view.xml b/custom/hr_wage_increment/views/hr_contract_view.xml
+index e2a2b38..d8ebed2 100644
+--- a/custom/hr_wage_increment/views/hr_contract_view.xml
++++ b/custom/hr_wage_increment/views/hr_contract_view.xml
+@@ -15,7 +15,8 @@
+                                    readonly="1">
+                                 <tree>
+                                     <field name="employee_id"/>
+-                                    <field name="job_id"/>
++                                    <!--<field name="job_id"/>-->
++                                    <field name="from_amend"/>
+                                     <field name="trial_date_start"/>
+                                     <field name="trial_date_end"/>
+                                     <field name="date_start"/>

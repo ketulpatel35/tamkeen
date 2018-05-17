@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- Menus -->
+        <!-- for v10 hide some in build menu -->
+        <!--<delete model="ir.ui.menu"-->
+        <!--id="hr_recruitment.menu_crm_case_categ0_act_job"/>-->
+
+        <!--<delete model="ir.ui.menu"-->
+        <!--id="hr_recruitment.menu_hr_job_position"/>-->
+
+        <!-- Add Menu -->
+        <menuitem id="menu_hiring_main"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  name="Recruitment" sequence="1" groups="hr_recruitment_stages_movement.group_dep_manager,hr_recruitment_stages_movement.group_unit_head,hr_recruitment_stages_movement.group_ceo_manager"/>
+        <!--<menuitem id="menu_hiring_main"-->
+        <!--parent="hr_recruitment.menu_hr_recruitment_root"-->
+        <!--name="Recruitment" sequence="1"/>-->
+
+        <!--<menuitem parent="menu_hiring_main" id="hiring_menu_hr_job_position"-->
+                  <!--action="hr_recruitment.action_hr_job" sequence="0"/>-->
+        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_job_position">
+            <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
+        </record>
+        <record model="ir.ui.menu" id="hr_recruitment.menu_crm_case_categ0_act_job">
+            <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
+        </record>
+        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_recruitment_root">
+            <field name="groups_id" eval="[
+            (4, ref('hr_recruitment.group_hr_recruitment_user')),
+            (4, ref('hr_recruitment_stages_movement.group_hr_manager_rec')),
+            (4, ref('hr_recruitment.group_hr_recruitment_manager')),
+            (4, ref('hr_recruitment_stages_movement.group_compensation'))
+            ]"/>
+            <!--(6,0,[ref('hr_recruitment.group_hr_recruitment_user')]),(6,0,[ref('hr_recruitment_stages_movement.group_hr_manager_rec')]),(6,0,[ref('hr_recruitment.group_hr_recruitment_manager')]),(6,0,[ref('hr_recruitment_stages_movement.group_compensation')])]" />-->
+        </record>
+
+        (4, ref('sales_team.group_sale_salesman'))
+
+        <menuitem id="dep_manager_menue_" parent="menu_hiring_main"
+                  name="Department Manager" sequence="3" groups="hr_recruitment_stages_movement.group_dep_manager"/>
+        <menuitem
+                name="To be Approved"
+                parent="dep_manager_menue_"
+                id="menu_crm_case_categ0_act_job5"
+                action="crm_case_categ0_act_job5" sequence="2"/>
+
+        <menuitem id="unit_head_menue_" parent="menu_hiring_main"
+                  name="Unit Head" sequence="3" groups="hr_recruitment_stages_movement.group_unit_head"/>
+        <menuitem
+                name="To be Approved"
+                parent="unit_head_menue_"
+                id="menu_crm_case_categ0_act_job7"
+                action="crm_case_categ0_act_job7" sequence="2"/>
+
+        <menuitem id="ceo_manager_menue_" parent="menu_hiring_main"
+                  name="CEO Manager" sequence="4" groups="hr_recruitment_stages_movement.group_ceo_manager"/>
+        <menuitem
+                name="To be Approved"
+                parent="ceo_manager_menue_"
+                id="menu_crm_case_categ0_act_job6"
+                action="crm_case_categ0_act_job6" sequence="2"/>
+
+        <!-- Rec. Officer -->
+
+        <!--<menuitem name="Recruitment3" id="menu_recruitment_root_officer"-->
+        <!--groups="groups_rules.group_recuitement_officer"-->
+        <!--sequence="91"/>-->
+
+        <menuitem id="menu_recruitment_main_officer"
+                  parent="hr_recruitment.menu_hr_recruitment_root"
+                  name="Recruitment" sequence="1"/>
+
+        <!-- Rec Manager -->
+        <menuitem id="rec_manager_menue_" parent="menu_recruitment_main_officer"
+                  name="Recruitment Manager" sequence="1" groups="hr_recruitment.group_hr_recruitment_user"/>
+
+        <menuitem
+                name="To be Approved"
+                parent="rec_manager_menue_"
+                id="menu_crm_case_categ0_act_job3"
+                action="crm_case_categ0_act_job3"/>
+
+        <!-- Compensation and Benefit -->
+        <menuitem id="compensation_menue_" parent="menu_recruitment_main_officer"
+                  name="Compensation and Benefits" sequence="2" groups="hr_recruitment_stages_movement.group_compensation"/>
+
+        <menuitem
+                name="To be Approved"
+                parent="compensation_menue_"
+                id="menu_crm_case_categ0_act_job8"
+                action="crm_case_categ0_act_job8" sequence="2"/>
+
+        <!-- HR Manager - Recruitment -->
+        <menuitem id="hr_manager_menue_" parent="menu_recruitment_main_officer"
+                  name="HR Manager - Recruitment" sequence="2" groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>
+
+        <menuitem
+                name="To be Approved"
+                parent="hr_manager_menue_"
+                id="menu_crm_case_categ0_act_job4"
+                action="crm_case_categ0_act_job4" sequence="2"/>
+
+        <!-- All Applications -->
+        <menuitem
+                name="All Applications"
+                parent="menu_recruitment_main_officer"
+                id="menu_crm_case_categ0_act_job22"
+                action="crm_case_categ0_act_job2" sequence="100" groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment_stages_movement.group_hr_manager_rec"/>
+
+        <menuitem parent="menu_recruitment_main_officer"
+                  id="hiring_menu_hr_job_position_officer"
+                  action="hr_recruitment.action_hr_job" sequence="1"/>
+
+        <menuitem
+                name="Applications"
+                parent="menu_recruitment_main_officer"
+                id="menu_crm_case_categ0_act_job2"
+                action="hr_recruitment.crm_case_categ0_act_job" sequence="2" groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment_stages_movement.group_hr_manager_rec"/>
+
+        <!-- Add CEO + Rec. Manager to reporting -->
+
+
+        <!-- <menuitem name="Reporting"
+                  id="menu_hr_rec_reporting"
+                  sequence="90"/> -->
+
+        <menuitem name="Reporting" id="menu_hr_rec_reporting" sequence="90"
+        web_icon="hr_recruitment_stages_movement,static/description/icon.png"/>
+
+        <menuitem id="rec_reporting_menue_" parent="menu_hr_rec_reporting"
+                  name="Recruitment" sequence="1"/>
+
+        <menuitem action="hr_recruitment.action_hr_recruitment_report_all"
+                  id="menu_hr_recruitment_report_all_rec"
+                  parent="rec_reporting_menue_"/>
+
+        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_recruitment_configuration">
+            <field name="groups_id" eval="[(6,0,[ref('hr_recruitment.group_hr_recruitment_manager')])]" />
+        </record>
+
+    </data>
+</odoo>

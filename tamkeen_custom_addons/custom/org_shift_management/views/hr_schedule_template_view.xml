@@ -1,0 +1,81 @@
+<odoo>
+
+    <!--Department -->
+    <record id="view_hr_schedule_template_form_inherit_for_shift"
+            model="ir.ui.view">
+        <field name="name">view.hr.schedule.template.form.inherit.for.shift</field>
+        <field name="model">hr.schedule.template</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr_schedule.view_hr_schedule_template_form"/>
+        <field name="arch" type="xml">
+            <field name="restday_ids" position="replace"/>
+            <field name="name" position="after">
+                <field name="short_name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </field>
+            <xpath expr="//group" position="after">
+                <group>
+                    <group>
+                        <field name="valid_from"/>
+                        <field name="employee_sub_group_id"/>
+                        <field name="restday_ids" widget="many2many_tags" />
+                        <field name="default_scheduled_hours"/>
+                    </group>
+                    <group>
+                        <field name="valid_to"/>
+                        <field name="personnel_sub_area_id"/>
+                        <!--<field name="public_holiday_id"/>-->
+                        <!--<field name="public_holiday_ids"-->
+                               <!--widget="many2many_tags"/>-->
+                        <!--<field name="public_holiday_id"/>-->
+                        <field name="public_holiday_ids"
+                               widget="many2many_tags"/>
+                        <field name="overnight_shift"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='worktime_ids']" position="replace"/>
+            <xpath expr="//form/sheet" position="inside">
+                <notebook>
+                    <page string="Worktime">
+                        <field name="worktime_ids"/>
+                    </page>
+                    <page string="description">
+                        <field name="description" nolabel="1"/>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_schedule_template_worktime_tree_inherit"
+            model="ir.ui.view">
+        <field name="name">hr.schedule.template.worktime.tree.inherit</field>
+        <field name="model">hr.schedule.template.worktime</field>
+        <field name="inherit_id"
+               ref="hr_schedule.view_hr_schedule_template_worktime_tree"/>
+        <field name="arch" type="xml">
+            <field name="dayofweek" position="after">
+                <field name="scheduled_hours"/>
+                <field name="flexible_hours"/>
+            </field>
+            <field name="hour_to" position="after">
+                <field name="late_time"/>
+                <field name="leave_early_time"/>
+                <field name="beginning_in"/>
+                <field name="ending_in"/>
+                <field name="beginning_out"/>
+                <field name="ending_out"/>
+            </field>
+            <field name="hour_from" position="attributes">
+                <attribute name="string">On Duty Time</attribute>
+            </field>
+            <field name="hour_to" position="attributes">
+                <attribute name="string">Off Duty Time</attribute>
+            </field>
+        </field>
+    </record>
+
+</odoo>

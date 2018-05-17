@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr.action_hr_job"
+            model="ir.actions.act_window">
+        <field name="name">Positions</field>
+    </record>
+
+    <!-- Position -->
+    <record id="hr_job_inherit_for_job_template" model="ir.ui.view">
+        <field name="name">hr.job.inherit.for.job.template</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="after">
+                <div class="oe_title">
+                    <h1>
+                        <field name="code" readonly="1"/>
+                    </h1>
+                </div>
+            </xpath>
+            <field name="no_of_recruitment" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="description" position="replace"/>
+            <!--<field name="requirements" position="replace"/>-->
+            <!--<label for="requirements" position="replace"/>-->
+            <label for="description" position="replace"/>
+            <field name="department_id" position="replace"/>
+            <!--<field name="name" position="attributes">-->
+                <!--<attribute name="string">Name</attribute>-->
+            <!--</field>-->
+            <field name="name" position="after">
+                <field name="short_name" required="1"/>
+            </field>
+            <group name="employee_data" position="after">
+                <group colspan="4" col="4">
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                </group>
+            </group>
+            <xpath expr="//form/header"
+                   position="replace">
+                <header>
+                    <button name="submit_for_approval"
+                            string="Submit of Approval" type="object"
+                            class="btn-primary" states="planned"/>
+                    <button name="button_approved"
+                            string="Approved" type="object"
+                            class="btn-primary" states="submitted"/>
+                    <button name="button_rejected"
+                            string="Reject" type="object" states="submitted"/>
+                    <button name="button_active"
+                            string="Active" type="object" states="approved" class="btn-primary"/>
+                    <button name="set_recruit" string="Launch Recruitment" type="object" class="oe_highlight" groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <button name="set_open" string="Stop Recruitment" states="recruit" type="object" groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+            </xpath>
+            <xpath expr="//form/sheet" position="inside">
+                <notebook>
+                    <page string="Relationship">
+                        <group colspan="4" col="4">
+                            <field name="job_template_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="parent_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="employee_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="department_id"
+                                   string="Organization Unit" required="1"
+                                   attrs="{'readonly': [('head_own_org_unit','=',True)]}" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <label for="head_own_org_unit"/>
+                            <div class="o_row">
+                                <field name="head_own_org_unit" readonly="1"/>
+                                <button string="Assign/Un-Assign Head of Own Org. Unit"
+                                        name="action_head_of_own_org_unit"
+                                        type="object"
+                                        attrs="{'invisible':[('department_id','=',False)]}" class="oe_link"/>
+                            </div>
+                            <!--<div class="o_row"-->
+                                 <!--attrs="{'invisible': [('head_own_org_unit','=',False)]}">-->
+                                <!--<field name="head_own_org_unit" readonly="1"/>-->
+                                <!--<button string="Unlink Head of Own Org. Unit"-->
+                                        <!--name="action_head_of_own_org_unit"-->
+                                        <!--type="object"-->
+                                        <!--attrs="{'invisible':[('department_id','=',False)]}" class="oe_link" context="{'unlink': True}"/>-->
+                            <!--</div>-->
+                        </group>
+                    </page>
+                    <!--<page string="Position Hierarchy">-->
+                    <!--<field name="child_ids"/>-->
+                    <!--</page>-->
+                    <page string="Description">
+                        <field name="description" widget="html"/>
+                    </page>
+                    <page string="Requirements">
+                        <field name="requirements" widget="html"/>
+                    </page>
+                    <page string="Duties">
+                        <field name="duties" widget="html"/>
+                    </page>
+                    <page string="Location">
+                        <group>
+                            <field name="address_id"/>
+                        </group>
+                    </page>
+                    <page string="Extra" name="extra">
+                        <group colspan="4" col="4">
+                            <field name="schedule_template_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="department_staff"/>
+                            <field name="user_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <label for="survey_id" groups="base.group_user"/>
+                            <div groups="base.group_user" class="o_row">
+                                <field name="survey_id" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <button string="Display Interview Form" name="action_print_survey" type="object" attrs="{'invisible':[('survey_id','=',False)]}" class="oe_link"/>
+                            </div>
+                            <field name="employee_group_id"
+                                       domain="[('parent_id','=',False)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="employee_sub_group_id"
+                                   domain="[('parent_id','=',employee_group_id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="personnel_area_id"
+                                   domain="[('parent_id','=',False)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="personnel_sub_area_id"
+                                   domain="[('parent_id', '=', personnel_area_id)]" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <!--<field name="payroll_period_schedule_id"-->
+                                   <!--required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                            <!--<field name="policy_group_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                            <field name="vacant"/>
+                            <field name="obsolete"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Position Search-->
+    <record id="view_job_filter_inherit" model="ir.ui.view">
+        <field name="name">view.job.filter.inherit</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_job_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="string">Position</attribute>
+            </field>
+            <field name="name" position="after">
+                <field name="employee_id"/>
+                <field name="code"/>
+            </field>
+            <filter name="in_recruitment" position="after">
+                <filter domain="[('employee_id','!=',False)]"
+                        string="Occupied"/>
+                <filter domain="[('employee_id','=',False)]"
+                        string="Un-Occupied"/>
+                <filter domain="[('vacant','=',True)]"
+                        string='Vacant'/>
+                <filter domain="[('obsolete','=',True)]"
+                        string='Obsolete'/>
+            </filter>
+            <xpath expr="//group" position="inside">
+                <filter string="Job Template" domain="[]"
+                        context="{'group_by':'job_template_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Position Tree-->
+    <record id="view_hr_job_tree_for_replace" model="ir.ui.view">
+        <field name="name">view.hr.job.tree.for.replace</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="field_parent">child_ids</field>
+        <field name="inherit_id"
+               ref="hr.view_hr_job_tree"/>
+        <field name="arch" type="xml">
+            <field name="no_of_employee" position="replace"/>
+            <field name="no_of_recruitment" position="replace"/>
+            <field name="expected_employees" position="replace"/>
+            <field name="no_of_hired_employee" position="replace"/>
+            <field name="name" position="after">
+                <field name="employee_id"/>
+                <field name="parent_id"/>
+            </field>
+            <field name="name" position="attributes">
+                <attribute name="string">Position</attribute>
+            </field>
+            <field name="department_id" position="attributes">
+                <attribute name="string">Organization Unit</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Position Tree-->
+    <record id="view_hr_job_tree_for_action" model="ir.ui.view">
+        <field name="name">view.hr.job.tree.for.action</field>
+        <field name="model">hr.job</field>
+        <field name="field_parent">child_ids</field>
+        <field name="arch" type="xml">
+            <tree string="Positions">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Position Action-->
+    <record id="hr_position_action_subordinate_hierachy"
+            model="ir.actions.act_window">
+        <field name="name">Subordinate Hierarchy</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.job</field>
+        <field name="domain">[('id','in',active_ids)]</field>
+        <field name="view_type">tree</field>
+        <field name="view_id" ref="organization_structure.view_hr_job_tree_for_action"/>
+    </record>
+
+    <!-- Position act widow-->
+    <record id="hr_position_action_subordinate_hierachy_mutli"
+            model="ir.values">
+        <field name="name">Subordinate Hierarchy</field>
+        <field name="model_id" ref="hr.model_hr_job"/>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('hr_position_action_subordinate_hierachy'))"/>
+        <field name="key">action</field>
+        <field name="key2">client_action_multi</field>
+        <field name="model">hr.job</field>
+    </record>
+
+    <record id="hr_job_survey_inherit_for_org_structure" model="ir.ui.view">
+        <field name="name">hr.job.form.inherit.for.org.structure</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment_survey.hr_job_survey_inherit"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="replace"/>
+            <field name="address_id" position="replace"/>
+            <div class="o_row" position="replace"/>
+            <label for="survey_id" position="replace"/>
+        </field>
+    </record>
+
+</odoo>

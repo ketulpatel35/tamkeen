@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="make_analytic_field_required_pr" model="ir.ui.view">
+        <field name="name">make.analytic.field.required.pr</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('purchase.group_analytic_accounting') ])]"/>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <field name="account_analytic_id" position="attributes">
+                <!--<attribute name="required">1</attribute>-->
+                <attribute name="attrs">{'required': [('state', 'in', ['draft'])], 'readonly': [('state', 'not in', ['draft'])]}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

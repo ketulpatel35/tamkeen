@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="crm_stage_control_action" model="ir.actions.act_window">
+            <field name="name">Stages Control</field>
+            <field name="res_model">crm.stage.control</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to define a new stage control stack.
+                </p><p>
+                
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_crm_stage_control"
+            name="Stages Control"
+            action="crm_stage_control_action"
+            parent="crm.menu_crm_config_lead"
+            sequence="4"
+            groups="base.group_no_one"/>
+    </data>
+</odoo>

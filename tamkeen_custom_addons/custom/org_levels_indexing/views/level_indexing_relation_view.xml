@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_job_inherit_for_job_template_inherit_for_indexing"
+            model="ir.ui.view">
+        <field name="name">hr.job.inherit.for.job.template_for.indexing</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="organization_structure.hr_job_inherit_for_job_template"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']/group/field[@name='obsolete']"
+                   position="after">
+                <field name="level_indexing_id"
+                       domain="[('model_id.model', '=', 'hr.job')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_job_filter_inherit_for_indexing"
+            model="ir.ui.view">
+        <field name="name">view.job.filter.inherit.for.indexing</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="hr.view_job_filter"/>
+        <field name="arch" type="xml">
+            <group position="inside">
+                <filter string="Level Indexing" domain="[]"
+                        context="{'group_by':'level_indexing_id'}"/>
+            </group>
+        </field>
+    </record>
+
+    <record id="hr_job_template_form_view_inherit_for_indexing"
+            model="ir.ui.view">
+        <field name="name">hr.job.template.form.view.inherit.for.indexing</field>
+        <field name="model">hr.job.template</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="organization_structure.hr_job_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']"
+                   position="after">
+                <field name="level_indexing_id"
+                       domain="[('model_id.model', '=', 'hr.job.template')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_job_template_search_view_inherit_for_indexing"
+            model="ir.ui.view">
+        <field name="name">hr.job.template.search.view.inherit.for.indexing</field>
+        <field name="model">hr.job.template</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="organization_structure.hr_job_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="valid_to" position="after">
+                <group expand="0" string="Group By">
+                    <filter string="Level Indexing" domain="[]"
+                        context="{'group_by':'level_indexing_id'}"/>
+                </group>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_department_form_for_org_structure_for_indexing"
+            model="ir.ui.view">
+        <field name="name">view.department.form.for.org.structure.for.indexing</field>
+        <field name="model">hr.department</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="organization_structure.view_department_form_for_org_structure"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']/group/field[@name='department_staff']"
+                   position="after">
+                <field name="level_indexing_id"
+                       domain="[('model_id.model', '=', 'hr.department')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_department_filter_for_indexing"
+            model="ir.ui.view">
+        <field name="name">view.department.filter.for.indexing</field>
+        <field name="model">hr.department</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="hr.view_department_filter"/>
+        <field name="arch" type="xml">
+            <filter name="inactive" position="after">
+                <group expand="0" string="Group By">
+                    <filter string="Level Indexing" domain="[]"
+                        context="{'group_by':'level_indexing_id'}"/>
+                </group>
+            </filter>
+        </field>
+    </record>
+</odoo>

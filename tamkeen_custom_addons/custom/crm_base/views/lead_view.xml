@@ -1,0 +1,157 @@
+<odoo>
+    <data>
+        <record id="crm_lead_source_form" model="ir.ui.view">
+            <field name="name">crm.lead.source.form</field>
+            <field name="model">crm.lead.source</field>
+            <field name="arch" type="xml">
+                <form string="Lead Source">
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'required': True}" />
+                            <field name="code" />
+                        </group>
+                        <group>
+                            <field name="order_sequence" attrs="{}" />
+                            <field name="sequence" attrs="{}" />
+                            <field name="active" attrs="{}" />
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="crm_lead_source_tree" model="ir.ui.view">
+            <field name="name">crm.lead.source.tree</field>
+            <field name="model">crm.lead.source</field>
+            <field name="arch" type="xml">
+                <tree string="Lead Sources">
+                    <field name="name" attrs="{'required': True}" />
+                    <field name="code" />
+                    <field name="order_sequence" attrs="{}" />
+                    <field name="sequence" attrs="{}" />
+                </tree>
+            </field>
+        </record>
+        <record id="crm_lead_form" model="ir.ui.view">
+            <field name="name">crm.lead.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='extra']/group/group[@name='categorization']" position="before">
+                    <group string="Reported By">
+                        <field name="reported_by"/>
+                        <field name="method"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <h2 class="o_row" position="replace">
+                </h2>
+                <field name="date_deadline" position="replace"></field>
+                <field name="tag_ids" position="before">
+                    <field name="estimated_budget" widget='monetary' options="{'currency_field': 'company_currency'}"></field>
+                </field>
+                <xpath expr="//notebook/page[1]/field[@name='description']" position="attributes">
+                    <attribute name="widget">html</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[1]" position="attributes">
+                    <attribute name="string">Opportunity Description</attribute>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                <page name="analysis" string="Analysis">
+                    <group>
+                        <group>
+                            <field name="customer_situation" attrs="{}" />
+                            <field name="customer_needs" attrs="{}" />
+                        </group>
+                        <group>
+                            <field name="proposed_solution" attrs="{}" />
+                        </group>
+                    </group>
+                    <separator string="Opportunity Analysis" />
+                        <div class="oe_edit_only alert alert-info" role="alert"><strong>Opportunity Analysis </strong> normally it should contain a description about the problem and the solution.</div>
+                    <field name="opportunity_analysis" widget="html"/>
+                </page>
+
+                <page name="forcast" string="Forcast">
+                    <div class="oe_title">
+                        <h2 class="o_row">
+                        <div class="oe_read_only">
+                            <span class="oe_grey">&#x00a0;&#x00a0;  Selling Value: </span>
+                        </div>
+                        <div>
+                            <label for="selling_value" class="oe_edit_only"/>
+                            <div class="o_row">
+                                <field name="selling_value" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                                <span class="oe_grey"> with </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="confidence" class="oe_edit_only"/>
+                            <div class="o_row">
+                                <field name="confidence" widget="integer"/>
+                                <span>%</span>
+                            </div>
+                        </div>
+                    </h2>
+                        <h2 class="o_row">
+                                <div>
+                                    <label for="planned_revenue" class="oe_edit_only" />
+                                    <div class="o_row">
+                                        <field name="company_currency" invisible="1"/>
+                                        <field name="planned_revenue" widget='monetary' options="{'currency_field': 'company_currency'}"/>
+                                        <span class="oe_grey"> at </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="probability" class="oe_edit_only"/>
+                                    <div class="o_row">
+                                        <field name="probability" widget="integer"/>
+                                        <span>%%</span>
+                                    </div>
+                                </div>
+                            </h2>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="date_deadline"></field>
+                        </group>
+                        <group>
+                        
+                        </group>
+                    </group>
+                </page>
+                </xpath>
+                <xpath expr="//form//sheet//group//label[@for='next_activity_id']" position="before">
+                    <field name="sequence" readonly="True" />                    
+                    <field name="lead_source_id" widget="selection" />
+                    <field name="project_type"/>
+                </xpath>
+                
+                <xpath expr="//form//sheet//h1" position="after">
+                    <label for="name_arabic" class="oe_edit_only"/>
+                    <h1><field name="name_arabic" placeholder="Arabic Lead Name ..."/></h1> 
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_opportunity_tree" model="ir.ui.view">
+            <field name="name">crm.lead.tree</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[1]" position="before">
+                    <field name="sequence"></field>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

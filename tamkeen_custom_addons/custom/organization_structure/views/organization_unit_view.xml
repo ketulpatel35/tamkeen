@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr.open_module_tree_department"
+            model="ir.actions.act_window">
+        <field name="name">Organization Unit</field>
+    </record>
+
+    <!--Department -->
+    <record id="view_department_form_for_org_structure"
+            model="ir.ui.view">
+        <field name="name">view.department.form.inherit.for.org.structure</field>
+        <field name="model">hr.department</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="submit_for_approval"
+                            string="Submit of Approval" type="object"
+                            class="btn-primary" states="planned"/>
+                    <button name="button_approved"
+                            string="Approved" type="object"
+                            class="btn-primary" states="submitted"/>
+                    <button name="button_rejected"
+                            string="Reject" type="object" states="submitted"/>
+                    <button name="button_active"
+                            string="Active" type="object" states="approved" class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="after">
+                <div class="oe_title">
+                    <h1>
+                        <field name="code" readonly="1"/>
+                    </h1>
+                </div>
+            </xpath>
+            <field name="manager_id" position="replace"/>
+            <field name="name" position="attributes">
+                <attribute name="string">Name</attribute>
+                <attribute name="placeholder">Department Name</attribute>
+            </field>
+            <field name="name" position="after">
+                <field name="short_name"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="org_unit_type"/>
+            </field>
+            <field name="parent_id" position="replace"/>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="related_line_manager_of"
+                        icon="fa-list"
+                        class="oe_stat_button"
+                        string="Sub Org. Unit/s" type="object"/>
+                <button name="related_positions" icon="fa-list"
+                        class="oe_stat_button"
+                        type="object">
+                    <field name="position_count" widget="statinfo" string="Position/s" help="Related Position/s"/>
+                </button>
+            </xpath>
+            <xpath expr="//form//sheet" position="inside">
+                <notebook>
+                    <page string="Relationship" name="relationship">
+                        <group colspan="4" col="4">
+                            <field name="holder_position_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="manager_id" readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="parent_id"
+                                   string="Parent Organization Unit"
+                                   readonly="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        </group>
+                    </page>
+                    <page string="Description">
+                        <field name="description" widget="html"/>
+                    </page>
+                    <page string="Extra" name="extra">
+                        <group>
+                            <field name="schedule_template_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="department_staff" />
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Organization Unit tree -->
+    <record id="view_org_unit2" model="ir.ui.view">
+        <field name="name">view.org.unit2</field>
+        <field name="model">hr.department</field>
+        <field name="field_parent">child_ids</field>
+        <field name="arch" type="xml">
+            <tree string="Organization Units">
+                <field name="name"/>
+                <field name="manager_id"/>
+                <field name="parent_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_urg_unit_action_subordinate_hierachy"
+            model="ir.actions.act_window">
+        <field name="name">Subordinate Hierarchy</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.department</field>
+        <field name="domain">[('id','in',active_ids)]</field>
+        <field name="view_type">tree</field>
+        <field name="view_id" ref="view_org_unit2"/>
+    </record>
+
+    <record id="hr_org_unit_action_subordinate_hierachy_mutli"
+            model="ir.values">
+        <field name="name">Subordinate Hierarchy</field>
+        <field name="model_id" ref="hr.model_hr_department"/>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('hr_urg_unit_action_subordinate_hierachy'))"/>
+        <field name="key">action</field>
+        <field name="key2">client_action_multi</field>
+        <field name="model">hr.department</field>
+    </record>
+
+    <!--<record id="view_department_tree_inherit_org_unit_type" model="ir.ui.view">-->
+        <!--<field name="name">hr.department.tree.inherit.org</field>-->
+        <!--<field name="model">hr.department</field>-->
+        <!--<field name="inherit_id" ref="hr.view_department_tree"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<xpath expr="//field[@name='manager_id']" position="after">-->
+                <!--<field name='org_unit_type'/>-->
+            <!--</xpath>-->
+
+        <!--</field>-->
+    <!--</record>-->
+
+</odoo>

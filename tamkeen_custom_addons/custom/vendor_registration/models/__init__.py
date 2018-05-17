@@ -1,0 +1,4 @@
+import ver_reg_config
+import vendor_registration
+import res_partner
+import vendor_activity

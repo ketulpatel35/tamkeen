@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Arabic report template-->
+    <template id="report_salary_arabic">
+        <t t-call="report.html_container">
+            <t t-call="hr_salary_certificates.salary_certi_report_header_footer_arabic">
+                <t t-foreach="docs" t-as="o">
+                    <!--<t t-call="report.external_layout">-->
+                     <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <style type="text/css">
+                                .headerreport{
+                                    font-size:19px;
+                                    text-align:center;
+                                    font-family:Sakkal Majalla;
+                                    margin-top: 2cm;
+                                }
+                                .designation{
+                                    font-size:19px;
+                                    text-align:right;
+                                    font-family:Sakkal Majalla;
+                                }
+                                .direction1{
+                                    direction:rtl;
+                                }
+                                .table1{
+                                    direction:rtl;
+                                    font-size:19px;
+                                }
+                                .currently{
+                                    font-size:19px;
+                                    padding-top: 10px;
+                                    text-align:right;
+                                    font-family:Sakkal Majalla;
+                                }
+                                .table2{
+                                    text-align:center;
+                                    font-family:Sakkal Majalla;
+                                }
+                                .purpose{
+                                    font-size:19px;
+                                    direction:rtl;
+                                    font-family:Sakkal Majalla;
+                                }
+                                .simple_text{
+                                    font-family:Sakkal Majalla;
+                                }
+                                .current_date{
+                                    padding-bottom:150px;
+                                    font-family:Sakkal Majalla;
+                                }
+                                .stamp{
+                                    padding-top: 28px;
+                                }
+                                table {
+                                border-collapse: collapse;
+                                font-family:Sakkal Majalla;
+                                }
+                                table, td{
+                                border: 1px solid black;
+                                font-family:Sakkal Majalla;
+                                }
+                                .tbl-td {
+                                height:20%;
+                                padding-top: 2px;
+                                padding-left: 15px;
+                                padding-right: 15px;
+                                padding-bottom: 2px;
+                                font-family:Sakkal Majalla;
+                                }
+                                .tbl-gray {
+                                text-align:center;
+                                background-color: #808080;
+                                font-family:Sakkal Majalla;
+                                }
+                                .table-td{
+                                border: 0px solid black;
+                                font-family:Sakkal Majalla;
+                                }
+                                {
+                                font-family:Sakkal Majalla;
+                                }
+                            </style>
+                            <t t-set="mf_tag" t-value="''"/>
+                            <t t-set="mf_tag1" t-value="'هو'"/>
+                            <t t-if="o.employee_id.gender == 'female'">
+                                <t t-set="mf_tag" t-value="'ا'"/>
+                                <t t-set="mf_tag1" t-value="'هى'"/>
+                            </t>
+                            <div class="text-right designation simple_text">
+                                <b class="simple_text"> الى:</b>
+                                <t t-if="not o.need_to_add_missing_destination">
+                                    <t t-if="o.bank_id">
+                                        <span class="simple_text" t-esc="o.bank_id.arabic_name"/>
+                                    </t>
+                                    <t t-elif="o.destination_organization_id">
+                                        <span class="simple_text" t-esc="o.destination_organization_id.arabic_name"/>
+                                    </t>
+                                </t>
+                                <t t-if="o.need_to_add_missing_destination">
+                                    <t t-if="o.other_dest_org">
+                                        <span class="simple_text" t-esc="o.other_dest_org"/>
+                                    </t>
+                                </t>
+                                <br/>
+                            </div>
+                            <br/>
+                            <table width="100%;" class="table1">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center tbl-gray tbl-td" width="100%;" colspan="2">
+                                            <b>المعلومات الشخصية</b>
+                                        </td>
+                                    </tr>
+                                    <!-- name -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b class="direction1">الإسم</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.employee_id.name_eng">
+                                                <span class="simple_text" t-esc="o.employee_id.name_eng"/>
+                                            </t>
+                                        </td>
+
+                                    </tr>
+                                    <!-- Joining Date -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b class="direction1">تاريخ الإلتحاق بالعمل</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.date_of_joining">
+                                                <span class="simple_text" t-esc="o.date_of_joining"/>
+                                            </t>
+                                        </td>
+
+                                    </tr>
+                                    <!-- Contract End Date -->
+                                    <t t-if="o.employee_id.contract_id and o.employee_id.contract_id.date_end">
+                                        <t t-if="o.current_country_code != 'SA'">
+                                            <tr>
+                                                <td width="35%;" class="tbl-td">
+                                                    <b class="direction1">تاريخ
+                                                        إنتهاء العقد</b>
+                                                </td>
+                                                <td width="65%;" class="tbl-td">
+                                                    <t t-if="o.employee_id.contract_id and o.employee_id.contract_id.contract_end_date">
+                                                        <span class="simple_text" t-esc="o.employee_id.contract_id.contract_end_date"/>
+                                                    </t>
+                                                </td>
+
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <!-- Position -->
+                                    <t t-if="o.job_id">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td">
+                                                <b class="direction1">الوظيفة</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td direction1">
+                                                <t t-if="o.job_id">
+                                                    <span class="simple_text" t-esc="o.job_id.arabic_name"/>
+                                                </t>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+                                    <!-- Nationality -->
+                                    <t t-if="o.employee_id.country_id">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td direction1">
+                                                <b>الجنسية</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td direction1">
+                                                <t t-if="o.employee_id.country_id">
+                                                    <span class="simple_text" t-esc="o.employee_id.country_id.name_eng"/>
+                                                </t>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+                                    <!-- Iqama Number -->
+                                    <t t-if="o.current_country_code != 'SA'">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td direction1">
+                                                <b>رقم الإقامة</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td direction1">
+                                                <t t-if="o.iqama_number">
+                                                    <span class="simple_text" t-esc="o.iqama_number"/>
+                                                </t>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="o.current_country_code == 'SA'">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td direction1">
+                                                <b>رقم الهوية</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td direction1">
+                                                <t t-if="o.identification_number">
+                                                    <span class="simple_text" t-esc="o.identification_number"/>
+                                                </t>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+                                    <!-- Passport Number -->
+                                    <t t-if="o.is_passport_number">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td direction1">
+                                                <b>رقم جواز
+                                                    السفر</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td direction1">
+                                                <span class="simple_text" t-esc="o.employee_id.passport_id"/>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <t t-set="payslip_data" t-value="o.get_data()"/>
+                            <t t-if="payslip_data and o.emp_salary_rule_ids">
+                                <div class="text-right currently">
+                                    <b> :تفاصيل الراتب الشهري الحالي كما هو موضح
+                                    </b>
+                                </div>
+                                <table width="100%;" style="direction:rtl;font-size:19px">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center tbl-gray tbl-td" width="100%;" colspan="2">
+                                                <b>تفاصيل الراتب</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="65%;" class="tbl-td table2">
+                                                <b>هيكلية الرواتب</b>
+                                            </td>
+                                            <td width="35%;" class="tbl-td table2">
+                                                <b>المبلغ</b>
+                                            </td>
+                                        </tr>
+                                        <!-- salary rule -->
+                                        <t t-foreach="o.emp_salary_rule_ids" t-as="line_rec">
+                                            <tr>
+                                                <td width="65%;" class="tbl-td">
+                                                    <b>
+                                                        <t t-esc="line_rec.arabic_name"/>
+                                                    </b>
+                                                </td>
+                                                <td width="35%;" class="tbl-td table2">
+                                                    <t t-if="line_rec.code in payslip_data">
+                                                        <t t-esc="payslip_data[line_rec.code]"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="len(o.emp_salary_rule_ids) &gt; 1">
+                                            <tr>
+                                                <td width="65%;" class="tbl-td">
+                                                    <b>الإجمالى‎</b>
+                                                </td>
+                                                <td width="35%;" class="tbl-td table2">
+                                                    <t>
+                                                        <t
+                                                                t-esc="payslip_data['total'] or 0.00"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                            </t>
+                            <br/>
+                            
+                            <div class="purpose">
+                                <b> الغرض:</b>
+                                <t t-if="not o.need_to_add_missing_purpose">
+                                    <t t-if="o.dest_org_purpose_id">
+                                        <t t-esc="o.dest_org_purpose_id.arabic_name"/>
+                                    </t>
+                                </t>
+                                <t t-if="o.need_to_add_missing_purpose">
+                                    <t t-if="o.other_purpose">
+                                        <t t-esc="o.other_purpose"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <div class="purpose"><b>
+                                السلام عليكم و رحمة الله وبركاته ،،،<br/>
+                                نفيدكم بأن الموظف
+                                الموضحة بياناته أعلاه يعمل لدينا ومازال على رأس العمل حتى تاريخه و قد أعطيت له<t t-esc="mf_tag"/>
+                                هذه الشهادة بناء على طلبه<t t-esc="mf_tag"/> ، <br/>
+                                دون أدنى مسؤولية على الشركة.<br/>
+
+                            </b>
+                                <t t-if="o.employee_id.company_id.salary_certificate_signature">
+                                    <div>
+                                        <b class="purpose"> تقبلوا تحياتنا ،،،</b><br/><img width="220px" style="padding-left:70px;" height="200px" class="img-responsive" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.salary_certificate_signature"/>
+
+                                        <!--<img class="img-responsive"-->
+                                        <!--src="/hr_salary_certificates/static/description/icon.png" width="200px" height="75px"/>-->
+                                    </div>
+                                </t>
+                                <div>
+                                    <b class="simple_text">التوقيع المعتمد:
+                                        <t t-if="o.destination_organization_type.employee_id">
+                                            <span class="simple_text" t-esc="o.destination_organization_type.employee_id.name_eng"/>
+                                        </t>
+                                    </b>
+                                    <br/>
+                                    <b style="padding-top: 10px;">
+                                        <div style="float: right;" class="simple_text">الوظيفة:
+                                            <t t-if="o.destination_organization_type.employee_id">
+                                                <span class="simple_text" t-esc="o.destination_organization_type.employee_id.job_id.arabic_name"/>
+                                            </t>
+                                            <br/>
+                                            <b class="simple_text current_date">
+                                                التاريخ: <t t-esc="o.get_current_date()"/>
+                                            </b>
+                                        </div>
+                                        <div>
+                                            <t t-if="o.employee_id.company_id.salary_certificate_stamp">
+                                                <img width="220px" height="200px" class="img-responsive stamp" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.salary_certificate_stamp"/>
+                                            </t>
+                                        </div>
+                                    </b>
+                                </div>
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                    <!--</t>-->
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!--Header footer for arabic report-->
+    <template id="salary_certi_report_header_footer_arabic">
+        <t
+            t-call="hr_salary_certificates.salary_certificates_report_header_arabic"/>
+        <t t-raw="0"/>
+        <t
+            t-call="hr_salary_certificates.salary_certificates_report_footer_arabic"/>
+    </template>
+
+    <template id="hr_salary_certificates.salary_certificates_report_header_arabic">
+        <div class="header">
+            <t t-foreach="docs" t-as="o">
+                <div class="col-xs-8 simple_text">
+                    <img class="img-responsive" src="/hr_salary_certificates/static/src/img/Logo_Arabic.jpg" width="220px" height="75px"/>
+                </div>
+                <div class="col-xs-4 text-right simple_text" style="padding-top: 5%;font-size:17px;font-family:Sakkal Majalla;">
+                    <t t-if="o.name">
+                        <t t-esc="o.name"/>
+                    </t>
+                </div>
+                <div class="row simple_text">
+                    <t t-if="o.employee_id.company_id.watermark_img">
+                        <div style="position:absolute;text-align:center;z-index:-1;border:0;opacity:0.1;padding-top:350px;">
+                            <img t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.watermark_img"/>
+                        </div>
+                    </t>
+                </div>
+                <div class="headerreport" style="text-align:center;font-size:19px;font-family:Sakkal Majalla;">
+                    <b style="text-align:center;font-size:22px;font-family:Sakkal Majalla;" class="headerreport">شهادة تعريف</b>
+                </div>
+            </t>
+        </div>
+    </template>
+
+    <template id="hr_salary_certificates.salary_certificates_report_footer_arabic"
+              name="salary_certificates_report_footer">
+        <t t-foreach="docs" t-as="o">
+            <div class="footer">
+                <div class="certi-last-page" style="font-size:17px;direction:rtl;font-family:Sakkal Majalla;">
+                    * هذه الشهادة تصدر الكترونيا من النظام.‎
+                    <br/>
+                    تعتبر الوثيقة لاغية في حال عدم وجود الختم الرسمي للشركة.<br/>
+                    <!--لمزيد من التفاصيل الرجاء التواصل عن طريق:-->
+                    <!--<t t-if="o.destination_organization_type.contact_email">-->
+                        <!--<span style="font-family:Sakkal Majalla;font-size:15px;" t-esc="o.destination_organization_type.contact_email"/>-->
+                    <!--</t>-->
+                </div>
+                <div style="border-top: 1px solid #808080;font-size:14px;color:#808080;direction:rtl;font-family:Sakkal Majalla;">
+                    <t t-if="o.employee_id.company_id">
+                        <b>العنوان:</b>
+                        <span>
+                            <span style="font-family:Sakkal Majalla;font-size:15px;">
+                                العقارية بلازا - البرج الشمالى - الدور الثانى - مكتب 220
+                                                            </span>
+                            <span style="font-family:Sakkal Majalla;font-size:15px;">
+                                ص ب 2392
+                            </span>
+                            <!-- <t t-if="o.employee_id.company_id.street">
+                                <span class="simple_text" t-field="o.employee_id.company_id.street"/>
+                            </t>
+                            -
+                            <t t-if="o.employee_id.company_id.street2">
+                                <span class="simple_text" t-field="o.employee_id.company_id.street2"/>
+                            </t> -->
+                        </span>
+                          <b>المدينة:</b>
+                        <span style="font-family:Sakkal Majalla;font-size:15px;">
+                            <t t-if="o.employee_id.company_id.city">
+                                <!-- <span class="simple_text" t-field="o.employee_id.company_id.city"/> -->
+                                <span style="font-family:Sakkal Majalla;font-size:15px;">
+                                    الرياض
+                                </span>
+                            </t>
+                        </span>
+                          <b>الهاتف:</b>
+                        <span style="font-family:Sakkal Majalla;font-size:15px;">
+                            <t t-if="o.employee_id.company_id.phone">
+                                <!-- <span class="simple_text" t-field="o.employee_id.company_id.phone"/> -->
+                                <span class="simple_text">
+                                    1411-1416-1420-4407700
+                                </span>
+                            </t>
+                        </span>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

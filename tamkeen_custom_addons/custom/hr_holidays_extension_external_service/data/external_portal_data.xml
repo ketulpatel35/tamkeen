@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- External Portal UUID Data -->
+        <record id="external_portal_uuid_data" model="ir.config_parameter">
+            <field name="key">external.portal.uuid</field>
+            <field name="value">0</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="invoice_supplier_form_inherit_reversal_entry"
+                model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.inherit.reversal</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_invoice_open']"
+                       position="after">
+                    <button name="generate_reversal_entry" type="object"
+                            string="Reverse Invoice"
+                            class="oe_highlight"
+                            attrs="{'invisible':[('state','not in',['open'])]}"  groups="account_journal_reversal.group_can_reverse_journal"/>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state','=','reversed')]}</attribute>
+                </xpath>
+                <field name="move_id" position="after">
+                    <field name="reversal_move_id" readonly="1"
+                           attrs="{'invisible':[('reversal_move_id','=',False)]}"/>
+                </field>
+
+            </field>
+        </record>
+
+         <!-- Inherit Form View to Modify it for customer invoice -->
+        <record id="invoice_customer_form_inherit_reversal_entry"
+                model="ir.ui.view">
+            <field name="name">account.invoice.customer.form.inherit
+                .reversal</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_invoice_open']"
+                       position="after">
+                    <button name="generate_reversal_entry" type="object"
+                            string="Reverse Invoice"
+                            class="oe_highlight"
+                            attrs="{'invisible':[('state','not in',['open'])]}"  groups="account_journal_reversal.group_can_reverse_journal"/>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state','=','reversed')]}</attribute>
+                </xpath>
+                <field name="move_id" position="after">
+                    <field name="reversal_move_id" readonly="1"
+                           attrs="{'invisible':[('reversal_move_id','=',False)]}"/>
+                </field>
+
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_account_move_reversal_move_invoice"
+                model="ir.ui.view">
+            <field name="name">account.move.reversal.form.inherit</field>
+            <field name="model">account.move.reversal</field>
+            <field name="inherit_id" ref="account.view_account_move_reversal"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group" position="after">
+                    <group>
+                        <field name="invoice_id" invisible="1"/>
+                        <field name="reason"
+                               attrs="{'invisible':[('invoice_id','=',False)]}"/>
+                    </group>
+                </xpath>
+                <xpath expr="//form/group/field[@name='journal_id']"
+                       position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_supplier_cancel_form_inherit_for_cancel"
+                model="ir.ui.view">
+            <field name="name">invoice.supplier.cancel.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_supplier_cancel_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_cancel']" position="replace">
+                    <button name="action_invoice_cancel" type="object"
+                            states="draft,proforma2,open"
+                            attrs="{'invisible':[('state','=','reversed')]}"
+                            string="Cancel Invoice" groups="account.group_account_invoice"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

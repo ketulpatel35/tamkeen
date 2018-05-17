@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record id="pre_overtime_submit_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Overtime Pre-Approval Submit Reminder</field>
+             <!--<field name="email_from">erp@company.com</field>  -->
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id" ref="hr_overtime.model_overtime_pre_request" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<br>
+Kindly, FYI.
+<br/>
+The request will not go to the approval cycle unless you pressed on "Submit for Approval" button.
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+        <record id="overtime_submit_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Overtime Request Submit Reminder</field>
+            <!-- <field name="email_from">erp@company.com</field>  -->
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id" ref="hr_overtime.model_overtime_pre_request" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<br>
+Kindly, FYI.
+<br/>
+The request will not go to the approval cycle unless you pressed on "Submit for Approval" button.
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+        <record id="pre_overtime_approval_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Overtime Pre-Request Reminder</field>
+             <field name="email_from">${object.pre_approval_policy_id.hr_email | safe}</field>
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_pre_request" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<br>
+Please take a moment to approve the pending ${(object.name or '')|safe} overtime pre-request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Nmber: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+% if ctx["display_link"]:   
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+        <record id="overtime_approval_reminder_cron_email_template"
+                model="mail.template">
+            <field name="name">Overtime Request Reminder</field>
+             <field name="email_from">${object.overtime_claim_policy_id.hr_email | safe}</field>
+            <field name="subject">Approval Reminder</field>
+            <field name="email_to">${ctx["email_to"] | safe}</field>
+            <field name="model_id"
+                   ref="hr_overtime.model_overtime_statement_request" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<br>
+Please take a moment to approve the pending ${(object.name or '')|safe} overtime pre-request.
+<br>
+Employee Name: ${object.employee_id.name}
+<br>
+Nmber: ${object.name}
+<br>
+Cost Center: ${object.account_analytic_id.name}
+<br>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br />
+<p> Kind Regards </p>
+<br />
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]></field>
+        </record>
+
+        <!-- Cron -->
+        <record model="ir.cron" id="pre_overtime_approval_reminder_cron">
+            <field name="name">Pre-Overtime Approval Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'overtime.pre.request'"/>
+            <field name="function" eval="'send_reminder'"/>
+            <field name="args" eval="'()'" />
+        </record>
+
+        <record model="ir.cron" id="overtime_approval_reminder_cron">
+            <field name="name">Overtime Approval Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'overtime.statement.request'"/>
+            <field name="function" eval="'send_reminder'"/>
+            <field name="args" eval="'()'" />
+        </record>
+
+        <record model="ir.cron"
+                id="overtime_reminder_pre_approval_for_employee">
+            <field name="name">Overtime Pre-Approval Submit Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'overtime.pre.request'"/>
+            <field name="function" eval="'send_pre_approval_submit_reminder'"/>
+            <field name="args" eval="'()'" />
+        </record>
+
+        <!--<record model="ir.cron" id="overtime_reminder_submit_for_employee">-->
+            <!--<field name="name">Overtime Submit Reminder</field>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">days</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field name="doall" eval="False"/>-->
+            <!--<field name="model" eval="'overtime.statement.request'"/>-->
+            <!--<field name="function" eval="'send_submit_reminder'"/>-->
+            <!--<field name="args" eval="'()'" />-->
+        <!--</record>-->
+
+    </data>
+</openerp>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--Loan Search view-->
+        <record id="loan_pre_request_search_view" model="ir.ui.view">
+            <field name="name">hr.employee.loan.search.view</field>
+            <field name="model">hr.employee.loan</field>
+            <field name="arch" type="xml">
+                <search string="Loan Pre-Requests">
+                    <field name="employee_id"/>
+                    <field name="state"/>
+                    <field name="employee_company_id"/>
+                    <field name="department_id"/>
+                    <!--<filter icon="terp-go-today" string="Current Month Submitted Requests" name="currentmonth" domain="[('submit_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('submit_date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]" help="Filter past groups" />-->
+                    <!--<filter name="exceeds_sla_period" string="Pending and Exceeds SLA Period"-->
+                    <!--domain="[('state','not in',['draft','closed','rejected', 'locked', 'open', 'cancelled', 'payroll_processing']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00')) ]"/>-->
+                    <filter string="Pending HR Approvals"
+                            name="pending_hr_approval"
+                            domain="[('state','in',['hr_approval'])]"/>
+                    <filter name="pending_finance_approval"
+                            string="Pending Finance Approval"
+                            domain="[('state','in',['finance_processing'])]"/>
+                    <filter string="Pending Budget Approvals"
+                            name="pending_budget_approval"
+                            domain="[('state','in',['budget_approval'])]"/>
+                    <filter icon="terp-go-today"
+                            string="Current Month Submitted Requests"
+                            name="currentmonth"
+                            domain="[('loan_submit_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('loan_submit_date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]"
+                            help="Filter past groups"/>
+                    <filter name="exceeds_sla_period"
+                            string="Pending and Exceeds SLA Period"
+                            domain="[('state','not in',['draft','closed','rejected', 'cancelled']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00'))]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_employee_id" string="Employee"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter name="group_department_id"
+                                string="Department"
+                                context="{'group_by':'department_id'}"/>
+                        <filter name="group_employee_cost_center_id"
+                                string="Cost Center"
+                                context="{'group_by':'cost_center_id'}"/>
+                        <filter name="group_employee_analytic_account_id"
+                                string="Analytic Account"
+                                context="{'group_by':'account_analytic_id'}"/>
+                        <filter name="state" string="State"
+                                icon="terp-go-today"
+                                domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- action hr approval -->
+        <record id="open_loan_request_for_hr_approval"
+                model="ir.actions.act_window">
+            <field name="name">HR Approval</field>
+            <field name="res_model">hr.employee.loan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_pending_hr_approval':1,'readonly_by_pass': True}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!-- action for finance approval -->
+        <record id="open_loan_request_for_finance_approval"
+                model="ir.actions.act_window">
+            <field name="name">Finance Approval</field>
+            <field name="res_model">hr.employee.loan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_pending_finance_approval':1,'readonly_by_pass': True}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!-- action for budget approval -->
+        <record id="open_loan_request_for_budget_approval"
+                model="ir.actions.act_window">
+            <field name="name">Budget Approval</field>
+            <field name="res_model">hr.employee.loan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_pending_budget_approval':1,'readonly_by_pass': True}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!-- View All -->
+        <record id="hr_employee_loan_action" model="ir.actions.act_window">
+            <field name="name">Loan Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.loan</field>
+            <field name="view_mode">kanban,tree,form,search</field>
+            <field name="context">
+                {'readonly_by_pass': True}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click here to add new document
+                </p>
+            </field>
+        </record>
+
+        <!-- Installment Payroll Processing Action -->
+        <record id="loan_installments_payroll_processing_action"
+                model="ir.actions.act_window">
+            <field name="name">Loan Installments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">loan.installments</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="context">
+                {
+                'search_default_group_month': 1,
+                'search_default_group_status': 1,
+                'search_default_payroll_processing': 'payroll_processing'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click here to add Loan Installments.
+                </p>
+            </field>
+        </record>
+
+        <!-- View All Installment -->
+        <record id="loan_installments_action" model="ir.actions.act_window">
+            <field name="name">Loan Installments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">loan.installments</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="context">
+                {
+                'search_default_group_month': 1,
+                'search_default_group_status': 1,
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click here to add Loan Installments.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</openerp>

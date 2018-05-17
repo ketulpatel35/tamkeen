@@ -1,0 +1,33 @@
+<odoo>
+
+    <!-- ESS Business Trip Management-->
+    <menuitem id="bt_ess_main_menu"
+              name="Business Trip Management"
+              groups="org_business_trip.group_bt_normal_user"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="46"/>
+
+    <!-- Business Trip Request -->
+    <menuitem id="bt_request_ess_menu"
+              name="Business Trip Request"
+              groups="org_business_trip.group_bt_normal_user"
+              parent="bt_ess_main_menu"
+              action="action_bt_requests_ess"
+              sequence="25"/>
+
+    <!-- MSS Business Trip -->
+    <menuitem id="bt_mss_approval_main_menu"
+              name="Business Trip Management"
+              groups="org_business_trip.group_bt_manager_approval,org_business_trip.group_bt_vp_approval,org_business_trip.group_bt_ceo_approval"
+              parent="emp_self_services.sub_mian_mss_menu"
+              sequence="1301"/>
+
+    <!-- Business Trip Request to be Approve -->
+    <menuitem id="bt_request_mss_approval_menu"
+              name="Business Trip Requests To Approve"
+              groups="org_business_trip.group_bt_manager_approval,org_business_trip.group_bt_vp_approval,org_business_trip.group_bt_ceo_approval"
+              parent="bt_mss_approval_main_menu"
+              action="action_bt_requests_approval_mss"
+              sequence="1"/>
+
+</odoo>

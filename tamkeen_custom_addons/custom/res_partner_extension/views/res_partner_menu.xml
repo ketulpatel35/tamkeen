@@ -1,0 +1,46 @@
+<odoo>
+    <!--Partner menu-->
+    <menuitem id="parent_menu_partner" name="Partners"
+              web_icon="res_partner_extension,static/description/image.jpg"
+              sequence="15" groups="group_all_partner"/>
+
+
+    <!-- inherit supplier menu action -->
+    <record id="base.action_partner_supplier_form" model="ir.actions.act_window">
+        <field name="context">{'search_default_supplier': 1,
+                               'default_customer': 0,
+                               'default_supplier': 1,
+                               'default_is_company': 1}</field>
+    </record>
+
+    <!--Supplier menu-->
+    <menuitem id="vendor_menu_partner" name="Vendors"
+              parent="parent_menu_partner"
+              action="base.action_partner_supplier_form" sequence="0"/>
+
+    <!--Partner menu-->
+    <menuitem id="customer_menu_partner" parent="parent_menu_partner" action="base.action_partner_form" sequence="1"/>
+
+    <!--Configuration menu-->
+    <menuitem id="partner_configuration_custom" parent="parent_menu_partner" sequence="100" name="Configuration"/>
+
+    <menuitem id="partner_tag_menu" parent="partner_configuration_custom" action="base.action_partner_category_form" sequence="0" groups="base.group_partner_manager"/>
+
+    <record model="ir.ui.menu" id="contacts.menu_contacts">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_partner_manager')])]" />
+    </record>
+
+    <!-- Customer -->
+    <record id="account.menu_account_customer" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_all_partner'))
+            ]"/>
+    </record>
+
+    <!-- Vendor -->
+    <record id="account.menu_account_supplier" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('group_all_partner'))
+            ]"/>
+    </record>
+</odoo>

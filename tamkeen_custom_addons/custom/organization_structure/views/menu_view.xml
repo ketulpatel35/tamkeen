@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Organization Structure Root -->
+    <menuitem id="menu_organization_structure_root"
+              name="Organization Management"
+              web_icon="organization_structure,static/description/icon.png"
+              groups="group_planning_head"/>
+
+    <!-- HR Job Template -->
+    <menuitem id="menu_hr_job_template"
+              name="Job Template"
+              parent="menu_organization_structure_root"
+              action="action_hr_job_template"
+              sequence="1" groups="group_planning_head"/>
+
+    <!-- HR Position -->
+    <menuitem id="menu_hr_job_position"
+              name="Position"
+              parent="menu_organization_structure_root"
+              action="hr.action_hr_job"
+              sequence="3" groups="group_planning_head"/>
+
+    <!-- Employee -->
+    <menuitem id="menu_hr_employee"
+              name="Employee"
+              parent="menu_organization_structure_root"
+              action="hr.open_view_employee_list_my"
+              sequence="5" groups="group_planning_head"/>
+
+    <!--&lt;!&ndash; OrganizationD Unit &ndash;&gt;-->
+    <menuitem id="menu_org_str_units"
+              name="Organization Unit"
+              parent="menu_organization_structure_root"
+              action="hr.open_module_tree_department"
+              sequence="1" groups="group_planning_head"/>
+
+    <menuitem id="menu_org_configuration"
+              name="Configuration"
+              parent="menu_organization_structure_root"
+              sequence="100" groups="group_planning_head"/>
+
+    <menuitem id="menu_employee_group_config"
+              name="Employee Group/Sub Group"
+              parent="menu_org_configuration"
+              action="organization_structure.action_hr_employee_group_template"
+              sequence="1" groups="group_planning_head"/>
+
+    <menuitem id="menu_personeel_area_config"
+              name="Personnel Area/Sub Area"
+              parent="menu_org_configuration"
+              action="organization_structure.action_personnel_area_template"
+              sequence="10" groups="group_planning_head"/>
+
+</odoo>

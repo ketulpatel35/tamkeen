@@ -1,0 +1,155 @@
+<odoo>
+    <data>
+        <!--explicit list view definition -->
+        <record model="ir.ui.view" id="emp_appraisal_year_tree">
+            <field name="name">emp.appraisal.year.tree</field>
+            <field name="model">appraisal.year.master</field>
+            <field name="arch" type="xml">
+                <tree string="Appraisal Year Master">
+                    <field name="title"/>
+                    <field name="app_from_date"/>
+                    <field name="app_to_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="emp_appraisal_year_form">
+            <field name="name">emp.appraisal.year.form</field>
+            <field name="model">appraisal.year.master</field>
+            <field name="arch" type="xml">
+                <form string="Appraisal Year Master">
+                    <header>
+                        <button name="generated_appraisal"
+                                type="object" states="draft"
+                                string="Generate Appraisal" class="oe_highlight"/>
+                        <button name="generated_appraisal"
+                                type="object" states="pending_appraisal"
+                                string="Generate Pending Appraisal"
+                                class="oe_highlight"/>
+                        <button name="cancel_appraisal"
+                                type="object"
+                                states="generated_appraisal,pending_appraisal"
+                                string="Cancel Appraisal" class="oe_highlight"
+                                groups="hr.group_hr_manager,
+                                        hr_employee_customization.group_employee_manager"/>
+                        <button name="close"
+                                type="object"
+                                states="generated_appraisal,pending_appraisal"
+                                string="Closed" class="oe_highlight"
+                                groups="hr.group_hr_manager,
+                                        hr_employee_customization.group_employee_manager"/>
+                        <button name="email_notification"
+                                type="object" states="generated_appraisal,pending_appraisal"
+                                string="Notification" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,generated_appraisal,close"/>
+                    </header>
+                    <sheet>
+                        <group string="Employee Appraisal Year">
+                            <group>
+                                <field name="title"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="is_current_year" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="app_from_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="app_to_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <button name="%(hr_get_employee_wizard_action_new)d"
+                                        string="Get Employees"
+                                        type="action"
+                                        class="oe_highlight" states="draft"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="emp_appraisal_line_ids" nolabel="1">
+                                <tree editable="bottom" create="false">
+                                    <!--<field name="select"/>-->
+                                    <field name="emp_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="parent_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="upper_manager" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="department_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="job_id" options="{'no_quick_create':True,'no_create_edit':True}" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="employee_role" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="manager" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="initial_employment_date" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="appraisal_year_action">
+            <field name="name">Employee Appraisal Year Master</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">appraisal.year.master</field>
+            <field name="view_id" ref="emp_appraisal_year_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--explicit list view definition -->
+        <record model="ir.ui.view" id="hr_employee_appraisal_line_tree">
+            <field name="name">hr.employee.appraisal.line</field>
+            <field name="model">hr.employee.appraisal.line</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Appraisal Detail">
+                    <!--<field name="select"/>-->
+                    <field name="appraisal_id" invisible="1"/>
+                    <field name="emp_id"/>
+                    <field name="parent_id"/>
+                    <field name="upper_manager"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="employee_role"/>
+                    <field name="manager"/>
+                    <field name="initial_employment_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="hr_employee_appraisal_line_form">
+            <field name="name">hr.employee.appraisal.line.form</field>
+            <field name="model">appraisal.year.master</field>
+            <field name="arch" type="xml">
+                <form string="Employee Appraisal Details">
+                    <sheet>
+                        <group string="Employee Appraisal Year">
+                            <!--<group>-->
+                            <!--<field name="appraisal_id" invisible="1"/>-->
+                            <!--<field name="emp_id"/>-->
+                            <!--<field name="parent_id"/>-->
+                            <!--<field name="initial_employment_date"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                            <!--<field name="department_id"/>-->
+                            <!--&lt;!&ndash;<field name="job_id"/>&ndash;&gt;-->
+                            <!--<field name="employee_role"/>-->
+                            <!--<field name="manager"/>-->
+                            <!--</group>-->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="hr_employee_appraisal_line_action">
+            <field name="name">Employee Appraisal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.appraisal.line</field>
+            <field name="view_id" ref="hr_employee_appraisal_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+    </data>
+</odoo>

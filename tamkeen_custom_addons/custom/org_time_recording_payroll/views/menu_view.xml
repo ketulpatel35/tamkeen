@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Time Recording Details -->
+    <menuitem name="Time Recording Details" id="menu_time_recording_details"
+              sequence="0"
+              action="act_open_time_recording_details" web_icon="org_time_recording_payroll,static/description/icon.png"/>
+</odoo>

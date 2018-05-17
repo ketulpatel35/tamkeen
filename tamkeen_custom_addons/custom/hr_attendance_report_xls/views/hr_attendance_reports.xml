@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<odoo>
+        <report
+            id="report_attendance_summary"
+            string="Attendance Summary"
+            model="hr.attendance"
+            report_type="qweb-pdf"
+            name="hr_attendance_report_xls.report_attendancessummary"
+            file="hr_attendance_report_xls.report_attendancessummary"
+            menu="False"/>
+</odoo>

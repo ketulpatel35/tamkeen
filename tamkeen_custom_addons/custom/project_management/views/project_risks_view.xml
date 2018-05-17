@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Project Risks View -->
+    <record id="search_view_project_risks" model="ir.ui.view">
+        <field name="name">search.view.project.risks</field>
+        <field name="model">project.risks</field>
+        <field name="arch" type="xml">
+            <search string="Search Project Risk">
+                <field name="code" string="Code"/>
+                <field name="project_id" string="Project Name"/>
+                <field name="business_unit_id" string="Business Unit"/>
+                <field name="user_id" string="Project Manager"/>
+                <field name="project_sponsor_id" string="Project Sponsor"/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="group_project_id"
+                            context="{'group_by':'project_id'}"/>
+                    <filter string="Business Unit" name="business_unit"
+                            context="{'group_by':'business_unit_id'}"/>
+                    <filter string="Project Manager"
+                            name="primary_project_manager"
+                            context="{'group_by':'user_id'}"/>
+                    <filter string="Project Sponsor" name="project_sponsor"
+                            context="{'group_by':'project_sponsor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Project risks Tree View -->
+    <record id="tree_view_project_risks" model="ir.ui.view">
+        <field name="name">tree.view.project.risks</field>
+        <field name="model">project.risks</field>
+        <field name="arch" type="xml">
+            <tree string="Projects Risk">
+                <field name="code"/>
+                <field name="id" string="ID"/>
+                <field name="name" string="Risk"/>
+                <field name="cause"/>
+                <field name="project_id" string="Project"/>
+                <field name="priority" string="Priority"/>
+                <field name="create_date"/>
+                <field name="assigned_to"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Risks From View -->
+    <record id="form_view_project_risks" model="ir.ui.view">
+        <field name="name">form.view.project.risks</field>
+        <field name="model">project.risks</field>
+        <field name="arch" type="xml">
+            <form string="Risk" class="o_form_project_tasks">
+                <header>
+                    <field name="stage_id" widget="statusbar" clickable="True"/>
+                </header>
+                <sheet string="Risk">
+                    <!--<div class="oe_button_box" name="button_box">-->
+                    <!--<button name="toggle_active" type="object" groups="base.group_user"-->
+                    <!--class="oe_stat_button" icon="fa-archive">-->
+                    <!--<field name="active" widget="boolean_button"-->
+                    <!--options='{"terminology": "archive"}'/>-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"
+                                   required="1"
+                                   placeholder="Risk Summary..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="main_assignment"/>
+                             <field name="assigned_to_external"
+                        attrs="{'required': [('main_assignment','=','external')], }"/>
+                            <field name="assigned_to"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1"/>
+                            <field name="impact" required="1"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="severity"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   options="{'no_create_edit': True}"/>
+                            <field name="project_id" required="1" readonly="1"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+
+                        </group>
+                        <group>
+                            <field name="required_action" required="1"/>
+                            <field name="contact" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                            <field name="cause" required="1"/>
+                            <field name="email" widget="email"/>
+                            <field name="progress"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_related_to_project_task"
+                                   required="1" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="project_task" domain="[('project_id', '=', project_id)]"
+                                   attrs="{'invisible': [('is_related_to_project_task', '!=', 'yes')], 'required': [('is_related_to_project_task', '=', 'yes')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="schedule" string="Schedule">
+                            <group col="4" colspan="4">
+                                <field name="excepted_closing_date" required="1"/>
+                                <field name="due_date" required="1"/>
+                                <field name="excepted_end_date" required="1"/>
+                                <field name="actual_end_date"/>
+                                <field name="days_of_delay"/>
+                            </group>
+                        </page>
+                        <page name="description_page_risk"
+                              string="Description">
+                            <field name="description" type="html"/>
+                        </page>
+                        <page string="Extra Info">
+                            <group>
+                                <group>
+                                    <field name="sequence"
+                                           groups="base.group_no_one"/>
+                                    <field name="days_to_assign"/>
+                                    <field name="days_to_close"/>
+                                    <field name="days_since_last_action"/>
+                                </group>
+                                <group>
+                                    <field
+                                            name="working_hours_to_assign_the_risk" invisible="1"/>
+                                    <field
+                                            name="working_hours_to_close_the_risk" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--Risk Kanban view-->
+    <record model="ir.ui.view" id="view_risk_kanban">
+        <field name="name">project.risk.kanban</field>
+        <field name="model">project.risks</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create">
+                <field name="name"/>
+                <field name="color"/>
+                <field name="priority"/>
+                <field name="stage_id" options='{"group_by_tooltip": {"description": "Stage Description", "legend_priority": "Use of stars"}}'/>
+                <field name="assigned_to"/>
+                <field name="excepted_closing_date"/>
+                <field name="message_needaction_counter"/>
+                <field name="tag_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <field name="tag_ids"/>
+                                </div>
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="text-muted">
+                                    <field name="project_id" invisible="context.get('default_project_id', False)"/>
+                                    <t t-if="record.excepted_closing_date.raw_value and record.excepted_closing_date.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
+                                    <span t-attf-class="#{red || ''}"><i><field name="excepted_closing_date"/></i></span>
+                                </div>
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                    <t t-if="record.message_needaction_counter.raw_value">
+                                        <span class='oe_kanban_mail_new' title='Unread Messages'><i class='fa fa-comments'/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                    </t>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <img t-att-src="kanban_image('res.users', 'image_small', record.assigned_to.raw_value)" t-att-title="record.assigned_to.value" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                </templates>
+            </kanban>
+
+        </field>
+
+    </record>
+
+
+    <record id="action_view_project_risks" model="ir.actions.act_window">
+        <field name="name">Risks</field>
+        <field name="res_model">project.risks</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="search_view_id" ref="search_view_project_risks"/>
+        <field name="context">{
+            'search_default_group_project_id': 1,
+            }</field>
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the pipeline of
+                your risks efficiently. You can track progress.
+            </p>
+        </field>
+    </record>
+
+    <!-- action for risk smart button -->
+    <record id="action_view_project_risks_from_project"
+            model="ir.actions.act_window">
+        <field name="name">Risks</field>
+        <field name="res_model">project.risks</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            'search_default_project_id': [active_id],
+            'default_project_id': active_id,
+            }</field>
+        <field name="search_view_id" ref="search_view_project_risks"/>
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the pipeline of
+                your risks efficiently. You can track progress.
+            </p>
+        </field>
+    </record>
+
+</odoo>

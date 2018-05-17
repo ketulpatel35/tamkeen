@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_form_inherit_for_tax"
+            model="ir.ui.view">
+        <field name="name">invoice.form.inherit.for.tax</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                <field name="price_tax"/>
+                <field name="price_total"/>
+            </xpath>
+            <field name="amount_untaxed" position="attributes">
+                <attribute name="string">Subtotal before Taxes</attribute>
+            </field>
+            <field name="amount_tax" position="attributes">
+                <attribute name="string">Total Tax (VAT 5%)</attribute>
+            </field>
+            <field name="amount_total" position="attributes">
+                <attribute name="string">Grand Total</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="invoice_supplier_form_inherit_for_tax"
+            model="ir.ui.view">
+        <field name="name">invoice.supplier.form.inherit.for.tax</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                <field name="price_tax"/>
+                <field name="price_total"/>
+            </xpath>
+            <field name="amount_untaxed" position="attributes">
+                <attribute name="string">Subtotal before Taxes</attribute>
+            </field>
+            <field name="amount_tax" position="attributes">
+                <attribute name="string">Total Tax (VAT 5%)</attribute>
+            </field>
+            <field name="amount_total" position="attributes">
+                <attribute name="string">Grand Total</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

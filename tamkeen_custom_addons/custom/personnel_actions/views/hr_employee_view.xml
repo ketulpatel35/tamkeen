@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Position -->
+    <record id="view_employee_form_for_assignment" model="ir.ui.view">
+        <field name="name">hr.employee.for.assignment</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" icon="fa-file-o"
+                        name="button_personnel_action" type="object"
+                        string="Personnel Action/s">
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

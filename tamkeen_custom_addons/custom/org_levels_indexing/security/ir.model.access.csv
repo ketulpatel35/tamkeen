@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_level_indexing_master,access_level_indexing_master,model_level_indexing,organization_structure.group_planning_head,1,1,1,1

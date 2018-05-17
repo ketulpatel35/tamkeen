@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Analytic Journal -->
+
+    <record id="view_account_analytic_journal_tree" model="ir.ui.view">
+        <field name="name">account.analytic.journal.tree</field>
+        <field name="model">account.analytic.journal</field>
+        <field name="arch" type="xml">
+            <tree string="Analytic Journal">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_analytic_journal_search" model="ir.ui.view">
+        <field name="name">account.analytic.journal.search</field>
+        <field name="model">account.analytic.journal</field>
+        <field name="arch" type="xml">
+            <search string="Analytic Journals">
+                <field name="name"
+                       filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
+                       string="Analytic Journal"/>
+                <field name="type"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" icon="terp-stock_symbol-selection"
+                            domain="[]" context="{'group_by':'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_journal_form" model="ir.ui.view">
+        <field name="name">account.analytic.journal.form</field>
+        <field name="model">account.analytic.journal</field>
+        <field name="arch" type="xml">
+            <form string="Analytic Journal">
+                <group col="4">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="type"/>
+                    <field name="active"/>
+                    <field name="company_id"
+                           groups="base.group_multi_company"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="action_account_analytic_journal_form"
+            model="ir.actions.act_window">
+        <field name="name">Analytic Journals</field>
+        <field name="res_model">account.analytic.journal</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_analytic_journal_search"/>
+    </record>
+
+    <menuitem groups="analytic.group_analytic_accounting"
+              action="action_account_analytic_journal_form"
+              id="account_def_analytic_journal"
+              parent="account.menu_analytic_accounting" sequence="5"/>
+
+    <!-- Analytic Journal in Analytic Account Line -->
+    <record id="account_analytic_line_form_int" model="ir.ui.view">
+        <field name="name">account.analytic.line.form.int.view</field>
+        <field name="model">account.analytic.line</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="analytic.view_account_analytic_line_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="journal_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_timesheet_line_search_journal" model="ir.ui.view">
+        <field name="name">account.analytic.line.search.joutnal</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id"
+               ref="hr_timesheet.hr_timesheet_line_search"/>
+        <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="journal_id"/>
+                </field>
+                <xpath expr="//group" position="inside">
+                    <filter string="Journal"
+                            name="gby_journal"
+                            context="{'group_by':'journal_id'}"
+                            help="Group by Journal"/>
+                </xpath>
+        </field>
+    </record>
+
+    <!-- set default group by -->
+    <record model="ir.actions.act_window"
+            id="analytic.account_analytic_line_action">
+        <field name="context">{'search_default_gby_journal': 1}</field>
+    </record>
+
+    <!-- Analytic Journal in Analytic Account Line -->
+    <record id="view_account_journal_form_int" model="ir.ui.view">
+        <field name="name">account.journal.form.int.view</field>
+        <field name="model">account.journal</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="analytic_journal_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

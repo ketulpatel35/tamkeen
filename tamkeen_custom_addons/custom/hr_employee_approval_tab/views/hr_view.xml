@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="employee_approval_delegation_view_form" model="ir.ui.view">
+            <field name="name">Approval/Delegation Tab</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr='//page[3]' position="after">
+                    <!--<page string="Approval/Delegation" name="approval_delegation"-->
+                          <!--groups="hr_employee_approval_tab.view_employees_approvla_tab">-->
+                    <page string="Approval/Delegation" name="approval_delegation"
+                          groups="hr_employee_customization.group_view_emp_info">
+                        <group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

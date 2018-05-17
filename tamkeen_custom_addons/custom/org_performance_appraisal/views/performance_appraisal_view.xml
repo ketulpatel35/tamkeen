@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Appraisal Performance Form View -->
+    <record id="performance_appraisal_form_views" model="ir.ui.view">
+        <field name="name">performance.appraisal.form.view</field>
+        <field name="model">performance.appraisal</field>
+        <field name="arch" type="xml">
+            <form string="Appraisal Performance" create="false">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                    <!-- Submit -->
+                    <button name="action_submit_request" type="object"
+                            string="Submit" class="btn-primary"
+                            groups="org_performance_appraisal.group_pa_normal_user"
+                            states="draft"/>
+
+                    <!--Manager -->
+                    <button name="action_submit_to_vp_approval"
+                            type="object" string="Manager Approval"
+                            groups="org_performance_appraisal.group_pa_manager_approval"
+                            context="{'state': 'mngr_approval'}"
+                            class="btn-primary" states="mngr_approval"/>
+
+                    <!-- Manager Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_performance_appraisal.group_pa_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- Manager Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_performance_appraisal.group_pa_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <button name="action_submit_to_hr_approval"
+                            type="object" states="vp_approval"
+                            context="{'state': 'vp_approval'}"
+                            groups="org_performance_appraisal.group_pa_vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+
+                    <!-- VP Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_performance_appraisal.group_pa_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- VP Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_performance_appraisal.group_pa_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- VP Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Calibration"
+                            groups="org_performance_appraisal.group_pa_vp_approval"
+                            states='vp_approval'
+                            context="{'calibration_by_vp': True}"/>
+
+                    <!-- HR Approval -->
+                    <button name="action_submit_to_budget_approval"
+                            type="object"
+                            string="Hr Approval" class="btn-primary"
+                            groups="org_performance_appraisal.group_pa_hr_approval"
+                            states="hr_approval"/>
+
+                    <!-- HR Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_performance_appraisal.group_pa_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- HR Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_performance_appraisal.group_pa_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!--&lt;!&ndash; Notify &ndash;&gt;-->
+                    <!--<button name="send_notify"-->
+                            <!--type="object"-->
+                            <!--string="Notify"-->
+                            <!--groups="org_performance_appraisal.group_pa_hr_approval"-->
+                            <!--states='hr_approval'/>-->
+
+                    <!-- Budget Approval -->
+                    <button name="action_submit_to_hr_review"
+                            type="object"
+                            string="Budget Approval" class="btn-primary"
+                            groups="org_performance_appraisal.group_pa_budget_approval"
+                            states="budget_approval"/>
+
+                    <!-- Budget Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_performance_appraisal.group_pa_budget_approval"
+                            states='budget_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- Budget Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_performance_appraisal.group_pa_budget_approval"
+                            states='budget_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!--&lt;!&ndash; Budget Notify &ndash;&gt;-->
+                    <!--<button name="send_notify"-->
+                            <!--type="object"-->
+                            <!--string="Notify"-->
+                            <!--groups="org_performance_appraisal.group_pa_budget_approval"-->
+                            <!--states='budget_approval'/>-->
+
+                    <!-- CEO -->
+                    <button name="action_submit_to_finance_processing"
+                            type="object"
+                            groups="org_performance_appraisal.group_pa_ceo_approval"
+                            string="CEO Approval" class="btn-primary"
+                            states="ceo_approval"/>
+
+                </header>
+                <sheet>
+                    <!--<div class="oe_button_box">-->
+                        <!--<button name="action_open_journal_entries"-->
+                                <!--class="oe_stat_button"-->
+                                <!--icon="fa-book"-->
+                                <!--string="Accounting Entries"-->
+                                <!--groups="performance_appraisal
+                                .group_pa_finance_approval"-->
+                                <!--attrs="{'invisible': [('account_move_id', '=', False)]}"-->
+                                <!--type="object">-->
+                        <!--</button>-->
+                    <!--</div>-->
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1"
+                               attrs="{'invisible':[('name', '=', False)]}"
+                               class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   readonly="1" required="1"/>
+                            <field name="job_id" readonly="1" required="1"/>
+                            <field name="org_unit_type" readonly="1"
+                                   required="1"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="description" readonly="1"/>
+                            <field name="employee_company_id" readonly="1"
+                                   required="1"/>
+                            <field name="department_id" readonly="1"
+                                   required="1"/>
+                            <field name="account_analytic_id"
+                                   required="1"
+                                   readonly="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="performance_appraisal_policy_id"
+                                   context="{'performance_appraisal_policy': True}"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   domain="[('is_performance_appraisal', '=', True)]"
+                                   required="1" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="performance_appraisal_type"
+                                   readonly="1" string="Type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="review_start_date" readonly="1"/>
+                            <field name="due_start_date" readonly="1"/>
+                            <field name="budget"
+                                   groups="org_performance_appraisal.group_pa_budget_approval"
+                                   attrs="{'readonly': [('state', '!=', 'budget_approval')]}"/>
+                        </group>
+                        <group>
+                            <field name="review_end_date" readonly="1"/>
+                            <field name="due_end_date" readonly="1"/>
+                            <field name="budget_exception_reason"
+                                   attrs="{'invisible': [('budget','!=','exceptional_out_budget')],'required': [('budget','=','exceptional_out_budget'), ('state','=','budget_approval')],'readonly':[('state','!=','budget_approval')]}"
+                                   groups="org_performance_appraisal.group_pa_budget_approval"/>
+                        </group>
+                    </group>
+                    <field name="about_service" widget='html'
+                           readonly="1"/>
+                    <!--<field name="about_service" widget='html' readonly="1"/>-->
+                    <notebook>
+                        <!-- Objectives -->
+                        <page string="Objectives Assessment"
+                              name="pa_objectives"
+                              attrs="{'invisible':[('is_use_objectives','=',False)]}">
+                            <field name="objectives_assessment_ids">
+                                <tree create="false" editable="bottom">
+                                    <field name="performance_appraisal_id"
+                                           invisible="1"/>
+                                    <field name="goal" readonly="1"/>
+                                    <field name="weightage" readonly="1"/>
+                                    <field name="measurement" readonly="1"/>
+                                    <field name="target_date" readonly="1"/>
+                                    <field name="actual_date" readonly="1"/>
+                                    <field name="completed" readonly="1"/>
+                                    <field name="status" readonly="1"/>
+                                    <field name="self_assessment"
+                                           required="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="manager_assessment"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="evaluation_value"/>
+                                </tree>
+                            </field>
+                            <field name="is_use_objectives"
+                                   invisible="1"/>
+                        </page>
+                        <page string="Values Assessment"
+                              name="pa_value"
+                              attrs="{'invisible':[('is_use_value','=',False)]}">
+                            <field name="value_assessment_ids">
+                                <tree create="false" editable="bottom">
+                                    <field name="performance_appraisal_id"
+                                           invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="description" readonly="1"/>
+                                    <field name="manager_assessment"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="evaluation_value"
+                                           readonly="1"/>
+                                </tree>
+                            </field>
+                            <field name="is_use_value"
+                                   invisible="1"/>
+                        </page>
+                        <page string="Personal Competencies Assessment"
+                              name="personal_competencies"
+                              attrs="{'invisible':[('is_use_personal_competencies','=',False)]}">
+                            <field name="pc_assessment_ids">
+                                <tree create="false" editable="bottom">
+                                    <field name="performance_appraisal_id"
+                                           invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="description" readonly="1"/>
+                                    <field name="manager_assessment"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="evaluation_value"
+                                           readonly="1"/>
+                                </tree>
+                            </field>
+                            <field name="is_use_personal_competencies"
+                                   invisible="1"/>
+                        </page>
+                        <page name="IDB" string="IDB">
+
+                        </page>
+                        <page string="Strength and Weaknesses"
+                              name="strength_and_weaknesses">
+                            <group>
+                                <field name="input_strength"
+                                       required="1"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="input_weaknesses"
+                                       required="1"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="Development Plan"
+                              name="development_plan">
+
+                        </page>
+                        <!-- Endorsement -->
+                        <page string="Endorsement"
+                              name="endorsement"
+                              attrs="{'invisible':[('endorsement_for_pa','=',False)]}">
+                            <group>
+                                <field name="endorsement_text" nolabel="1"
+                                       widget="html"/>
+                            </group>
+                            <group>
+                                <field name="endorsement_required"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <field name="endorsement_for_pa"
+                                   invisible="1"/>
+                        </page>
+                        <page name="service_logs" string="Service Logs">
+                            <field name="service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="performance_appraisal_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Approvals" name="approvals">
+                            <div>
+                                The approval/refusal information will be
+                                displayed here.
+                            </div>
+                            <group>
+                                <group
+                                        attrs="{'invisible':[('pa_manager_user_id','=',False)]}">
+                                    <field name="pa_manager_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_manager_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('pa_vp_user_id','=',False)]}">
+                                    <field name="pa_vp_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_vp_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('pa_hr_user_id','=',False)]}">
+                                    <field name="pa_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_hr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('pa_ceo_user_id','=',False)]}">
+                                    <field name="pa_ceo_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_ceo_approval_date"/>
+                                </group>
+                                <group attrs="{'invisible':[('pa_finance_user_id','=',False)]}">
+                                    <field name="pa_finance_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_finance_approval_date"/>
+                                </group>
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('pa_submitted_by','=',False)]}">
+                                    <field name="pa_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="pa_submit_date"
+                                           colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('pa_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="pa_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer" groups="org_performance_appraisal.group_pa_manager_approval,org_performance_appraisal.group_pa_hr_approval">
+                        <field name="total_objectives_assessment"/>
+                        <field name="total_values_assessment"/>
+                        <field name="total_pc_assessment"/>
+                        <field name="calibration" groups="org_performance_appraisal.group_pa_hr_approval"/>
+                        <field name="final_assessment"
+                               class="oe_subtotal_footer_separator"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance Form View for Manager -->
+    <record id="performance_appraisal_manager_form_views" model="ir.ui.view">
+        <field name="name">performance.appraisal.manager_form.view</field>
+        <field name="model">performance.appraisal</field>
+        <field name="inherit_id" ref="performance_appraisal_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_performance_appraisal.group_pa_manager_approval'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='objectives_assessment_ids']/tree/field[@name='manager_assessment']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <!--<xpath-->
+                    <!--expr="//field[@name='objectives_assessment_ids']/tree/field[@name='self_assessment']" position="attributes">-->
+                <!--<attribute name="readonly">1</attribute>-->
+            <!--</xpath>-->
+            <xpath
+                    expr="//field[@name='value_assessment_ids']/tree/field[@name='manager_assessment']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <xpath
+                    expr="//field[@name='pc_assessment_ids']/tree/field[@name='manager_assessment']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- Appraisal Performance Tree View -->
+    <record id="performance_appraisal_tree_view" model="ir.ui.view">
+        <field name="name">performance.appraisal.tree.view</field>
+        <field name="model">performance.appraisal</field>
+        <field name="arch" type="xml">
+            <tree string="Appraisal Performance" create="false">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="job_id"/>
+                <field name="performance_appraisal_policy_id"
+                       string="Appraisal Performance Type"/>
+                <field name="account_analytic_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance Search View -->
+    <record id="performance_appraisal_search_view" model="ir.ui.view">
+        <field name="name">performance.appraisal.search.view</field>
+        <field name="model">performance.appraisal</field>
+        <field name="arch" type="xml">
+            <search string="Appraisal Performance">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By...">
+                    <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_department_id" string="Department"
+                            context="{'group_by':'department_id'}"/>
+                    <filter name="state" string="State" icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance Action view -->
+    <record id="performance_appraisal_req_action_view"
+            model="ir.actions.act_window">
+        <field name="name">All Appraisal Performance</field>
+        <field name="res_model">performance.appraisal</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!--<field name="domain">[('employee_id.user_id.id','=',uid)]</field>-->
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+    <!-- Appraisal Performance Action view hr Approval -->
+    <record id="performance_appraisal_req_hr_approval_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Appraisal Performance HR Approval</field>
+        <field name="res_model">performance.appraisal</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!--<field name="domain">[('employee_id.user_id.id','=',uid)]</field>-->
+        <field name="context">{'search_default_pending_hr_approval':True,
+            'readonly_by_pass': True}</field>
+    </record>
+
+</odoo>

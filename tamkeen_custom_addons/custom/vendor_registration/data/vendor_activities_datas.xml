@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Vendor Activities Categories and Activity -->
+
+        <!-- Enterprise Architecture -->
+        <record id="cat_enterprise_architecture"
+                model="vendor.activities.categories">
+            <field name="code">EA</field>
+            <field name="name">Enterprise Architecture</field>
+            <field name="note">Enterprise Architecture</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_organizational_design" model="vendor.activities">
+            <field name="code">EAOD</field>
+            <field name="name">Organizational Design</field>
+            <field name="note">Organizational Design</field>
+            <field name="category_id"
+                   ref="vendor_registration.cat_enterprise_architecture"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="portfolio_management" model="vendor.activities">
+            <field name="code">EAPPM</field>
+            <field name="name">Portfolio/Project Management</field>
+            <field name="note">Portfolio/Project Management</field>
+            <field name="category_id" ref="vendor_registration.cat_enterprise_architecture"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="risk_management" model="vendor.activities">
+            <field name="code">EARM</field>
+            <field name="name">Risk Management</field>
+            <field name="note">Risk Management</field>
+            <field name="category_id" ref="vendor_registration.cat_enterprise_architecture"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <!-- Managed Services -->
+        <record id="cat_managed_services"
+                model="vendor.activities.categories">
+            <field name="code">MS</field>
+            <field name="name">Managed Services</field>
+            <field name="note">Managed Services</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="hosting_services" model="vendor.activities">
+            <field name="code">MSHS</field>
+            <field name="name">Hosting Services</field>
+            <field name="note">Hosting Services</field>
+            <field name="category_id" ref="vendor_registration.cat_managed_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="internet_services" model="vendor.activities">
+            <field name="code">MSIS</field>
+            <field name="name">Internet Services</field>
+            <field name="note">Internet Services</field>
+            <field name="category_id" ref="vendor_registration.cat_managed_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="outsourcing" model="vendor.activities">
+            <field name="code">MSOS</field>
+            <field name="name">Outsourcing</field>
+            <field name="note">Outsourcing</field>
+            <field name="category_id" ref="vendor_registration.cat_managed_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="soc_noc" model="vendor.activities">
+            <field name="code">MSS/NOC</field>
+            <field name="name">Service/Network Operations Center (SOC/NOC)</field>
+            <field name="note">Service/Network Operations Center (SOC/NOC)</field>
+            <field name="category_id" ref="vendor_registration.cat_managed_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <!-- Infrastructure Services -->
+        <record id="cat_infrastructure_services"
+                model="vendor.activities.categories">
+            <field name="code">IS</field>
+            <field name="name">Infrastructure Services</field>
+            <field name="note">Infrastructure Services</field>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_backup_restore" model="vendor.activities">
+            <field name="code">ISBR</field>
+            <field name="name">Backup/Restore</field>
+            <field name="note">Backup/Restore</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_cluster_solutions" model="vendor.activities">
+            <field name="code">ISCS</field>
+            <field name="name">Cluster Solutions</field>
+            <field name="note">Cluster Solutions</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_data_center" model="vendor.activities">
+            <field name="code">ISDC</field>
+            <field name="name">Data Center</field>
+            <field name="note">Data Center</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_email_services" model="vendor.activities">
+            <field name="code">ISES</field>
+            <field name="name">Email Services</field>
+            <field name="note">Email Services</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_installation_services" model="vendor.activities">
+            <field name="code">ISIS</field>
+            <field name="name">Installation Services</field>
+            <field name="note">Installation Services</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="act_ip_telephony" model="vendor.activities">
+            <field name="code">ISIPT</field>
+            <field name="name">IP Telephony</field>
+            <field name="note">IP Telephony</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="act_lnx_systems_support" model="vendor.activities">
+            <field name="code">ISLSS</field>
+            <field name="name">Linux Systems Support</field>
+            <field name="note">Linux Systems Support</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">7</field>
+        </record>
+
+        <record id="act_load_balancing" model="vendor.activities">
+            <field name="code">ISLB</field>
+            <field name="name">Load Balancing</field>
+            <field name="note">Load Balancing</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="act_storage" model="vendor.activities">
+            <field name="code">ISS</field>
+            <field name="name">Storage</field>
+            <field name="note">Storage</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">9</field>
+        </record>
+        <record id="act_two_factor_auth" model="vendor.activities">
+            <field name="code">ISTFA</field>
+            <field name="name">Two-Factor Authentication</field>
+            <field name="note">Two-Factor Authentication</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="act_videoconferencing" model="vendor.activities">
+            <field name="code">ISVC</field>
+            <field name="name">Video Conferencing</field>
+            <field name="note">Video Conferencing</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">11</field>
+        </record>
+
+        <record id="act_virtualization_management" model="vendor.activities">
+            <field name="code">ISVM</field>
+            <field name="name">Virtualization Management</field>
+            <field name="note">Virtualization Management</field>
+            <field name="category_id" ref="vendor_registration.cat_infrastructure_services"/>
+            <field name="sequence">12</field>
+        </record>
+
+        <record id="act_windows_server_services" model="vendor.activities">
+            <field name="code">ISWSS</field>
+            <field name="name">Windows Server Services</field>
+            <field name="note">Windows Server Services</field>
+            <field name="category_id" ref="cat_infrastructure_services"/>
+            <field name="sequence">13</field>
+        </record>
+
+        <!-- Business Analysis Services -->
+        <record id="cat_business_analysis_services"
+                model="vendor.activities.categories">
+            <field name="code">BAS</field>
+            <field name="name">Business Analysis Services</field>
+            <field name="note">Business Analysis Services</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_brd_srs" model="vendor.activities">
+            <field name="code">BASBRA</field>
+            <field name="name">Business / Requirement Analysis (BRD/SRS)</field>
+            <field name="note">Business / Requirement Analysis (BRD/SRS)</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_bss" model="vendor.activities">
+            <field name="code">BASBSS</field>
+            <field name="name">Business Solution Scoping (BSS)</field>
+            <field name="note">Business Solution Scoping (BSS)</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_benchmarking" model="vendor.activities">
+            <field name="code">BASBM</field>
+            <field name="name">Benchmarking</field>
+            <field name="note">Benchmarking</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_gap_analysis" model="vendor.activities">
+            <field name="code">BASGA</field>
+            <field name="name">Gap Analysis</field>
+            <field name="note">gap Analysis</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_consultation" model="vendor.activities">
+            <field name="code">BASCDS</field>
+            <field name="name">Consultation &amp; Decision Support</field>
+            <field name="note">Consultation &amp; Decision Support</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="act_automation_modeling" model="vendor.activities">
+            <field name="code">BASBPAM</field>
+            <field name="name">Business Processes Automation/Modeling</field>
+            <field name="note">Business Processes Automation/Modeling</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="act_ui_uxdesign" model="vendor.activities">
+            <field name="code">BASUI/XD</field>
+            <field name="name">UI/UX Design</field>
+            <field name="note">UI/UX Design</field>
+            <field name="category_id" ref="cat_business_analysis_services"/>
+            <field name="sequence">7</field>
+        </record>
+
+        <!-- Solution Implementation -->
+        <record id="cat_solution_implementation"
+                model="vendor.activities.categories">
+            <field name="code">SI</field>
+            <field name="name">Solution Implementation</field>
+            <field name="note">Solution Implementation</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="act_customized_applications" model="vendor.activities">
+            <field name="code">SICA</field>
+            <field name="name">Customized Applications</field>
+            <field name="note">Customized Applications</field>
+            <field name="category_id" ref="cat_solution_implementation"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_system_integration" model="vendor.activities">
+            <field name="code">SISI</field>
+            <field name="name">System Integration</field>
+            <field name="note">System Integration</field>
+            <field name="category_id" ref="cat_solution_implementation"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_software_development" model="vendor.activities">
+            <field name="code">SISD</field>
+            <field name="name">Software Development</field>
+            <field name="note">Software Development</field>
+            <field name="category_id" ref="cat_solution_implementation"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <!-- Cloud Services -->
+        <record id="cat_cloud_services"
+                model="vendor.activities.categories">
+            <field name="code">CS</field>
+            <field name="name">Cloud Services</field>
+            <field name="note">Cloud Services</field>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="act_iaas" model="vendor.activities">
+            <field name="code">CSIAAS</field>
+            <field name="name">Infrastructure as a Service (IaaS)</field>
+            <field name="note">Infrastructure as a Service (IaaS)</field>
+            <field name="category_id" ref="cat_cloud_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_paas" model="vendor.activities">
+            <field name="code">CSPAAS</field>
+            <field name="name">Platform as a Service (PaaS)</field>
+            <field name="note">Platform as a Service (PaaS)</field>
+            <field name="category_id" ref="cat_cloud_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_saas" model="vendor.activities">
+            <field name="code">CS</field>
+            <field name="name">Software as a Service (SaaS)</field>
+            <field name="note">Software as a Service (SaaS)</field>
+            <field name="category_id" ref="cat_cloud_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <!-- Security Services -->
+        <record id="cat_security_services"
+                model="vendor.activities.categories">
+            <field name="code">SS</field>
+            <field name="name">Security Services</field>
+            <field name="note">Security Services</field>
+            <field name="sequence">7</field>
+        </record>
+
+
+        <record id="act_physical_security" model="vendor.activities">
+            <field name="code">SSPS</field>
+            <field name="name">Physical Security</field>
+            <field name="note">Physical Security</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_digital_forensic_services" model="vendor.activities">
+            <field name="code">SSDFS</field>
+            <field name="name">Digital Forensic Services</field>
+            <field name="note">Digital Forensic Services</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_incident_response_services" model="vendor.activities">
+            <field name="code">SSIRS</field>
+            <field name="name">Incident Response Services</field>
+            <field name="note">Incident Response Services</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_penetration_testing_services" model="vendor.activities">
+            <field name="code">SSPTS</field>
+            <field name="name">Penetration Testing Services</field>
+            <field name="note">Penetration Testing Services</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_information_security" model="vendor.activities">
+            <field name="code">SSITSGS</field>
+            <field name="name">Information Security Governance Services</field>
+            <field name="note">Information Security Governance Services</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="act_source_code_review" model="vendor.activities">
+            <field name="code">SSSCR</field>
+            <field name="name">Source Code Review</field>
+            <field name="note">Source Code Review</field>
+            <field name="category_id" ref="cat_security_services"/>
+            <field name="sequence">6</field>
+        </record>
+
+        <!-- Other IT Services -->
+        <record id="cat_other_it_services"
+                model="vendor.activities.categories">
+            <field name="code">OITS</field>
+            <field name="name">Other IT Services</field>
+            <field name="note">Other IT Services</field>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="act_consulting_services" model="vendor.activities">
+            <field name="code">OITSCS</field>
+            <field name="name">Consulting Services</field>
+            <field name="note">Consulting Services</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_contract_management_services" model="vendor.activities">
+            <field name="code">OITSCM/LS</field>
+            <field name="name">Contract Management/Legal Services</field>
+            <field name="note">Contract Management/Legal Services</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_digital_design" model="vendor.activities">
+            <field name="code">OITSDD</field>
+            <field name="name">Digital Design</field>
+            <field name="note">Digital Design</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_document_management" model="vendor.activities">
+            <field name="code">OITSDM</field>
+            <field name="name">Document Management</field>
+            <field name="note">Document Management</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_erp_services" model="vendor.activities">
+            <field name="code">OITSERPS</field>
+            <field name="name">ERP Services</field>
+            <field name="note">ERP Services</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="act_reporting_bi" model="vendor.activities">
+            <field name="code">OITSRBI</field>
+            <field name="name">Reporting &amp; BI</field>
+            <field name="note">Reporting &amp; BI</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="act_software_qa_testing" model="vendor.activities">
+            <field name="code">OITSSQT</field>
+            <field name="name">Software QA/Testing</field>
+            <field name="note">Software QA/Testing</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">7</field>
+        </record>
+
+        <record id="act_training" model="vendor.activities">
+            <field name="code">OITST</field>
+            <field name="name">Training</field>
+            <field name="note">Training</field>
+            <field name="category_id" ref="cat_other_it_services"/>
+            <field name="sequence">8</field>
+        </record>
+
+
+        <!-- Other Non-IT Services -->
+        <record id="cat_other_non_it_services"
+                model="vendor.activities.categories">
+            <field name="code">ONITS</field>
+            <field name="name">Other Non-IT Services</field>
+            <field name="note">Other Non-IT Services</field>
+            <field name="sequence">9</field>
+        </record>
+
+        <record id="act_furniture" model="vendor.activities">
+            <field name="code">ONITSF</field>
+            <field name="name">Furniture</field>
+            <field name="note">Furniture</field>
+            <field name="category_id" ref="cat_other_non_it_services"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="act_office_equipment" model="vendor.activities">
+            <field name="code">ONITSOE</field>
+            <field name="name">Office Equipment</field>
+            <field name="note">Office Equipment</field>
+            <field name="category_id" ref="cat_other_non_it_services"/>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="act_catering" model="vendor.activities">
+            <field name="code">ONITSC</field>
+            <field name="name">Catering</field>
+            <field name="note">Catering</field>
+            <field name="category_id" ref="cat_other_non_it_services"/>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="act_advertising" model="vendor.activities">
+            <field name="code">ONITSA</field>
+            <field name="name">Advertising</field>
+            <field name="note">Advertising</field>
+            <field name="category_id" ref="cat_other_non_it_services"/>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="act_maintenance_services" model="vendor.activities">
+            <field name="code">ONITSMS</field>
+            <field name="name">Maintenance Services</field>
+            <field name="note">Maintenance Services</field>
+            <field name="category_id" ref="cat_other_non_it_services"/>
+            <field name="sequence">5</field>
+        </record>
+
+    </data>
+</odoo>

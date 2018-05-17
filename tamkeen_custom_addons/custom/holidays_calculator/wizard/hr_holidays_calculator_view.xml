@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_hr_holidays_calculator_wizard" model="ir.ui.view">
+            <field name="name">view.wizard.form.hr.holidays.calculator</field>
+            <field name="model">hr.holidays.calculator</field>
+            <field name="arch" type="xml">
+                <form string="Holidays Calculator" version="7.0">
+                    <sheet>
+                        <group col="4" >
+                            <field name="employee_id"  colspan="2" required="1"/>
+                            <field name="allocate_balance" colspan="2"/>
+                            <field name="warning_message" attrs="{'invisible':[('warning_message','=',False)]}" nolabel="1" class="oe_warning_msg" colspan="4" readonly="1"/>
+                        </group>
+                        <group colspan='2' cols="2">
+                            <field name="holiday_status_id" attrs="{'required':[('allocate_balance','=',True)]}"/>
+                        </group>
+                        <group col="4" string="Leaves Statistics" attrs="{'invisible':[('allocate_balance','=',True)]}">
+                            <field name="allocated_leave_balance" colspan="2" readonly="1"/>
+                            <field name="taken_leave_balance" colspan="2" readonly="1"/>
+                        </group>
+                        <group col="4" string="Holidays Calculator" attrs="{'invisible':[('allocate_balance','=',False)]}">
+                            <field name="leave_max_days" colspan="2"/>
+                            <newline />
+                            <field name="date_from"  colspan="2"/>
+                            <field name="hijri_date_from" placeholder="e.g: 1417-10-20"  colspan="2"/>
+                            <field name="date_to"  colspan="2"/>
+                            <field name="hijri_date_to" placeholder="e.g: 1417-10-20"  colspan="2"/>
+                        </group>
+                        <group col="4" string="Result" attrs="{'invisible':[('allocate_balance','=',False)]}">
+                            <field name="deserved_balance" colspan="2"/>
+                            <newline />
+                            <button name="allocate_initial_leave_balance" attrs="{'invisible':[('allocate_balance','=',False)]}" string="Allocate Leave Balance" type="object" class="oe_highlight" groups="holidays_calculator.holidays_calculator" confirm="Are you sure you want to allocate this balance to the selected employee?"/>
+                        </group>
+                        <group string="Employee's Leaves" attrs="{'invisible':[('allocate_balance','=',True)]}">
+                            <group string="Taken Leaves" colspan="2" cols="2">
+                                <field name="previous_leaves_ids" nolabel="1" widget="one2many" readonly="1">
+                                    <tree>
+                                        <field name="holiday_status_id"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="number_of_days_temp"/>
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Allocated Leaves" colspan="2" cols="2">
+                                <field name="allocated_leaves_ids" nolabel="1" widget="one2many" readonly="1">
+                                    <tree>
+                                        <field name="holiday_status_id"/>
+                                        <field name="number_of_days_temp"/>
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer >
+                        <button special="cancel" string="Close"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_hr_holidays_calculator_wizard" model="ir.actions.act_window">
+            <field name="name">Holidays Calculator</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.holidays.calculator</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="Holidays Calculator"
+            id="menu_hr_holidays_calculator_wizard"
+            action="action_hr_holidays_calculator_wizard"
+            parent="hr_holidays.menu_hr_holidays_approvals"
+            groups="holidays_calculator.holidays_calculator"
+            sequence="17"
+        />
+    </data>
+</odoo>
+

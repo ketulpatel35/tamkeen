@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_by_employees_inherit_for_context"
+            model="ir.ui.view">
+        <field name="name">view.hr.payslip.by.employees.inherit.for
+            .context</field>
+        <field name="model">hr.payslip.employees</field>
+        <field name="inherit_id"
+               ref="hr_payroll.view_hr_payslip_by_employees"/>
+        <field name="arch" type="xml">
+            <field name="employee_ids" position="attributes">
+                <attribute name="context">{'active_id':
+                    context.get('batch_id'), 'active_model': context.get('run_active_model')}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

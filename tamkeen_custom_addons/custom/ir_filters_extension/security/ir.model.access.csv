@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_filters_user,ir.filters.user,base.model_ir_filters,base.group_user,1,1,1,0
+access_ir_filters_admin,ir.filters.admin,base.model_ir_filters,hr_admin.group_hr_admin,1,1,1,0
+

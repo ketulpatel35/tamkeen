@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- View all customer invoice-->
+        <record id="rule_view_all_customer_invoice" model="ir.rule">
+            <field name="name">View All Customer Invoice</field>
+            <field name="model_id" ref="account.model_account_invoice" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_customer_invoice'))]"/>
+        </record>
+
+        <!-- View all purchase invoice-->
+        <record id="rule_view_all_po_invoice" model="ir.rule">
+            <field name="name">View All Purchase Invoice</field>
+            <field name="model_id" ref="account.model_account_invoice" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_vendor_invoice'))]"/>
+        </record>
+
+        <!--&lt;!&ndash; Create/update Sale Invoice &ndash;&gt;-->
+        <!--<record id="rule_create_update_invoice" model="ir.rule">-->
+        <!--<field name="name">Create/Update Sale Invoice</field>-->
+        <!--<field name="model_id" ref="account.model_account_invoice" />-->
+        <!--<field name="domain_force"> [('user_id.id', '=', user.id)]</field>-->
+        <!--<field name="groups"-->
+        <!--eval="[(4,ref('finance_authority_matrix.groups_create_customer_invoice'))]"/>-->
+        <!--</record>-->
+
+        <!--&lt;!&ndash; Create/update Purchase Invoice &ndash;&gt;-->
+        <!--<record id="rule_create_update_po_invoice" model="ir.rule">-->
+        <!--<field name="name">Create/Update Purchase Invoice</field>-->
+        <!--<field name="model_id" ref="account.model_account_invoice" />-->
+        <!--<field name="domain_force"> [('user_id.id', '=', user.id)]</field>-->
+        <!--<field name="groups"-->
+        <!--eval="[(4,ref('finance_authority_matrix.groups_create_vendor_invoice'))]"/>-->
+        <!--</record>-->
+
+        <!-- Sale Payment -->
+        <record id="rule_view_all_payments" model="ir.rule">
+            <field name="name">View All Sale Payments</field>
+            <field name="model_id" ref="account.model_account_payment" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_sale_account_payment'))]"/>
+        </record>
+
+        <!-- Purchase Payment -->
+        <record id="rule_view_all_po_payments" model="ir.rule">
+            <field name="name">View All Purchase Payments</field>
+            <field name="model_id" ref="account.model_account_payment" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_purchase_account_payment'))]"/>
+        </record>
+
+        <!-- Voucher Payments-->
+        <record id="rule_view_all_voucher" model="ir.rule">
+            <field name="name">View All Voucher</field>
+            <field name="model_id" ref="account_voucher.model_account_voucher" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_receipts_entries'))]"/>
+        </record>
+
+        <!-- Journal Entries -->
+        <record id="rule_view_all_journal_entries" model="ir.rule">
+            <field name="name">View All Journal Entries</field>
+            <field name="model_id" ref="account.model_account_move" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_journal_entries'))]"/>
+        </record>
+
+        <!-- Journal Lines -->
+        <record id="rule_view_all_journal_entries_line" model="ir.rule">
+            <field name="name">View All Journal Lines</field>
+            <field name="model_id" ref="account.model_account_move_line" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.groups_view_all_journal_entries'))]"/>
+        </record>
+
+        <!-- Chart of Account -->
+        <record id="rule_view_all_chart_of_account" model="ir.rule">
+            <field name="name">Chart of Account View All</field>
+            <field name="model_id" ref="account.model_account_account" />
+            <field name="domain_force"> [(1, '=', 1)]</field>
+            <field name="groups"
+                   eval="[(4,ref('finance_authority_matrix.group_chart_of_account_view_all'))]"/>
+        </record>
+    </data>
+</odoo>

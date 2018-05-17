@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <!--explicit list view definition -->
+        <record model="ir.ui.view" id="requirement_category_tree">
+            <field name="name">requirement.category.tree</field>
+            <field name="model">requirement.category</field>
+            <field name="arch" type="xml">
+                <tree string="Career Discussion">
+                    <field name="category_id" invisible="1"/>
+                    <field name="category_type"/>
+                    <field name="Weightage"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="requirement_category_form">
+            <field name="name">individual.development.plan.form</field>
+            <field name="model">requirement.category</field>
+            <field name="arch" type="xml">
+                <form string="Career Discussion">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="category_id" invisible="1"/>
+                                <field name="category_type"/>
+                                <field name="Weightage"/>
+                                <field name="type"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="requirement_category_action">
+            <field name="name">Requirement Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requirement.category</field>
+            <field name="view_id" ref="requirement_category_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--<menuitem name="Category Master" id="category_id"-->
+                  <!--parent="hr_appraisal_evaluation_configuration"-->
+                  <!--action="requirement_category_action"-->
+                  <!--groups="hr.group_hr_manager,hr_admin.group_hr_admin,hr_employee_customization.group_employee_manager"/>-->
+
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+         <record id="res_partner_view_smart_buttons_inherit_for_add_group"
+                model="ir.ui.view">
+            <field name="name">res.partner.view.smart.buttons.inherit.for.add.group</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="res_partner_extension.res_partner_view_smart_buttons_inherit"/>
+            <field name="arch" type="xml">
+                <xpath
+                        expr="//button[@name='%(res_partner_extension.act_res_partner_payments)d']"
+                       position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_view_all_sale_account_payment,finance_authority_matrix.groups_view_all_purchase_account_payment</attribute>
+                </xpath>
+                <xpath
+                        expr="//button[@name='%(account.action_account_moves_all_tree)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_view_all_journal_entries</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

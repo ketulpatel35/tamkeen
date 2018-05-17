@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Purchase Order Inherit -->
+        <record id="purchase_order_form_req" model="ir.ui.view">
+            <field name="name">purchase.order.form.req</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="buyer_name" readonly="1"/>
+                </xpath>
+                <field name="origin" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_po_make_readonly_false" model="ir.ui.view">
+            <field name="name">view.po.make.readonly.false</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_requisition_config.purchase_order_form_req" />
+            <field name="groups_id" eval="[(6, 0, [ref('purchase.group_purchase_manager')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='buyer_name']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Purchase Requision search view (search by Requester Officer) -->
+        <record id="view_purchase_requisition_filter_inherit"
+                model="ir.ui.view">
+            <field name="name">view.purchase.requisition.filter.inherit</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id"
+                   ref="purchase_requisition.view_purchase_requisition_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="string">Purchase Requisition</attribute>
+                </field>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="employee_ids" string="Requester Officer"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="anaylitic_account_add_group" model="ir.ui.view">
+            <field name="name">account.analytic.account.add.group</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id"
+                   ref="analytic.view_account_analytic_account_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='debit']" position="attributes">
+                    <attribute
+                        name="groups">account.group_account_invoice,account.group_account_user,account.group_account_manager
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='credit']" position="attributes">
+                    <attribute
+                        name="groups">account.group_account_invoice,account.group_account_user,account.group_account_manager
+                    </attribute>
+                </xpath>
+                <xpath expr="//field[@name='balance']" position="attributes">
+                    <attribute
+                        name="groups">account.group_account_invoice,account.group_account_user,account.group_account_manager
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_req_inherit">
+            <field name="name">purchase.req.inherit</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+                <!--<field name="vendor_id" position="attributes">-->
+                <!--<attribute name="required">1</attribute>-->
+                <!--</field>-->
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="estimated_cost" required="1"/>
+                    <field name="currency_id" groups="base.group_multi_currency" required="1" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                    <field name="est_cost" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                    <field name="conversion_factor"/>
+                    <field name="other_details" attrs="{'invisible': [('state', '=', 'draft')],'readonly': [('state','in',('in_progress','done','cancel'))]}"/>
+                </xpath>
+                <field name="account_analytic_id" position="attributes">
+                    <!--<attribute name="widget">selection</attribute>-->
+                    <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}</attribute>
+                </field>
+                <xpath expr="//field[@name='type_id']" position="after">
+                    <field name="exclusive" attrs="{'readonly': [('state','not in',('draft'))]}" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='account_analytic_id']" position="after">
+                    <field name="contract_manager" required="1" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                    <field name="subject" required="1" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                    <field name="budget" groups="purchase_requisition_config.group_budget_approval_pr" attrs="{'readonly': [('state', '!=', 'budget')]}"/>
+                    <field name="budget_exception_reason"
+                           attrs="{'invisible': [('budget','!=','exceptional_out_budget')],'required': [('budget','=','exceptional_out_budget'), ('state','=','budget')],'readonly':[('state','!=','budget')]}"
+                           groups="purchase_requisition_config.group_budget_approval_pr"/>
+                </xpath>
+                <field name="vendor_id" position="attributes">
+                    <attribute name="options">{'create':false}</attribute>
+                    <attribute name="attrs">{'readonly': [('state', 'not in ', ('draft'))]}</attribute>
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <xpath expr="//notebook" position="before">
+                    <group colspan="2" cols="2">
+                        <field name="purchase_order_text" groups="purchase_requisition_config.group_procurement_officer_pr"/>
+                        <field name="r_f_q_text" groups="purchase_requisition_config.group_procurement_officer_pr"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='product_id']" position="after">
+                    <field name="description"/>
+                    <!--<field name="remarks"/>-->
+                </xpath>
+                <!-- Hide Price Unit From PR Lines-->
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='price_unit']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='account_analytic_id']" position="attributes">
+                    <!--<attribute name="widget">selection</attribute>-->
+                    <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="before">
+                    <field name="employee_ids" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="user_change" invisible="1" />
+                    <field name="is_office_change_mail" invisible="1"/>
+                    <!--<field name="employee_ids" readonly="1" />-->
+                </xpath>
+                <xpath expr="//form/header" position="replace">
+                    <header>
+                        <!-- Start New -->
+                        <button name="to_manager" states="draft" string="Submit for Approval"
+                                class="oe_highlight" type="object" groups="purchase_requisition_config.group_normal_user_pr"/>
+                        <button name="manager_appr" states="tomanager_app" string="Manager Approval"
+                                class="oe_highlight" groups="purchase_requisition_config.group_manager_approval_pr" type="object"/>
+                        <button name="procurement_review"
+                                states="procurement_review"
+                                string="Procurement Review"
+                                class="oe_highlight" groups="purchase_requisition_config.group_procurement_review" type="object"/>
+                        <button name="to_vp" states="vp" string="VP Approval"
+                                class="oe_highlight" groups="purchase_requisition_config.group_vp_approval_pr" type="object"/>
+                        <button name="budget_appr" states="budget" string="Budget Approval"
+                                class="oe_highlight" groups="purchase_requisition_config.group_budget_approval_pr" type="object"/>
+                        <button name="forward_officer" states="purchase_app" type="object" string="Forward to Officer"
+                                class="oe_highlight" groups="purchase_requisition_config.group_procurement_manager_pr" />
+                        <button name="send_notify" states="budget" type="object" string="Notify"
+                                class="oe_highlight" groups="purchase_requisition_config.group_budget_approval_pr" />
+                        <button name="to_ceo" states="ceo" string="CEO Approval"
+                                class="oe_highlight" groups="purchase_requisition_config.group_ceo_approval_pr" type="object"/>
+                        <button name="%(purchase_requisition.action_purchase_requisition_to_so)d" type="action"
+                                string="New Quotation" class="btn-primary"
+                                attrs="{'invisible': [('state', 'not in', ['in_progress','open','purchase_app'])]}" groups="purchase_requisition_config.group_procurement_officer_pr"/>
+                        <button name="action_in_progress" states="purchase_app"
+                                string="Confirm" type="object" class="oe_highlight"
+                                groups="purchase_requisition_config.group_procurement_officer_pr" />
+                        <button name="to_draft_state"
+                                states="tomanager_app" string="Return"
+                                groups="purchase_requisition_config.group_manager_approval_pr" type="object"/>
+
+                        <button name="to_draft_state" states="procurement_review" string="Return"
+                                groups="purchase_requisition_config.group_procurement_review" type="object"/>
+                        <button name="to_draft_state" states="budget" string="Return"
+                                groups="purchase_requisition_config.group_budget_approval_pr" type="object"/>
+                        <button name="to_draft_state" states="purchase_app" string="Return"
+                                groups="purchase_requisition_config.group_procurement_officer_pr" type="object"/>
+                        <button name="to_draft_state" states="vp" string="Return"
+                                groups="purchase_requisition_config.group_vp_approval_pr" type="object"/>
+                        <button name="to_draft_state" states="ceo" string="Return"
+                                groups="purchase_requisition_config.group_ceo_approval_pr" type="object"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,tomanager_app,vp,procurement_review,budget,purchase_app,in_progress"
+                               statusbar_colors="{&quot;in_progress&quot;:&quot;blue&quot;}" readonly="1" type="object"/>
+
+                        <!-- End New -->
+                        <button name="action_cancel"
+                                states="in_progress,vp,budget,purchase_app"
+                                string="Cancel Call" type="object" groups="purchase_requisition_config.group_vp_approval_pr"/>
+                        <!--<button name="action_done"-->
+                        <!--context="{'check_post':True}"-->
+                        <!--states="open"-->
+                        <!--string="Done" type="object" class="btn-primary"/>-->
+                        <button name="%(action_view_purchase_requisition_close)d"
+                                context="{'check_post':True}"
+                                states="open"
+                                string="Done" type="action"
+                                class="btn-primary"/>
+
+                        <!--<button name="action_done" states="open" string="Done" type="object" class="btn-primary" groups="purchase_requisition_config.group_procurement_manager_pr"/>-->
+
+                        <button name="action_open" states="in_progress" string="Validate" type="object" class="btn-primary" />
+                    </header>
+                </xpath>
+
+                <xpath expr="//div[@name='button_box']" position="attributes">
+                    <attribute name="groups">purchase_requisition_config.group_procurement_officer_pr</attribute>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Approvals">
+                        <div>
+                            The approval/refusal information will be displayed here.
+                        </div>
+                        <group>
+                            <group attrs="{'invisible':[('mngr_user_id','=',False)]}">
+                                <field name="mngr_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" />
+                                <field name="mngr_approval_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('vp_user_id','=',False)]}">
+                                <field name="vp_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="vp_approval_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('pr_review_user_id','=',False)]}">
+                                <field name="pr_review_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" />
+                                <field name="pr_review_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('finance_user_id','=',False)]}">
+                                <field name="finance_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="finance_approval_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('procurement_user_id','=',False)]}">
+                                <field name="procurement_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="procurement_approval_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('ceo_user_id','=',False)]}">
+                                <field name="ceo_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="ceo_approval_date"/>
+                            </group>
+                            <group attrs="{'invisible':[('pr_confirm_user_id','=',False)]}">
+                                <field name="pr_confirm_user_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="pr_confirm_date"/>
+                            </group>
+
+                        </group>
+                        <group attrs="{'invisible':[('submitted_by','=',False)]}" colspan="4" col="4">
+                            <field name="submitted_by" colspan="2" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="submit_date" colspan="2"/>
+                        </group>
+                        <group>
+                            <!--        <group attrs="{'invisible':[('refused_by','=',False)]}">
+                                       <field name="refused_by" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                       <field name="refuse_date"/>
+                                   </group> -->
+                            <group attrs="{'invisible':[('returned_by','=',False)]}">
+                                <field name="returned_by" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="return_date"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_requisition.act_res_partner_2_purchase_order"
+                model="ir.actions.act_window">
+            <field name="groups_id" eval="[(4, ref('purchase_requisition_config.group_procurement_officer_pr'))]"/>
+        </record>
+
+        <record model="ir.ui.view" id="view_purchase_requisition_tree_inherits_for_budget">
+            <field name="name">view.purchase.requisition.tree.inherits.for.budget</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_tree" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="attributes">
+                    <attribute name="string">Officer</attribute>
+                </field>
+                <field name="user_id" position="before">
+                    <field name="employee_ids"/>
+                    <field name="contract_manager"/>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="budget" groups="purchase_requisition_config.group_budget_approval_pr"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="rfq_initiated"/>
+                    <field name="po_initiated"/>
+                    <field name="purchase_order_text" invisible="1"/>
+                    <field name="r_f_q_text" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_purchase_configuration_inherit_for_validation">
+            <field name="name">view.purchase.configuration.inherit.for.validation</field>
+            <field name="model">purchase.config.settings</field>
+            <field name="inherit_id" ref="purchase.view_purchase_configuration"/>
+            <field name="arch" type="xml">
+                <field name="po_double_validation_amount" position="after">
+                    <field name="ceo_limit"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_purchase_agreement_type">
+            <field name="name">view.purchase.agreement.type.config</field>
+            <field name="model">purchase.requisition.type</field>
+            <field name="inherit_id"
+                   ref="purchase_requisition.view_purchase_requisition_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group" position="inside">
+                    <group>
+                        <separator
+                            string="PR Notification"/><br/>
+                        <field name="mngr_approval" />
+                        <field name="vp_approval" />
+                        <field name="pr_review_approval"/>
+                        <field name="budget_approval" />
+                        <field name="ceo_approval" />
+                        <field name="finance_approval" />
+                        <field name="purchase_approval" />
+                        <field name="pr_confirm" />
+                    </group>
+                    <group>
+                        <separator string="PO Notification" /><br/>
+                        <field name="purchase_bud_confirm" invisible="1"/>
+                        <field name="po_confirm" />
+                    </group>
+                    <group>
+                        <separator string="Vendor Bill Notification" /><br/>
+                        <field name="vendor_bill_first" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_order_form_inherit_for_add_domain">
+            <field name="name">purchase.order.form.inherit.for.add.domain</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id"
+                   ref="purchase_requisition.purchase_order_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='requisition_id']" position="attributes">
+                    <attribute name="domain">[('state','in',('purchase_app','open','in_progres'))]</attribute>
+                    <attribute name="string">Purchase Requisition</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Customer Invoice -->
+        <record model="ir.ui.view" id="account_invoice_double_validation_inherit">
+            <field name="name">account.invoice.double.validation</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="before">
+                    <button name="reset_to_draft" states="confirm" string="Set to draft" type="object"/>
+                    <button name="submit_to_fi_manager" states="draft" string="First Validate" type="object"
+                            class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//field[@name='date_invoice']" position="after">
+                    <field name="date"/>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="states">draft,proforma2,open</attribute>
+                    <!--<attribute name="groups">account.group_account_manager</attribute>-->
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="states">confirm</attribute>
+                    <!--<attribute name="groups">account.group_account_invoice</attribute>-->
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Supplier Invoice -->
+        <record model="ir.ui.view" id="account_invoice_supplier_double_validation_inherit">
+            <field name="name">account.invoice.double.validation</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="before">
+                    <button name="reset_to_draft" states="confirm" string="Set to draft" type="object"/>
+                    <button name="submit_to_first_validate" type="object" states="draft" string="Submit"
+                            class="oe_highlight"/>
+                    <button name="submit_to_fi_manager" type="object" states="submit" string="First Validate"
+                            class="oe_highlight"/>
+                </xpath>
+                <!--<xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="replace">-->
+                    <!--<button name="%(account.action_account_invoice_refund)d" type='action' string='Ask Refund' groups="account.group_account_invoice,account_financial_matrix.group_account_AP" attrs="{'invisible': ['|',('type', 'in', ['in_refund','out_refund']),('state','not in',('open','paid'))]}"/>-->
+                <!--</xpath>-->
+
+                <!--<xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="replace">-->
+                    <!--<button name="%(account.action_account_invoice_refund)d" type='action' string='Ask Refund' groups="account.group_account_invoice" attrs="{'invisible': ['|',('type', 'in', ['in_refund','out_refund']),('state','not in',('open','paid'))]}"/>-->
+                <!--</xpath>-->
+                <xpath expr="//field[@name='date']" position="replace"/>
+                <xpath expr="//field[@name='date_invoice']" position="after">
+                    <field name="date"/>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="states">draft,proforma2,open</attribute>
+                    <!--<attribute name="groups">account.group_account_manager</attribute>-->
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="states">confirm</attribute>
+                    <!--<attribute name="groups">account_financial_matrix.group_account_AP</attribute>-->
+                </xpath>
+                <xpath expr="//sheet/div" position='before'>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="get_related_purchase_order" string="Purchase Order" type="object" class="oe_stat_button" icon="fa-copy"  attrs="{'invisible':[('origin','=',False)]}"/>
+                    </div>
+                </xpath>
+                <xpath expr="//form//field[@name='reference']" position="after">
+                    <field name="account_analytic_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="replace">
+                    <field name="journal_id"
+                           groups="account.group_account_user"
+                           options="{'no_create': True}"
+                           attrs="{'readonly':[('move_name','!=',False),('state', '!=', 'draft')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

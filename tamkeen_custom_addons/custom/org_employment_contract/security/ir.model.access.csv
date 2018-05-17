@@ -1,0 +1,3 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink","active"
+employment_contract_hr_officer,employment.contract.hr.officer,model_employment_contract,organization_structure.group_planning_head,1,1,1,1
+

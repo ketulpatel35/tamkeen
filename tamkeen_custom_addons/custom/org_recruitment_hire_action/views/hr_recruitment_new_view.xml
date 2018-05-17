@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view"
+            id="new_crm_case_form_view_job_inherit_for_hire_employee">
+        <field name="name">Jobs - Recruitment Form for Hiring Employee</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id"
+               ref="hr_recruitment_stages_movement.new_crm_case_form_view_job"/>
+        <field name="arch" type="xml">
+            <button name="refuses" position="after">
+                <button name="hire_employee"
+                        string="Hire Employee" type="object"
+                        attrs="{'invisible': [('stage_name_invisible', 'not in', ['On-Boarding'])]}" class="oe_highlight" groups="hr_recruitment.group_hr_recruitment_user"/>
+            </button>
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <group colspan="4" col="2">
+                    <field name="hire_action_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

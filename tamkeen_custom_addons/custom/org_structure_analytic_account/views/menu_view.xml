@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!--Cost Center-->
+    <menuitem id="org_structure_analytic_account"
+              name="Cost Center"
+              parent="organization_structure.menu_organization_structure_root"
+              action="analytic.action_account_analytic_account_form"
+              sequence="2"/>
+
+</odoo>

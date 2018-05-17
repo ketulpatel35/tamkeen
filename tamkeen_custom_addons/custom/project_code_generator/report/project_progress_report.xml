@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_project_progress_header_inherit_for_project_code"
+              inherit_id="project_management.project_progress_report_header">
+        <xpath expr="//div[@class='col-xs-8']"
+               position="replace">
+            <div class="col-xs-8"
+                 style="padding-top: 8%;font-size:12px;overflow:hidden;text-overflow: ellipsis;">
+                <b>Strategy and Projects Management</b>
+                <br/><br/><br/>
+                <t t-if="o.name">
+                    <t t-if="o.project_code">
+                        [<span
+                            style="font-size:10px;"><t
+                            t-esc="o.project_code"/></span>] <span
+                            style="font-size:10px;"><t
+                            t-esc="o.name"/></span>
+                    </t>
+                </t>
+            </div>
+
+
+        </xpath>
+
+    </template>
+
+
+</odoo>

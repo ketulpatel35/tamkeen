@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_generate_prepaid_move_wizard" model="ir.ui.view">
+        <field name="name">view.generate.prepaid.move.wizard</field>
+        <field name="model">generate.prepaid.move</field>
+        <field name="arch" type="xml">
+            <form string="Generate Entries">
+                <div>
+                    <p>
+                        This wizard will post scheduled prepayments for the selected month.<br/>
+                    </p> 
+                </div>
+                <group>
+                    <field name="date"/>
+                    <field name="prepayment_type_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button string="Generate Entries" name="generate_entries" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+    </record>
+
+    <record id="action_asset_depreciation_confirmation_wizard" model="ir.actions.act_window">
+        <field name="name">Generate PrePayment Entries</field>
+        <field name="res_model">generate.prepaid.move</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_generate_prepaid_move_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Generate PrePayment Entries" action="action_asset_depreciation_confirmation_wizard"
+        id="menu_asset_depreciation_confirmation_wizard"
+        parent="account_prepayment.menu_prepayment_header" sequence="111"/>
+
+</odoo>

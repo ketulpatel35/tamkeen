@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem id="menu_org_personnel_action"
+              name="Personnel Action"
+              parent="organization_structure.menu_organization_structure_root"
+              sequence="90" groups="organization_structure.group_planning_head"/>
+
+    <menuitem id="menu_personnel_action"
+              name="Personnel Action"
+              parent="menu_org_personnel_action"
+              action="action_personnel_action_view"
+              sequence="1" groups="organization_structure.group_planning_head"/>
+
+    <menuitem id="menu_personnel_action_type"
+              name="Personnel Action Type"
+              parent="menu_org_personnel_action"
+              action="action_personnel_action_type_view"
+              sequence="2" groups="organization_structure.group_planning_head"/>
+
+</odoo>

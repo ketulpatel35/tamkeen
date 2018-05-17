@@ -1,0 +1,121 @@
+<odoo>
+  <data>
+
+    <!--explicit search view definition -->
+    <!--<record id="view_purchase_order_filter" model="ir.ui.view">-->
+    <!--<field name="name">request.quotation.select</field>-->
+    <!--<field name="model">purchase.order</field>-->
+    <!--<field name="arch" type="xml">-->
+    <!--<search string="Search Purchase Order">-->
+    <!--<field name="name" string="Reference"/>-->
+    <!--<field name="partner_id" operator="child_of"/>-->
+    <!--<field name="product_id"/>-->
+    <!--<field name="create_uid"/>-->
+    <!--<filter name="draft" string="Quotations" domain="[('state','in',('draft','sent','to approve'))]"/>-->
+    <!--<filter name="approved" string="Purchase Orders" domain="[('state','in',('purchase','done'))]"/>-->
+    <!--<filter name="to_approve" string="To Approve" domain="[('state', '=', 'to approve')]"/>-->
+    <!--<separator/>-->
+    <!--<filter name="not_invoiced" string="Waiting Bills" domain="[('invoice_status','=', 'to invoice')]" help="Purchase orders that include lines not invoiced."/>-->
+    <!--<filter name="invoiced" string="Bills Received" domain="[('invoice_status','=', 'invoiced')]" help="Purchase orders that have been invoiced."/>-->
+    <!--<filter string="New Mail" name="message_unread" domain="[('message_unread','=',True)]"/>-->
+    <!--<group expand="0" string="Group By">-->
+    <!--<filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>-->
+    <!--<filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>-->
+    <!--<filter string="Expected Date" domain="[]" context="{'group_by':'date_planned'}"/>-->
+    <!--</group>-->
+    <!--</search>-->
+    <!--</field>-->
+    <!--</record>-->
+
+    <!--explicit list view definition -->
+    <record model="ir.ui.view" id="individual_development_plan_tree">
+      <field name="name">individual.development.plan.list</field>
+      <field name="model">individual.development.plan</field>
+      <field name="arch" type="xml">
+        <!--<tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'"-->
+        <!--decoration-info="state in ('wait','confirmed')" string="IDP">-->
+        <tree string="IDP">
+          <field name="emp_ref_id" invisible="1"/>
+          <field name="development_obj"/>
+          <field name="Justification"/>
+          <field name="detail_description"/>
+          <field name="development_options"/>
+          <field name="intervention"/>
+          <!--<field name="success_measurre"/>-->
+          <field name="target_completion_date"/>
+          <field name="remark"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+    <record model="ir.ui.view" id="individual_development_plan_form">
+      <field name="name">individual.development.plan.form</field>
+      <field name="model">individual.development.plan</field>
+      <field name="arch" type="xml">
+        <form string="Individual Development Plan">
+          <sheet>
+            <!--<div class="oe_title">-->
+            <!--<label string="Request for Quotation " attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}"/>-->
+            <!--<label string="Purchase Order " attrs="{'invisible': [('state','in',('draft','sent','bid'))]}"/>-->
+            <!--<h1>-->
+            <!--<field name="name" readonly="1"/>-->
+            <!--</h1>-->
+            <!--</div>-->
+            <group>
+              <field name="emp_ref_id" invisible="1"/>
+              <group>
+                <field name="development_obj" height="10px;"/>
+                <field name="Justification" height="10px;"/>
+                <field name="detail_description" height="10px;"/>
+                <field name="development_options" height="10px;"/>
+              </group>
+              <group>
+                <field name="intervention" height="10px;"/>
+                <!--<field name="success_measurre"/>-->
+                <field name="target_completion_date"/>
+                <field name="remark" height="10px;"/>
+              </group>
+            </group>
+
+          </sheet>
+          <!--<div class="oe_chatter">-->
+          <!--<field name="message_follower_ids" widget="mail_followers"/>-->
+          <!--<field name="message_ids" widget="mail_thread"/>-->
+          <!--</div>-->
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="individual_development_plan_action">
+      <field name="name">Individual development</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">individual.development.plan</field>
+      <field name="view_id" ref="individual_development_plan_tree"/>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <!--<field name="context">{'search_default_todo':1, 'show_purchase': True}</field>-->
+      <!--<field name="domain">[('state','not in',('draft','sent','bid', 'confirmed'))]</field>-->
+      <!--<field name="search_view_id" ref="view_purchase_order_filter"/>-->
+    </record>
+
+    <!--&lt;!&ndash; server action to the one above &ndash;&gt;-->
+    <!--<record model="ir.actions.server" id="Text.action_server">-->
+    <!--<field name="name">Text server</field>-->
+    <!--<field name="model_id" ref="model_Text_Text"/>-->
+    <!--<field name="code">-->
+    <!--action = {-->
+    <!--"type": "ir.actions.act_window",-->
+    <!--"view_mode": "tree,form",-->
+    <!--"res_model": self._name,-->
+    <!--}-->
+    <!--</field>-->
+    <!--</record>-->
+
+    <!-- actions -->
+    <!--<menuitem name="Individual Development Plan" id="individual_dev_plan" parent="hr_appraisal_evaluation_report"-->
+              <!--action="individual_development_plan_action"/>-->
+
+  </data>
+</odoo>

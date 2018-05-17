@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_base.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name="client_type"/>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('client_type', '!=','existing')]}</attribute>
+                    <attribute name="domain">[('is_company','=',True),('parent_id','=',False),('customer','=',True)]</attribute>
+                </field>
+                <xpath expr="//form/header/button[@name='action_set_won']"
+                   position="after">
+                    <button name="forward_to_account_manager"
+                            string="Forward To Account Manager" type="object"
+                            class="oe_highlight o_wow"
+                            attrs="{'invisible': ['|', ('active','=',False), ('probability', '=', 100)]}" groups="sales_team.group_sale_manager"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

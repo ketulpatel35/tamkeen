@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Salary Rule Categories  -->
+        <record id="hr_salary_categ_general" model="hr.salary.rule.category">
+            <field name="code">GEN</field>
+            <field name="name">General</field>
+            <field name="note"></field>
+        </record>
+
+        <!-- Salary Rules  -->
+
+        <record id="hr_payroll.hr_rule_net" model="hr.salary.rule">
+            <field name="sequence" eval="350"/>
+        </record>
+
+        <record id="hr_payroll.hr_rule_taxable" model="hr.salary.rule">
+            <field name="sequence" eval="190"/>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_nupl" model="hr.salary.rule">
+            <field name="code">NUPL</field>
+            <field name="name">Number of unpaid Leaves</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = worked_days.UNP.number_of_days
+]]></field>
+            <field name="quantity">1</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="sequence" eval="1"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_npl" model="hr.salary.rule">
+            <field name="code">NPL</field>
+            <field name="name">Number of annual Leaves</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = worked_days.ANNLV.number_of_days
+]]></field>
+            <field name="quantity">1</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="sequence" eval="1"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_sick" model="hr.salary.rule">
+            <field name="code">NSL</field>
+            <field name="name">Number of sick Leaves</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = worked_days.SICKLV.number_of_days
+]]></field>
+            <field name="quantity">1</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="sequence" eval="1"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_ded_bded" model="hr.salary.rule">
+            <field name="code">BDED</field>
+            <field name="name">Basic Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * BASIC * -1
+else:
+    prorata_calc = 0
+result = round(inputs.BDI.amount + BASIC * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="5"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_bnet" model="hr.salary.rule">
+            <field name="code">BNET</field>
+            <field name="name">Basic (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (BASIC + BDED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="10"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_bdnet" model="hr.salary.rule">
+            <field name="code">BDNET</field>
+            <field name="name">Basic Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(BNET)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="20"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_bindnet" model="hr.salary.rule">
+            <field name="code">BINDNET</field>
+            <field name="name">Basic InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(BNET)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="20"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_allowance_ha" model="hr.salary.rule">
+            <field name="code">HA</field>
+            <field name="name">Housing Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.25)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="30"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_ded_haded" model="hr.salary.rule">
+            <field name="code">HADED</field>
+            <field name="name">Housing Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * HA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.HADEDI.amount + HA * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="40"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_hanet" model="hr.salary.rule">
+            <field name="code">HANET</field>
+            <field name="name">Housing Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (HA + HADED,2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="50"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_hadnet" model="hr.salary.rule">
+            <field name="code">HADNET</field>
+            <field name="name">Housing Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = HANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="60"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_haindnet" model="hr.salary.rule">
+            <field name="code">HAINDNET</field>
+            <field name="name">Housing Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = HANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="60"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_allowance_ta" model="hr.salary.rule">
+            <field name="code">TA</field>
+            <field name="name">Transport Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.1)
+if result> 3000.0:
+    result = 3000.0
+elif result < 500.0:
+    result = 500.0
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="70"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_allowance_tamol" model="hr.salary.rule">
+            <field name="code">TA</field>
+            <field name="name">Transport Allowance MOL</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_python_compute"></field>
+            <field name="amount_fix">900</field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="71"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_taceo" model="hr.salary.rule">
+            <field name="code">TA</field>
+            <field name="name">Unlimited Transport Allowance (10%)</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.1)
+]]>
+            </field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="72"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_ded_taded" model="hr.salary.rule">
+            <field name="code">TADED</field>
+            <field name="name">Transport Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * TA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.TADEDI.amount + TA * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="80"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_tanet" model="hr.salary.rule">
+            <field name="code">TANET</field>
+            <field name="name">Transport Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(TA + TADED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="90"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_tadnet" model="hr.salary.rule">
+            <field name="code">TADNET</field>
+            <field name="name">Transport Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = TANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="100"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_taindnet" model="hr.salary.rule">
+            <field name="code">TAINDNET</field>
+            <field name="name">Transport Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = TANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="100"/>
+            <field name="note"></field>
+        </record>
+
+        <!-- Unlimited Transport Allowance -->
+        <record id="hr_salary_rule_allowance_unta" model="hr.salary.rule">
+            <field name="code">UNTA</field>
+            <field name="name">Unlimited Transport Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = round(contract.wage * 0.1)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="70"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_ded_untaded" model="hr.salary.rule">
+            <field name="code">UNTADED</field>
+            <field name="name">Unlimited Transport Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * UNTA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.TADEDI.amount + UNTA * (NUPL / 30) * -1 + prorata_calc,2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="80"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_untanet" model="hr.salary.rule">
+            <field name="code">UNTANET</field>
+            <field name="name">Unlimited Transport Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = round(UNTA + UNTADED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="90"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_untadnet" model="hr.salary.rule">
+            <field name="code">UNTADNET</field>
+            <field name="name">Unlimited Transport Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = UNTANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="100"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_untaindnet" model="hr.salary.rule">
+            <field name="code">UNTAINDNET</field>
+            <field name="name">Unlimited Transport Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = UNTANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="100"/>
+            <field name="note"></field>
+        </record>
+
+        <!-- End Unlimited Transport Allowance -->
+        <record id="hr_salary_rule_ded_gosi" model="hr.salary.rule">
+            <field name="code">GOSI</field>
+            <field name="name">GOSI</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python"><![CDATA[
+gcc = ['BH','AE','QA','KW']   
+if employee.country_id.code=='SA':     
+    result = True   
+elif employee.country_id.code in gcc:     
+    result = True
+
+]]></field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+<![CDATA[
+result = contract.gosi_wage * 0.10
+if result > 4500:
+    result = 4500
+result = result * -1
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="200"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_companygosi" model="hr.salary.rule">
+            <field name="code">CGOSI</field>
+            <field name="name">Company GOSI</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+gcc = ['BH','AE','QA','KW']
+
+if employee.country_id.code=='SA':
+    result = contract.gosi_wage  * 0.12
+else:
+    result = contract.gosi_wage * 0.02
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="200"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_allowance_ca" model="hr.salary.rule">
+            <field name="code">CA</field>
+            <field name="name">Cashier Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_fix">500.00</field>
+            <field name="amount_select">fix</field>
+            <field name="amount_python_compute"></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="110"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_ded_caded" model="hr.salary.rule">
+            <field name="code">CADED</field>
+            <field name="name">Cashier Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * CA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.CADEDI.amount + CA * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="120"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_gen_calnet" model="hr.salary.rule">
+            <field name="code">CANET</field>
+            <field name="name">Cashier Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (CA - CADED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="130"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_caldirnet" model="hr.salary.rule">
+            <field name="code">CADNET</field>
+            <field name="name">Cashier Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = CANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="135"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_gen_calindirnet" model="hr.salary.rule">
+            <field name="code">CAINDNET</field>
+            <field name="name">Cashier Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = CANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="135"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_wdot" model="hr.salary.rule">
+            <field name="code">WDOT</field>
+            <field name="name">Week Day Overtime</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+                <![CDATA[
+if inputs.WDOTI.amount > 0:
+    result=True
+]]></field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = contract.wage/240 * inputs.WDOTI.amount * 1.5
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="1"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_ra10" model="hr.salary.rule">
+            <field name="code">RA</field>
+            <field name="name">Rare Allowance (10%)</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.1)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="140"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_ra15" model="hr.salary.rule">
+            <field name="code">RA</field>
+            <field name="name">Rare Allowance (15%)</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.15)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="140"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_ra20" model="hr.salary.rule">
+            <field name="code">RA</field>
+            <field name="name">Rare Allowance (20%)</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round(contract.wage * 0.2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="140"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_ded_raded" model="hr.salary.rule">
+            <field name="code">RADED</field>
+            <field name="name">Rare Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee) / 30 * RA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.RADEDI.amount + RA * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="150"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_ranet" model="hr.salary.rule">
+            <field name="code">RANET</field>
+            <field name="name">Rare Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (RA + RADED, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="160"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_radirnet" model="hr.salary.rule">
+            <field name="code">RADNET</field>
+            <field name="name">Rare Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = RANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="170"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_allowance_raindirnet" model="hr.salary.rule">
+            <field name="code">RAINDNET</field>
+            <field name="name">Rare Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = RANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="170"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_other_ded" model="hr.salary.rule">
+            <field name="code">OD</field>
+            <field name="name">Other Deduction</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (inputs.ODIN.amount * -1, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="170"/>
+            <field name="note"></field>
+        </record>
+
+        <record id="hr_salary_rule_other_earning" model="hr.salary.rule">
+            <field name="code">OE</field>
+            <field name="name">Other Earning</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (inputs.OEIN.amount, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="170"/>
+            <field name="note"></field>
+        </record>
+
+        <!-- Cost Of Living Allowance -->
+        <record id="hr_salary_rule_allowance_cla" model="hr.salary.rule">
+            <field name="code">CLA</field>
+            <field name="name">Cost Of Living Allowance</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <!-- <field name="amount_select">fix</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = 1000
+]]></field> -->
+            <field name="quantity">1</field>
+            <field name="sequence" eval="60"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_ded_claded" model="hr.salary.rule">
+            <field name="code">CLADED</field>
+            <field name="name">Cost Of Living Allowance Adjustment</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+if payslip.check_employee_start_date:
+    prorata_calc = (30 - payslip.number_of_days_new_employee)/30 * CLA * -1
+else:
+    prorata_calc = 0
+result = round(inputs.CLADEDI.amount + CLA * (NUPL / 30) * -1 + prorata_calc, 2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="70"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_clanet" model="hr.salary.rule">
+            <field name="code">CLANET</field>
+            <field name="name">Cost Of Living Allowance (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = round (CLA + CLADED,2)
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="80"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_cladnet" model="hr.salary.rule">
+            <field name="code">CLADNET</field>
+            <field name="name">Cost Of Living Allowance Direct (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = CLANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="90"/>
+            <field name="note"></field>
+        </record>
+
+
+        <record id="hr_salary_rule_basic_claindnet" model="hr.salary.rule">
+            <field name="code">CLAINDNET</field>
+            <field name="name">Cost Of Living Allowance InDirect (Net)</field>
+            <field name="category_id" ref="hr_salary_categ_general"/>
+            <field name="condition_select">none</field>
+            <field name="condition_python"># None</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+                <![CDATA[
+result = CLANET
+]]></field>
+            <field name="quantity">1</field>
+            <field name="sequence" eval="90"/>
+            <field name="note"></field>
+        </record>
+
+
+
+        <!-- Salary Rules Inputs  -->
+
+        <record id="hr_salary_rule_input_bdi" model="hr.rule.input">
+            <field name="name">Basic Adjustment</field>
+            <field name="code">BDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_bded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_hadedi" model="hr.rule.input">
+            <field name="name">Housing Adjustment</field>
+            <field name="code">HADEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_haded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_cladedi" model="hr.rule.input">
+            <field name="name">Cost Of Living Adjustment</field>
+            <field name="code">CLADEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_claded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_tadedi" model="hr.rule.input">
+            <field name="name">Transportation Adjustment</field>
+            <field name="code">TADEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_taded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_cadedi" model="hr.rule.input">
+            <field name="name">Cashier Adjustment</field>
+            <field name="code">CADEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_caded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_radedi" model="hr.rule.input">
+            <field name="name">Rare Adjustment</field>
+            <field name="code">RADEDI</field>
+            <field name="input_id" ref="hr_salary_rule_ded_raded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_odedi" model="hr.rule.input">
+            <field name="name">Other Deduction</field>
+            <field name="code">ODIN</field>
+            <field name="input_id" ref="hr_salary_rule_other_ded"/>
+        </record>
+
+        <record id="hr_salary_rule_input_oeari" model="hr.rule.input">
+            <field name="name">Other Earning</field>
+            <field name="code">OEIN</field>
+            <field name="input_id" ref="hr_salary_rule_other_earning"/>
+        </record>
+
+    </data>
+</openerp>

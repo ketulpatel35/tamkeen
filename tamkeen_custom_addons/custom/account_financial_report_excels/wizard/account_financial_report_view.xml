@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_report_finance_view_excel_report" model="ir.ui.view">
+        <field name="name">Accounting Report in Excel</field>
+        <field name="model">accounting.report</field>
+        <field name="inherit_id" ref="account.accounting_report_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_to']" position="after">
+                <field name="show_inital_balance" attrs="{'invisible': [('debit_credit','=',False)]}"/>
+            </xpath>
+            <xpath expr="/form/footer/button[1]" position="after">
+                <button name="check_report_excel" string="Print in Excel" type="object" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//field[@name='date_to']" position="attributes">
+                <attribute name="attrs">{'required':
+                    [('show_inital_balance','!=',False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_from']" position="attributes">
+                <attribute name="attrs">{'required':
+                    [('show_inital_balance','!=',False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="finance_xls_output_view" model="ir.ui.view">
+         <field name="name">Account Financial Excel Output</field>
+         <field name="model">accounting.finance.report.output.wizard</field>
+         <field name="arch" type="xml">
+             <form string="Excel Output">
+                   <separator colspan="4" string="Please save file as .xls excel format"/>
+                   <field name="name" invisible="1"/>
+                   <field name="xls_output" filename='name' readonly='1'/>
+                   <footer>
+                       <button string="Cancel" class="oe_link" special="cancel"/>
+                   </footer>
+             </form>
+         </field>
+       </record>
+</odoo>

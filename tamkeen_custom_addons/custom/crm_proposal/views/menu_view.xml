@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem
+            action="action_crm_proposal"
+            id="crm_proposal_menu"
+            parent="sales_team.menu_sales"
+            sequence="5" name="Proposal"/>
+</odoo>

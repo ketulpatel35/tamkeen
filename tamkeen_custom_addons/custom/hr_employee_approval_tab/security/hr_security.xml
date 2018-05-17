@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data >
+        <record id="view_employees_approvla_tab" model="res.groups">
+            <field name="name">View Employees Approval Tab</field>
+        </record>
+    </data>
+</odoo>

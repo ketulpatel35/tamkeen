@@ -1,0 +1,52 @@
+<odoo>
+    <record model="ir.ui.view"
+            id="hr_payslip_run_form_inherit_for_recording">
+        <field name="name">hr.payslip.run.form.inherit.for.recording</field>
+        <field name="inherit_id"
+               ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="model">hr.payslip.run</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/label" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_time_record"
+                            type="object"
+                            string="Time Recording">
+                    </button>
+                    <button type="object"
+                            name="generate_pyaslip_amendment"
+                            string="Payslip Amendment"/>
+                    </div>
+            </xpath>
+            <field name="date_start" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </field>
+            <field name="date_end" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </field>
+            <xpath expr="//sheet/group/label"
+                   position="before">
+                <field name="payroll_period_id" required="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_payroll.action_hr_payslip_run_tree"
+            model="ir.actions.act_window">
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+    <!--<record model="ir.ui.view"-->
+            <!--id="view_hr_payslip_form_inherit_for_customization">-->
+        <!--<field name="name">view.hr.payslip.form.inherit.for.customization</field>-->
+        <!--<field name="inherit_id"-->
+               <!--ref="hr_payroll.view_hr_payslip_form"/>-->
+        <!--<field name="model">hr.payslip</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<xpath-->
+                    <!--expr="//field[@name='worked_days_line_ids']/tree/field[@name='number_of_days']" position="before">-->
+                <!--<field name="simulated_days"/>-->
+                <!--<field name="recorded_days"/>-->
+            <!--</xpath>-->
+        <!--</field>-->
+    <!--</record>-->
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!--Hold wizard-->
+        <record id="view_employee_obj_can_wizard" model="ir.ui.view">
+            <field name="name">Employee Objective cancellation wizard</field>
+            <field name="model">employee.objective.cancellation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Employee objective cancallation Wizard">
+                    <group>
+                        <field name="can_remarks"/>
+                        <field name="can_date"/>
+                    </group>
+                    <footer>
+                        <button name="create_request"
+                            string="Payment" type="object"
+                            class="btn-primary"/>
+                        <button string="Cancel"
+                            class="btn-default"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_emp_obj_can_wizard" model="ir.actions.act_window">
+            <field name="name">Employee Cancellation wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.objective.cancellation.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_employee_obj_can_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="service_panel_wizard_view" model="ir.ui.view">
+            <field name="name">service.panel.wizard.view</field>
+            <field name="model">service.panel.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Service Panel Wizard">
+                    <group name="service_panel" colspan="4" col="4">
+                        <field name="overtime"/>
+                    </group>
+                    <group colspan="4" col="4" name="service_panel_options">
+                        <field name="pre_overtime"
+                               attrs="{'invisible': [('overtime', '=', False)], 'readonly': [('claim_overtime', '=', True)]}"/>
+                        <field name="claim_overtime"
+                               attrs="{'invisible': [('overtime', '=', False)], 'readonly': [('pre_overtime', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="open_service_panel"
+                                string="Open Service Panel"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_open_service_panel_wizard">
+            <field name="name">Service Panel Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.panel.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="open_service_panel_wizard" name="Service Panel Wizard"
+                  action="act_open_service_panel_wizard" parent="services_config_panel_child"/>
+
+    </data>
+</odoo>

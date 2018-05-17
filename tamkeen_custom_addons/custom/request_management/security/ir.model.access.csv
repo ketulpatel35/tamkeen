@@ -1,0 +1,7 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+request_access_right_user,request_access_right,model_request_general,,1,1,1,1
+request_access_right_manager,request_access_right,model_request_general,,1,1,1,1
+request_access_right_manager_general,request_access_right,model_request_general,,1,1,1,1
+request_types_access_right_user,request_types_access_right,model_request_types,,1,0,0,0
+request_types_access_right_manager,request_types_access_right,model_request_types,,1,1,1,1
+request_types_access_right_manager_general,request_types_access_right,model_request_types,,1,1,1,1

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+        <record model="ir.rule" id="attachment_normal_emp">
+            <field name="name">Employee see Own leave attache</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+             <field name="domain_force">[('res_model','in',['request.general','hr.holidays','purchase.requisition','hr.expense.expense'])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="global" eval="False"/>
+        </record>
+        
+       <record model="ir.rule" id="attachment_emp_delete">
+            <field name="name">Delete attachment purchase</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">[('user_id','=',1),('user_id','=',-1)]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="global" eval="False"/>
+        </record> 
+
+
+        <record model="ir.rule" id="attachment_see_all_for_other_groups">
+            <field name="name">all other groups see attachment</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman')),(4, ref('account.group_account_invoice')),(4, ref('purchase.group_purchase_user')),(4, ref('stock.group_stock_user'))]"/>
+             <field name="domain_force">[('res_model','not in',['hr.employee'])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="global" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="attachment_see_all_for_other_groups">
+            <field name="name">all other groups see attachment</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman')),(4, ref('account.group_account_invoice')),(4, ref('purchase.group_purchase_user')),(4, ref('stock.group_stock_user'))]"/>
+             <field name="domain_force">[('res_model','not in',['hr.employee'])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="global" eval="False"/>
+        </record>
+        
+        
+        <!-- Delete -->
+        
+       <record model="ir.rule" id="attachment_delete_all_for_pur">
+            <field name="name">Delete attachment purchase</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+             <field name="domain_force">[('res_model','not in',['request.general','hr.holidays','hr.employee','hr.expense.expense'])]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="global" eval="False"/>
+        </record>
+        
+       <record model="ir.rule" id="attachment_delete_purch">
+            <field name="name">Delete attachment all other groups</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman')),(4, ref('account.group_account_invoice')),
+            (4, ref('stock.group_stock_user'))]"/>
+             <field name="domain_force">[('res_model','not in',['request.general','purchase.requisition','hr.holidays','hr.employee','hr.expense.expense'])]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="global" eval="False"/>
+        </record>
+        
+        <!-- End Delete -->
+        
+        
+        <!-- HR -->
+        
+        
+       <record model="ir.rule" id="attachment_delete_hr">
+            <field name="name">HR attachment purchase groups</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+             <field name="domain_force">[('res_model','not in',['purchase.requisition'])]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="global" eval="False"/>
+        </record>
+        
+       <record model="ir.rule" id="attachment_see_hr_all">
+            <field name="name">HR attachment purchase groups</field>
+            <field name="model_id" ref="base.model_ir_attachment"/>
+            <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+             <field name="domain_force">[(1,'=',1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="global" eval="False"/>
+        </record>
+    </data>
+</openerp>
+

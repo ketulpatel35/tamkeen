@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shift Assignment Wizard-->
+    <record id="org_shift_assignment_wizard" model="ir.ui.view">
+        <field name="name">org.shift.assignment.wizard</field>
+        <field name="model">shift.assignment</field>
+        <field name="arch" type="xml">
+            <form>
+                <group colspan="4" col="4">
+                    <field name="date_from" required="1"/>
+                    <field name="date_to" required="1"/>
+                    <field name="category" required="1"/>
+                    <field name="shift_id" required="1"/>
+                </group>
+                <group>
+                    <field name="employee_ids"
+                           attrs="{'invisible': [('category', '!=', 'by_employee')]}"/>
+                    <field name="department_ids"
+                           attrs="{'invisible': [('category', '!=', 'by_department')]}"/>
+                    <field name="cost_center_ids"
+                           attrs="{'invisible': [('category', '!=', 'by_cost_center')]}"/>
+                    <field name="category_ids"
+                           attrs="{'invisible': [('category', '!=', 'by_tag')]}"/>
+                </group>
+                <footer>
+                    <button name="assign_shift" string="Assign Shift"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_shift_assignment"
+                model="ir.actions.act_window">
+            <field name="name">Shift Assignment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shift.assignment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="org_shift_assignment_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    <menuitem id="menu_shift_assignment" name="Shift Assignment"
+              parent="organization_structure.menu_org_configuration"
+              sequence="2" action="action_shift_assignment"/>
+</odoo>

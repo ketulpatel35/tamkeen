@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="minimal_layout" inherit_id="report.minimal_layout">
+        <xpath expr="//t[@t-if='subst is True']" position="replace">
+            <t t-if="subst is True">
+                <script>
+                    function subst() {
+                    var vars = {};
+                    var x = document.location.search.substring(1).split('&amp;');
+                    for (var i in x) {
+                    var z = x[i].split('=', 2);
+                    vars[z[0]] = unescape(z[1]);
+                    }
+                    var x=['frompage', 'topage', 'page', 'webpage', 'section', 'subsection', 'subsubsection'];
+                    for (var i in x) {
+                    var y = document.getElementsByClassName(x[i]);
+                    for (var j=0; j&lt;y.length; ++j)
+                    y[j].textContent = vars[x[i]];
+                    }
+                    var operations = {
+                    'certi-not-first-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.frompage) ? "hidden" : "visible";
+                    },
+                    'certi-not-last-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.topage) ? "hidden" : "visible";
+                    },
+                    'certi-first-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.frompage) ? "visible" : "hidden";
+                    },
+                    'certi-last-page': function (elt) {
+                    elt.style.visibility = (vars.page === vars.topage) ? "visible" : "hidden";
+                    },
+                    };
+                    for (var klass in operations) {
+                    var y = document.getElementsByClassName(klass);
+                    for (var j=0; j&lt;y.length; ++j)
+                    operations[klass](y[j]);
+                    }
+                    }
+                </script>
+            </t>
+        </xpath>
+    </template>
+    <template id="report_salary_english">
+        <t t-call="report.html_container">
+            <t t-call="hr_salary_certificates.salary_certi_report_header_footer_new">
+                <t t-foreach="docs" t-as="o">
+                    <!--<t t-call="report.external_layout">-->
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <style type="text/css">
+                                .headerreport{
+                                font-size:19px;
+                                text-align:center;
+                                font-family:Sakkal Majalla;
+                                }
+                                .designation{
+                                font-size:19px;
+                                font-family:Sakkal Majalla;
+                                }
+                                .table2{
+                                font-size:19px;
+                                padding-top: 10px;
+                                font-family:Sakkal Majalla;
+                                }
+                                .table3{
+                                font-size:19px;
+                                font-family:Sakkal Majalla;
+
+                                }
+                                .purpose{
+                                font-size:19px;
+                                font-family:Sakkal Majalla;
+                                }
+                                .signature{
+                                padding-top: 10px;
+                                font-family:Sakkal Majalla;
+                                }
+                                table {
+                                border-collapse: collapse;
+                                font-family:Sakkal Majalla;
+                                }
+                                table, td{
+                                border: 1px solid black;
+                                font-family:Sakkal Majalla;
+                                }
+                                .tbl-td {
+                                height:20%;
+                                padding-top: 2px;
+                                padding-left: 15px;
+                                padding-right: 15px;
+                                padding-bottom: 2px;
+                                font-family:Sakkal Majalla;
+                                }
+                                .tbl-gray {
+                                text-align:center;
+                                background-color: #808080;
+                                font-family:Sakkal Majalla;
+                                }
+                                .table-td{
+                                border: 0px solid black;
+                                }
+                                #block_container
+                                {
+                                text-align:center;
+                                }
+                                #bloc1, #bloc2
+                                {
+                                display:inline;
+                                }
+                                {
+                                font-family: Sakkal Majalla;
+                                }
+                                .simple_text{
+                                    font-family:Sakkal Majalla;
+                                }
+                            </style>
+                            <t t-set="mf_tag" t-value="'his'"/>
+                            <t t-set="mf_tag1" t-value="'he'"/>
+                            <t t-if="o.employee_id.gender == 'female'">
+                                <t t-set="mf_tag" t-value="'her'"/>
+                                <t t-set="mf_tag1" t-value="'she'"/>
+                            </t>
+                            <div class="designation">
+                                <b>To:</b>
+                                <t t-if="not o.need_to_add_missing_destination">
+                                    <t t-if="o.bank_id">
+                                        <t t-esc="o.bank_id.name"/>
+                                    </t>
+                                    <t t-elif="o.destination_organization_id">
+                                        <t t-esc="o.destination_organization_id.name"/>
+                                    </t>
+                                </t>
+                                <t t-if="o.need_to_add_missing_destination">
+                                    <t t-if="o.other_dest_org">
+                                        <t t-esc="o.other_dest_org"/>
+                                    </t>
+                                </t>
+                                <br/><br/>
+                            </div>
+                            <table width="100%;" class="designation">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center tbl-gray tbl-td" width="100%;" colspan="2">
+                                            <b>Employee Information</b>
+                                        </td>
+                                    </tr>
+                                    <!-- name -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b>Name</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.employee_id.name">
+                                                <span class="simple_text" t-esc="o.employee_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <!-- Joining Date -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b>Joining Date</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.date_of_joining">
+                                                <span class="simple_text" t-esc="o.date_of_joining"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <!-- Contract End Date -->
+                                    <t t-if="o.current_country_code != 'SA'">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td">
+                                                <b>Contract End Date</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td">
+                                                <t t-if="o.employee_id.contract_id and o.employee_id.contract_id.contract_end_date">
+                                                        <span class="simple_text" t-esc="o.employee_id.contract_id.contract_end_date"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <!-- Position -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b>Position</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.job_id">
+                                                <span class="simple_text" t-esc="o.job_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <!-- Nationality -->
+                                    <tr>
+                                        <td width="35%;" class="tbl-td">
+                                            <b>Nationality</b>
+                                        </td>
+                                        <td width="65%;" class="tbl-td">
+                                            <t t-if="o.country_id">
+                                                <span class="simple_text" t-esc="o.country_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <!-- Iqama Number -->
+                                    <t t-if="o.current_country_code != 'SA'">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td">
+                                                <b>Iqama Number</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td">
+                                                <t t-if="o.iqama_number">
+                                                    <span class="simple_text" t-esc="o.iqama_number"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.current_country_code == 'SA'">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td">
+                                                <b>Identification Number</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td">
+                                                <t t-if="o.identification_number">
+                                                    <span class="simple_text" t-esc="o.identification_number"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <!-- Passport Number -->
+                                    <t t-if="o.is_passport_number">
+                                        <tr>
+                                            <td width="35%;" class="tbl-td">
+                                                <b>Passport Number</b>
+                                            </td>
+                                            <td width="65%;" class="tbl-td">
+                                                <span class="simple_text" t-esc="o.employee_id.passport_id"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <t t-set="payslip_data" t-value="o.get_data()"/>
+                            <t t-if="payslip_data and o.emp_salary_rule_ids">
+                                <div class="table2">
+                                    <b>Currently
+                                        <t t-esc="mf_tag1"/>
+                                        is drawing monthly
+                                        salary as per following breakup:
+                                    </b>
+                                </div>
+                                <table width="100%;" class="table3">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center tbl-gray tbl-td" width="100%;" colspan="2">
+                                                <b>Salary Details</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="65%;" class="tbl-td text-center">
+                                                <b>Salary Structure</b>
+                                            </td>
+                                            <td width="35%;" class="tbl-td text-center">
+                                                <b>Amount</b>
+                                            </td>
+                                        </tr>
+                                        <!-- salary rule -->
+
+                                        <t t-foreach="o.emp_salary_rule_ids" t-as="line_rec">
+                                            <tr>
+                                                <td width="65%;" class="tbl-td">
+                                                    <b>
+                                                        <t t-esc="line_rec.name"/>
+                                                    </b>
+                                                </td>
+                                                <td width="35%;" style="text-align: center;" class="tbl-td">
+                                                    <t t-if="line_rec.code in payslip_data">
+                                                        <t t-esc="payslip_data[line_rec.code] or 0.0"/>
+
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="len(o.emp_salary_rule_ids) &gt; 1">
+                                            <tr>
+                                                <td width="65%;" class="tbl-td">
+                                                    <b>Total</b>
+                                                </td>
+                                                <td width="35%;" class="tbl-td text-center">
+                                                    <t>
+                                                        <t
+                                                                t-esc="payslip_data['total'] or 0.00"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                    </tbody>
+                                </table>
+                            </t>
+                            <br/>
+                            <div class="purpose">
+                                <b>Purpose:</b>
+                                <t t-if="not o.need_to_add_missing_purpose">
+                                    <t t-if="o.dest_org_purpose_id">
+                                        <t t-esc="o.dest_org_purpose_id.name"/>
+                                    </t>
+                                </t>
+                                <t t-if="o.need_to_add_missing_purpose">
+                                    <t t-if="o.other_purpose">
+                                        <t t-esc="o.other_purpose"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <div class="purpose">
+                                <b>Tamkeen Technologies certifies that the
+                                    mentioned employee is still performing
+                                    <t t-esc="mf_tag"/>
+                                    duties till this moment
+                                    and
+                                    <t t-esc="mf_tag1"/>
+                                    has been given this
+                                    certificate upon
+                                    <t t-esc="mf_tag"/>
+                                    request, and without any
+                                    liability on the company.
+                                </b>
+                                <t t-if="o.employee_id.company_id.salary_certificate_signature">
+                                    <div class="simple_text">
+                                        <b> Regards,</b><br/><img width="220px" style="padding-left:70px;" height="200px" class="img-responsive" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.salary_certificate_signature"/>
+
+                                        <!--<img class="img-responsive"-->
+                                        <!--src="/hr_salary_certificates/static/description/icon.png" width="200px" height="75px"/>-->
+                                    </div>
+                                </t>
+                                <div>
+                                    <b class="signature">
+                                        Signature of Authorised Official: <t t-if="o.destination_organization_type.employee_id">
+                                            <span class="simple_text" t-esc="o.destination_organization_type.employee_id.name"/>
+                                        </t>
+                                    </b>
+                                    <br/>
+                                    <b class="signature">
+                                        <div class="simple_text" 
+                                            style="float:left;">
+                                            Position Held:
+                                            <t t-if="o.destination_organization_type.employee_id">
+                                                <span class="simple_text" t-esc="o.destination_organization_type.employee_id.job_id.name"/>
+                                            </t>
+                                            <br/>
+                                            <b style="padding-bottom:150px;">Date:
+                                                <t t-esc="o.get_current_date()"/>
+                                            </b>
+                                        </div>
+                                        <div>
+                                            <t t-if="o.employee_id.company_id.salary_certificate_stamp">
+                                                <img width="220px" height="200px" style="padding-top: 28px;" class="img-responsive" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.salary_certificate_stamp"/>
+                                            </t>
+                                        </div>
+                                    </b>
+                                </div>
+                                <br/>
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                    <!--</t>-->
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!--Header footer for english report-->
+    <template id="salary_certi_report_header_footer_new">
+        <t t-call="hr_salary_certificates.salary_certificates_report_header"/>
+        <t t-raw="0"/>
+        <t t-call="hr_salary_certificates.salary_certificates_report_footer"/>
+    </template>
+
+    <template id="hr_salary_certificates.salary_certificates_report_header">
+        <div class="header">
+            <t t-foreach="docs" t-as="o">
+                <div class="col-xs-8" style="font-family: Sakkal Majalla;">
+
+                    <img class="img-responsive" src="/hr_salary_certificates/static/src/img/Logo_English.jpg" width="230px" height="75px"/>
+                </div>
+                <div class="col-xs-4 text-right" style="padding-top: 5%;font-size:17px;font-family: Sakkal Majalla;">
+
+                    <t t-if="o.name">
+                        <t t-esc="o.name"/>
+                    </t>
+                </div>
+                <div class="row" style="font-family: Sakkal Majalla;">
+                    <t t-if="o.employee_id.company_id.watermark_img">
+                        <div style="position:absolute;text-align:center;z-index:-1;border:0;opacity:0.1;padding-top:350px;">
+                            <img t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.watermark_img"/>
+                        </div>
+                    </t>
+                </div>
+                <div class="headerreport" style="text-align:center;font-size:19px;font-family:Sakkal Majalla;">
+                    <b style="text-align:center;font-size:22px;font-family:Sakkal Majalla;" class="headerreport">EMPLOYMENT CERTIFICATE</b>
+                </div>
+            </t>
+        </div>
+    </template>
+
+    <template id="hr_salary_certificates.salary_certificates_report_footer"
+              name="salary_certificates_report_footer">
+        <t t-foreach="docs" t-as="o">
+            <div class="footer">
+                <div class="certi-last-page" style="font-size:19px;font-family: Sakkal Majalla;">
+                    * This certificate issued electronically.
+                    <br/>
+                    If no company stamp available please confirm
+                    employment on company letter headed.<br/>
+                    <!--For more details please contact:-->
+                    <!--<t t-if="o.destination_organization_type.contact_email">-->
+                        <!--<span style="font-family: Sakkal Majalla;font-size:17px;" t-esc="o.destination_organization_type.contact_email"/>-->
+                    <!--</t>-->
+                </div>
+                <div style="border-top: 1px solid #808080;font-size:12px;color:#808080;font-family: Sakkal Majalla;">
+                    <t t-if="o.employee_id.company_id">
+                        <b>Address:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.street">
+                                <span t-field="o.employee_id.company_id.street"/>
+                            </t>
+                            -
+                            <t t-if="o.employee_id.company_id.street2">
+                                <span t-field="o.employee_id.company_id.street2"/>
+                            </t>
+                        </span>
+                          <b>City:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.city">
+                                <span t-field="o.employee_id.company_id.city"/>
+                            </t>
+                        </span>
+                          <b>Tel:</b>
+                        <span>
+                            <t t-if="o.employee_id.company_id.phone">
+                                <span t-field="o.employee_id.company_id.phone"/>
+                            </t>
+                        </span>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+</odoo>

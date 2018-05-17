@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Sequences for Appraisal Performance -->
+        <record id="seq_performance_appraisal" model="ir.sequence">
+            <field name="name">Appraisal Performance</field>
+            <field name="code">performance.appraisal</field>
+            <field name="prefix">PA</field>
+            <field name="padding">6</field>
+        </record>
+
+    </data>
+</openerp>

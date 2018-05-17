@@ -1,0 +1,1246 @@
+diff --git a/custom/hr_attendance_customization/__manifest__.py b/custom/hr_attendance_customization/__manifest__.py
+index 5b26b61..9ce3694 100644
+--- a/custom/hr_attendance_customization/__manifest__.py
++++ b/custom/hr_attendance_customization/__manifest__.py
+@@ -12,6 +12,7 @@
+         'hr_admin'
+     ],
+     'data': [
++        'security/user_groups.xml',
+         'views/hr_attendance_view.xml'
+     ],
+     'installable': True,
+diff --git a/custom/hr_attendance_customization/views/hr_attendance_view.xml b/custom/hr_attendance_customization/views/hr_attendance_view.xml
+index 5b2d690..8f8aef1 100644
+--- a/custom/hr_attendance_customization/views/hr_attendance_view.xml
++++ b/custom/hr_attendance_customization/views/hr_attendance_view.xml
+@@ -3,4 +3,9 @@
+     <record model="ir.actions.report.xml" id="hr_attendance.hr_employee_print_badge">
+         <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
+     </record>
++
++    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_root">
++        <field name="groups_id" eval="[(6,0,[ref('hr_attendance.group_hr_attendance_manager')]), (6,0,[ref('hr_attendance.group_hr_attendance_user')])]" />
++    </record>
++
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_contract_init/views/hr_contract_view.xml b/custom/hr_contract_init/views/hr_contract_view.xml
+index f627cc4..fcd5f68 100755
+--- a/custom/hr_contract_init/views/hr_contract_view.xml
++++ b/custom/hr_contract_init/views/hr_contract_view.xml
+@@ -156,4 +156,18 @@
+         </field>
+     </record>
+ 
++    <record id="remove_bank_account_id_for_group" model="ir.ui.view">
++        <field name="name">hr.employee.remove.group</field>
++        <field name="model">hr.employee</field>
++        <field name="inherit_id"
++               ref="hr_contract.hr_hr_employee_view_form2" />
++        <field name="arch" type="xml">
++            <data>
++                <xpath expr="//button[@name='%(hr_contract.act_hr_employee_2_hr_contract)d']" position="attributes">
++                    <attribute name="groups">hr_contract_init.group_view_all_contracts</attribute>
++                </xpath>
++            </data>
++        </field>
++    </record>
++
+ </odoo>
+diff --git a/custom/hr_holidays_extension/models/hr_holidays_extend.py b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+index 6cfe4c3..3a11013 100644
+--- a/custom/hr_holidays_extension/models/hr_holidays_extend.py
++++ b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+@@ -79,7 +79,7 @@ class HrHolidaysStatus(models.Model):
+     allow_future_balance = fields.Boolean(
+         "Allow Future Balance",
+         help="Allow the calculation of future leave for this type.")
+-    hr_seniour = fields.Boolean(string='HR Seniour Approval')
++    # hr_seniour = fields.Boolean(string='HR Seniour Approval')
+ 
+ 
+ class HrLeaveDaysInclude(models.Model):
+@@ -321,7 +321,7 @@ class HrHolidays(models.Model):
+                               ('refuse', 'Refused'),
+                               ('vp', 'VP Approval'),
+                               ('validate1', 'HR Approval'),
+-                              ('validate2', 'Senior HR Approval'),
++                              # ('validate2', 'Senior HR Approval'),
+                               ('ceo', 'CEO Approval'),
+                               ('validate', 'Approved')],
+                              string='Status', readonly=True,
+@@ -389,8 +389,7 @@ class HrHolidays(models.Model):
+         :return:True
+         '''
+         for rec in self:
+-            rec.write({'state': 'amend',
+-                       'amend': True})
++            rec.write({'state': 'draft', 'amend': True})
+         template_obj = self.env['mail.template']
+         ir_model_data = self.env['ir.model.data']
+         try:
+@@ -1189,8 +1188,8 @@ class HrHolidays(models.Model):
+             if (this.holiday_status_id.ceo_number >
+                     0 and this.holiday_status_id.ceo_number <= this.real_days):
+                 this.write({'state': 'ceo'})
+-            elif this.holiday_status_id.hr_seniour:
+-                this.state = 'validate2'
++            # elif this.holiday_status_id.hr_seniour:
++            #     this.state = 'validate2'
+             else:
+                 this.action_confirm()
+                 this.action_validate()
+diff --git a/custom/hr_holidays_extension/views/hr_holidays_view.xml b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+index eb118fd..d832b06 100644
+--- a/custom/hr_holidays_extension/views/hr_holidays_view.xml
++++ b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+@@ -24,10 +24,10 @@
+                                     states="validate1"
+                                     class="oe_highlight" type="object"
+                                     groups="hr_holidays.group_hr_holidays_user"/>
+-                            <button string="Senior HR Approval" name="validate"
+-                                    states="validate2"
+-                                    class="oe_highlight" type="object"
+-                                    groups="hr_holidays_extension.senior_hr_approval_group"/>
++                            <!--<button string="Senior HR Approval" name="validate"-->
++                            <!--states="validate2"-->
++                            <!--class="oe_highlight" type="object"-->
++                            <!--groups="hr_holidays_extension.senior_hr_approval_group"/>-->
+                             <!-- Reset to Draft -->
+                             <button string="Reset to draft" name="action_draft"
+                                     states="refuse" class="oe_highlight" type="object" groups="hr_holidays.group_hr_holidays_user"/>
+@@ -47,9 +47,9 @@
+                             <button string="Refuse" name="action_refuse_wizard"
+                                     states="ceo" type="object"
+                                     groups="hr_holidays_extension.group_leave_ceo_approval"/>
+-                            <button string="Refuse" name="action_refuse_wizard"
+-                                    states="validate2" type="object"
+-                                    groups="hr_holidays_extension.senior_hr_approval_group"/>
++                            <!--<button string="Refuse" name="action_refuse_wizard"-->
++                            <!--states="validate2" type="object"-->
++                            <!--groups="hr_holidays_extension.senior_hr_approval_group"/>-->
+                             <!--Amend -->
+                             <button name="button_amend" string="Amend" groups="base.group_user" type="object" attrs="{'invisible': ['|', ('type', '=', 'add'), ('state', 'not in', ('validate'))]}" confirm="Are you sure you want to amend this request?"/>
+                             <button name="button_cancel" string="Cancel" groups="hr_holidays.group_hr_holidays_user" type="object" attrs="{'invisible': ['|', ('type', '=', 'add'), ('state', 'not in', ('validate'))]}" confirm="Are you sure you want to cancel this request?"/>
+@@ -283,7 +283,7 @@
+                                         <field name="hr_appr"/>
+                                         <field name="double_validation"/>
+                                         <field name="limit"/>
+-                                        <field name="hr_seniour"/>
++                                        <!--<field name="hr_seniour"/>-->
+                                     </group>
+                                     <group string="Misc">
+                                         <field name="color_name"/>
+@@ -380,5 +380,17 @@
+                 </xpath>
+             </field>
+         </record>
++
++        <record id="view_employee_form_leave_inherit_for_group" model="ir.ui.view">
++            <field name="name">hr.employee.leave.form.inherit.for_group</field>
++            <field name="model">hr.employee</field>
++            <field name="inherit_id" ref="hr_holidays.view_employee_form_leave_inherit"/>
++            <field name="arch" type="xml">
++                <xpath expr="//div[@name='button_box']//button[@name='%(hr_holidays.act_hr_employee_holiday_request)d']" position="attributes">
++                    <attribute name="groups">hr_holidays_extension.group_leave_all_requests,hr_holidays.group_hr_holidays_user</attribute>
++                </xpath>
++            </field>
++        </record>
++
+     </data>
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_holidays_extension/views/templates.xml b/custom/hr_holidays_extension/views/templates.xml
+index 5158c4b..90a8ec9 100644
+--- a/custom/hr_holidays_extension/views/templates.xml
++++ b/custom/hr_holidays_extension/views/templates.xml
+@@ -55,8 +55,7 @@ form&amp;model=hr.holidays&amp;menu_id=192&amp;action=291"> Click Here. </a>
+             <field name="name">Leave Amendement</field>
+             <field name="model_id" ref="hr_holidays.model_hr_holidays" />
+             <field name="email_from">${user.email}</field>
+-            <field
+-                    name="email_to">${object.company_id.hr_group_email}
++            <field name="email_to">${object.holiday_status_id.company_id.hr_group_email}
+             </field>
+             <field name="email_cc"></field>
+             <field name="subject"> Leave Amendement </field>
+diff --git a/custom/hr_infraction/security/ir_rule.xml b/custom/hr_infraction/security/ir_rule.xml
+index eba2fcc..93f18bf 100644
+--- a/custom/hr_infraction/security/ir_rule.xml
++++ b/custom/hr_infraction/security/ir_rule.xml
+@@ -3,7 +3,7 @@
+   <data>
+       
+     <record id="infraction_emp_read" model="ir.rule">
+-        <field name="name">Infraction </field>
++        <field name="name">Infraction</field>
+         <field name="model_id" ref="model_hr_infraction"/>
+         <field name="domain_force">[('employee_id.user_id.id', '=', user.id)]</field>
+         <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+diff --git a/custom/hr_payroll_customization/security/ir.model.access.csv b/custom/hr_payroll_customization/security/ir.model.access.csv
+index b5fe527..ecbb944 100644
+--- a/custom/hr_payroll_customization/security/ir.model.access.csv
++++ b/custom/hr_payroll_customization/security/ir.model.access.csv
+@@ -13,6 +13,7 @@ access_hr_payslip_worked_days_officer,hr.payslip.worked.days.officer,hr_payroll.
+ access_hr_payslip_worked_days_auditor,hr.payslip.worked.days.auditor,hr_payroll.model_hr_payslip_worked_days,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+ 
+ hr_payroll.access_hr_payslip_run,hr.payslip.run,hr_payroll.model_hr_payslip_run,hr_payroll.group_hr_payroll_manager,0,0,0,0
++access_hr_payslip_run_officer,hr.payslip.run.officer,hr_payroll.model_hr_payslip_run,hr_payroll.group_hr_payroll_user,1,1,1,1
+ 
+ hr_payroll.access_hr_payroll_structure,hr.payroll.structure,hr_payroll.model_hr_payroll_structure,hr_payroll.group_hr_payroll_manager,1,1,1,1
+ hr_payroll.access_hr_salary_rule_category,hr.salary.rule.category,hr_payroll.model_hr_salary_rule_category,hr_payroll.group_hr_payroll_manager,1,1,1,1
+diff --git a/custom/hr_payroll_customization/security/user_groups.xml b/custom/hr_payroll_customization/security/user_groups.xml
+index d859f3d..a9b690e 100644
+--- a/custom/hr_payroll_customization/security/user_groups.xml
++++ b/custom/hr_payroll_customization/security/user_groups.xml
+@@ -17,7 +17,7 @@
+             <field name="name">Payroll Officer</field>
+             <field name="implied_ids" eval="[(4, ref('hr_payroll_customization.group_payroll_auditor'))]"/>
+         </record>
+-        <delete model="res.groups" id="hr_payroll.group_hr_payroll_manager"/>
++        <!--<delete model="res.groups" id="hr_payroll.group_hr_payroll_manager"/>-->
+         <record id="hr_payroll.group_hr_payroll_manager" model="res.groups">
+             <field name="name">Payroll Configuration</field>
+             <field name="category_id" ref="payroll_management"/>
+diff --git a/custom/hr_payroll_customization/views/hr_payroll_view.xml b/custom/hr_payroll_customization/views/hr_payroll_view.xml
+index 3d3c3d4..24c6590 100644
+--- a/custom/hr_payroll_customization/views/hr_payroll_view.xml
++++ b/custom/hr_payroll_customization/views/hr_payroll_view.xml
+@@ -1,6 +1,26 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <odoo>
+     <record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_root">
+-        <field name="groups_id" eval="[(6,0,[ref('hr_payroll_customization.group_payroll_auditor'),ref('hr_payroll.group_hr_payroll_manager')])]" />
++        <field name="groups_id" eval="[(6,0,[ref('hr_payroll_customization.group_payroll_auditor'),ref('hr_payroll.group_hr_payroll_user'), ref('hr_payroll.group_hr_payroll_manager')])]" />
+     </record>
++
++    <!--<record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_configuration">-->
++        <!--<field name="groups_id" eval="[(6,0,[ref('hr_payroll.group_hr_payroll_manager')])]" />-->
++    <!--</record>-->
++
++    <!--<record model="ir.ui.menu" id="hr_payroll.menu_hr_payslip_run">-->
++        <!--<field name="groups_id" eval="[(6,0,[ref('hr_payroll.group_hr_payroll_user')])]" />-->
++    <!--</record>-->
++    <!-- Employee View -->
++    <record id="payroll_hr_employee_view_form_for_group" model="ir.ui.view">
++        <field name="name">payroll.hr.employee.view.form.for.group</field>
++        <field name="model">hr.employee</field>
++        <field name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
++        <field name="arch" type="xml">
++            <xpath expr="//div//button[@name='%(hr_payroll.act_hr_employee_payslip_list)d']" position="attributes">
++                <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
++            </xpath>
++        </field>
++    </record>
++
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_payroll_period/security/ir.model.access.csv b/custom/hr_payroll_period/security/ir.model.access.csv
+index 8140ffc..5b4128a 100644
+--- a/custom/hr_payroll_period/security/ir.model.access.csv
++++ b/custom/hr_payroll_period/security/ir.model.access.csv
+@@ -8,6 +8,10 @@ access_hr_payroll_period_schedule_hro,access_hr_payroll_period_schedule,model_hr
+ 
+ access_hr_payslip_amendment_hruser,access_hr_payslip_amendment,model_hr_payslip_amendment,hr_payroll.group_hr_payroll_user,1,1,1,1
+ 
++
++access_hr_payslip_exception_auditor,access.hr.payslip.exception.auditor,model_hr_payslip_exception,hr_payroll_customization.group_payroll_auditor,1,0,0,0
++access_hr_payslip_exception_officer,access.hr.payslip.exception.officer,model_hr_payslip_exception,hr_payroll.group_hr_payroll_user,1,1,1,1
++
+ access_hr_payslip_exception_rule_hrm,access_hr_payslip_exception_rule,model_hr_payslip_exception_rule,hr_payroll.group_hr_payroll_manager,1,1,1,1
+ access_hr_payslip_exception_rule_officer,access.hr.payslip.exception.officer,model_hr_payslip_exception_rule,hr_payroll.group_hr_payroll_user,1,1,1,1
+ access_hr_payslip_exception_rule_pm,access_hr_payslip_exception_rule,model_hr_payslip_exception_rule,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+diff --git a/custom/hr_payroll_period/views/hr_payroll_period_view.xml b/custom/hr_payroll_period/views/hr_payroll_period_view.xml
+index d845253..3ff03f1 100644
+--- a/custom/hr_payroll_period/views/hr_payroll_period_view.xml
++++ b/custom/hr_payroll_period/views/hr_payroll_period_view.xml
+@@ -12,7 +12,7 @@
+         <menuitem action="hr_payroll.action_view_hr_payslip_form"
+                   id="hr_payroll.menu_department_tree" parent="menu_payroll_advanced" sequence="10"/>
+         <menuitem action="hr_payroll.action_hr_payslip_run_tree"
+-                  id="hr_payroll.menu_hr_payslip_run" parent="menu_payroll_advanced" sequence="20"/>
++                  id="hr_payroll.menu_hr_payslip_run" parent="menu_payroll_advanced" groups="hr_payroll.group_hr_payroll_user" sequence="20"/>
+         <!-- Move 'Payroll Register' from hr_payroll_register -->
+         <menuitem action="hr_payroll_register.open_payroll_registers"
+                   id="hr_payroll_register.menu_payroll_register" parent="menu_payroll_advanced"
+diff --git a/custom/hr_recruitment_customization/__manifest__.py b/custom/hr_recruitment_customization/__manifest__.py
+index 4931e72..0bef241 100644
+--- a/custom/hr_recruitment_customization/__manifest__.py
++++ b/custom/hr_recruitment_customization/__manifest__.py
+@@ -50,6 +50,7 @@
+         'base',
+     ],
+     'data': [
++        'security/groups.xml',
+         'static/data/degree_data.xml',
+         'static/data/major_data.xml',
+         # 'views/hr_recruitment_customization.xml',
+diff --git a/custom/hr_recruitment_customization/security/ir.model.access.csv b/custom/hr_recruitment_customization/security/ir.model.access.csv
+index ba358b9..9ec9db0 100644
+--- a/custom/hr_recruitment_customization/security/ir.model.access.csv
++++ b/custom/hr_recruitment_customization/security/ir.model.access.csv
+@@ -1,4 +1,6 @@
+ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+-access_hr_applicant_references_user,access_hr_applicant_references_user,model_hr_applicant_references,hr.group_hr_user,1,1,1,1
+-access_hr_applicant_references_manager,access_hr_applicant_references_manager,model_hr_applicant_references,hr.group_hr_manager,1,1,1,1
+-access_hr_applicant_major,access_hr_applicant_major,model_hr_applicant_major,,1,0,0,0
+\ No newline at end of file
++access_hr_applicant_references_user,access_hr_applicant_references_user,model_hr_applicant_references,hr_recruitment_customization.group_web_service,0,0,1,0
++access_hr_applicant_references_view,access_hr_applicant_references.vieww,model_hr_applicant_references,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_references_manager,access_hr_applicant_references_manager,model_hr_applicant_references,hr_recruitment_customization.view_all_recruitment_data,1,1,1,1
++access_hr_applicant_major,access_hr_applicant_major,model_hr_applicant_major,hr_recruitment_customization.group_web_service,1,0,0,0
++access_hr_applicant_major_view,access_hr_applicant_major.view,model_hr_applicant_major,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
+\ No newline at end of file
+diff --git a/custom/hr_recruitment_stages_movement/__manifest__.py b/custom/hr_recruitment_stages_movement/__manifest__.py
+index c2964c4..afc20b2 100755
+--- a/custom/hr_recruitment_stages_movement/__manifest__.py
++++ b/custom/hr_recruitment_stages_movement/__manifest__.py
+@@ -30,9 +30,9 @@ This module used to delete odoo standard stages and create new ones.
+     ],
+     'data': [
+         # 'hr_recruitment_view.xml',
++        'security/groups.xml',
+         'views/hr_recruitment_new_view.xml',
+         'views/hr_recruitment_menu.xml',
+-        'security/groups.xml',
+         'security/ir.model.access.csv',
+         'views/hr_employee_view.xml',
+         'report/local_candidate_templete.xml',
+diff --git a/custom/hr_recruitment_stages_movement/models/hr_recruitment.py b/custom/hr_recruitment_stages_movement/models/hr_recruitment.py
+index dabaa36..3e5d71a 100755
+--- a/custom/hr_recruitment_stages_movement/models/hr_recruitment.py
++++ b/custom/hr_recruitment_stages_movement/models/hr_recruitment.py
+@@ -261,6 +261,7 @@ class HrApplicant(models.Model):
+                 self.date_closed = fields.datetime.now()
+                 self.stage_name_invisible = self.stage_id.name
+ 
++
+     @api.multi
+     def write(self, vals):
+         """
+@@ -323,7 +324,7 @@ class HrApplicant(models.Model):
+                                     'Please set application responsible!'))
+                 # Only recruitment responsible can change application stage
+                 if applicant_rec.user_id:
+-                    if applicant_rec.user_id.id != applicant_rec._uid:
++                    if applicant_rec.user_id.id != self.env.user.id:
+                         raise Warning(_('Warning ! \n'
+                                         'You cannot change application stage'))
+                     if under_job_rec and applicant_rec.stage_id.id == \
+diff --git a/custom/hr_recruitment_stages_movement/security/groups.xml b/custom/hr_recruitment_stages_movement/security/groups.xml
+index 529df11..63681b0 100755
+--- a/custom/hr_recruitment_stages_movement/security/groups.xml
++++ b/custom/hr_recruitment_stages_movement/security/groups.xml
+@@ -1,86 +1,105 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <odoo>
+-	<data noupdate="0">
+-
+-		<record model="ir.module.category" id="module_category1_recuirtment">
+-			<field name="name">Recruitment</field>
+-			<field name="description">Helps you manage applications.</field>
+-			<field name="sequence">2</field>
+-		</record>
+-
+-		<record id="group_compensation" model="res.groups">
+-			<field name="name">Compensation and Benefits</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job8'))]" />
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-		
+-		<record id="group_rec_manager" model="res.groups">
+-			<field name="name">Recruitment Manager</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('hr_admin.group_hr_admin'))]" />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job3')),
+-			(4,ref('hiring_menu_hr_job_position')),(4,ref('menu_hr_rec_reporting')),(4,ref('rec_reporting_menue_'))
+-			,(4,ref('menu_hr_recruitment_report_all_rec'))]" />
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-		
+-		<record id="group_hr_manager_rec" model="res.groups">
+-			<field name="name">HR Manager - Recruitment</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('hr_admin.group_hr_admin'))]"  />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job4'))]" /> 
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-
+-		<record id="group_dep_manager" model="res.groups">
+-			<field name="name">Department Manager - Recruitment</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+-			<field name="category_id" ref="base.module_category_human_resources" />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job5'))]" /> 
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-		
+-		<record id="group_unit_head" model="res.groups">
+-			<field name="name">Unit Head - Recruitment</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+-			<field name="category_id" ref="base.module_category_human_resources" />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job7'))]"
+-			 /> 
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-
+-		<record id="group_ceo_manager" model="res.groups">
+-			<field name="name">CEO - Recruitment</field>
+-			<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
+-			<field name="category_id" ref="base.module_category_human_resources" />
+-			<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job6'))
+-			,(4,ref('menu_hr_rec_reporting')),(4,ref('rec_reporting_menue_')),(4,ref('menu_hr_recruitment_report_all_rec'))]" />
+-			<field name="category_id" ref="module_category1_recuirtment"/>
+-		</record>
+-
+-		<!-- Group Rule -->
+-		
+-		<record model="ir.rule" id="dep_manager_rec_rule">
++    <data noupdate="0">
++
++        <record id="hr_recruitment.group_hr_recruitment_manager" model="res.groups">
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
++            <field name="name">Recruitment Configuration</field>
++        </record>
++
++        <record id="hr_recruitment.group_hr_recruitment_user" model="res.groups">
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
++            <field name="name">Recruitment Manager</field>
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job3')),-->
++             <!--(4,ref('hiring_menu_hr_job_position')),(4,ref('menu_hr_rec_reporting')),(4,ref('rec_reporting_menue_')),-->
++             <!--(4,ref('menu_hr_recruitment_report_all_rec'))]" />-->
++        </record>
++
++        <!--<record model="ir.module.category" id="123">-->
++            <!--<field name="name">Recruitment</field>-->
++            <!--<field name="description">Helps you manage applications.</field>-->
++            <!--<field name="sequence">2</field>-->
++        <!--</record>-->
++
++        <record id="group_compensation" model="res.groups">
++            <field name="name">Compensation and Benefits</field>
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job8'))]" />-->
++            <field name="category_id" ref="base.module_category_hr_recruitment"/>
++        </record>
++
++        <!--<record id="group_recruitment_configuration" model="res.groups">-->
++            <!--<field name="name">Recruitment Configuration</field>-->
++            <!--<field name="implied_ids" eval="[(4, ref('base.group_user'))]" />-->
++            <!--<field name="category_id" ref="base.module_category_hr_recruitment"/>-->
++        <!--</record>-->
++
++        <!--<record id="group_rec_manager" model="res.groups">-->
++            <!--<field name="name">Recruitment Manager</field>-->
++            <!--<field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('hr_admin.group_hr_admin'))]" />-->
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job3')),-->
++			<!--(4,ref('hiring_menu_hr_job_position')),(4,ref('menu_hr_rec_reporting')),(4,ref('rec_reporting_menue_'))-->
++			<!--,(4,ref('menu_hr_recruitment_report_all_rec'))]" />-->
++            <!--<field name="category_id" ref="base.module_category_hr_recruitment"/>-->
++        <!--</record>-->
++
++        <record id="group_hr_manager_rec" model="res.groups">
++            <field name="name">HR Manager - Recruitment</field>
++            <field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('hr_admin.group_hr_admin'))]"  />
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job4'))]" />-->
++            <field name="category_id" ref="base.module_category_hr_recruitment"/>
++        </record>
++
++        <record id="group_dep_manager" model="res.groups">
++            <field name="name">Department Manager Approval</field>
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
++            <field name="category_id" ref="base.module_category_human_resources" />
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job5'))]" />-->
++            <field name="category_id" ref="base.module_category_hr_recruitment"/>
++        </record>
++
++        <record id="group_unit_head" model="res.groups">
++            <field name="name">Unit Head Approval</field>
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
++            <field name="category_id" ref="base.module_category_human_resources" />
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job7'))]"-->
++            <!--/>-->
++            <field name="category_id" ref="base.module_category_hr_recruitment"/>
++        </record>
++
++        <record id="group_ceo_manager" model="res.groups">
++            <field name="name">CEO Approval</field>
++            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
++            <field name="category_id" ref="base.module_category_human_resources" />
++            <!--<field name="menu_access" eval="[(4,ref('menu_crm_case_categ0_act_job22')),(4,ref('menu_crm_case_categ0_act_job6'))-->
++			<!--,(4,ref('menu_hr_rec_reporting')),(4,ref('rec_reporting_menue_')),(4,ref('menu_hr_recruitment_report_all_rec'))]" />-->
++            <field name="category_id" ref="base.module_category_hr_recruitment"/>
++        </record>
++
++        <!-- Group Rule -->
++
++        <record model="ir.rule" id="dep_manager_rec_rule">
+             <field name="name">See own department</field>
+             <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+             <field name="groups" eval="[(4,ref('group_dep_manager'))]"/>
+             <field name="domain_force">['|', ('department_id.id','child_of', [user.employee_ids[0].department_id.id]),('department_id.id','=', user.employee_ids[0].department_id.id)]
+             </field>
+             <field name="global" eval="False"/>
+-        </record>  
+-        
++        </record>
++
+         <record model="ir.rule" id="without_dep_manager_rec_rule">
+             <field name="name">See all department</field>
+             <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+-            <field name="groups" eval="[(4,ref('group_ceo_manager')),(4,ref('group_rec_manager')),(4,ref('group_hr_manager_rec'))]"/>
++            <field name="groups" eval="[(4,ref('group_ceo_manager')),(4,ref('hr_recruitment.group_hr_recruitment_user')),(4,ref('group_hr_manager_rec'))]"/>
+             <field name="domain_force">[(1, '=', 1)]
+             </field>
+             <field name="global" eval="False"/>
+-        </record>       
+-        
++        </record>
++
+         <record model="ir.rule" id="rec_rule_see_all_attachments">
+             <field name="name">Recruitment See All Attachments</field>
+             <field name="model_id" ref="base.model_ir_attachment"/>
+-            <field name="groups" eval="[(4,ref('group_rec_manager')),
++            <field name="groups" eval="[(4,ref('hr_recruitment.group_hr_recruitment_user')),
+             (4,ref('group_hr_manager_rec')),(4,ref('group_dep_manager')),
+             (4,ref('group_ceo_manager')),(4,ref('group_compensation')),
+             (4,ref('group_unit_head')),
+@@ -88,7 +107,7 @@
+             <field name="domain_force">[(1, '=', 1)]</field>
+             <field name="global" eval="False"/>
+         </record>
+-        
+-	</data>
++
++    </data>
+ </odoo>
+ 
+diff --git a/custom/hr_recruitment_stages_movement/security/ir.model.access.csv b/custom/hr_recruitment_stages_movement/security/ir.model.access.csv
+index 6fc534c..649c754 100755
+--- a/custom/hr_recruitment_stages_movement/security/ir.model.access.csv
++++ b/custom/hr_recruitment_stages_movement/security/ir.model.access.csv
+@@ -1,109 +1,99 @@
+-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+-access_hr_applicant_rec_manager,hr.applicant.rec_manager,hr_recruitment.model_hr_applicant,group_rec_manager,1,1,1,1
+-access_hr_applicant_hr_manager,hr.applicant.hr_manager,hr_recruitment.model_hr_applicant,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_dep_manager,hr.applicant.dep_manager,hr_recruitment.model_hr_applicant,group_dep_manager,1,1,0,0
+-access_hr_applicant_ceo_manager,hr.applicant.ceo_manager,hr_recruitment.model_hr_applicant,group_ceo_manager,1,1,0,0
+-access_hr_applicant_unit_head,access_hr_applicant_unit_head,hr_recruitment.model_hr_applicant,group_unit_head,1,1,0,0
+-access_hr_applicant_compensation,access_hr_applicant_compensation,hr_recruitment.model_hr_applicant,group_compensation,1,1,0,0
+-access_hr_applicant_rec_officer,access_hr_applicant_rec_officer,hr_recruitment.model_hr_applicant,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_recruitment_stage_re_manager,access_hr_recruitment_stage_re_manager,hr_recruitment.model_hr_recruitment_stage,group_rec_manager,1,1,1,1
+-access_hr_recruitment_stage_hr_manager,access_hr_recruitment_stage_hr_manager,hr_recruitment.model_hr_recruitment_stage,group_hr_manager_rec,1,1,1,1
+-access_hr_recruitment_stage_dep_manager,access_hr_recruitment_stage_dep_manager,hr_recruitment.model_hr_recruitment_stage,group_dep_manager,1,1,1,1
+-access_hr_recruitment_stage_ceo_manager,access_hr_recruitment_stage_ceo_manager,hr_recruitment.model_hr_recruitment_stage,group_ceo_manager,1,1,1,1
+-access_hr_recruitment_stage_unit_head,access_hr_recruitment_stage_unit_head,hr_recruitment.model_hr_recruitment_stage,group_unit_head,1,1,1,1
+-access_hr_recruitment_stage_compensation,access_hr_recruitment_stage_compensation,hr_recruitment.model_hr_recruitment_stage,group_compensation,1,1,1,1
+-access_hr_recruitment_stage_rec_officer,access_hr_recruitment_stage_rec_officer,hr_recruitment.model_hr_recruitment_stage,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_recruitment_degree_rec_manager,access_hr_recruitment_degree_rec_manager,hr_recruitment.model_hr_recruitment_degree,group_rec_manager,1,1,1,1
+-access_hr_recruitment_degree_hr_manager,access_hr_recruitment_degree_hr_manager,hr_recruitment.model_hr_recruitment_degree,group_hr_manager_rec,1,1,1,1
+-access_hr_recruitment_degree_dep_manager,access_hr_recruitment_degree_dep_manager,hr_recruitment.model_hr_recruitment_degree,group_dep_manager,1,1,1,1
+-access_hr_recruitment_degree_ceo_manager,access_hr_recruitment_degree_ceo_manager,hr_recruitment.model_hr_recruitment_degree,group_ceo_manager,1,1,1,1
+-access_hr_recruitment_degree_unit_head,access_hr_recruitment_degree_unit_head,hr_recruitment.model_hr_recruitment_degree,group_unit_head,1,1,1,1
+-access_hr_recruitment_degree_compensation,access_hr_recruitment_degree_compensation,hr_recruitment.model_hr_recruitment_degree,group_compensation,1,1,1,1
+-access_hr_recruitment_degree_rec_officer,access_hr_recruitment_degree_rec_officer,hr_recruitment.model_hr_recruitment_degree,hr_admin.group_hr_admin,1,1,1,1
+-access_res_partner_rec_manager,access_res_partner_rec_manager,base.model_res_partner,group_rec_manager,1,1,1,1
+-access_res_partner_hr_manager,access_res_partner_hr_manager,base.model_res_partner,group_hr_manager_rec,1,1,1,1
+-access_res_partner_dep_manager,access_res_partner_dep_manager,base.model_res_partner,group_dep_manager,1,1,1,1
+-access_res_partner_ceo_manager,access_res_partner_ceo_manager,base.model_res_partner,group_ceo_manager,1,1,1,1
+-access_res_partner_unit_head,access_res_partner_unit_head,base.model_res_partner,group_unit_head,1,1,1,1
+-access_res_partner_compensation,access_res_partner_compensation,base.model_res_partner,group_compensation,1,1,1,1
+-access_res_partner_rec_officer,access_res_partner_rec_officer,base.model_res_partner,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_recruitment_source_rec_manager,access_hr_recruitment_source_rec_manager,hr_recruitment.model_hr_recruitment_source,group_rec_manager,1,1,1,1
+-access_hr_recruitment_source_hr_manager,access_hr_recruitment_source_hr_manager,hr_recruitment.model_hr_recruitment_source,group_hr_manager_rec,1,1,1,1
+-access_hr_recruitment_source_dep_manager,access_hr_recruitment_source_dep_manager,hr_recruitment.model_hr_recruitment_source,group_dep_manager,1,1,1,1
+-access_hr_recruitment_source_ceo_manager,access_hr_recruitment_source_ceo_manager,hr_recruitment.model_hr_recruitment_source,group_ceo_manager,1,1,1,1
+-access_hr_recruitment_source_unit_head,access_hr_recruitment_source_unit_head,hr_recruitment.model_hr_recruitment_source,group_unit_head,1,1,1,1
+-access_hr_recruitment_source_compensation,access_hr_recruitment_source_compensation,hr_recruitment.model_hr_recruitment_source,group_compensation,1,1,1,1
+-access_hr_recruitment_source_rec_officer,access_hr_recruitment_source_rec_officer,hr_recruitment.model_hr_recruitment_source,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_category_rec_manager,access_hr_applicant_category_rec_manager,hr_recruitment.model_hr_applicant_category,group_rec_manager,1,1,1,1
+-access_hr_applicant_category_hr_manager,access_hr_applicant_category_hr_manager,hr_recruitment.model_hr_applicant_category,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_category_dep_manager,access_hr_applicant_category_dep_manager,hr_recruitment.model_hr_applicant_category,group_dep_manager,1,1,1,1
+-access_hr_applicant_category_ceo_manager,access_hr_applicant_category_ceo_manager,hr_recruitment.model_hr_applicant_category,group_ceo_manager,1,1,1,1
+-access_hr_applicant_category_unit_head,access_hr_applicant_category_unit_head,hr_recruitment.model_hr_applicant_category,group_unit_head,1,1,1,1
+-access_hr_applicant_category_compensation,access_hr_applicant_category_compensation,hr_recruitment.model_hr_applicant_category,group_compensation,1,1,1,1
+-access_hr_applicant_category_hr_officer,access_hr_applicant_category_hr_officer,hr_recruitment.model_hr_applicant_category,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_references_rec_manager,access_hr_applicant_references_rec_manager,hr_recruitment_customization.model_hr_applicant_references,group_rec_manager,1,1,1,1
+-access_hr_applicant_references_hr_manager,access_hr_applicant_references_hr_manager,hr_recruitment_customization.model_hr_applicant_references,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_references_dep_manager,access_hr_applicant_references_dep_manager,hr_recruitment_customization.model_hr_applicant_references,group_dep_manager,1,1,1,1
+-access_hr_applicant_references_ceo_manager,access_hr_applicant_references_ceo_manager,hr_recruitment_customization.model_hr_applicant_references,group_ceo_manager,1,1,1,1
+-access_hr_applicant_references_unit_head,access_hr_applicant_references_unit_head,hr_recruitment_customization.model_hr_applicant_references,group_unit_head,1,1,1,1
+-access_hr_applicant_references_compensation,access_hr_applicant_references_compensation,hr_recruitment_customization.model_hr_applicant_references,group_compensation,1,1,1,1
+-access_hr_applicant_references_hr_officer,access_hr_applicant_references_hr_officer,hr_recruitment_customization.model_hr_applicant_references,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_logs_rec_manager,access_hr_applicant_logs_rec_manager,model_hr_applicant_logs,group_rec_manager,1,1,1,1
+-access_hr_applicant_logs_hr_manager,access_hr_applicant_logs_hr_manager,model_hr_applicant_logs,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_logs_dep_manager,access_hr_applicant_logs_dep_manager,model_hr_applicant_logs,group_dep_manager,1,1,1,1
+-access_hr_applicant_logs_ceo_manager,access_hr_applicant_logs_ceo_manager,model_hr_applicant_logs,group_ceo_manager,1,1,1,1
+-access_hr_applicant_logs_unit_head,access_hr_applicant_logs_unit_head,model_hr_applicant_logs,group_unit_head,1,1,1,1
+-access_hr_applicant_logs_group_compensation,access_hr_applicant_logs_group_compensation,model_hr_applicant_logs,group_compensation,1,1,1,1
+-access_hr_applicant_logs_hr_officer,access_hr_applicant_logs_hr_officer,model_hr_applicant_logs,hr_admin.group_hr_admin,1,1,1,1
+-access_grade_level_rec_manager,access_grade_level_rec_manager,hr_contract_grade_level.model_grade_level,group_rec_manager,1,1,1,1
+-access_grade_level_hr_manager,access_grade_level_hr_manager,hr_contract_grade_level.model_grade_level,group_hr_manager_rec,1,1,1,1
+-access_grade_level_dep_manager,access_grade_level_dep_manager,hr_contract_grade_level.model_grade_level,group_dep_manager,1,1,1,1
+-access_grade_level_ceo_manager,access_grade_level_ceo_manager,hr_contract_grade_level.model_grade_level,group_ceo_manager,1,1,1,1
+-access_grade_level_unit_head,access_grade_level_unit_head,hr_contract_grade_level.model_grade_level,group_unit_head,1,1,1,1
+-access_grade_level_compensation,access_grade_level_compensation,hr_contract_grade_level.model_grade_level,group_compensation,1,1,1,1
+-access_grade_level_hr_officer,access_grade_level_hr_officer,hr_contract_grade_level.model_grade_level,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_stage_logs_rec_manager,access_hr_applicant_stage_logs_rec_manager,model_hr_applicant_stage_logs,group_rec_manager,1,1,1,1
+-access_hr_applicant_stage_logs_hr_manager,access_hr_applicant_stage_logs_hr_manager,model_hr_applicant_stage_logs,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_stage_logs_dep_manager,access_hr_applicant_stage_logs_dep_manager,model_hr_applicant_stage_logs,group_dep_manager,1,1,1,1
+-access_hr_applicant_stage_logs_ceo_manager,access_hr_applicant_stage_logs_ceo_manager,model_hr_applicant_stage_logs,group_ceo_manager,1,1,1,1
+-access_hr_applicant_stage_logs_unit_head,access_hr_applicant_stage_logs_unit_head,model_hr_applicant_stage_logs,group_unit_head,1,1,1,1
+-access_hr_applicant_stage_logs_compensation,access_hr_applicant_stage_logs_compensation,model_hr_applicant_stage_logs,group_compensation,1,1,1,1
+-access_hr_applicant_stage_logs_hr_officer,access_hr_applicant_stage_logs_hr_officer,model_hr_applicant_stage_logs,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_assessment_tem_rec_manager,access_hr_applicant_assessment_tem_rec_manager,model_hr_applicant_assessment_template,group_rec_manager,1,1,1,1
+-access_hr_applicant_assessment_tem_hr_manager,access_hr_applicant_assessment_tem_hr_manager,model_hr_applicant_assessment_template,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_assessment_tem_dep_manager,access_hr_applicant_assessment_tem_dep_manager,model_hr_applicant_assessment_template,group_dep_manager,1,1,1,1
+-access_hr_applicant_assessment_tem_ceo_manager,access_hr_applicant_assessment_tem_ceo_manager,model_hr_applicant_assessment_template,group_ceo_manager,1,1,1,1
+-access_hr_applicant_assessment_tem_unit_head,access_hr_applicant_assessment_tem_unit_head,model_hr_applicant_assessment_template,group_unit_head,1,1,1,1
+-access_hr_applicant_assessment_tem_compensation,access_hr_applicant_assessment_tem_compensation,model_hr_applicant_assessment_template,group_compensation,1,1,1,1
+-access_hr_applicant_assessment_tem_hr_officer,access_hr_applicant_assessment_tem_hr_officer,model_hr_applicant_assessment_template,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_applicant_experience_rec_manager,access_hr_applicant_experience_rec_manager,model_hr_applicant_experience,group_rec_manager,1,1,1,1
+-access_hr_applicant_experience_hr_manager,access_hr_applicant_experience_hr_manager,model_hr_applicant_experience,group_hr_manager_rec,1,1,1,1
+-access_hr_applicant_experience_dep_manager,access_hr_applicant_experience_dep_manager,model_hr_applicant_experience,group_dep_manager,1,1,1,1
+-access_hr_applicant_experience_ceo_manager,access_hr_applicant_experience_ceo_manager,model_hr_applicant_experience,group_ceo_manager,1,1,1,1
+-access_hr_applicant_experience_unit_head,access_hr_applicant_experience_unit_head,model_hr_applicant_experience,group_unit_head,1,1,1,1
+-access_hr_applicant_experience_compensation,access_hr_applicant_experience_compensation,model_hr_applicant_experience,group_compensation,1,1,1,1
+-access_hr_applicant_experience_hr_officer,access_hr_applicant_experience_hr_officer,model_hr_applicant_experience,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_qualifications_hr_officer,access_hr_qualifications_hr_officer,emp_self_services.model_tamkeen_hr_qualifications,hr_admin.group_hr_admin,1,1,1,0
+-access_hr_experience_hr_officer,access_hr_experience_hr_officer,emp_self_services.model_tamkeen_hr_experiences,hr_admin.group_hr_admin,1,1,1,0
+-access_hr_job_rec_manager,access_hr_job_rec_manager,hr_recruitment.model_hr_job,group_rec_manager,1,1,1,1
+-access_hr_applicant_major_dep_manager,access_hr_applicant_major_dep_manager,hr_recruitment_customization.model_hr_applicant_major,group_dep_manager,1,1,1,1
+-access_hr_applicant_major_ceo_manager,access_hr_applicant_major_ceo_manager,hr_recruitment_customization.model_hr_applicant_major,group_ceo_manager,1,1,1,1
+-access_hr_applicant_major_unit_head,access_hr_applicant_major_unit_head,hr_recruitment_customization.model_hr_applicant_major,group_unit_head,1,1,1,1
+-access_hr_applicant_major_compensation,access_hr_applicant_major_compensation,hr_recruitment_customization.model_hr_applicant_major,group_compensation,1,1,1,1
+-access_hr_applicant_major_hr_officer,access_hr_applicant_major_hr_officer,hr_recruitment_customization.model_hr_applicant_major,hr_admin.group_hr_admin,1,1,1,1
+-access_rec_report_rec_manager,access_rec_report_rec_manager,hr_recruitment.model_hr_recruitment_report,group_rec_manager,1,1,1,0
+-access_rec_report_rec_ceo,access_rec_report_rec_ceo,hr_recruitment.model_hr_recruitment_report,group_ceo_manager,1,1,1,0
+-access_hr_applicant_hr_user,access_hr_applicant_hr_user,hr_recruitment.model_hr_applicant,hr.group_hr_user,1,0,0,0
+-access_hr_recruitment_stage_hr_user,access_hr_recruitment_stage_hr_user,hr_recruitment.model_hr_recruitment_stage,hr.group_hr_user,1,0,0,0
+-access_hr_recruitment_degree_hr_user,access_hr_recruitment_degree_hr_user,hr_recruitment.model_hr_recruitment_degree,hr.group_hr_user,1,0,0,0
+-access_res_partner_hr_user,access_res_partner_hr_user,base.model_res_partner,hr.group_hr_user,1,0,0,0
+-access_hr_recruitment_source_hr_user,access_hr_recruitment_source_hr_user,hr_recruitment.model_hr_recruitment_source,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_category_hr_user,access_hr_applicant_category_hr_user,hr_recruitment.model_hr_applicant_category,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_references_hr_user,access_hr_applicant_references_hr_user,hr_recruitment_customization.model_hr_applicant_references,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_logs_hr_user,access_hr_applicant_logs_hr_user,model_hr_applicant_logs,hr.group_hr_user,1,0,0,0
+-access_grade_level_hr_user,access_grade_level_hr_user,hr_contract_grade_level.model_grade_level,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_stage_logs_hr_user,access_hr_applicant_stage_logs_hr_user,model_hr_applicant_stage_logs,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_assessment_tem_hr_user,access_hr_applicant_assessment_tem_hr_user,model_hr_applicant_assessment_template,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_experience_hr_user,access_hr_applicant_experience_hr_user,model_hr_applicant_experience,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_major_hr_user,access_hr_applicant_major_hr_user,hr_recruitment_customization.model_hr_applicant_major,hr.group_hr_user,1,0,0,0
+-access_hr_applicant_email,access_hr_applicant_email,model_hr_applicant_email,,1,0,0,0
+\ No newline at end of file
++id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
++access_grade_level_ceo_manager,access_grade_level_ceo_manager,hr_contract_grade_level.model_grade_level,group_ceo_manager,1,1,1,1
++access_hr_applicant_assessment_tem_ceo_manager,access_hr_applicant_assessment_tem_ceo_manager,model_hr_applicant_assessment_template,group_ceo_manager,1,1,1,1
++access_hr_applicant_category_ceo_manager,access_hr_applicant_category_ceo_manager,hr_recruitment.model_hr_applicant_category,group_ceo_manager,1,1,1,1
++access_hr_applicant_ceo_manager,hr.applicant.ceo_manager,hr_recruitment.model_hr_applicant,group_ceo_manager,1,1,0,0
++access_hr_applicant_experience_ceo_manager,access_hr_applicant_experience_ceo_manager,model_hr_applicant_experience,group_ceo_manager,1,1,1,1
++access_hr_applicant_logs_ceo_manager,access_hr_applicant_logs_ceo_manager,model_hr_applicant_logs,group_ceo_manager,1,1,1,1
++access_hr_applicant_major_ceo_manager,access_hr_applicant_major_ceo_manager,hr_recruitment_customization.model_hr_applicant_major,group_ceo_manager,1,1,1,1
++access_hr_applicant_references_ceo_manager,access_hr_applicant_references_ceo_manager,hr_recruitment_customization.model_hr_applicant_references,group_ceo_manager,1,1,1,1
++access_hr_applicant_stage_logs_ceo_manager,access_hr_applicant_stage_logs_ceo_manager,model_hr_applicant_stage_logs,group_ceo_manager,1,1,1,1
++access_hr_recruitment_degree_ceo_manager,access_hr_recruitment_degree_ceo_manager,hr_recruitment.model_hr_recruitment_degree,group_ceo_manager,1,1,1,1
++access_hr_recruitment_source_ceo_manager,access_hr_recruitment_source_ceo_manager,hr_recruitment.model_hr_recruitment_source,group_ceo_manager,1,1,1,1
++access_hr_recruitment_stage_ceo_manager,access_hr_recruitment_stage_ceo_manager,hr_recruitment.model_hr_recruitment_stage,group_ceo_manager,1,1,1,1
++access_rec_report_rec_ceo,access_rec_report_rec_ceo,hr_recruitment.model_hr_recruitment_report,group_ceo_manager,1,1,1,0
++access_res_partner_ceo_manager,access_res_partner_ceo_manager,base.model_res_partner,group_ceo_manager,1,1,1,1
++access_grade_level_compensation,access_grade_level_compensation,hr_contract_grade_level.model_grade_level,group_compensation,1,1,1,1
++access_hr_applicant_assessment_tem_compensation,access_hr_applicant_assessment_tem_compensation,model_hr_applicant_assessment_template,group_compensation,1,1,1,1
++access_hr_applicant_category_compensation,access_hr_applicant_category_compensation,hr_recruitment.model_hr_applicant_category,group_compensation,1,1,1,1
++access_hr_applicant_compensation,access_hr_applicant_compensation,hr_recruitment.model_hr_applicant,group_compensation,1,1,0,0
++access_hr_applicant_experience_compensation,access_hr_applicant_experience_compensation,model_hr_applicant_experience,group_compensation,1,1,1,1
++access_hr_applicant_logs_group_compensation,access_hr_applicant_logs_group_compensation,model_hr_applicant_logs,group_compensation,1,1,1,1
++access_hr_applicant_major_compensation,access_hr_applicant_major_compensation,hr_recruitment_customization.model_hr_applicant_major,group_compensation,1,1,1,1
++access_hr_applicant_references_compensation,access_hr_applicant_references_compensation,hr_recruitment_customization.model_hr_applicant_references,group_compensation,1,1,1,1
++access_hr_applicant_stage_logs_compensation,access_hr_applicant_stage_logs_compensation,model_hr_applicant_stage_logs,group_compensation,1,1,1,1
++access_hr_recruitment_degree_compensation,access_hr_recruitment_degree_compensation,hr_recruitment.model_hr_recruitment_degree,group_compensation,1,1,1,1
++access_hr_recruitment_source_compensation,access_hr_recruitment_source_compensation,hr_recruitment.model_hr_recruitment_source,group_compensation,1,1,1,1
++access_hr_recruitment_stage_compensation,access_hr_recruitment_stage_compensation,hr_recruitment.model_hr_recruitment_stage,group_compensation,1,1,1,1
++access_res_partner_compensation,access_res_partner_compensation,base.model_res_partner,group_compensation,1,1,1,1
++access_grade_level_dep_manager,access_grade_level_dep_manager,hr_contract_grade_level.model_grade_level,group_dep_manager,1,1,1,1
++access_hr_applicant_assessment_tem_dep_manager,access_hr_applicant_assessment_tem_dep_manager,model_hr_applicant_assessment_template,group_dep_manager,1,1,1,1
++access_hr_applicant_category_dep_manager,access_hr_applicant_category_dep_manager,hr_recruitment.model_hr_applicant_category,group_dep_manager,1,1,1,1
++access_hr_applicant_dep_manager,hr.applicant.dep_manager,hr_recruitment.model_hr_applicant,group_dep_manager,1,1,0,0
++access_hr_applicant_experience_dep_manager,access_hr_applicant_experience_dep_manager,model_hr_applicant_experience,group_dep_manager,1,1,1,1
++access_hr_applicant_logs_dep_manager,access_hr_applicant_logs_dep_manager,model_hr_applicant_logs,group_dep_manager,1,1,1,1
++access_hr_applicant_major_dep_manager,access_hr_applicant_major_dep_manager,hr_recruitment_customization.model_hr_applicant_major,group_dep_manager,1,1,1,1
++access_hr_applicant_references_dep_manager,access_hr_applicant_references_dep_manager,hr_recruitment_customization.model_hr_applicant_references,group_dep_manager,1,1,1,1
++access_hr_applicant_stage_logs_dep_manager,access_hr_applicant_stage_logs_dep_manager,model_hr_applicant_stage_logs,group_dep_manager,1,1,1,1
++access_hr_recruitment_degree_dep_manager,access_hr_recruitment_degree_dep_manager,hr_recruitment.model_hr_recruitment_degree,group_dep_manager,1,1,1,1
++access_hr_recruitment_source_dep_manager,access_hr_recruitment_source_dep_manager,hr_recruitment.model_hr_recruitment_source,group_dep_manager,1,1,1,1
++access_hr_recruitment_stage_dep_manager,access_hr_recruitment_stage_dep_manager,hr_recruitment.model_hr_recruitment_stage,group_dep_manager,1,1,1,1
++access_res_partner_dep_manager,access_res_partner_dep_manager,base.model_res_partner,group_dep_manager,1,1,1,1
++access_grade_level_hr_manager,access_grade_level_hr_manager,hr_contract_grade_level.model_grade_level,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_assessment_tem_hr_manager,access_hr_applicant_assessment_tem_hr_manager,model_hr_applicant_assessment_template,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_category_hr_manager,access_hr_applicant_category_hr_manager,hr_recruitment.model_hr_applicant_category,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_experience_hr_manager,access_hr_applicant_experience_hr_manager,model_hr_applicant_experience,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_hr_manager,hr.applicant.hr_manager,hr_recruitment.model_hr_applicant,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_logs_hr_manager,access_hr_applicant_logs_hr_manager,model_hr_applicant_logs,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_references_hr_manager,access_hr_applicant_references_hr_manager,hr_recruitment_customization.model_hr_applicant_references,group_hr_manager_rec,1,1,1,1
++access_hr_applicant_stage_logs_hr_manager,access_hr_applicant_stage_logs_hr_manager,model_hr_applicant_stage_logs,group_hr_manager_rec,1,1,1,1
++access_hr_recruitment_degree_hr_manager,access_hr_recruitment_degree_hr_manager,hr_recruitment.model_hr_recruitment_degree,group_hr_manager_rec,1,1,1,1
++access_hr_recruitment_source_hr_manager,access_hr_recruitment_source_hr_manager,hr_recruitment.model_hr_recruitment_source,group_hr_manager_rec,1,1,1,1
++access_hr_recruitment_stage_hr_manager,access_hr_recruitment_stage_hr_manager,hr_recruitment.model_hr_recruitment_stage,group_hr_manager_rec,1,1,1,1
++access_res_partner_hr_manager,access_res_partner_hr_manager,base.model_res_partner,group_hr_manager_rec,1,1,1,1
++access_grade_level_unit_head,access_grade_level_unit_head,hr_contract_grade_level.model_grade_level,group_unit_head,1,1,1,1
++access_hr_applicant_assessment_tem_unit_head,access_hr_applicant_assessment_tem_unit_head,model_hr_applicant_assessment_template,group_unit_head,1,1,1,1
++access_hr_applicant_category_unit_head,access_hr_applicant_category_unit_head,hr_recruitment.model_hr_applicant_category,group_unit_head,1,1,1,1
++access_hr_applicant_experience_unit_head,access_hr_applicant_experience_unit_head,model_hr_applicant_experience,group_unit_head,1,1,1,1
++access_hr_applicant_logs_unit_head,access_hr_applicant_logs_unit_head,model_hr_applicant_logs,group_unit_head,1,1,1,1
++access_hr_applicant_major_unit_head,access_hr_applicant_major_unit_head,hr_recruitment_customization.model_hr_applicant_major,group_unit_head,1,1,1,1
++access_hr_applicant_references_unit_head,access_hr_applicant_references_unit_head,hr_recruitment_customization.model_hr_applicant_references,group_unit_head,1,1,1,1
++access_hr_applicant_stage_logs_unit_head,access_hr_applicant_stage_logs_unit_head,model_hr_applicant_stage_logs,group_unit_head,1,1,1,1
++access_hr_applicant_unit_head,access_hr_applicant_unit_head,hr_recruitment.model_hr_applicant,group_unit_head,1,1,0,0
++access_hr_recruitment_degree_unit_head,access_hr_recruitment_degree_unit_head,hr_recruitment.model_hr_recruitment_degree,group_unit_head,1,1,1,1
++access_hr_recruitment_source_unit_head,access_hr_recruitment_source_unit_head,hr_recruitment.model_hr_recruitment_source,group_unit_head,1,1,1,1
++access_hr_recruitment_stage_unit_head,access_hr_recruitment_stage_unit_head,hr_recruitment.model_hr_recruitment_stage,group_unit_head,1,1,1,1
++access_res_partner_unit_head,access_res_partner_unit_head,base.model_res_partner,group_unit_head,1,1,1,1
++access_hr_applicant_experience_job_readonly,access_hr_applicant_experience_job_readonly,hr.model_hr_job,hr_recruitment_customization.group_web_service,1,0,0,0
++access_hr_applicant_experience_rec_readonly,access_hr_applicant_experience_rec_readonly,model_hr_applicant_experience,hr_recruitment_customization.group_web_service,0,0,1,0
++access_hr_applicant_user_portal,hr.applicant.user.portal,model_hr_applicant,hr_recruitment_customization.group_web_service,0,0,1,0
++access_hr_recruitment_degree_readonly,hr.recruitment.degree.readonly,hr_recruitment.model_hr_recruitment_degree,hr_recruitment_customization.group_web_service,1,0,0,0
++access_grade_level_hr_user,access_grade_level_hr_user,hr_contract_grade_level.model_grade_level,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_assessment_tem_hr_user,access_hr_applicant_assessment_tem_hr_user,model_hr_applicant_assessment_template,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_category_hr_user,access_hr_applicant_category_hr_user,hr_recruitment.model_hr_applicant_category,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_experience_hr_user,access_hr_applicant_experience_hr_user,model_hr_applicant_experience,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_experience_job_view,access_hr_applicant_experience_job_view,hr.model_hr_job,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_hr_user,access_hr_applicant_hr_user,hr_recruitment.model_hr_applicant,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_logs_hr_user,access_hr_applicant_logs_hr_user,model_hr_applicant_logs,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_major_hr_user,access_hr_applicant_major_hr_user,hr_recruitment_customization.model_hr_applicant_major,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_references_hr_user,access_hr_applicant_references_hr_user,hr_recruitment_customization.model_hr_applicant_references,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_applicant_stage_logs_hr_user,access_hr_applicant_stage_logs_hr_user,model_hr_applicant_stage_logs,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_recruitment_degree_hr_user,access_hr_recruitment_degree_hr_user,hr_recruitment.model_hr_recruitment_degree,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_recruitment_source_hr_user,access_hr_recruitment_source_hr_user,hr_recruitment.model_hr_recruitment_source,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_hr_recruitment_stage_hr_user,access_hr_recruitment_stage_hr_user,hr_recruitment.model_hr_recruitment_stage,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_res_partner_hr_user,access_res_partner_hr_user,base.model_res_partner,hr_recruitment_customization.view_all_recruitment_data,1,0,0,0
++access_grade_level_rec_manager,access_grade_level_rec_manager,hr_contract_grade_level.model_grade_level,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_assessment_tem_rec_manager,access_hr_applicant_assessment_tem_rec_manager,model_hr_applicant_assessment_template,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_category_rec_manager,access_hr_applicant_category_rec_manager,hr_recruitment.model_hr_applicant_category,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_experience_rec_manager,access_hr_applicant_experience_rec_manager,model_hr_applicant_experience,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_logs_rec_manager,access_hr_applicant_logs_rec_manager,model_hr_applicant_logs,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_rec_manager,hr.applicant.rec_manager,hr_recruitment.model_hr_applicant,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_references_rec_manager,access_hr_applicant_references_rec_manager,hr_recruitment_customization.model_hr_applicant_references,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_stage_logs_rec_manager,access_hr_applicant_stage_logs_rec_manager,model_hr_applicant_stage_logs,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_job_rec_manager,access_hr_job_rec_manager,hr.model_hr_job,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_recruitment_degree_rec_manager,access_hr_recruitment_degree_rec_manager,hr_recruitment.model_hr_recruitment_degree,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_recruitment_source_rec_manager,access_hr_recruitment_source_rec_manager,hr_recruitment.model_hr_recruitment_source,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_recruitment_stage_re_manager,access_hr_recruitment_stage_re_manager,hr_recruitment.model_hr_recruitment_stage,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_rec_report_rec_manager,access_rec_report_rec_manager,hr_recruitment.model_hr_recruitment_report,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_res_partner_rec_manager,access_res_partner_rec_manager,base.model_res_partner,hr_recruitment.group_hr_recruitment_user,1,1,1,1
++access_hr_applicant_email,access_hr_applicant_email,model_hr_applicant_email,,1,0,0,0
+diff --git a/custom/hr_recruitment_stages_movement/views/hr_recruitment_menu.xml b/custom/hr_recruitment_stages_movement/views/hr_recruitment_menu.xml
+index a04eaed..20358a7 100755
+--- a/custom/hr_recruitment_stages_movement/views/hr_recruitment_menu.xml
++++ b/custom/hr_recruitment_stages_movement/views/hr_recruitment_menu.xml
+@@ -5,47 +5,44 @@
+         <!-- Menus -->
+         <!-- for v10 hide some in build menu -->
+         <!--<delete model="ir.ui.menu"-->
+-                <!--id="hr_recruitment.menu_crm_case_categ0_act_job"/>-->
++        <!--id="hr_recruitment.menu_crm_case_categ0_act_job"/>-->
+ 
+         <!--<delete model="ir.ui.menu"-->
+-                <!--id="hr_recruitment.menu_hr_job_position"/>-->
++        <!--id="hr_recruitment.menu_hr_job_position"/>-->
+ 
+         <!-- Add Menu -->
+         <menuitem id="menu_hiring_main"
+-                  parent="emp_self_services.mian_ess_menu"
++                  parent="emp_self_services.sub_mian_ess_menu"
+                   name="Recruitment" sequence="1"/>
+         <!--<menuitem id="menu_hiring_main"-->
+-                  <!--parent="hr_recruitment.menu_hr_recruitment_root"-->
+-                  <!--name="Recruitment" sequence="1"/>-->
++        <!--parent="hr_recruitment.menu_hr_recruitment_root"-->
++        <!--name="Recruitment" sequence="1"/>-->
++
++        <!--<menuitem parent="menu_hiring_main" id="hiring_menu_hr_job_position"-->
++                  <!--action="hr_recruitment.action_hr_job" sequence="0"/>-->
++        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_job_position">
++            <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
++        </record>
++        <record model="ir.ui.menu" id="hr_recruitment.menu_crm_case_categ0_act_job">
++            <field name="groups_id" eval="[(6,0,[ref('hr_admin.group_hr_admin')])]" />
++        </record>
++        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_recruitment_root">
++            <field name="groups_id" eval="[(6,0,[ref('hr_recruitment.group_hr_recruitment_user')]),(6,0,[ref('hr_recruitment_stages_movement.group_hr_manager_rec')]), (6,0,[ref('hr_recruitment.group_hr_recruitment_manager')]), (6,0,[ref('hr_recruitment_stages_movement.group_compensation')])]" />
++        </record>
+ 
+-        <menuitem parent="menu_hiring_main" id="hiring_menu_hr_job_position"
+-                  action="hr_recruitment.action_hr_job" sequence="0"/>
+-        <menuitem
+-                name="All Applications"
+-                parent="menu_hiring_main"
+-                id="menu_crm_case_categ0_act_job22"
+-                action="crm_case_categ0_act_job2" sequence="1"/>
+-
+-        <!-- Compensation and Benefit -->
+-        <menuitem id="compensation_menue_" parent="menu_hiring_main"
+-                  name="Compensation and Benefits" sequence="2"/>
+         <menuitem
+                 name="To be Approved"
+                 parent="compensation_menue_"
+                 id="menu_crm_case_categ0_act_job8"
+                 action="crm_case_categ0_act_job8" sequence="2"/>
+ 
+-        <!-- Rec Manager -->
+-        <menuitem id="rec_manager_menue_" parent="menu_hiring_main"
+-                  name="Recruitment Manager" sequence="1"/>
++
+         <menuitem
+                 name="To be Approved"
+                 parent="rec_manager_menue_"
+                 id="menu_crm_case_categ0_act_job3"
+                 action="crm_case_categ0_act_job3"/>
+ 
+-        <menuitem id="hr_manager_menue_" parent="menu_hiring_main"
+-                  name="HR Manager - Recruitment" sequence="2"/>
+         <menuitem
+                 name="To be Approved"
+                 parent="hr_manager_menue_"
+@@ -53,7 +50,7 @@
+                 action="crm_case_categ0_act_job4" sequence="2"/>
+ 
+         <menuitem id="dep_manager_menue_" parent="menu_hiring_main"
+-                  name="Department Manager" sequence="3"/>
++                  name="Department Manager" sequence="3" groups="hr_recruitment_stages_movement.group_dep_manager"/>
+         <menuitem
+                 name="To be Approved"
+                 parent="dep_manager_menue_"
+@@ -61,7 +58,7 @@
+                 action="crm_case_categ0_act_job5" sequence="2"/>
+ 
+         <menuitem id="unit_head_menue_" parent="menu_hiring_main"
+-                  name="Unit Head" sequence="3"/>
++                  name="Unit Head" sequence="3" groups="hr_recruitment_stages_movement.group_unit_head"/>
+         <menuitem
+                 name="To be Approved"
+                 parent="unit_head_menue_"
+@@ -69,7 +66,7 @@
+                 action="crm_case_categ0_act_job7" sequence="2"/>
+ 
+         <menuitem id="ceo_manager_menue_" parent="menu_hiring_main"
+-                  name="CEO Manager" sequence="4"/>
++                  name="CEO Manager" sequence="4" groups="hr_recruitment_stages_movement.group_ceo_manager"/>
+         <menuitem
+                 name="To be Approved"
+                 parent="ceo_manager_menue_"
+@@ -79,13 +76,29 @@
+         <!-- Rec. Officer -->
+ 
+         <!--<menuitem name="Recruitment3" id="menu_recruitment_root_officer"-->
+-                  <!--groups="groups_rules.group_recuitement_officer"-->
+-                  <!--sequence="91"/>-->
++        <!--groups="groups_rules.group_recuitement_officer"-->
++        <!--sequence="91"/>-->
+ 
+         <menuitem id="menu_recruitment_main_officer"
+                   parent="hr_recruitment.menu_hr_recruitment_root"
+                   name="Recruitment" sequence="1"/>
+ 
++        <!-- Rec Manager -->
++        <menuitem id="rec_manager_menue_" parent="menu_recruitment_main_officer"
++                  name="Recruitment Manager" sequence="1" groups="hr_recruitment.group_hr_recruitment_user"/>
++        <!-- Compensation and Benefit -->
++        <menuitem id="compensation_menue_" parent="menu_recruitment_main_officer"
++                  name="Compensation and Benefits" sequence="2" groups="hr_recruitment_stages_movement.group_compensation"/>
++        <!-- HR Manager - Recruitment -->
++        <menuitem id="hr_manager_menue_" parent="menu_recruitment_main_officer"
++                  name="HR Manager - Recruitment" sequence="2" groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>
++        <!-- All Applications -->
++        <menuitem
++                name="All Applications"
++                parent="menu_recruitment_main_officer"
++                id="menu_crm_case_categ0_act_job22"
++                action="crm_case_categ0_act_job2" sequence="100" groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment_stages_movement.group_hr_manager_rec"/>
++
+         <menuitem parent="menu_recruitment_main_officer"
+                   id="hiring_menu_hr_job_position_officer"
+                   action="hr_recruitment.action_hr_job" sequence="1"/>
+@@ -94,7 +107,7 @@
+                 name="Applications"
+                 parent="menu_recruitment_main_officer"
+                 id="menu_crm_case_categ0_act_job2"
+-                action="hr_recruitment.crm_case_categ0_act_job" sequence="2"/>
++                action="hr_recruitment.crm_case_categ0_act_job" sequence="2" groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment_stages_movement.group_hr_manager_rec"/>
+ 
+         <!-- Add CEO + Rec. Manager to reporting -->
+ 
+@@ -109,6 +122,9 @@
+                   id="menu_hr_recruitment_report_all_rec"
+                   parent="rec_reporting_menue_"/>
+ 
++        <record model="ir.ui.menu" id="hr_recruitment.menu_hr_recruitment_configuration">
++            <field name="groups_id" eval="[(6,0,[ref('hr_recruitment.group_hr_recruitment_manager')])]" />
++        </record>
+ 
+     </data>
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_recruitment_stages_movement/views/hr_recruitment_new_view.xml b/custom/hr_recruitment_stages_movement/views/hr_recruitment_new_view.xml
+index b8a24bd..df72185 100755
+--- a/custom/hr_recruitment_stages_movement/views/hr_recruitment_new_view.xml
++++ b/custom/hr_recruitment_stages_movement/views/hr_recruitment_new_view.xml
+@@ -32,7 +32,7 @@
+                             class="oe_highlight"
+                             attrs="{'invisible': ['|',('stage_name_invisible', 'not in', ['Under Job Offer']),
+                                 ('state', 'in', ['draft'])]}"
+-                            groups="hr_recruitment_stages_movement.group_rec_manager"/>
++                            groups="hr_recruitment.group_hr_recruitment_user"/>
+                     <button name="send_to_approve"
+                             string="Send for Approval" type="object"
+                             class="oe_highlight"
+@@ -58,12 +58,12 @@
+                             string="Recruitment Manager Approval"
+                             type="object" states="rec_manager"
+                             class="oe_highlight"
+-                            groups="hr_recruitment_stages_movement.group_rec_manager" />
++                            groups="hr_recruitment.group_hr_recruitment_user" />
+ 
+                     <button name="refuses" string="Reject" type="object"
+                             states="rec_manager"
+                             class="oe_highlight"
+-                            groups="hr_recruitment_stages_movement.group_rec_manager"/>
++                            groups="hr_recruitment.group_hr_recruitment_user"/>
+ 
+                     <!-- HR Manager  -->
+                     <button name="hr_manager_confirm"
+diff --git a/custom/hr_saudi_filed/views/hr_saudi_view.xml b/custom/hr_saudi_filed/views/hr_saudi_view.xml
+index f6e296d..2c8d08e 100644
+--- a/custom/hr_saudi_filed/views/hr_saudi_view.xml
++++ b/custom/hr_saudi_filed/views/hr_saudi_view.xml
+@@ -18,10 +18,6 @@
+                     <xpath expr="//field[@name='bank_account_id']"
+                            position="replace">
+                     </xpath>
+-
+-                    <xpath expr="//button[@name='%(hr_contract.act_hr_employee_2_hr_contract)d']" position="attributes">
+-                        <attribute name="groups">hr.group_hr_user</attribute>
+-                    </xpath>
+                 </data>
+             </field>
+         </record>
+diff --git a/custom/hr_schedule/__manifest__.py b/custom/hr_schedule/__manifest__.py
+index 3bf473c..1d21a9c 100644
+--- a/custom/hr_schedule/__manifest__.py
++++ b/custom/hr_schedule/__manifest__.py
+@@ -18,7 +18,8 @@ Easily create, manage, and track employee schedules.
+         'hr_holidays',
+         'hr_admin',
+         'mail',
+-        'hr'
++        'hr',
++        'hr_attendance_customization'
+     ],
+     'data': [
+         'security/ir.model.access.csv',
+diff --git a/custom/hr_schedule/security/ir.model.access.csv b/custom/hr_schedule/security/ir.model.access.csv
+index d5cdd00..634aaa2 100644
+--- a/custom/hr_schedule/security/ir.model.access.csv
++++ b/custom/hr_schedule/security/ir.model.access.csv
+@@ -1,22 +1,18 @@
+ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+-access_hr_schedule_user,access_hr_schedule,model_hr_schedule,base.group_user,1,0,0,0
+-access_hr_schedule_hruser,access_hr_schedule,model_hr_schedule,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_manager,access_hr_schedule,model_hr_schedule,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_detail_user,access_hr_schedule_detail,model_hr_schedule_detail,base.group_user,1,0,0,0
+-access_hr_schedule_detail_hruser,access_hr_schedule_detail,model_hr_schedule_detail,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_detail_manager,access_hr_schedule_detail,model_hr_schedule_detail,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_request_user,access_hr_schedule_request,model_hr_schedule_request,base.group_user,1,1,1,1
+-access_hr_schedule_request_hruser,access_hr_schedule_request,model_hr_schedule_request,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_request_manager,access_hr_schedule_request,model_hr_schedule_request,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_template_user,access_hr_schedule_template,model_hr_schedule_template,base.group_user,1,0,0,0
+-access_hr_schedule_template_hruser,access_hr_schedule_template,model_hr_schedule_template,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_template_manager,access_hr_schedule_template,model_hr_schedule_template,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_template_worktime_user,access_hr_schedule_template_worktime,model_hr_schedule_template_worktime,base.group_user,1,0,0,0
+-access_hr_schedule_template_worktime_hruser,access_hr_schedule_template_worktime,model_hr_schedule_template_worktime,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_template_worktime_manager,access_hr_schedule_template_worktime,model_hr_schedule_template_worktime,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_alert_hruser,access_hr_schedule_alert,model_hr_schedule_alert,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_alert_manager,access_hr_schedule_alert,model_hr_schedule_alert,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_alert_rule_manager,access_hr_schedule_alert,model_hr_schedule_alert_rule,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_weekday_user,access_hr_schedule_weekday,model_hr_schedule_weekday,hr.group_hr_user,1,1,1,1
+-access_hr_schedule_weekday_manager,access_hr_schedule_weekday,model_hr_schedule_weekday,hr.group_hr_manager,1,1,1,1
+-access_hr_schedule_alert_rule_emp_mngr,access_hr_schedule_alert_emp_mngr,model_hr_schedule_alert_rule,hr_admin.group_hr_admin,1,1,1,0
++
++access_hr_schedule_template_officer,access_hr_schedule_template.officer,model_hr_schedule_template,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_template_worktime_officer,access_hr_schedule_template_worktime.officer,model_hr_schedule_template_worktime,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_alert_officer,access_hr_schedule_alert.officer,model_hr_schedule_alert,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_weekday_officer,access_hr_schedule_weekday.officer,model_hr_schedule_weekday,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_alert_rule_officer,access_hr_schedule_alert.officer,model_hr_schedule_alert_rule,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_request_officer,access_hr_schedule_request.officer,model_hr_schedule_request,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_detail_officer,access_hr_schedule_detail.officer,model_hr_schedule_detail,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_officer,access_hr_schedule.officer,model_hr_schedule,hr_attendance.group_hr_attendance_user,1,1,1,1
++access_hr_schedule_employee,access_hr_schedule.employee,model_hr_schedule,base.group_user,1,0,0,0
++
++access_hr_schedule_template_user,access_hr_schedule_template,model_hr_schedule_template,hr_attendance_customization.group_hr_attendance_view_all,1,0,0,0
++access_hr_schedule_template_worktime_user,access_hr_schedule_template_worktime,model_hr_schedule_template_worktime,hr_attendance_customization.group_hr_attendance_view_all,1,0,0,0
++
++
++access_hr_schedule_detail_user,access_hr_schedule_detail,model_hr_schedule_detail,hr_attendance_customization.group_hr_attendance_view_all,1,0,0,0
++access_hr_schedule_user,access_hr_schedule,model_hr_schedule,hr_attendance_customization.group_hr_attendance_view_all,1,0,0,0
+\ No newline at end of file
+diff --git a/custom/hr_schedule/views/hr_schedule_view.xml b/custom/hr_schedule/views/hr_schedule_view.xml
+index 5743383..2f81177 100644
+--- a/custom/hr_schedule/views/hr_schedule_view.xml
++++ b/custom/hr_schedule/views/hr_schedule_view.xml
+@@ -3,7 +3,7 @@
+ 
+     <!-- Top-level Menu -->
+     <menuitem name="Time and Attendance" id="menu_time_attendance"
+-              parent="hr.menu_hr_root" groups="hr.group_hr_user" sequence="2" />
++              parent="hr_attendance.menu_hr_attendance_root" groups="hr.group_hr_user" sequence="2" />
+ 
+     <!-- Put the attendance top-level menu under our submenu -->
+     <menuitem id="menu_hr_attendance"
+@@ -69,7 +69,7 @@
+                 <!-- states="draft" -->
+                 <header>
+                     <button name="action_validate" type="object"
+-                            class="oe_highlight" string="Validate" />
++                            class="oe_highlight" string="Validate" groups="hr_attendance.group_hr_attendance_user"/>
+                     <field name="state" required="True" readonly="True" widget="statusbar" />
+                 </header>
+                 <sheet>
+@@ -188,7 +188,7 @@
+             <form string="Schedule Detail">
+                 <header>
+                     <button name="action_validate" type="object" states="draft"
+-                            class="oe_highlight" string="Validate" />
++                            class="oe_highlight" string="Validate" groups="hr_attendance.group_hr_attendance_user"/>
+                     <field name="state" required="True" readonly="True" widget="statusbar" />
+                 </header>
+                 <group>
+@@ -544,7 +544,7 @@
+             <data>
+                 <xpath expr="//div[@name='button_box']" position="inside">
+                     <button name="%(act_hr_employee_2_hr_schedule)d" icon="fa-book"
+-                            class="oe_stat_button" type="action" groups="hr.group_hr_user">
++                            class="oe_stat_button" type="action" groups="hr_attendance_customization.group_hr_attendance_view_all">
+                         <field name="schedule_count" widget="statinfo" string="Schedule"
+                                help="Schedule" />
+                     </button>
+diff --git a/custom/hr_wage_increment/__manifest__.py b/custom/hr_wage_increment/__manifest__.py
+index a76cf14..1abcd45 100755
+--- a/custom/hr_wage_increment/__manifest__.py
++++ b/custom/hr_wage_increment/__manifest__.py
+@@ -24,6 +24,7 @@ Wage Increment Handling
+     "init_xml": [],
+     'data': [
+         'security/ir.model.access.csv',
++        'security/ir_rule.xml',
+         'wizard/wage_adjustment_by_employees.xml',
+         'views/wage_increment_view.xml',
+         'views/hr_contract_view.xml',
+diff --git a/custom/hr_wage_increment/security/ir.model.access.csv b/custom/hr_wage_increment/security/ir.model.access.csv
+index 3a238c9..e1df271 100755
+--- a/custom/hr_wage_increment/security/ir.model.access.csv
++++ b/custom/hr_wage_increment/security/ir.model.access.csv
+@@ -1,7 +1,5 @@
+ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+-access_hr_wage_increment_user,access_hr_wage_increment,model_hr_contract_wage_increment,hr.group_hr_user,1,1,1,1
+-access_hr_wage_increment_manager,access_hr_wage_increment,model_hr_contract_wage_increment,hr.group_hr_manager,1,1,1,1
+-access_hr_wage_increment_director,access_hr_wage_increment,model_hr_contract_wage_increment,hr_admin.group_hr_admin,1,1,1,1
+-access_hr_wage_increment_run_user,access_hr_wage_increment_run,model_hr_contract_wage_increment_run,hr.group_hr_user,1,1,1,1
+-access_hr_wage_increment_run_manager,access_hr_wage_increment_run,model_hr_contract_wage_increment_run,hr.group_hr_manager,1,1,1,1
+-access_hr_contract_wage_increment_user,access_hr_contract_wage_increment_user,model_hr_contract_wage_increment,base.group_user,1,0,0,0
++access_hr_wage_increment_auditor,access_hr_wage_increment_auditor,model_hr_contract_wage_increment,hr_payroll_customization.group_payroll_auditor,1,0,0,0
++access_hr_wage_increment_user,access_hr_wage_increment,model_hr_contract_wage_increment,base.group_user,1,0,0,0
++access_hr_wage_increment_officer,access_hr_wage_increment_officer,model_hr_contract_wage_increment,hr_payroll.group_hr_payroll_user,1,1,1,1
++access_hr_wage_increment_run_officer,access_hr_wage_increment_run_officer,model_hr_contract_wage_increment_run,hr_payroll.group_hr_payroll_user,1,1,1,1
+diff --git a/custom/hr_wage_increment/views/wage_increment_view.xml b/custom/hr_wage_increment/views/wage_increment_view.xml
+index a85103d..7447f05 100755
+--- a/custom/hr_wage_increment/views/wage_increment_view.xml
++++ b/custom/hr_wage_increment/views/wage_increment_view.xml
+@@ -5,7 +5,7 @@
+ 		<!-- Menus -->
+ 
+ 		<menuitem name="Wage Adustments" id="submenu_hr_wageadjust"
+-			parent="hr.menu_hr_main" sequence="120" groups="hr.group_hr_user" />
++				  parent="hr_payroll.menu_hr_payroll_root" sequence="90" groups="hr.group_hr_user" />
+ 
+ 		<record id="view_hr_wage_increment_filter" model="ir.ui.view">
+ 			<field name="name">view_hr_wage_increment_filter</field>
+@@ -13,9 +13,9 @@
+ 			<field name="arch" type="xml">
+ 				<search string="Wage Adjustment Search">
+ 					<filter icon="terp-camera_test" domain="[('state','in',('draft', 'confirm'))]"
+-						string="To Approve" name="to_approve" />
++							string="To Approve" name="to_approve" />
+ 					<filter name="done" icon="terp-camera_test" string="Done"
+-						domain="[('state','=','approve')]" />
++							domain="[('state','=','approve')]" />
+ 					<newline />
+ 					<field name="effective_date" />
+ 					<field name="employee_id" />
+@@ -23,18 +23,18 @@
+ 					<field name="job_id" />
+ 					<newline />
+ 					<filter string="My Department Adjustments" icon="terp-personal+"
+-						domain="[('department_id.manager_id','=',uid)]" />
++							domain="[('department_id.manager_id','=',uid)]" />
+ 					<group expand="0" string="Group By...">
+ 						<filter name="department" string="Department" icon="terp-personal"
+-							domain="[]" context="{'group_by':'department_id'}" />
++								domain="[]" context="{'group_by':'department_id'}" />
+ 						<filter name="job" string="Job" icon="terp-personal"
+-							domain="[]" context="{'group_by':'job_id'}" />
++								domain="[]" context="{'group_by':'job_id'}" />
+ 						<filter name="employee" string="Employee" icon="terp-personal"
+-							domain="[]" context="{'group_by':'employee_id'}" />
++								domain="[]" context="{'group_by':'employee_id'}" />
+ 						<filter name="date" icon="terp-go-today" domain="[]"
+-							context="{'group_by':'effective_date'}" />
++								context="{'group_by':'effective_date'}" />
+ 						<filter name="state" string="State" icon="terp-go-today"
+-							domain="[]" context="{'group_by':'state'}" />
++								domain="[]" context="{'group_by':'state'}" />
+ 					</group>
+ 				</search>
+ 			</field>
+@@ -69,7 +69,7 @@
+ 			</field>
+ 		</record>
+ 		<menuitem action="open_wage_increment" id="menu_wage_increment"
+-			parent="submenu_hr_wageadjust" groups="hr.group_hr_user" sequence="10" />
++				  parent="submenu_hr_wageadjust" groups="hr.group_hr_user" sequence="10" />
+ 
+ 
+ 		<record id="wage_increment_view_popup" model="ir.ui.view">
+@@ -79,40 +79,40 @@
+ 				<form string="Wage Adjustment">
+ 					<header>
+ 						<button name="do_signal_confirm" type="object" states="draft"
+-							string="Confirm" class="oe_highlight" />
++								string="Confirm" class="oe_highlight" />
+ 						<button name="do_signal_approve" type="object" states="confirm"
+-							string="Approve" class="oe_highlight" />
++								string="Approve" class="oe_highlight" />
+ 						<button name="signal_decline" type="workflow" states="confirm"
+-							string="Decline" class="oe_highlight" />
++								string="Decline" class="oe_highlight" />
+ 						<field name="state" widget="statusbar" readonly="1"/>
+ 					</header>
+ 					<sheet>
+-					<group>
+-						<group string="New Contract">
+-							<field name="wage" required="1"
+-								   attrs="{'readonly': [('state','!=','draft')]}"/>
+-							<field name="effective_date" required="1"
+-								   attrs="{'readonly': [('state','!=','draft')]}"/>
+-							<field name="wage_difference" readonly="1"/>
+-						</group>
+-						<group string="Current Contract">
+-							<field name="employee_id" readonly="1"/>
+-							<field name="contract_id" readonly="1"/>
+-							<field name="c_wage" readonly="1"/>
+-						</group>
+-						<group string="Miscellaneous">
+-							<field name="department_id" readonly="1"/>
+-							<field name="job_id" readonly="1"/>
+-							<field name="run_id" />
++						<group>
++							<group string="New Contract">
++								<field name="wage" required="1"
++									   attrs="{'readonly': [('state','!=','draft')]}"/>
++								<field name="effective_date" required="1"
++									   attrs="{'readonly': [('state','!=','draft')]}"/>
++								<field name="wage_difference" readonly="1"/>
++							</group>
++							<group string="Current Contract">
++								<field name="employee_id" readonly="1"/>
++								<field name="contract_id" readonly="1"/>
++								<field name="c_wage" readonly="1"/>
++							</group>
++							<group string="Miscellaneous">
++								<field name="department_id" readonly="1"/>
++								<field name="job_id" readonly="1"/>
++								<field name="run_id" />
++							</group>
+ 						</group>
+-					</group>
+ 					</sheet>
+ 				</form>
+ 			</field>
+ 		</record>
+ 		<act_window name="Wage Adjustment" res_model="hr.contract.wage.increment"
+-			src_model="hr.employee" view_mode="form" view_id="wage_increment_view_popup"
+-			target="new" id="wage_increment_act_window" />
++					src_model="hr.employee" view_mode="form" view_id="wage_increment_view_popup"
++					target="new" id="wage_increment_act_window" groups="hr_payroll.group_hr_payroll_user"/>
+ 
+ 		<!-- wage adjustment runs -->
+ 
+@@ -124,14 +124,14 @@
+ 					<field name="name" string="Adjustment Batches" />
+ 					<field name="effective_date" />
+ 					<filter icon="terp-camera_test" domain="[('state','in',('draft', 'confirm'))]"
+-						string="To Approve" name="to_approve" />
++							string="To Approve" name="to_approve" />
+ 					<filter name="done_filter" icon="terp-camera_test" string="Done"
+-						domain="[('state','=','approve')]" help="Approved Adjustment Batches" />
++							domain="[('state','=','approve')]" help="Approved Adjustment Batches" />
+ 					<group expand="0" string="Group By...">
+ 						<filter name="state" string="State" icon="terp-go-today"
+-							domain="[]" context="{'group_by':'state'}" />
++								domain="[]" context="{'group_by':'state'}" />
+ 						<filter name="date" string="Date" icon="terp-go-today"
+-							domain="[]" context="{'group_by':'effective_date'}" />
++								domain="[]" context="{'group_by':'effective_date'}" />
+ 					</group>
+ 				</search>
+ 			</field>
+@@ -158,13 +158,13 @@
+ 				<form string="Wage Adjustment Batch">
+ 					<header>
+ 						<button name="%(action_wage_adjustment_by_employees)d"
+-							type="action" states="draft" string="Generate Adjustments" class="oe_highlight" />
++								type="action" states="draft" string="Generate Adjustments" class="oe_highlight" groups="hr_payroll.group_hr_payroll_user"/>
+ 						<button name="state_confirm" type="object" string="Confirm"
+-							states="draft" class="oe_highlight" />
++								states="draft" class="oe_highlight" groups="hr_payroll.group_hr_payroll_user"/>
+ 						<button name="state_approve" type="object" string="Approve"
+-							states="confirm" class="oe_highlight" />
++								states="confirm" class="oe_highlight" groups="hr_payroll.group_hr_payroll_user"/>
+ 						<button name="state_decline" type="object" string="Decline"
+-							states="confirm" class="oe_highlight" />
++								states="confirm" class="oe_highlight" groups="hr_payroll.group_hr_payroll_user"/>
+ 						<field name="state" widget="statusbar" readonly="1"/>
+ 					</header>
+ 					<sheet>
+@@ -211,7 +211,7 @@
+ 			<!-- <field name="context">{'default_type': 'to_approve', 'search_default_to_approve':1}</field> -->
+ 		</record>
+ 		<menuitem action="action_wage_adjustment_run" id="menu_wage_adjustment_run"
+-			parent="submenu_hr_wageadjust" groups="hr.group_hr_user" sequence="20" />
++				  parent="submenu_hr_wageadjust" groups="hr.group_hr_user" sequence="20" />
+ 
+ 		<!-- Employee Wage History -->
+ 
+@@ -233,11 +233,10 @@
+ 
+ 					<xpath expr="//div[@name='button_box']" position="inside">
+ 						<button name="%(act_hr_employee_2_hr_wage_adjustment)d"
+-							class="oe_stat_button" icon="fa-book" type="action" groups="hr.group_hr_user" >
+-							
++								class="oe_stat_button" icon="fa-book" type="action" groups="hr_payroll_customization.group_payroll_auditor" >
+ 							<field name="wage_count" widget="statinfo" string="Wage History"
+-								help="wage" />
+-								
++								   help="wage" />
++
+ 						</button>
+ 					</xpath>
+ 				</data>
+diff --git a/custom/hr_wage_increment/wizard/wage_adjustment_by_employees.xml b/custom/hr_wage_increment/wizard/wage_adjustment_by_employees.xml
+index fdef746..1f18066 100755
+--- a/custom/hr_wage_increment/wizard/wage_adjustment_by_employees.xml
++++ b/custom/hr_wage_increment/wizard/wage_adjustment_by_employees.xml
+@@ -10,7 +10,7 @@
+                     <header>
+                         <button icon="fa-cogs" string="Generate"
+                                 name="create_adjustments"
+-                                type="object" class="oe_highlight" context="{'create_adjustment': 'True'}"/>
++                                type="object" class="oe_highlight" context="{'create_adjustment': 'True'}" groups="hr_payroll.group_hr_payroll_user"/>
+                     </header>
+                     <group>
+                         <label colspan="4" nolabel="1"

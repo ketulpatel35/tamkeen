@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report  -->
+        <report id="salary_certificates_report_register"
+                model="emp.salary.certificates"
+                string="Employment Certificate Report"
+                name="hr_salary_certificates.report_salary_english"
+                file="hr_salary_certificates.report_salary_english"
+                report_type="qweb-pdf"
+                menu="False"/>
+
+        <report id="salary_certificates_report_arabic_register"
+                model="emp.salary.certificates"
+                string="Employment Certificate Report Arabic"
+                name="hr_salary_certificates.report_salary_arabic"
+                file="hr_salary_certificates.report_salary_arabic"
+                report_type="qweb-pdf"
+                menu="False"/>
+
+
+    </data>
+</odoo>

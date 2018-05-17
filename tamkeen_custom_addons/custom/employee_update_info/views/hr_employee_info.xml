@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit hr employee Apply for all employee -->
+        <record id="employee_inherit_up_info_all" model="ir.ui.view">
+            <field name="name">employee.inherit.up.info.all</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="category_ids" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <xpath expr="//page[@name='public']" position="attributes">
+                    <attribute name="groups">hr_employee_customization.group_view_emp_info</attribute>
+                </xpath>
+                <field name="work_email" position="after">
+                    <field name="is_self_employee" invisible="1"/>
+                </field>
+                <field name="address_id" position="attributes">
+                    <attribute name="required">0</attribute>
+                    <attribute name="attrs">
+                        {'readonly':[('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="work_phone" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="work_location" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="marital" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="mobile_phone" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="work_email" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="identification_id" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="gender" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="birthday" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="employee_hr_hr_employee_view_form2" model="ir.ui.view">
+            <field name="name">employee.hr.hr.employee.view.form2</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
+            <field name="arch" type="xml">
+                <field name="place_of_birth" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_employee_form_inherit_extension_int_all" model="ir.ui.view">
+            <field name="name">view.employee.documents.form.int.all</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_employee_customization.view_employee_form_inherit_extension"/>
+            <field name="arch" type="xml">
+                <field name="initial_employment_date"
+                       position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="length_of_service_days" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                    <field name="length_of_service" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_saudi_inherit_employee">
+            <field name="name">hr.employee.saudi.employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_saudi_filed.hr_saudi_inherit2" />
+            <field name="arch" type="xml">
+                <field name="emergency_contact_ids" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_saudi_inherit_employee_update" model="ir.ui.view">
+            <field name="name">view.employee.documents.form.int.all</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_saudi_filed.hr_saudi_inherit"/>
+            <field name="arch" type="xml">
+                <field name="id_exp_date" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="id_exp_date_hijri" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="passport_id" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="passport_exp_date" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="passport_exp_date_hijri" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="address_home_id" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="address_details" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="personal_mobile_number" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="post_code" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="zip_code" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="personal_email" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="home_phone_number" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+                <field name="blood_type" position="attributes">
+                    <attribute name="attrs">
+                        {'readonly': [('is_self_employee', '!=', True)]}
+                    </attribute>
+                </field>
+
+                <field name="gosi_number" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="bank_account" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="religion" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="emp_experience" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="birthday_hijri" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <!-- Add group for some Page -->
+        <record id="view_employee_documents_form_int_all" model="ir.ui.view">
+            <field name="name">view.employee.documents.form.int.all</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="emp_self_services.view_employee_documents_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='experiences']"
+                       position="attributes">
+                    <attribute name="groups">base.group_user</attribute>
+                    <attribute name="autofocus">"autofocus"</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='public']" position="attributes">
+                    <attribute name="groups">hr_employee_customization.group_view_emp_info</attribute>
+                </xpath>
+                <field name="address_id" position="attributes">
+                    <attribute name="required">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- Inherit hr employee (saudi fields) Apply for all employee -->
+        <record id="employee_saudi_fields_up_info_all" model="ir.ui.view">
+            <field name="name">employee.saudi.fields.up.info.all</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_saudi_filed.hr_saudi_inherit"/>
+            <field name="arch" type="xml">
+                <field name="name_eng" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <field name="f_employee_no" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- Inherit hr employee Form apply for particular group -->
+        <record id="employee_inherit_up_info_group" model="ir.ui.view">
+            <field name="name">hr.employee.info.update</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]" />
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="category_ids" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="work_email" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="identification_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="gender" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="birthday" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_saudi_inherit_employee_for_update" model="ir.ui.view">
+            <field name="name">hr.saudi.inherit.employee.for.update</field>
+            <field name="model">hr.employee</field>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]" />
+            <field name="inherit_id" ref="employee_update_info.hr_saudi_inherit_employee_update"/>
+            <field name="arch" type="xml">
+                <field name="gosi_number" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="bank_account" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="religion" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="emp_experience" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="birthday_hijri" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="employee_update_hr_hr_employee_view_form2"
+                model="ir.ui.view">
+            <field name="name">employee.update.hr.employee.view.form2</field>
+            <field name="model">hr.employee</field>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]" />
+            <field name="inherit_id" ref="employee_hr_hr_employee_view_form2"/>
+            <field name="arch" type="xml">
+                <field name="place_of_birth" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="employee_update_form_inherit_extension"
+                model="ir.ui.view">
+            <field name="name">employee.update.form.inherit.extension</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="view_employee_form_inherit_extension_int_all"/>
+            <field name="arch" type="xml">
+                <field name="initial_employment_date"
+                       position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="length_of_service_days" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                    <field name="length_of_service" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- Inherit hr employee (saudi fields) Apply for all employee -->
+        <record id="employee_saudi_fields_up_info_grp" model="ir.ui.view">
+            <field name="name">employee.saudi.fields.up.info.grp</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_saudi_filed.hr_saudi_inherit"/>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]" />
+            <field name="arch" type="xml">
+                <field name="name_eng" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="f_employee_no" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_additional_employee_role_form_inherit_for_role" model="ir.ui.view">
+            <field name="name">Employee Role</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_employee_marked_roles.view_additional_employee_role_form" />
+            <field name="arch" type="xml">
+                <field name="employee_role" position="attributes">
+                    <attribute name="required">0</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

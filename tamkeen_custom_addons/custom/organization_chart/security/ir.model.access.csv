@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tree_normal_user,tree_normal_user,model_tree_chart_config,organization_chart.group_tree_chart_user,1,0,0,0
+access_tree_lines_normal_user,tree_lines_normal_user,model_tree_chart_line,organization_chart.group_tree_chart_user,1,0,0,0
+access_tree_config,tree_config,model_tree_chart_config,organization_chart.group_tree_chart_config,1,1,1,1
+access_tree_lines_config,tree_lines_config,model_tree_chart_line,organization_chart.group_tree_chart_config,1,1,1,1
+

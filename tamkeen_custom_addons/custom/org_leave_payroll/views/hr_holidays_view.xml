@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_hr_holidays_extension_status_form" model="ir.ui.view">
+            <field name="name">hr.holidays.extension.status.form.inherit</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays_extension.view_holiday_status_inherit_for_extension"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/field[@name='active']" position="after">
+                    <field name="ignore_locked_period" />
+                </xpath>
+                <xpath expr="//group/field[@name='categ_id']" position="after">
+                    <field name="code"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--<record id="hr_holidays_inherit_for_add_for_payroll_period_01"-->
+                <!--model="ir.ui.view">-->
+            <!--<field name="name">hr.holidays.inherit.for.add.for.payroll.period.01</field>-->
+            <!--<field name="model">hr.holidays</field>-->
+            <!--<field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field name="payslip_status" position="before">-->
+                    <!--<field name="payroll_period_id"/>-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</odoo>

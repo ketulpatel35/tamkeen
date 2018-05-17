@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Org End of Service Form View -->
+    <record id="org_end_of_service_form_views" model="ir.ui.view">
+        <field name="name">org.end.of.service.form.view</field>
+        <field name="model">org.end.of.service</field>
+        <field name="arch" type="xml">
+            <form string="Org End of Service">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+
+                    <button name="action_submit_request" type="object"
+                            string="Submit" class="btn-primary"
+                            groups="org_end_of_service.group_eos_normal_user"
+                            states="draft"/>
+
+                    <!--Manager -->
+                    <button name="%(org_end_of_service.recommend_negotiation_wizard_action_view)d"
+                            type="action" string="Manager Approval"
+                            groups="org_end_of_service.group_eos_manager_approval"
+                            context="{'state': 'mngr_approval'}"
+                            class="btn-primary" states="mngr_approval"/>
+
+                    <!-- VP -->
+                    <button name="%(org_end_of_service.recommend_negotiation_wizard_action_view)d"
+                            type="action" states="vp_approval"
+                            context="{'state': 'vp_approval'}"
+                            groups="org_end_of_service.group_eos_vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+
+                    <!-- Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_end_of_service.group_eos_manager_approval,org_end_of_service.group_eos_vp_approval"
+                            states='mngr_approval,vp_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- HR -->
+                    <button name="action_submit_to_ceo_approval" type="object"
+                            string="Hr Approval" class="btn-primary"
+                            groups="org_end_of_service.group_eos_hr_approval"
+                            states="hr_approval"/>
+
+                    <!-- CEO -->
+                    <button name="action_submit_to_final_hr_approval"
+                            type="object"
+                            groups="org_end_of_service.group_eos_ceo_approval"
+                            string="CEO Approval" class="btn-primary"
+                            states="ceo_approval"/>
+
+                    <!-- Final HR Approval -->
+                    <button name="action_submit_to_finance_processing"
+                            type="object"
+                            groups="org_end_of_service.group_eos_hr_approval"
+                            string="HR Approval" class="btn-primary"
+                            states="final_hr_approval"/>
+
+                    <!-- Financial Processing -->
+                    <button name="action_finance_approved"
+                            type="object"
+                            groups="org_end_of_service.group_eos_finance_approval"
+                            string="Finance Approval" class="btn-primary"
+                            states="finance_processing"/>
+
+                    <!-- Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="org_end_of_service.group_eos_hr_approval"
+                            states='final_hr_approval'/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                states="hr_approval,final_hr_approval"
+                                groups="org_end_of_service.group_eos_hr_approval"
+                                name="action_schedule_meeting"
+                                icon="fa-calendar">
+                            <div class="o_stat_info">
+                                <field name="calendar_event_ids"
+                                       invisible="1"/>
+                                <field name="meeting_count"
+                                       class="o_stat_value"/>
+                                <span class="o_stat_text"
+                                      attrs="{'invisible': [('meeting_count', '&lt;', 2)]}">
+                                    Meetings
+                                </span>
+                                <span class="o_stat_text"
+                                      attrs="{'invisible': [('meeting_count', '&gt;', 1)]}">
+                                    Meeting
+                                </span>
+                            </div>
+                        </button>
+                        <button name="action_start_survey"
+                                class="oe_stat_button" icon="fa-user"
+                                type="object"
+                                groups="org_end_of_service.group_eos_hr_approval"
+                                help="Answer related end of job question"
+                                context="{'survey_id': survey_id}"
+                                attrs="{'invisible':['|', ('survey_id', '=', False), ('state', 'not in' , ['hr_approval','final_hr_approval','ceo_approval','finance_processing','approved'])]}">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Start Exit</span>
+                                <span class="o_stat_text">Interview</span>
+                            </div>
+                        </button>
+                        <button name="action_print_survey"
+                                class="oe_stat_button"
+                                icon="fa-print"
+                                type="object"
+                                help="Print exit interview report"
+                                attrs="{'invisible':[('survey_id','=',False)]}">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Print Exit</span>
+                                <span class="o_stat_text">Interview</span>
+                            </div>
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1"
+                               attrs="{'invisible':[('name', '=', False)]}"
+                               class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   readonly="1" required="1"/>
+                            <field name="org_unit_type" readonly="1"
+                                   required="1"/>
+                            <field name="job_id" readonly="1" required="1"/>
+                            <field name="date_of_joining" readonly="1"
+                                   required="1"/>
+                            <field name="mobile"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_company_id"/>
+                            <field name="department_id" readonly="1"
+                                   required="1"/>
+                            <field name="nationality_id" readonly="1"
+                                   required="1"/>
+                            <field name="email"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="end_of_service_policy_id"
+                                   invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="last_day_of_work"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="request_type"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="survey_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="about_service" widget='html' readonly="1"/>
+                    <notebook>
+                        <!-- Recommend Negotiation -->
+                        <page name="recommend_negotiation_by"
+                              string="Recommendation">
+                            <group>
+                                <field name="recommend_negotiation_ids"
+                                       nolabel="1" readonly="1">
+                                    <tree string="Recommend Negotiation">
+                                        <field name="end_of_service_id"
+                                               invisible="1"/>
+                                        <field name="user_id"/>
+                                        <field name="date"/>
+                                        <field name="reason"
+                                               string="Justification"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <!-- Endorsement -->
+                        <page string="Endorsement"
+                              attrs="{'invisible':[('endorsement_for_eos','=',False)]}">
+                            <group>
+                                <field name="endorsement_text" nolabel="1"
+                                       widget="html"/>
+                            </group>
+                            <group>
+                                <field name="endorsement_required"/>
+                            </group>
+                            <field name="endorsement_for_eos"
+                                   invisible="1"/>
+                        </page>
+                        <!--Approvals Page-->
+                        <page string="Approvals" name="approvals">
+                            <div>
+                                The approval/refusal information will be
+                                displayed here.
+                            </div>
+                            <group>
+                                <group
+                                        attrs="{'invisible':[('eos_manager_user_id','=',False)]}">
+                                    <field name="eos_manager_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_manager_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('eos_vp_user_id','=',False)]}">
+                                    <field name="eos_vp_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_vp_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('eos_hr_user_id','=',False)]}">
+                                    <field name="eos_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_hr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('eos_ceo_user_id','=',False)]}">
+                                    <field name="eos_ceo_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_ceo_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('eos_final_hr_user_id','=',False)]}">
+                                    <field name="eos_final_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_final_hr_approval_date"/>
+                                </group>
+                                <group attrs="{'invisible':[('eos_finance_user_id','=',False)]}">
+                                    <field name="eos_finance_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_finance_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('eos_rejected_user_id','=',False)]}">
+                                    <field name="eos_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_rejected_date"/>
+                                </group>
+
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('eos_submitted_by','=',False)]}">
+                                    <field name="eos_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="eos_submit_date"
+                                           colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('eos_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="eos_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="service_logs" string="Service Logs">
+                            <field name="service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="end_of_service_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- End of Service Form View Send Request behalf of other Employee -->
+    <record id="end_of_service_req_behalf_form_view" model="ir.ui.view">
+        <field name="name">end.of.service.req.behalf.form.view</field>
+        <field name="model">org.end.of.service</field>
+        <field name="inherit_id" ref="org_end_of_service_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_end_of_service.group_eos_on_behalf_of_other'))]"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="domain">[(1,'=',1)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!--Org End of Service Tree View-->
+    <record id="org_end_of_service_tree_view" model="ir.ui.view">
+        <field name="name">org.end.of.service.tree.view</field>
+        <field name="model">org.end.of.service</field>
+        <field name="arch" type="xml">
+            <tree string="End of Service">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="job_id"/>
+                <!--<field name="org_unit_type"/>-->
+                <field name="department_id"/>
+                <field name="request_type"/>
+                <field name="date_of_joining"/>
+                <field name="last_day_of_work"/>
+                <!--<field name="state"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Org End of Service Search View -->
+    <record id="org_end_of_service_search_view" model="ir.ui.view">
+        <field name="name">org.end.of.service.search.view</field>
+        <field name="model">org.end.of.service</field>
+        <field name="arch" type="xml">
+            <search string="End of Service">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="request_type"/>
+                <field name="state"/>
+                <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                <filter name="pending_finance_approval"
+                        string="Pending Finance Approval"
+                        domain="[('state','in',['finance_processing'])]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_request_type"
+                            string="Request Type"
+                            context="{'group_by':'request_type'}"/>
+                    <filter name="group_department_id" string="Department"
+                            context="{'group_by':'department_id'}"/>
+                    <!--<filter name="state" string="State" icon="terp-go-today"-->
+                    <!--domain="[]" context="{'group_by':'state'}"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Org End of Service Action view -->
+    <record id="org_end_of_service_action_view"
+            model="ir.actions.act_window">
+        <field name="name">End of Service</field>
+        <field name="res_model">org.end.of.service</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!--<field name="context"></field>-->
+        <!--<field name="domain">[]</field>-->
+    </record>
+
+    <!-- View All End of Service -->
+    <record id="org_end_of_service_action_view_all"
+            model="ir.actions.act_window">
+        <field name="name">End of Service</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">org.end.of.service</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to add new document
+            </p>
+        </field>
+    </record>
+
+    <!-- action hr approval end of service -->
+    <record id="open_eos_request_for_hr_approval"
+            model="ir.actions.act_window">
+        <field name="name">HR Approval</field>
+        <field name="res_model">org.end.of.service</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_hr_approval':1,'readonly_by_pass': True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+    <!-- action finance approval end of service -->
+    <record id="open_eos_request_for_finance_approval"
+            model="ir.actions.act_window">
+        <field name="name">Finance Approval</field>
+        <field name="res_model">org.end.of.service</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_pending_finance_approval':1,
+            'readonly_by_pass': True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- quality.hse form view -->
+        <record id="quality_hse_config_form_view" model="ir.ui.view">
+            <field name="name">quality.hse.config.form.view</field>
+            <field name="model">quality.hse</field>
+            <field name="arch" type="xml">
+                <form string="Quality HSE">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- quality.hse tree view -->
+        <record id="quality_hse_config_tree_view" model="ir.ui.view">
+            <field name="name">quality.hse.config.tree.view</field>
+            <field name="model">quality.hse</field>
+            <field name="arch" type="xml">
+                <tree string="Quality HSE">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- quality.hse action view -->
+        <record id="action_for_quality_hse_conf"
+                model="ir.actions.act_window">
+            <field name="name">Quality HSE</field>
+            <field name="res_model">quality.hse</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>

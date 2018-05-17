@@ -1,0 +1,386 @@
+diff --git a/custom/auth_ldap_customization/users_ldap_customization.py b/custom/auth_ldap_customization/users_ldap_customization.py
+index 1bbfc8d..d09d8ff 100644
+--- a/custom/auth_ldap_customization/users_ldap_customization.py
++++ b/custom/auth_ldap_customization/users_ldap_customization.py
+@@ -14,57 +14,93 @@ _logger = logging.getLogger(__name__)
+ class CompanyLDAP(models.Model):
+     _inherit = 'res.company.ldap'
+ 
++    # @api.model
++    # def get_or_create_user(self, conf, login, ldap_entry):
++    #     """
++    #     Retrieve an active resource of model res_users with the specified
++    #     login. Create the user if it is not initially found.
++    #
++    #     :param dict conf: LDAP configuration
++    #     :param login: the user's login
++    #     :param tuple ldap_entry: single LDAP result (dn, attrs)
++    #     :return: res_users id
++    #     :rtype: int
++    #     """
++    #
++    #     user_id = False
++    #     login = tools.ustr(login.lower().strip())
++    #     self.env.cr.execute("SELECT id,"
++    #                         " active FROM res_users WHERE"
++    #                         " lower(login)=%s", (login,))
++    #     res = self.env.cr.fetchone()
++    #     if res:
++    #         if res[1]:
++    #             user_id = res[0]
++    #     elif conf['create_user']:
++    #         _logger.debug("Creating new Odoo user \"%s\" from LDAP" % login)
++    #         values = self.map_ldap_attributes(conf, login, ldap_entry)
++    #         SudoUser = self.env['res.users'].sudo()
++    #         if conf['user']:
++    #             values['active'] = True
++    #             user_id = SudoUser.\
++    #                 browse(conf['user'][0]).copy(default=values).id
++    #
++    #         else:
++    #             '''NOTE --> Check if the employee
++    #              exists by searching him using
++    #               his email got from LDAP information
++    #             , If employee exists...Create him a User
++    #              and link this user by updating the employee
++    #               record with the new created user_id and
++    #                the work phone (extension)
++    #             , If not...He can't log in and a message
++    #              will appear to the user
++    #               (Invalid user or password) '''
++    #
++    #             employee_rec = self.pool.get('hr.employee').search([
++    #                 ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
++    #             if employee_rec:
++    #                 values['email'] = ldap_entry[1]['mail'][0].lower()
++    #                 user_id = SudoUser.create(values).id
++    #                 employee_rec.\
++    #                     write({'user_id': user_id,
++    #                            'work_phone': ldap_entry[1]['telephoneNumber']
++    #                            [0] if ldap_entry[1].get('telephoneNumber')
++    #                            else False})
++    #     return user_id
++
+     @api.model
+     def get_or_create_user(self, conf, login, ldap_entry):
+         """
+         Retrieve an active resource of model res_users with the specified
+         login. Create the user if it is not initially found.
+-
+         :param dict conf: LDAP configuration
+         :param login: the user's login
+         :param tuple ldap_entry: single LDAP result (dn, attrs)
+         :return: res_users id
+         :rtype: int
+         """
+-
+-        user_id = False
+-        login = tools.ustr(login.lower().strip())
+-        self.env.cr.execute("SELECT id,"
+-                            " active FROM res_users WHERE"
+-                            " lower(login)=%s", (login,))
+-        res = self.env.cr.fetchone()
++        employee_rec = False
++        res = super(CompanyLDAP, self).get_or_create_user(conf, login,
++                                                          ldap_entry)
+         if res:
+-            if res[1]:
+-                user_id = res[0]
+-        elif conf['create_user']:
+-            _logger.debug("Creating new Odoo user \"%s\" from LDAP" % login)
+-            values = self.map_ldap_attributes(conf, login, ldap_entry)
+-            SudoUser = self.env['res.users'].sudo()
+-            if conf['user']:
+-                values['active'] = True
+-                user_id = SudoUser.\
+-                    browse(conf['user'][0]).copy(default=values).id
+-
+-            else:
+-                '''NOTE --> Check if the employee
+-                 exists by searching him using
+-                  his email got from LDAP information
+-                , If employee exists...Create him a User
+-                 and link this user by updating the employee
+-                  record with the new created user_id and
+-                   the work phone (extension)
+-                , If not...He can't log in and a message
+-                 will appear to the user
+-                  (Invalid user or password) '''
+-
+-                employee_rec = self.pool.get('hr.employee').search([
+-                    ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
++            user_rec = self.env['res.company'].browse(res)
++            if conf['create_user'] and not conf['user']:
++                '''NOTE --> Check if the employee exists by searching him
++                using his email got from LDAP information If employee exists
++                ...Create him a User and link this user by updating the
++                employee record with the new created user_id and the work
++                phone (extension) If not...He can't log in and a message
++                will appear to the user (Invalid user or password) '''
++                if ldap_entry and ldap_entry[1] and ldap_entry[1]['mail']:
++                    employee_rec = self.env['hr.employee'].search([
++                        ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
+                 if employee_rec:
+-                    values['email'] = ldap_entry[1]['mail'][0].lower()
+-                    user_id = SudoUser.create(values).id
+-                    employee_rec.\
+-                        write({'user_id': user_id,
+-                               'work_phone': ldap_entry[1]['telephoneNumber']
+-                               [0] if ldap_entry[1].get('telephoneNumber')
++                    user_rec.write({'email': ldap_entry[1]['mail'][0].lower()})
++                    employee_rec. \
++                        write({'user_id': user_rec and user_rec.id,
++                               'work_phone': ldap_entry[1]
++                               ['telephoneNumber'][0] if
++                               ldap_entry[1].get('telephoneNumber')
+                                else False})
+-        return user_id
++        return res
+diff --git a/custom/bank_ir8a_payroll_report/__manifest__.py b/custom/bank_ir8a_payroll_report/__manifest__.py
+index 71318c9..da64b4b 100755
+--- a/custom/bank_ir8a_payroll_report/__manifest__.py
++++ b/custom/bank_ir8a_payroll_report/__manifest__.py
+@@ -19,6 +19,7 @@ Export employees payslip details to a formatted bank IR8A text file.
+     'depends': [
+         'hr_payroll_period',
+         'hr_security',
++        'base',
+     ],
+     'data': [
+         # 'report.xml',
+diff --git a/custom/bank_ir8a_payroll_report/res_company.py b/custom/bank_ir8a_payroll_report/res_company.py
+index e530590..2d7ce07 100755
+--- a/custom/bank_ir8a_payroll_report/res_company.py
++++ b/custom/bank_ir8a_payroll_report/res_company.py
+@@ -15,3 +15,5 @@ class res_company(models.Model):
+                                             '15!d (99-999999999999999)')
+     connect_id = fields.Char(string='Connect ID', default='ABC74849001',
+                              help='Connect ID with the bank.')
++    # payroll_bank = fields.Many2one('res.bank', string='Payroll Bank')
++    payroll_partner_bank = fields.Many2one('res.partner.bank', string='Payroll Account Number', required=1)
+diff --git a/custom/bank_ir8a_payroll_report/res_company_view.xml b/custom/bank_ir8a_payroll_report/res_company_view.xml
+index abd22de..c329fd4 100755
+--- a/custom/bank_ir8a_payroll_report/res_company_view.xml
++++ b/custom/bank_ir8a_payroll_report/res_company_view.xml
+@@ -11,6 +11,7 @@
+                        position="after">
+                     <field name="mol_establishment_id"/>
+                     <field name="connect_id"/>
++                    <field name="payroll_partner_bank"/>
+                 </xpath>
+             </field>
+         </record>
+diff --git a/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py b/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
+index dfca6fa..3f5a321 100755
+--- a/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
++++ b/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
+@@ -3,6 +3,8 @@ from odoo import fields, models, api
+ import base64
+ import datetime
+ from odoo.exceptions import Warning
++from random import randint
++from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+ 
+ 
+ class bank_ir8a_wizard(models.TransientModel):
+@@ -10,7 +12,7 @@ class bank_ir8a_wizard(models.TransientModel):
+     payroll_period_id = fields.Many2one('hr.payroll.period', string='Payroll'
+                                                                     'Period')
+     date_start = fields.Datetime(string='Period Start Date')
+-    date_end = fields.Datetime(string='Period Start Date')
++    date_end = fields.Datetime(string='Period End Date')
+     payment_purpose_code = fields.Selection([('S', 'Salary'), ('B', 'Bonus'),
+                                              ('O', 'Other Payments'),
+                                              ('N', 'Non ACH Payments')],
+@@ -60,10 +62,7 @@ class bank_ir8a_wizard(models.TransientModel):
+                                                          'number.')
+     connect_id = fields.Char(string='Connect ID',
+                              help='Connect ID.')
+-    filename = fields.Char(string='File Name',
+-                           default='WPS.9883.CY.SAR.' + str(
+-                               datetime.datetime.now().strftime("%d%H%M%S%f")[
+-                                   :-1]) + ".txt")
++    filename = fields.Char(string='File Name')
+     data = fields.Binary(string='Export to File', readonly=True)
+     report_destination = fields.Selection(
+         [('bank', 'Bank'), ('other', 'Other')],
+@@ -80,16 +79,13 @@ class bank_ir8a_wizard(models.TransientModel):
+ 
+     @api.onchange('company_id')
+     def onchange_company_id(self):
+-        if self.company_id:
+-            debit_account_number = ''
+-            if self.company_id.bank_ids:
+-                for bank in self.company_id.bank_ids:
+-                    if bank.bank_bic == 'AAAL':
+-                        debit_account_number = bank.acc_number
+-            self.employer_id = self.company_id.company_registry
+-            self.mol_establishment_id = self.company_id.mol_establishment_id
+-            self.debit_account_number = debit_account_number
+-            self.connect_id = self.company_id.connect_id
++        debit_account_number = ''
++        if self.company_id and self.company_id.payroll_partner_bank and self.company_id.payroll_partner_bank.acc_number:
++            debit_account_number = self.company_id.payroll_partner_bank.acc_number
++        self.employer_id = self.company_id.company_registry
++        self.mol_establishment_id = self.company_id.mol_establishment_id
++        self.debit_account_number = debit_account_number
++        self.connect_id = self.company_id.connect_id
+ 
+     @api.one
+     def _compute_salary_rules(self, report_destination, payslip_line_ids):
+@@ -129,7 +125,7 @@ class bank_ir8a_wizard(models.TransientModel):
+     def action_generate_bank_ir8a(self):
+ 
+         for rec in self:
+-            current_datetime = datetime.datetime.now().strftime("%Y-%m-%d")
++            current_datetime = datetime.datetime.now().strftime(DF)
+             if rec.value_date < current_datetime:
+                 raise Warning(
+                     "Value date should not be less then the "
+@@ -137,19 +133,19 @@ class bank_ir8a_wizard(models.TransientModel):
+ 
+             creation_date = datetime.datetime.now().strftime(
+                 "%Y%m%d")  # ("%Y/%m/%d")
+-            value_date = datetime.datetime.strptime(rec.value_date, "%Y-%m-%d")
++            value_date = datetime.datetime.strptime(rec.value_date, DF)
+             value_date = value_date.strftime('%Y%m%d')
+             # employee_id #Beneficiary's Employee ID.
+             # This has to be unique within a file.
+             # bank id #Bank ID/ SWIFT ID to identify the bank.
+             # Payment Amount #Payment amount to the employee. With two decimal
+             # places No preceeding zeros allowed
+-            file_reference = 'WPS.' + str(rec.connect_id) + '.CY.SAR.' + str(
+-                datetime.datetime.now().strftime("%d%H%M%S%f")[
+-                    :-1])  # ("%d%H%M%S%f")[:-3] 'CONv' + str(datetime.datetime
++            file_reference = str(datetime.datetime.now().strftime("%d%H%M%S%f")[:-1]) + str(randint(111, 999))
++            file_name = 'WPS.9883.CY.SAR.' + file_reference + ".txt"
+             # .now().strftime("%Y%m%d%H%M%S"))
+             # batch_reference = 'W' + str(datetime.datetime.now().
+             # strftime("%Y%m%d%H%M%S"))
++
+             record_number, total_sum = 0, 0.0
+             employee_line, line2 = "", ""
+             space = ' '
+@@ -190,18 +186,24 @@ class bank_ir8a_wizard(models.TransientModel):
+                     formatted_net_salary = (
+                         '%.2f' % salary_rules['net_salary']).replace('.', ',')
+ 
+-                    employee_line = \
+-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" \
+-                        "\t%s\r\n" % (formatted_net_salary,
+-                                      payslip.employee_id.bank_account,
+-                                      payslip.employee_id.name,
+-                                      payslip.employee_id.bank_id.bic,
+-                                      rec.payment_narration, space,
+-                                      formatted_beneficiary_basic_salary,
+-                                      formatted_housing_allowance,
+-                                      formatted_other_earnings,
+-                                      formatted_deductions, employee_identity,
+-                                      space, space, space)
++                    # employee_line = \
++                    #     "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" \
++                    #     "\t%s\r\n" % (formatted_net_salary,
++                    #                   payslip.employee_id.bank_account,
++                    #                   payslip.employee_id.name,
++                    #                   payslip.employee_id.bank_id.bic,
++                    #                   rec.payment_narration, space,
++                    #                   formatted_beneficiary_basic_salary,
++                    #                   formatted_housing_allowance,
++                    #                   formatted_other_earnings,
++                    #                   formatted_deductions, employee_identity,
++                    #                   space, space, space)
++
++                    employee_line = "%s\t%s\t%s\t%s\t%s\t\t%s\t%s\t%s\t%s\t%s\t\t\t\r\n" % (
++                    formatted_net_salary, payslip.employee_id.bank_account, payslip.employee_id.name,
++                    payslip.employee_id.bank_id.bic, rec.payment_narration,
++                    formatted_beneficiary_basic_salary, formatted_housing_allowance, formatted_other_earnings,
++                    formatted_deductions, employee_identity)
+ 
+                     line2 += employee_line
+                     # else:
+@@ -217,13 +219,19 @@ class bank_ir8a_wizard(models.TransientModel):
+                                                      ',')  # The total amount
+             # being paid out through the payment file.
+ 
+-            line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t%s\t%s\r\n" % (
+-                rec.connect_id, rec.debit_account_number, creation_date,
+-                total_sum, value_date, file_reference, space,
+-                rec.mol_establishment_id)
++            # line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t%s\t%s\r\n" % (
++            #     rec.connect_id, rec.debit_account_number, creation_date,
++            #     total_sum, value_date, file_reference, space,
++            #     rec.mol_establishment_id)
++            #
++            # output = line1 + line2
++            # rec.data = base64.encodestring(output.encode('utf-8'))
++
++            line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t\t%s\r\n" % (rec.connect_id, rec.debit_account_number, creation_date, total_sum, value_date, file_reference, rec.mol_establishment_id)
++            line3 = "-"
++            output = line1 + line2 + line3
++            self.write({'data': base64.encodestring(output.encode('utf-8')), 'filename': file_name})
+ 
+-            output = line1 + line2
+-            rec.data = base64.encodestring(output.encode('utf-8'))
+         return {
+             'type': 'ir.actions.act_window',
+             'res_model': 'bank.ir8a.wizard',
+diff --git a/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py b/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
+index 894b7f7..391d006 100755
+--- a/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
++++ b/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
+@@ -57,16 +57,17 @@ class default_employee_approval_line(models.TransientModel):
+                 service_vp_id = employee.id
+                 service_ceo_id = employee.id
+ 
+-        employee.service_manager_id = service_manager_id
+-        employee.service_vp_id = service_vp_id
+-        employee.service_ceo_id = service_ceo_id
++        return {'service_manager_id': service_manager_id,
++                'service_vp_id': service_vp_id,
++                'service_ceo_id': service_ceo_id}
+ 
+     @api.multi
+     def action_reset_default_employee_approval_line(self):
+         employee_pool = self.env['hr.employee']
+         employee_ids = employee_pool.search([('active', '=', True)])
+         for employee in employee_ids:
+-            self._get_employee_approval_line(employee)
++            employee_approval_line = self._get_employee_approval_line(employee)
++            employee.write(employee_approval_line)
+ 
+         return {
+             'type': 'ir.actions.act_window',
+diff --git a/custom/fix_contract_duplicate/hr_contract.py b/custom/fix_contract_duplicate/hr_contract.py
+index dbfd7fc..ddb7d97 100755
+--- a/custom/fix_contract_duplicate/hr_contract.py
++++ b/custom/fix_contract_duplicate/hr_contract.py
+@@ -1,11 +1,23 @@
+-# -*- encoding: utf-8 -*-
+-##############################################################################
++#-*- coding:utf-8 -*-
++#
++#
++#    Copyright (C) 2013 Michael Telahun Makonnen <mmakonnen@gmail.com>.
++#    All Rights Reserved.
++#
++#    This program is free software: you can redistribute it and/or modify
++#    it under the terms of the GNU Affero General Public License as published by
++#    the Free Software Foundation, either version 3 of the License, or
++#    (at your option) any later version.
++#
++#    This program is distributed in the hope that it will be useful,
++#    but WITHOUT ANY WARRANTY; without even the implied warranty of
++#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++#    GNU Affero General Public License for more details.
++#
++#    You should have received a copy of the GNU Affero General Public License
++#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+-#    Bista Solutions Pvt. Ltd
+-#    Copyright (C) 2016 (http://www.bistasolutions.com)
+ #
+-##############################################################################
+-
+ from odoo import models, api
+ 
+ 

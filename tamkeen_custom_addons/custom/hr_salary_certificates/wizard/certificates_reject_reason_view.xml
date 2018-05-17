@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- certificates reject reason form_view -->
+    <record id="certificates_reject_reason_form_view" model="ir.ui.view">
+        <field name="name">certificates.reject.reason.from.view</field>
+        <field name="model">certificates.reject.reason</field>
+        <field name="arch" type="xml">
+            <form string="Certificates Reject Reason">
+                <group>
+                    <field name="reason" required="1"/>
+                    <field name="is_reject" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Reject"
+                            name="reject_salary_certificates" type="object"
+                            attrs="{'invisible':[('is_reject','=', False)]}"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Set to Draft"
+                            name="reject_salary_certificates"
+                            attrs="{'invisible':[('is_reject','=', True)]}"
+                            type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

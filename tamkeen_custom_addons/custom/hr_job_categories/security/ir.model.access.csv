@@ -1,0 +1,26 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+
+hr.access_hr_job_user,hr.job user,hr.model_hr_job,hr_job_categories.group_job_master,1,1,1,1
+hr_access_for_employee,hr_access_for_employee,hr.model_hr_job,base.group_user,1,0,0,0
+
+access_hr_department_job_master,access.hr.department.job.master,hr.model_hr_department,hr_job_categories.group_job_master,1,0,0,0
+access_survey_survey_job_master,access.survey.survey.job.master,survey.model_survey_survey,hr_job_categories.group_job_master,1,0,0,0
+access_hr_user_job_master,access.hr.user.job.master,base.model_res_users,hr_job_categories.group_job_master,1,0,0,0
+access_hr_employee_categ_job_master,access.hr.employee.categ.master,hr.model_hr_employee_category,hr_job_categories.group_job_master,1,0,0,0
+
+access_job_update,access.job.update,hr.model_hr_job,hr_job_categories.group_update_job_position,1,1,0,0
+
+access_hr_department_job_master_update,access.hr.department.job.master.update,hr.model_hr_department,hr_job_categories.group_update_job_position,1,0,0,0
+
+access_survey_survey_job_master_update,access.survey.survey.job.master.update,survey.model_survey_survey,hr_job_categories.group_update_job_position,1,0,0,0
+access_hr_user_job_master_update,access.hr.user.job.master.update,base.model_res_users,hr_job_categories.group_update_job_position,1,0,0,0
+access_hr_employee_categ_job_master_update,access.hr.employee.categ.master.update,hr.model_hr_employee_category,hr_job_categories.group_update_job_position,1,0,0,0
+
+access_job_view,access.job.view,hr.model_hr_job,hr_job_categories.group_view_all_job_positions,1,0,0,0
+access_hr_department_job_master_view,access.hr.department.job.master.view,hr.model_hr_department,hr_job_categories.group_view_all_job_positions,1,0,0,0
+
+access_survey_survey_job_master_view,access.survey.survey.job.master.view,survey.model_survey_survey,hr_job_categories.group_view_all_job_positions,1,0,0,0
+access_hr_user_job_master_view,access.hr.user.job.master.view,base.model_res_users,hr_job_categories.group_view_all_job_positions,1,0,0,0
+access_hr_employee_categ_job_master_view,access.hr.employee.categ.master.view,hr.model_hr_employee_category,hr_job_categories.group_view_all_job_positions,1,0,0,0
+
+access_hr_applicant_view_all,access_hr_applicant_view.all,hr_recruitment.model_hr_applicant,hr_job_categories.group_view_all_job_positions,1,0,0,0

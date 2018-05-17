@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="appraisal_performance_wizard_view" model="ir.ui.view">
+            <field name="name">appraisal.performance.wizard.view</field>
+            <field name="model">appraisal.performance.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Appraisal Performance Wizard">
+                    <sheet>
+                        <h1 class="mt0">
+                            <field name="name" placeholder="Name"
+                                   required="1"/>
+                        </h1>
+                        <group>
+                            <field name="performance_appraisal_policy_id"
+                                   domain="[('is_performance_appraisal', '=', True)]"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   required="1"/>
+                        </group>
+                        <group attrs="{'invisible':[('performance_appraisal_policy_id','=',False)]}">
+                            <field name="grade_level_ids" readonly="1"
+                                   attrs="{'invisible':[('performance_appraisal_policy_id','=',False)]}"
+                                   widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="review_start_date" required="1"/>
+                                <field name="due_start_date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="review_end_date" required="1"/>
+                                <field name="due_end_date" required="1"/>
+                            </group>
+                        </group>
+                        <group string="Employees">
+                            <field name="employee_ids" nolabel="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_generate_appraisal"
+                                string="Generate Appraisal"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_open_appraisal_performance_wizard">
+            <field name="name">Appraisal Performance Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">appraisal.performance.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

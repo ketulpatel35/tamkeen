@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--Contract view inherit for timesheet management-->
+    <record id="tamkeen_hr_contract_inherit_timesheet_management"
+            model="ir.ui.view">
+        <field name="name">hr.contract.timesheet</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_id']" position="after">
+                <field name="timesheet_type"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Purchase Order -->
+        <record model="ir.ui.view"
+                id="purchase_order_form_add_valid">
+            <field name="name">purchase.order.form.add.valid</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id"
+                   ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="not_allow_more_amount" invisible="1"/>
+                    <field name="not_allow_diff_currency" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Purchase Configuration -->
+        <record model="ir.ui.view"
+                id="view_purchase_configuration_inv_valid">
+            <field name="name">view.purchase.configuration.inv.valid</field>
+            <field name="model">purchase.config.settings</field>
+            <field name="inherit_id"
+                   ref="purchase.view_purchase_configuration"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group[2]" position="after">
+                    <group>
+                        <label for="div_not_allow_more_amount"
+                               string="Allow to invoice more than the purchase order amount"/>
+                        <div name="div_not_allow_more_amount">
+                            <field name="not_allow_more_amount" nolabel="1"
+                                   class="oe_inline"/>
+                            <button string="Apply Now"
+                                    icon="fa-arrow-right text-success"
+                                    name="validation_allow_more_amount" type="object"
+                                    class="oe_link oe_inline"/>
+                        </div>
+                        <label for="div_not_allow_diff_currency"
+                               string="Allow invoice with different currency"/>
+                        <div name="div_not_allow_diff_currency">
+                            <field name="not_allow_diff_currency" nolabel="1"
+                                   class="oe_inline"/>
+                            <button string="Apply Now"
+                                    icon="fa-arrow-right text-success"
+                                    name="validation_allow_diff_currency" type="object"
+                                    class="oe_link oe_inline"/>
+                        </div>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+
+        <record model="ir.module.category" id="leave_management">
+            <field name="name">Leave Management</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_leave_manage_normal_user" model="res.groups">
+            <field name="name">Normal User</field>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <record id="group_leave_bu_manager_approval" model="res.groups">
+            <field name="name">Manager Approval</field>
+            <field name="implied_ids" eval="[(4, ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+        <record id="group_leave_vp_approval" model="res.groups">
+            <field name="name">VP Approval</field>
+            <field name="implied_ids" eval="[(4, ref('group_leave_bu_manager_approval'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <!--<record id="group_leave_hr_approval" model="res.groups">-->
+            <!--<field name="name">HR Approval</field>-->
+            <!--<field name="implied_ids" eval="[(4, ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>-->
+            <!--<field name="category_id" ref="leave_management"/>-->
+        <!--</record>-->
+
+        <record id="group_leave_ceo_approval" model="res.groups">
+            <field name="name">CEO Approval</field>
+            <field name="implied_ids" eval="[(4, ref('group_leave_bu_manager_approval'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+        <record id="group_leave_all_requests" model="res.groups">
+            <field name="name">View All Leave Requests</field>
+            <field name="implied_ids" eval="[(4, ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <record id="group_leave_audit_all_requests" model="res.groups">
+            <field name="name">Audit All Leave Requests</field>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <record id="group_leave_self_approval_srvs" model="res.groups">
+            <field name="name">Can Approve/Refuse His/Her Requests</field>
+            <field name="implied_ids" eval="[(4, ref('group_leave_bu_manager_approval'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+        <record id="group_request_on_behalf_others" model="res.groups">
+            <field name="name">Can Request on Behalf of Others</field>
+            <field name="implied_ids" eval="[(4, ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <!--<record id="group_leave_config" model="res.groups">-->
+            <!--<field name="name">Holidays Configuration</field>-->
+            <!--<field name="implied_ids" eval="[(4, ref('hr_holidays_extension.group_leave_manage_normal_user'))]"/>-->
+            <!--<field name="category_id" ref="leave_management"/>-->
+        <!--</record>-->
+
+        <record id="group_exceptional_leave" model="res.groups">
+            <field name="name">Exceptional Leave</field>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+        <record id="hr_holidays.group_hr_holidays_user" model="res.groups">
+            <field name="category_id" ref="leave_management"/>
+            <field name="name">HR Approvals</field>
+        </record>
+        <record id="hr_leave_allocation" model="res.groups">
+            <field name="category_id" ref="leave_management"/>
+            <field name="name">Leave Allocation</field>
+            <field name="implied_ids" eval="[(4, ref('hr_holidays.group_hr_holidays_user'))]"/>
+        </record>
+        <record id="hr_holidays.group_hr_holidays_manager" model="res.groups">
+            <field name="category_id" ref="leave_management"/>
+            <field name="name">Leaves Configuration</field>
+        </record>
+
+        <record id="amend_leave_group" model="res.groups">
+            <field name="category_id" ref="leave_management"/>
+            <field name="name">Amend</field>
+        </record>
+
+        <!-- New Changes by Sankar-->
+        <record id="senior_hr_approval_group" model="res.groups">
+            <field name="name">Senior HR</field>
+            <field name="category_id" ref="leave_management"/>
+        </record>
+
+    </data>
+</odoo>

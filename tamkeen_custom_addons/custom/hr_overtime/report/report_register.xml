@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Report Register -->
+        <report id="overtime_statement_request_report_register"
+                model="overtime.statement.request"
+                string="Overtime Claim Request Report"
+                name="hr_overtime.overtime_claim_request_report"
+                file="hr_overtime.overtime_claim_request_report"
+                report_type="qweb-pdf" />
+
+    </data>
+</odoo>

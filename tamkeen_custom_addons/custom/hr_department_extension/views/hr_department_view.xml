@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_department_view_inherit_for_eng_name" model="ir.ui.view">
+        <field name="name">hr.department.form.sequence.inherit.for.eng.name</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="dep_eng_name"/>
+            </xpath>
+              <!--<xpath expr="//field[@name='parent_id']" position="after">-->
+                <!--<field name="vice_president_id" />-->
+                <!--<field name="ceo_id" />-->
+            <!--</xpath>-->
+        </field>
+    </record>
+
+    <record id="hr_department_tree_view_inherit_for_eng_name" model="ir.ui.view">
+        <field name="name">hr.department.tree.sequence.inherit.for.eng.name</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="dep_eng_name" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.menu" id="hr.menu_hr_department_tree">
+        <field name="groups_id" eval="[(6,0,[ref('hr_department_extension.group_view_all_departments')])]" />
+    </record>
+</odoo>

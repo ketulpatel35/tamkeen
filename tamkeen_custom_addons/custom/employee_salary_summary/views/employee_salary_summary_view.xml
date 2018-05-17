@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_employee_salary_summary_form_view" model="ir.ui.view">
+            <field name="name">Employee Salary Summary</field>
+            <field name="model">hr.employee.salary.summary</field>
+            <field name="arch" type="xml">
+                <form string="Employee Salary Summary">
+                    <h3>
+                        <span>
+                            This report will display the basic pay information for the selected employee/s.
+                        </span>
+                    </h3>
+                    <footer>
+                        <button string="Generate Salary Summary" type="object"
+                                name="generate_salary_summary"
+                                class="oe_link" />
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="salary_summary_report_print_link_view"
+                model="ir.ui.view">
+            <field name="name">hr.employee.salary.summary.print.link</field>
+            <field name="model">hr.employee.salary.summary.print.link</field>
+            <field name="arch" type="xml">
+                <form string="Excel Output">
+                    <separator colspan="4" string="Please save file as .xls excel format"/>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <field name="sal_summary_xls_output" filename='name' readonly='1'/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <act_window id="act_open_employee_salary_summary"
+                    multi="False"
+                    key2="client_action_multi" name="Employee Salary Summary"
+                    res_model="hr.employee.salary.summary"
+                    src_model="hr.employee"
+                    view_mode="form" target="new" view_type="form"
+                    groups="employee_salary_summary.group_employee_salary_summary_can_print"/>
+    </data>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- === hr.payroll.register.run Wizard form view === -->
+    <record id="view_payroll_register" model="ir.ui.view">
+        <field name="name">hr.payroll.register.run.wizard</field>
+        <field name="model">hr.payroll.register.run</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Payslip Creation by Department">
+                <group colspan="4" >
+                    <separator string="Payslips by Department" colspan="4"/>
+                    <label colspan="4" nolabel="1" string="This wizard will generate payslips for selected departments." />
+                    <newline/>
+                    <field name="department_ids" nolabel="1"/>
+                </group>
+                <footer>
+                    <button  icon="fa-cogs" string="Generate" name="create_payslip_runs" class="oe_highlight oe_right" type="object"/>
+                    <button class="btn-default oe_right" special="cancel" string="Cancel"/>
+                </footer>
+           </form>
+        </field>
+    </record>
+
+    <!-- === hr.payroll.register.run Wizard Action === -->
+    <record id="action_create_runs" model="ir.actions.act_window">
+        <field name="name">Generate Payslips</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.payroll.register.run</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

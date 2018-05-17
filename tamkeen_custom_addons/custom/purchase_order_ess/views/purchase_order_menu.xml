@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="purchase.menu_purchase_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('purchase_config.group_view_all_po'))]"/>
+        </record>
+        <menuitem id="purchase_order_management_ess_manager"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  name="Purchase Order Management" sequence="3"/>
+        <menuitem id="ceo_approve_po" name="Purchase Order to Approve" parent="purchase_order_management_ess_manager"
+                  action="purchase_order_ess.purchase_view_for_ceo" groups="purchase_config.group_ceo_approval_po" sequence="35" />
+    </data>
+</odoo>

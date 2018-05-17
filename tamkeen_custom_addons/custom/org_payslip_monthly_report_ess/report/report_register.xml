@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--&lt;!&ndash; Report  &ndash;&gt;-->
+        <!--<report id="hr_payslip_report"-->
+                <!--model="hr.payslip"-->
+                <!--string="PaySlip Details"-->
+                <!--name="org_payslip_monthly_report_ess.report_payslip_details"-->
+                <!--file="org_payslip_monthly_report_ess.report_payslip_details"-->
+                <!--report_type="qweb-pdf"-->
+                <!--menu="True"/>-->
+     <report
+            id="hr_payroll.action_report_payslip"
+            model="hr.payslip"
+            string="PaySlip Details"
+            report_type="qweb-pdf"
+            name="hr_payroll.report_payslip"
+            file="hr_payroll.report_payslip"
+        />
+
+
+    </data>
+</odoo>

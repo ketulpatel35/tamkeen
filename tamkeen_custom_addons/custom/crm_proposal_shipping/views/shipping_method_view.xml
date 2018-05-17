@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_shipping_method_form" model="ir.ui.view">
+            <field name="name">crm.shipping.method.view</field>
+            <field name="model">crm.shipping.method</field>
+            <field name="arch" type="xml">
+                <form string="Shipping Method">
+                    <group>
+                        <group>
+                            <field name="code"></field>
+                            <field name="name" required="True"></field>
+                        </group>
+                        <group>
+                            <field name="sequence"></field>
+                            <field name="active"></field>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="crm_shipping_method_tree" model="ir.ui.view">
+            <field name="name">crm.shipping.method.view</field>
+            <field name="model">crm.shipping.method</field>
+            <field name="arch" type="xml">
+                <tree string="Shipping Methods">
+                    <field name="order_sequence" widget="handle"></field>
+                    <field name="code"></field>
+                    <field name="name"></field>
+                    <field name="sequence"></field>
+                    <field name="active"></field>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

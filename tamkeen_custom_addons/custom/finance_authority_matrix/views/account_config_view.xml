@@ -1,0 +1,131 @@
+<odoo>
+    <data>
+
+        <!-- Main Configuration -->
+        <record id="account.menu_finance_configuration" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Main Configuration -->
+        <record id="account.menu_account_config" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+        <!-- Configuration Setting-->
+        <record id="account.menu_account_config" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Accounting Configuration-->
+        <record id="account.account_account_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Taxes Configuration-->
+        <record id="account.menu_action_tax_form" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Fiscal Position Configuration-->
+        <record id="account.menu_action_account_fiscal_position_form" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Bank Accounts Configuration-->
+        <record id="account.menu_action_account_bank_journal_form" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Journals Configuration-->
+        <record id="account.menu_action_account_journal_form" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Accounts Tag Configuration-->
+        <record id="account.account_tag_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Date Range Configuration-->
+        <record id="account_fiscal_year.menu_date_range_accounting" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Date Ranges Type Configuration-->
+        <record id="account_fiscal_year.menu_date_range_type_action_accounting" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Date Ranges Child Configuration-->
+        <record id="account_fiscal_year.menu_date_range_action_accounting" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Management Configuration-->
+        <record id="account.account_management_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Asset Type Configuration-->
+        <record id="account_asset.menu_action_account_asset_asset_list_normal_purchase" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Multi Currency Configuration-->
+        <record id="account.menu_config_multi_currency" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Financial Reports Configuration-->
+        <record id="account.menu_account_reports" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Payments Configuration-->
+        <record id="payment.root_payment_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+        <!-- Payments Configuration-->
+        <record id="payment.payment_acquirer_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_account_configuration'))
+            ]"/>
+        </record>
+
+
+    </data>
+</odoo>

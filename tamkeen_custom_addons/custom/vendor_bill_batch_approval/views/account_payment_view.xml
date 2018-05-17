@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_batch_payment_diff_inherit"
+            model="ir.ui.view">
+        <field name="name">view.account.payment.register</field>
+        <field name="model">account.register.payments</field>
+        <field name="inherit_id"
+               ref="account.view_account_payment_from_invoices"/>
+        <field name="arch" type="xml">
+            <field name="amount" position="before">
+                <field name="is_vendor_batch_payment" invisible="1"/>
+            </field>
+            <xpath expr="//group[@name='account_payment_int']"
+                   position="attributes">
+                <attribute name="attrs">{'invisible': ['|',
+                    ('payment_difference', '=', 0.0),
+                    ('is_vendor_batch_payment', '=', True)]}
+                </attribute>
+            </xpath>
+            <field name="amount" position="attributes">
+                <attribute name="attrs">{'readonly':
+                    [('is_vendor_batch_payment', '=', True)]}
+                </attribute>
+            </field>
+        </field>
+    </record>
+
+</odoo>

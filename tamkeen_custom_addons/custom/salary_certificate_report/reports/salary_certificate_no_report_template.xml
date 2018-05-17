@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="salary_certificate_no_report_template_id">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="salary_certificate_report.salary_certificate_no_report_header_footer_call_template_id">
+                    <div class="page" >
+                        <link rel="stylesheet"
+                              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                        <table width="100%">
+                            <tr style="border:1px solid black;">
+                                <th style="border:1px solid black;" width="8%">
+                                    Date:
+                                </th>
+                                <td style="border:1px solid black; text-align:right;" width="42%">
+                                    <span t-esc="time.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td style="border:1px solid black;" width="42%">
+                                    <span t-esc="time.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <th style="text-align:right; border:1px solid black;" width="8%">
+                                    :التاريخ
+                                </th>
+                            </tr>
+                            <tr style="border:1px solid black;">
+                                <th colspan="2">
+                                     <span style="margin-right:10px;">To: </span>  <span
+                                    t-esc="o.destination_arabic"/>
+                                </th>
+                                <th colspan="2" style="text-align:right; border:1px solid black;">
+                                    <span t-esc="o.destination_arabic" style="margin-right:10px;"/>:إلى
+                                </th>
+                            </tr>
+                        </table>
+                        <br/>
+                        <br/>
+
+                        <table class="table table-condensed" style="border:1px solid black;" width="100%" >
+                            <tr >
+                                <td style="border:1px solid black;">
+                                    Greetings, <br/>
+                                    This is to certify that the employee with the information <br/>
+                                    below is an employee at Tamkeen<br/>
+                                    technologies company, this letter has been <br/>
+                                    issued based on his request without any <br/>
+                                    liability on the company
+                                </td>
+                                <td style="border:1px solid black; text-align:right;">
+                                    السلام عليكم ورحمة الله وبركاته ... وبعد،
+                                    <br/>تشهد شركة تمكين للتقنيات بأن الموظف التالية بياناته هو
+                                    <br/>أحد منسوبي الشركة وقد اعطي هذه الإفادة بناء على
+                                    <br/>طلبه ودون أدنى مسئولية على الشركة
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table class="table table-condensed" style="border:1px solid black;" width="100%">
+                            <tr>
+                                <th colspan="2" width="50%"
+                                    style="text-align:center; background-color:lavender; border:1px solid black;">
+                                    Employee Information
+                                </th>
+                                <th colspan="2" width="50%" style="text-align:right; background-color:lavender; border:1px solid black;">
+                                    بيانات الموظف
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    Name
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.name"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.name"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    الاسم
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    Employee Number
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.identification_id"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.identification_id"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    الرقم الوظيفي
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    Nationality
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.country_id.name"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.country_id.name"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    الجنسية
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    National ID
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.identification_id"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.employee_id.identification_id"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    ifرقم الإقامة/ififرقم الهوية/if
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    Job Title
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.contract_id.job_id.name"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.contract_id.job_id.name"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    الوظيفي المسمى
+                                </th>
+                            </tr>
+                            <tr>
+                                <th width="15%" style="background-color:lavender; border:1px solid black;" >
+                                    Hiring Date
+                                </th>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.contract_id.date_start"/>
+                                </td>
+                                <td width="35%" style="border:1px solid black; text-align:center;">
+                                    <span t-esc="o.contract_id.date_start"/>
+                                </td>
+                                <th width="15%" style="border:1px solid black; text-align:right; background-color:lavender;">
+                                    تاريخ التعيين
+                                </th>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table class="table table-condensed" width="100%" style="border:1px solid black;">
+                            <tr>
+                                <td style="border:1px solid black;" width="50%">
+                                    Yours Sincerely
+                                </td>
+                                <td style="text-align:right; border:1px solid black;" width="50%">
+                                    وتقبلوا خالص التحيـات ،،،
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border:1px solid black; text-align:center;">
+                                    مدير عام الإدارة المالية  والخدمات المساندة
+                                    <br/>
+                                    Director of Finance and Support Services Dept.<br/>
+                                    عبـــدالله بن عبدالعزيز الرويتــــــــــــــــــــــــــــــــع
+                                    <br/>Abdullah Al Rowaiti
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="salary_certificate_no_report_header_footer_call_template_id">
+        <t t-call="salary_certificate_report.salary_certificate_no_report_header_template_id"/>
+        <t t-raw="0"/>
+        <t t-call="salary_certificate_report.salary_certificate_no_report_footer_template_id"/>
+    </template>
+
+    <template id="salary_certificate_no_report_header_template_id">
+        <div class="header">
+            <div class="col-xs-8">
+
+            </div>
+            <div class="col-xs-4 text-right">
+                <img class="img-responsive"
+                     src="/salary_certificate_report/static/image/company-logo.png" width="200px" height="75px"/>
+            </div>
+        </div>
+    </template>
+
+    <template id="salary_certificate_no_report_footer_template_id">
+        <div class="footer">
+            <center>
+                __________________________________________________________________________________<br/>
+                العنوان: العقارية بلازا – البرج الشمالي – الدور الثاني – مكتب 220 – ص ب: 2392 الرياض هاتف:
+                <br/>_______________<br/>
+                2762803-2524609
+            </center>
+
+        </div>
+    </template>
+</odoo>

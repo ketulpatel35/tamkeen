@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Crm stages -->
+        <record model="crm.stage" id="crm.stage_lead3">
+            <field name="name">RFP Received</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">2</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead4">
+            <field name="name">HLRD Generated</field>
+            <field name="case_default">1</field>
+            <field name="probability">50</field>
+            <field name="sequence">3</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead5">
+            <field name="name">HLRD Approved</field>
+            <field name="case_default">1</field>
+            <field name="probability">60</field>
+            <field name="sequence">4</field>
+        </record>
+        <!--&lt;!&ndash;Comment code because not-null contraint apply in name fields&ndash;&gt;-->
+        <!--<record model="crm.stage" id="crm.stage_lead6">-->
+            <!--<field name="sequence">9</field>-->
+        <!--</record>-->
+        <!--<record model="crm.stage" id="crm.stage_lead7">-->
+            <!--<field name="sequence">10</field>-->
+        <!--</record>-->
+        <record model="crm.stage" id="stage_lead8">
+            <field name="name">Business Case Generated</field>
+            <field name="case_default">1</field>
+            <field name="probability">70</field>
+            <field name="sequence">5</field>
+        </record>
+        <record model="crm.stage" id="stage_lead9">
+            <field name="name">Business Case Approved</field>
+            <field name="case_default">1</field>
+            <field name="probability">80</field>
+            <field name="sequence">6</field>
+        </record>
+        <record model="crm.stage" id="stage_lead10">
+            <field name="name">Business Case Sent to Business Committee</field>
+            <field name="case_default">1</field>
+            <field name="probability">90</field>
+            <field name="sequence">7</field>
+        </record>
+        <record model="crm.stage" id="stage_lead11">
+            <field name="name">Business Committee Approved</field>
+            <field name="case_default">1</field>
+            <field name="probability">100</field>
+            <field name="sequence">8</field>
+        </record>
+
+    </data>
+</odoo>

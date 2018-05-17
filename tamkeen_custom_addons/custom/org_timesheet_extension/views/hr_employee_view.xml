@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record model="ir.ui.view"
+            id="hr_employee_form_inherit_for_deligation_timesheet">
+        <field name="name">hr.employee.form.inherit.for.deligation
+            .timesheet</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id"
+               ref="hr_employee_approval_tab.employee_approval_delegation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//page[@name="approval_delegation"]/group'
+                   position="inside">
+                <group string="Timesheet">
+                    <field name="timesheet_manager_id" colspan="2" required="1"/>
+                    <field name="timesheet_vp_id" colspan="2" required="1"/>
+                    <field name="timesheet_ceo_id" colspan="2" required="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

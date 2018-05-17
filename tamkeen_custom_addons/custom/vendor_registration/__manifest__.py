@@ -1,0 +1,30 @@
+{
+    'name': 'Vendor Registration',
+    'version': '1.0',
+    'category': 'Bista Solutions',
+    "sequence": 1,
+    'description': """
+    """,
+    'summary': 'Vendor Registration',
+    'author': 'Bista Solutions',
+    'website': 'http://bistasolutions.com',
+    'depends': ['base', 'hr'],
+    'data': [
+        'security/user_groups.xml',
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
+        'wizard/blacklist_vendor_view.xml',
+        'wizard/vendor_reset_view.xml',
+        'views/vendor_reg_config_view.xml',
+        'views/vendor_registration_view.xml',
+        'views/res_partner_view.xml',
+        'views/quality_hse_view.xml',
+        'views/vendor_activity_view.xml',
+        'views/vendor_registration_sequence.xml',
+        'views/menuitem_view.xml',
+        'data/vendor_activities_datas.xml',
+    ],
+
+    'installable': True,
+    'auto_install': False,
+}

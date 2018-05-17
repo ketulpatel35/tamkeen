@@ -1,0 +1,58 @@
+.navbar1 {
+    position: relative;
+    min-height: 53px;
+    margin-bottom: 0px;
+    border: 1px solid transparent;
+}
+@media (min-width: 992px) {
+  .o_website_quote .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .o_website_quote .bs-sidebar {
+    width: 213px;
+  }
+}
+@media (min-width: 1200px) {
+  .o_website_quote .bs-sidebar {
+    width: 263px;
+  }
+}
+@media print {
+    body {
+        padding : 0 !important;
+    }
+}
+/*###########*/
+html, body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#org_structure {
+    width: 100%;
+    height: 100%;
+}
+
+.oe_loading_hide {
+     display: none;
+}
+.openerp .oe_loading {
+   display: none;
+}
+
+#dvLoading{
+  background:url("../img/loading.gif") no-repeat center center;
+  height: 110%;
+  width: 110%;
+  position: fixed;
+  z-index: 1000;
+  margin: -25px 0 0 -25px;
+  background-color:#fff;
+  opacity:0.8;
+}
+.chart_wrapper .navbar{
+    margin-bottom: 1px;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <data>
+
+    <template id="assets_backend" name="web_track_delete_view assets" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+        <script type="text/javascript" src="/web_track_delete/static/src/js/track_delete.js"></script>
+      </xpath>
+    </template>
+
+  </data>
+</odoo>

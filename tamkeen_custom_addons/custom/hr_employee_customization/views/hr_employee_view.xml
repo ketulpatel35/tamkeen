@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--<record id="hr_children_view_tree" model="ir.ui.view">-->
+        <!--<field name="name">hr.children.view.tree</field>-->
+        <!--<field name="model">hr.employee.children</field>-->
+        <!--<field name="type">tree</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<tree string="Employee Children">-->
+                <!--<field name="name"/>-->
+                <!--<field name="dob"/>-->
+            <!--</tree>-->
+        <!--</field>-->
+    <!--</record>-->
+    <!--<record id="hr_children_view_form" model="ir.ui.view">-->
+        <!--<field name="name">hr.children.view.form</field>-->
+        <!--<field name="model">hr.employee.children</field>-->
+        <!--<field name="type">form</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form string="Employee Children">-->
+                <!--<group>-->
+                    <!--<field name="name" required="1"/>-->
+                    <!--<field name="dob"/>-->
+                <!--</group>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record id="view_employee_form_inherit_extension" model="ir.ui.view">
+        <field name="name">view.employee.form.inherit.extension</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="mobile_phone" position="after">
+                <field name="internal_number" invisible="1"/>
+                <field name="short_number" invisible="1"/>
+            </field>
+            <xpath expr="//group[@name='active_group']" position="after">
+                <group string="Duration of Service">
+                    <field name="initial_employment_date" required="1"/>
+                    <field name="length_of_service_days"/>
+                    <field name="length_of_service"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_tree_inherit_extension" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.extension</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='work_phone']" position="before">
+                <field name="length_of_service" groups="hr.group_hr_user"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

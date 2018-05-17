@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="crm_opportunity_form" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_base.crm_opportunity_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button
+                            class="oe_inline oe_stat_button"
+                            type="object"
+                            context="{
+                                'default_partner_id': partner_id,
+                                'default_reference_id': reference_value,
+                            }"
+                            name="button_actions"
+                            icon="fa-list">
+                        <field string="Actions" name="actions_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+                <field name="partner_id" position="after">
+                    <field name="reference_value" attrs="{'invisible':True}" />
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem id="menu_employee_family_info"
+              name="Dependants"
+              parent="hr.menu_hr_main"
+              action="action_family_info_view"
+              sequence="2000"/>
+    <menuitem id="menu_employee_family_info_ess"
+              name="Dependants"
+              parent="emp_self_services.sub_mian_empinfo_menu"
+              action="action_family_info_view_ess"
+              sequence="2000"/>
+</odoo>

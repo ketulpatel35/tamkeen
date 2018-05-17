@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.sequence" id="lead_sequence">
+            <field name="name">CRM Action Sequence</field>
+            <field name="code">crm.action</field>
+            <field name="prefix"></field>
+            <field name="padding" eval="10"></field>
+        </record>    
+    </data>
+</odoo>

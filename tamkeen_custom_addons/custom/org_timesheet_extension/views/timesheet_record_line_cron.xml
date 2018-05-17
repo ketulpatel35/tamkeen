@@ -1,0 +1,13 @@
+<odoo>
+    <!-- Cron for timesheet create -->
+    <record model="ir.cron" id="timesheet_create_cron">
+        <field name="name">Create Timesheet</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model" eval="'hr_timesheet_sheet.sheet'"/>
+        <field name="function" eval="'create_timesheet'"/>
+        <field name="args" eval="'()'"/>
+    </record>
+</odoo>

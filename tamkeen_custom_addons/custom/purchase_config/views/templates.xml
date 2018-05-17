@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- Budget confirm to CEO Approval-->
+        <record id="email_template_rfq_to_budget_approval"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Order
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${object.company_id.prcrmnt_group_email | safe}</field>
+            <field name="email_to">${object.company_id.budget_team_mail | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Purchase Order to be approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Budget team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, approve the purchase order ${(object.name or '')|safe}.
+<br/>
+<br/>
+<br/>
+<b>Requester Name:</b> Procurement Team.
+<br/>
+<br/>
+<b>Analytic Account :</b> ${object.requisition_id.account_analytic_id.name}
+<br/>
+<br/>
+<b>Remark:</b> ${(object.remark or '')|safe}
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+
+    <!--  confirm order to CEO Approval-->
+        <record id="email_template_confirm_order_to_ceo_approval"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Order
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.requisition_id.employee_ids.pr_ceo_id.work_email | safe}</field>
+            <field name="email_cc">${object.company_id.prcrmnt_group_email | safe},
+                ${object.company_id.budget_team_mail | safe}</field>
+            <field name="subject">Purchase Order to be approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear CEO,
+<br/>
+<br/>
+Kindly, approve the ${object.name}
+<br />
+Source Document : ${object.requisition_id.name}
+</p>
+<br />
+To proceed, Kindly
+<a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+<br />
+<br />
+Kind Regards
+<br />
+<p > Note: Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+    <!-- purchase order confirm -->
+     <record id="email_template_purchase_order_confirmed"
+                model="mail.template">
+            <field name="name"> Approval of Purchase Order
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.company_id.prcrmnt_group_email | safe}</field>
+            <field name="email_cc">${object.company_id.budget_team_mail | safe}</field>
+            <field name="subject">Purchase Order has been confirmed</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Procurement Manager,
+<br/>
+<br/>
+Kindly, approve the ${object.name}
+<br />
+Source Document : ${object.requisition_id.name}
+</p>
+<br />
+To proceed, Kindly
+<a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+<br />
+<br />
+Kind Regards
+<br />
+<p > Note: Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+     <record id="email_template_purchase_return_from_confirm_order"
+                model="mail.template">
+            <field name="name">Purchase return from confirm order
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${object.company_id.prcrmnt_group_email | safe}</field>
+            <field name="email_to">${object.requisition_id.user_id.partner_id.email | safe}</field>
+            <field
+                    name="email_cc">${object.company_id.budget_team_mail},${object.requisition_id.employee_ids.department_id.vice_president_id.work_email | safe}
+            </field>
+            <field name="subject">Purchase order return from confirm
+                state: ${object.name}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.requisition_id.user_id.name}
+<br/>
+<p style="padding-left: 4em;">
+The purchase order  ${(object.name or '')|safe} has been returned from confirm stage.
+<br/>
+<br/>
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <record id="email_template_purchase_return_from_budget_confirm"
+                model="mail.template">
+            <field name="name">Purchase return from Budget confirm
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${object.company_id.budget_team_mail | safe}</field>
+            <field name="email_to">${object.requisition_id.user_id
+            .partner_id.email | safe}</field>
+            <field name="email_cc">${object.company_id.prcrmnt_group_email | safe}</field>
+            <field name="subject">Purchase order return from budget
+                confirm state: ${object.name}</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.requisition_id.user_id.name}
+<br/>
+<p style="padding-left: 4em;">
+The purchase order  ${(object.name or '')|safe} has been returned from Budget team.
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <record id="email_template_purchase_order_cancelation"
+                model="mail.template">
+            <field name="name">Purchase Order Cancellation
+            </field>
+            <field name="model_id"
+                   ref="purchase.model_purchase_order" />
+            <field name="email_from">${object.company_id.prcrmnt_group_email | safe}</field>
+            <field name="email_to">${object.requisition_id.user_id.partner_id
+            .email | safe}</field>
+            <field name="email_cc">${object.company_id.budget_team_mail | safe}
+            </field>
+            <field name="subject">Purchase order cancelled: ${object.name} </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.requisition_id.user_id.name}
+<br/>
+<p style="padding-left: 4em;">
+The purchase order  ${(object.name or '')|safe} has been cancelled.
+<br/>
+<br/>
+<b>Remark</b> : ${(object.requisition_id.remark or '')|safe}
+</p>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="expense_rule_request_employee" model="ir.rule">
+            <field name="name">Normal User</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_normal_user'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+        <record id="expense_request_rule_request_manager" model="ir.rule">
+            <field name="name">Manager Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[('employee_id.expense_manager_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_manager_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="expense_rule_request_vp" model="ir.rule">
+            <field name="name">VP Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[('employee_id.expense_vp_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_vp_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="expense_rule_hr_approval_srvs" model="ir.rule">
+            <field name="name">HR Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_hr_approval'))]"/>
+        </record>
+        <record id="expense_rule_budget_approval_srvs" model="ir.rule">
+            <field name="name">Budget Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_budget_approval'))]"/>
+        </record>
+        <record id="expense_rule_finance_approval_srvs"
+                model="ir.rule">
+            <field name="name">Finance Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_finance_approval'))]"/>
+        </record>
+        <record id="expense_rule_ceo_approval_srvs" model="ir.rule">
+            <field name="name">CEO Approval</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[('employee_id.expense_ceo_id.user_id.id','=',user.id)]</field>
+            <!--<field name="domain_force">[('expense_approval_policy_id.ceo_approval','=',True),('employee_id.expense_ceo_id.user_id.id','=',user.id)]</field>-->
+            <field name="groups" eval="[(4,ref('group_expense_ceo_approval'))]"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record id="expense_rule_all_srvs" model="ir.rule">
+            <field name="name">View All expense Requests</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_expense_view_all_expense'))]"/>
+        </record>
+        <record id="expense_rule_request_general_manager" model="ir.rule">
+            <field name="name">Services Configuration</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="groups" eval="[(4,ref('group_expense_config'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- ESS -->
+        <menuitem id="emp_self_services_call_for_main"
+                  name="Procurement Requisition"
+                  parent="emp_self_services.sub_mian_ess_menu"
+                  groups="purchase_requisition_config.group_normal_user_pr"
+                  sequence="95"/>
+
+        <menuitem id="emp_self_services_call_for_bids"
+                  name="Procurement Requisition"
+                  parent="emp_self_services_call_for_main"
+                  action="procurment_requistion_ess.purchase_action_for_pr_employee"
+                  groups="purchase_requisition_config.group_normal_user_pr"
+                  sequence="100"/>
+
+        <!-- MSS -->
+        <menuitem id="emp_pr_mngr_approval"
+                  name="Purchase Requisition to Approve"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  action="procurment_requistion_ess.purchase_budget_all_emp_action"
+                  groups="purchase_requisition_config.group_manager_approval_pr,purchase_requisition_config.group_vp_approval_pr,purchase_requisition_config.group_ceo_approval_pr"
+                  sequence="34"/>
+
+        <!-- Main Menu -->
+        <menuitem id="pr_menu_root" name="Procurement Requisition"
+                  web_icon="purchase_requisition_config,static/description/icon_1.png"
+                  groups="purchase_requisition_config.group_budget_approval_pr,purchase_requisition_config.group_view_all_pr,purchase_requisition_config.group_procurement_officer_pr,purchase_requisition_config.group_procurement_review"
+                  sequence="13"/>
+
+        <menuitem id="pr_main_menu" name="Procurement Requisition"
+                  parent="pr_menu_root"
+                  groups="purchase_requisition_config.group_budget_approval_pr,purchase_requisition_config.group_view_all_pr,purchase_requisition_config.group_procurement_officer_pr,purchase_requisition_config.group_procurement_review"
+                  sequence="1"/>
+
+        <!-- PR Officer -->
+        <menuitem id="menu_purchase_requisition_for_officer"
+                  sequence="1"
+                  groups="purchase_requisition_config.group_procurement_officer_pr"
+                  parent="pr_main_menu"
+                  action="action_purchase_requisition_for_officer"/>
+
+        <!-- Budget Approval -->
+        <menuitem name="Budget Approval"
+                  id="menu_purchase_requisition_for_budget_approval"
+                  sequence="2"
+                  groups="purchase_requisition_config.group_budget_approval_pr"
+                  parent="pr_main_menu"
+                  action="action_purchase_requisition_for_budget_approval"/>
+
+        <!-- Procurement Review -->
+        <menuitem name="Procurement Review"
+                  id="menu_purchase_requisition_for_procurement_review"
+                  sequence="3"
+                  groups="purchase_requisition_config.group_procurement_review"
+                  parent="pr_main_menu"
+                  action="action_purchase_requisition_for_procurement_review"/>
+
+    </data>
+</odoo>

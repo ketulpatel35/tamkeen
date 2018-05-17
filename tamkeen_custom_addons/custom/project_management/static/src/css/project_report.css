@@ -1,0 +1,18 @@
+td.text-center{
+    align:center;
+}
+.td_bg{
+    padding: 15px;
+    background-color:#D9D9D9;
+    border:1px solid black;
+    color:#990000;
+
+}
+.td_bg2{
+    padding: 15px;
+    background-color:#F2F2F2;
+    border:1px solid black;
+}
+.tr_bg {
+    background-color:#B7B7B7;
+}

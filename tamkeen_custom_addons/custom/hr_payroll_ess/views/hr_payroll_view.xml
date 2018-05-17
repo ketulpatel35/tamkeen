@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+        <record id="view_hr_payslip_form_inherit_for_auditor"
+                model="ir.ui.view">
+            <field name="name">view.hr.payslip.form.inherit.for.auditor</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </field>
+                <field name="credit_note" position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </field>
+                <xpath expr="//page[4]"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </xpath>
+                <xpath expr="//page[2]"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </xpath>
+                <xpath expr="//page[1]//separator[1]"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </xpath>
+                <field name="worked_days_line_ids" position="attributes">
+                    <attribute name="groups">hr_payroll_customization.group_payroll_auditor</attribute>
+                </field>
+
+                <xpath expr="//button[@name='action_payslip_done']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='refund_sheet']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_payslip_draft']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='compute_sheet']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_payslip_cancel']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+                <xpath expr="//div[@name='button_box']"
+                       position="attributes">
+                    <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_payslip_tree_for_display_in_ess"
+                model="ir.ui.view">
+            <field name="name">view.hr.payslip.form.inherit.for.auditor</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <field name="display_in_ess"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="action_view_employee_hr_payslip"
+                model="ir.actions.act_window">
+            <field name="name">Employee Payslip</field>
+            <field name="res_model">hr.payslip</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('employee_id.user_id.id', '=', uid),('display_in_ess', '=', True)]</field>
+        </record>
+
+        <record id="employee_payslip_manager_action"
+                model="ir.actions.act_window">
+            <field name="name">Employee Payslip</field>
+            <field name="res_model">hr.payslip</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('employee_id.user_id.id', '=',
+                uid),('employee_id.parent_id.user_id.id','=',uid)]
+            </field>
+        </record>
+
+        <record id="hr_payroll.action_report_payslip"
+                model="ir.actions.report.xml">
+            <field name="groups_id"
+               eval="[(4, ref('hr_payroll.group_hr_payroll_user'))]" />
+        </record>
+
+        <record id="hr_payroll.payslip_details_report"
+                model="ir.actions.report.xml">
+            <field name="groups_id"
+               eval="[(4, ref('hr_payroll.group_hr_payroll_user'))]" />
+        </record>
+    </data>
+</odoo>

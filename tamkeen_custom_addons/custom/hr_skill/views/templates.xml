@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+       <!-- Skill request send for HR Approval -->
+        <record id="hr_skill_req_send_to_hr" model="mail.template">
+            <field name="name">Skill HR Approval</field>
+            <field name="model_id"
+                   ref="hr_skill.model_hr_skill" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.emp_line.company_id
+            .hr_group_email | safe}</field>
+            <field name="subject">Skill Request To Be Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending skill request.
+<br/>
+<b>Requester Name: </b>${object.emp_line.name}
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+
+        <!-- Skill request approved -->
+        <record id="hr_skill_req_approved" model="mail.template">
+            <field name="name">Skill Request Approved</field>
+            <field name="model_id"
+                   ref="hr_skill.model_hr_skill" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.emp_line.work_email | safe}</field>
+            <field name="subject">Skill Request Approved</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.emp_line.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your skill request has been approved.
+<br/><br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- Skill request rejected -->
+        <record id="hr_skill_req_rejected" model="mail.template">
+            <field name="name">Skill Request Rejected</field>
+            <field name="model_id"
+                   ref="hr_skill.model_hr_skill" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.emp_line.work_email | safe}</field>
+            <field name="subject">Training Request Rejected</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.emp_line.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your skill request has been rejected.
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+    </data>
+
+</odoo>

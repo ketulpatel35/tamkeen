@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_proposal_form" model="ir.ui.view">
+            <field name="name">crm.proposal.form</field>
+            <field name="model">crm.proposal</field>
+            <field name="inherit_id" ref="crm_proposal.view_proposal_form" />
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Shipping">
+                        <group string="Dates &amp; Schedules">
+                            <group>
+                                <field name="effective_from" attrs="{}" />
+                                <field name="delivery_date" attrs="{}" />
+                                <field name="shipping_method_id" widget="selection" attrs="{}" />
+                            </group>
+                            <group>
+                                <field name="effective_to" attrs="{}" />
+                                <field name="due_date" attrs="{}" />
+                            </group>
+                        </group>
+                        <separator string="Shipping Notes"></separator>
+                        <field name="shipping_notes" attrs="{}" />
+                        <group>
+                            <group string="Billing Addess">
+                                <field name="billing_address_id" context="{'show_address': 1}" domain="['|',('parent_id','=',partner_id), ('id','=',partner_id)]" options='{"always_reload": True,"no_create":True}'/>
+
+                                
+                            </group>
+                            <group string="Shipping Addess">
+                                <field name="shipping_address_id" domain="['|',('parent_id','=',partner_id), ('id','=',partner_id)]"   context="{'show_address': 1}" options='{"always_reload": True,"no_create":True}' />
+                                
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>

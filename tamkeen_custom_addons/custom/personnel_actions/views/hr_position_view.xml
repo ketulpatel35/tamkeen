@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Position -->
+    <record id="hr_job_inherit_for_job_template" model="ir.ui.view">
+        <field name="name">hr.job.inherit.for.job.template</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" icon="fa-file-o"
+                        name="button_assignment" type="object"
+                        string="Assignment/s">
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

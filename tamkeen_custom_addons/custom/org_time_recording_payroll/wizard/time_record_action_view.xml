@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Time Recording Line Wizard-->
+    <record id="time_recording_line_wizard" model="ir.ui.view">
+        <field name="name">time.recording.line.wizard</field>
+        <field name="model">time.record.action.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payroll_period_id"/>
+                </group>
+                <footer>
+                    <button name="button_confirm" string="Confirm"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Time Recording Line Wizard-->
+    <record id="time_recording_line_assign_payroll_wizard" model="ir.ui.view">
+        <field name="name">time.recording.line.assign.payroll.wizard</field>
+        <field name="model">time.record.action.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payroll_period_id"/>
+                </group>
+                <footer>
+                    <button name="button_assign_to_payroll"
+                            string="Assign to Payroll"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Time Recording Line Wizard-->
+    <record id="time_recording_line_on_hold_wizard" model="ir.ui.view">
+        <field name="name">time.recording.line.on.hold.wizard</field>
+        <field name="model">time.record.action.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payroll_period_id"/>
+                </group>
+                <footer>
+                    <button name="button_on_hold" string="Confirm"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Time Recording Line Wizard-->
+    <record id="time_recording_line_unlonk_wizard" model="ir.ui.view">
+        <field name="name">time.recording.line.unlock.wizard</field>
+        <field name="model">time.record.action.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payroll_period_id"/>
+                </group>
+                <footer>
+                    <button name="button_unlock" string="Confirm"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Adjusted Hours Wizard Wizard-->
+    <record id="adjusted_hours_wizard" model="ir.ui.view">
+        <field name="name">adjusted.hours.wizard</field>
+        <field name="model">hr.adjusted.hours</field>
+        <field name="arch" type="xml">
+            <form>
+                <footer>
+                    <button name="button_adjusted_hours"
+                            string="Adjust Hours"
+                            type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Time Recording Line Wizard-->
+    <!--<record id="time_recording_line_simulated_wizard" model="ir.ui.view">-->
+        <!--<field name="name">time.recording.line.simulated.wizard</field>-->
+        <!--<field name="model">time.record.action.wizard</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form>-->
+                <!--<footer>-->
+                    <!--<button name="button_simulated"-->
+                            <!--string="Simulated"-->
+                            <!--type="object" class="oe_highlight"/>-->
+                    <!--<button string="Cancel" class="oe_link" special="cancel" />-->
+                <!--</footer>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <!--&lt;!&ndash; Time Recording Reset To Draft Wizard&ndash;&gt;-->
+    <!--<record id="time_recording_reset_to_draft_wizard" model="ir.ui.view">-->
+        <!--<field name="name">time.recording.reset.to.draft.wizard</field>-->
+        <!--<field name="model">time.record.action.wizard</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form>-->
+                <!--<footer>-->
+                    <!--<button name="button_reset_to_draft"-->
+                            <!--string="Reset To Draft"-->
+                            <!--type="object" class="oe_highlight"/>-->
+                    <!--<button string="Cancel" class="oe_link" special="cancel" />-->
+                <!--</footer>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <act_window id="action_time_recording_line_wizard"
+                name="Confirm Records"
+                res_model="time.record.action.wizard"
+                src_model="sheet.time.recording.line"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                multi="True"
+                view_id="time_recording_line_wizard"
+                target="new" />
+
+    <act_window id="action_time_recording_line_assign_payroll_wizard"
+                name="Assign To Current Payroll Period"
+                res_model="time.record.action.wizard"
+                src_model="sheet.time.recording.line"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                multi="True"
+                view_id="time_recording_line_assign_payroll_wizard"
+                target="new" />
+
+    <act_window id="action_time_recording_line_on_hold_wizard"
+                name="Set On-Hold"
+                res_model="time.record.action.wizard"
+                src_model="sheet.time.recording.line"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                multi="True"
+                view_id="time_recording_line_on_hold_wizard"
+                target="new" />
+
+    <act_window id="action_time_recording_adjusted_hours_wizard"
+                name="Adjust Hours"
+                res_model="hr.adjusted.hours"
+                src_model="sheet.time.recording.line"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                multi="True"
+                view_id="adjusted_hours_wizard"
+                target="new" />
+
+    <!--<act_window id="action_unlock_period_assginment"-->
+                <!--name="Unlock Period Assignment"-->
+                <!--res_model="time.record.action.wizard"-->
+                <!--src_model="sheet.time.recording.line"-->
+                <!--view_type="form"-->
+                <!--view_mode="form"-->
+                <!--key2="client_action_multi"-->
+                <!--multi="True"-->
+                <!--view_id="time_recording_line_unlonk_wizard"-->
+                <!--target="new" />-->
+
+    <!--<act_window id="action_time_recording_line_simulated_wizard"-->
+                <!--name="Simulated"-->
+                <!--res_model="time.record.action.wizard"-->
+                <!--src_model="sheet.time.recording.line"-->
+                <!--view_type="form"-->
+                <!--view_mode="form"-->
+                <!--key2="client_action_multi"-->
+                <!--multi="True"-->
+                <!--view_id="time_recording_line_simulated_wizard"-->
+                <!--target="new" />-->
+
+    <!--<act_window id="action_time_reset_to_draft_wizard"-->
+                <!--name="Reset To Draft"-->
+                <!--res_model="time.record.action.wizard"-->
+                <!--src_model="sheet.time.recording.line"-->
+                <!--view_type="form"-->
+                <!--view_mode="form"-->
+                <!--key2="client_action_multi"-->
+                <!--multi="True"-->
+                <!--view_id="time_recording_reset_to_draft_wizard"-->
+                <!--target="new" />-->
+
+</odoo>

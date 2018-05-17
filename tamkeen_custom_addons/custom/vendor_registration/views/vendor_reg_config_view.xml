@@ -1,0 +1,77 @@
+<odoo>
+
+    <!-- Financial Statement Configuration Form View-->
+    <record id="financial_statement_config_form_view" model="ir.ui.view">
+        <field name="name">financial.statement.config.form.view</field>
+        <field name="model">financial.statement.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Financial Statement Configuration">
+                <sheet string="Financial Statement Configuration">
+                    <group colspan="4" col="4">
+                        <field name="name" required="1"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vendor Registration Tree View-->
+    <record id="financial_statement_config_tree_view" model="ir.ui.view">
+        <field name="name">financial.statement.config.tree.view</field>
+        <field name="model">financial.statement.configuration</field>
+        <field name="arch" type="xml">
+            <tree string="Financial Statement Configuration">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vendor Registration Group Action -->
+    <record id="action_for_financial_statement_config"
+            model="ir.actions.act_window">
+        <field name="name">Financial Statement Configuration</field>
+        <field name="res_model">financial.statement.configuration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Procrument Configuration Form View-->
+    <record id="procrument_template_config_form_view" model="ir.ui.view">
+        <field name="name">procrument.template.config.form.view</field>
+        <field name="model">procrument.template</field>
+        <field name="arch" type="xml">
+            <form string="Procrument Template Configuration">
+                <sheet string="Procrument Template Configuration">
+                    <group colspan="4" col="4">
+                        <field name="category" widget="radio"/>
+                        <field name="survey_template_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vendor Registration Tree View-->
+    <record id="procrument_template_config_tree_view" model="ir.ui.view">
+        <field name="name">procrument.template.config.tree.view</field>
+        <field name="model">procrument.template</field>
+        <field name="arch" type="xml">
+            <tree string="Procrument Template Configuration">
+                <field name="category"/>
+                <field name="survey_template_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vendor Registration Group Action -->
+    <record id="action_for_procrument_template"
+            model="ir.actions.act_window">
+        <field name="name">Procrument Template Configuration</field>
+        <field name="res_model">procrument.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

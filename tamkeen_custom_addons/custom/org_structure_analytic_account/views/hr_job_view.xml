@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- HR Job -->
+    <record id="hr_job_inherit_for_job_cost_center" model="ir.ui.view">
+        <field name="name">hr.job.inherit.for.cost.center</field>
+        <field name="model">hr.job</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="organization_structure.hr_job_inherit_for_job_template"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='o_row']" position="after">
+                <field name="analytic_account_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

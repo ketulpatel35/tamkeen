@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- stage.config -->
+    <record id="stage_config_from" model="ir.ui.view">
+        <field name="name">stage.config.form</field>
+        <field name="model">stage.config</field>
+        <field name="arch" type="xml">
+            <form string="Stage Configuration" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sla_hours"/>
+                        </group>
+                    </group>
+                    <group invisible="1">
+                        <field name="dam_conf_line_id"/>
+                        <field name="dam_conf_id"/>
+                        <field name="object"/>
+                        <!--<field name="required_fields"-->
+                        <!--widget="many2many_tags"-->
+                        <!--domain="[('model_id','=',object)]"/>-->
+                    </group>
+                    <notebook>
+                        <page string="User Controllers"
+                              name="user_controllers">
+                            <group>
+                                <field name="multi_user_all_ids" nolable="1">
+                                    <tree editable="bottom">
+                                        <field name="allowed_user"/>
+                                        <!--<field name="department_id"/>-->
+                                        <field name="allowed_bypass" />
+                                        <field name="active_delegate"/>
+                                        <field name="delegate_user"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Controllers" name="controllers">
+                            <group>
+                                <group>
+                                    <field name="is_reject"/>
+                                    <!--<field name="reject_btn_name"-->
+                                           <!--attrs="{'invisible':[('is_reject','=',False)]}"/>-->
+                                    <field name="add_reject_btn"/>
+                                    <!--<field name="add_set_to_draft_btn"/>-->
+                                    <!--<field name="set_to_draft_btn_name"-->
+                                           <!--attrs="{'invisible':[('add_set_to_draft_btn','=',False)]}"/>-->
+                                </group>
+                                <group>
+                                    <field name="attachment_mandatory"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Actions" name="actions">
+                            <group>
+                                <field name="action_id"
+                                       context="{'default_model_id': object}"
+                                       string="Action"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stage_config_action" model="ir.actions.act_window">
+        <field name="name">Stage Config</field>
+        <field name="res_model">stage.config</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</odoo>

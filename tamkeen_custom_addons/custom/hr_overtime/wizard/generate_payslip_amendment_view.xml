@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="generate_payslip_amendment_view" model="ir.ui.view">
+            <field name="name">generate.payslip.amendment.view</field>
+            <field name="model">generate.payslip.amendment</field>
+            <field name="arch" type="xml">
+                <form string="Generate Payslip Amendment">
+                    <group>
+                        <field name="employee_id" readonly="1"/>
+                        <field name="payroll_period_id"/>
+                    </group>
+                    <group>
+                        <field name="amendment_status"
+                               required="1"
+                               string="Generated Amendment in Status"/>
+                    </group>
+                    <group>
+                        <field name="remark" placeholder="Note"
+                               nolabel="1" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="generate_amendment"
+                                string="Generate Amendment"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_open_generate_payslip_amendment">
+            <field name="name">Generate Payslip Amendment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">generate.payslip.amendment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

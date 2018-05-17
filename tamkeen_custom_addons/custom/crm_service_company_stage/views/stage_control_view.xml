@@ -1,0 +1,52 @@
+<odoo>
+    <data>
+        <record id="crm_stage_control_form" model="ir.ui.view">
+            <field name="name">crm.stage.control.form</field>
+            <field name="model">crm.stage.control</field>
+            <field name="arch" type="xml">
+                <form string="Stage Control">
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'required':True}" />
+                            <field name="code" attrs="{}" />
+                            <field name="sequence" attrs="{}" />
+                            <field name="next_activity_ids"  widget="many2many_tags" />
+                            <field name="user_ids" attrs="{'required': True}" widget="many2many_tags" />
+                            <field name="disable_forward" attrs="{}" />
+                            <field name="disable_backward" attrs="{}" />
+                        </group>
+                        <group>
+
+                            <field name="active" attrs="{}" />
+                            <field name="order_sequence" attrs="{}" />
+                            <field name="stage_id" attrs="{'required':True}" />
+                            <field name="back_activity_ids"  widget="many2many_tags" />
+                            <field name="next_stage_ids" widget="many2many_tags" attrs="{}" />
+                            <field name="back_stage_ids" widget="many2many_tags" attrs="{}" />
+                            
+                        </group>
+                    </group>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="crm_stage_control_tree" model="ir.ui.view">
+            <field name="name">crm.stage.control.tree</field>
+            <field name="model">crm.stage.control</field>
+            <field name="arch" type="xml">
+                <tree string="Stages Control">
+                    <field name="order_sequence" widget="handle" />
+                    <field name="name" attrs="{'required':True}" />
+                    <field name="stage_id" attrs="{'required':True}" />
+                    <field name="back_stage_ids" widget="many2many_tags" attrs="{}" />
+                    <field name="next_stage_ids" widget="many2many_tags" attrs="{}" />
+                    <field name="user_ids" widget="many2many_tags" attrs="{'required':True}" />
+                    <field name="disable_forward" widget="toggle_button" attrs="{}" />
+                    <field name="disable_backward" widget="toggle_button" attrs="{}" />
+                </tree>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

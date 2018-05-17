@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+acess_att_report_print_link_normal_employee,acess.att.report.print.link.normal.employee,model_att_report_print_link,hr_attendance_customization.group_hr_normal_user,1,1,1,0

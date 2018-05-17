@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!--<record id="purchase_order_form_inherit7" model="ir.ui.view">-->
+            <!--<field name="name">purchase.order.form.inherit7</field>-->
+            <!--<field name="model">purchase.order</field>-->
+            <!--<field name="inherit_id" ref="purchase.purchase_order_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//button[@name='button_approve']" position="replace">-->
+                     <!--<button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" groups="ceo_group.group_ceo"/>-->
+                    <!--&lt;!&ndash;<button name="purchase_approve" states="confirmed" string="Approve Order" class="oe_highlight" groups="ceo_group.group_ceo"/>&ndash;&gt;-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_ceo_all_purchase_orders_filter" model="ir.ui.view">
+                <field name="name">purchase.order.inherit.filter</field>
+                <field name="model">purchase.order</field>
+                <field name="inherit_id" ref="purchase.view_purchase_order_filter" />
+                <field name="arch" type="xml">
+                        <filter name="draft" position="after">
+                            <filter string="PO TO Approve" name="po_to_approve" help="Purchase orders to be approved" domain="[('state','=','to approve')]"/>
+                        </filter>
+                </field>
+           </record>
+
+           <record id="action_ceo_all_purchase_orders" model="ir.actions.act_window">
+                <field name="name">Purchase Orders</field>
+                <field name="res_model">purchase.order</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="domain">
+                    []
+                </field>
+                <field name="context">{'search_default_po_to_approve':1}</field>
+                <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+           </record>
+
+
+
+           <!--<menuitem id="ceo_all_purchase_orders_to_approve" name="Purchase Orders111"-->
+                     <!--parent="purchase.menu_procurement_management" action="action_ceo_all_purchase_orders" groups="ceo_group.group_ceo" sequence="2" />-->
+
+            <menuitem id="ceo_all_purchase_orders_to_approve" name="Purchase Orders To Approve"
+                  parent="purchase.menu_procurement_management" action="action_ceo_all_purchase_orders" sequence="2" groups="ceo_group.group_ceo"/>
+
+    </data>
+</openerp>

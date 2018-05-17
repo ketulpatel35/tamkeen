@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_ceo_all_employee_contracts_filter" model="ir.ui.view">
+            <field name="name">hr.contract.inherit.filter</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_search" />
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <separator/>
+                    <filter string="My Department Contracts" name="my_dept_contracts" help="My Department Contracts" domain="[('employee_id.user_id','=',uid),('employee_id.parent_id.user_id','=',uid)]"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="action_ceo_employees_contracts" model="ir.actions.act_window">
+            <field name="name">Employees Contracts</field>
+            <field name="res_model">hr.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                []
+            </field>
+            <field name="context">{'search_default_my_dept_contracts':1}</field>
+            <field name="search_view_id" ref="hr_contract.hr_contract_view_search"/>
+        </record>
+
+        <menuitem id="ceo_all_emp_contract" name="Employees Contracts" parent="emp_self_services.sub_mian_ess_menu" action="action_ceo_employees_contracts" groups="ceo_group.group_ceo" sequence="2" />
+
+    </data>
+</openerp>

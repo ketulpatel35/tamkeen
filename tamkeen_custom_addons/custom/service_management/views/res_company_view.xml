@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_company_group_email_inherit">
+            <field name="name">res.company.group_email.inherit</field>
+            <field name="inherit_id" ref="company_group_email.view_company_inherit_group_email" />
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='group_emails']/group" position="inside">
+                    <field name="admins_group_email"/>
+                    <field name="oe_group_email"/>
+                    <field name="ta_group_email"/>
+                    <field name="ss_vp_email"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

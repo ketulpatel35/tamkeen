@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+
+        <!-- Cron for Send reminder for Loan Request -->
+        <record model="ir.cron" id="loan_request_reminder_cron">
+            <field name="name">Loan Request Approval Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'hr.employee.loan'"/>
+            <field name="function" eval="'send_reminder'"/>
+            <field name="args" eval="'()'"/>
+        </record>
+
+        <!-- Cron for Send reminder for Loan Installment  -->
+        <record model="ir.cron"
+                id="loan_installment_ask_for_reschedule_reminder_cron">
+            <field name="name">Loan Installment Ask for Reschedule Approval
+                Reminder</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'loan.installments'"/>
+            <field name="function"
+                   eval="'send_reminder_loan_installment_ask_for_reschedule'"/>
+            <field name="args" eval="'()'"/>
+        </record>
+
+    </data>
+</openerp>

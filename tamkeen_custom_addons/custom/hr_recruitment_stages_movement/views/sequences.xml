@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Sequences for employee ID -->
+        <record id="seq_def_hr_employee_id" model="ir.sequence">
+            <field name="name">Employee</field>
+            <field name="code">hr.employee</field>
+            <field name="prefix">Temp-</field>
+            <field name="padding">4</field>
+        </record>
+        
+        <!-- Sequences for Applicant ID -->
+        <record id="seq_def_hr_applicant_id" model="ir.sequence">
+            <field name="name">Applicant</field>
+            <field name="code">hr.applicant</field>
+            <field name="prefix">APP-</field>
+            <field name="padding">4</field>
+        </record>
+
+    </data>
+</openerp>

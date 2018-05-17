@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Account Normal User -->
+        <record model="res.groups" id="group_account_normal_user">
+            <field name="name">Account Normal User</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Normal User -->
+        <record model="res.groups" id="group_normal_user_account">
+            <field name="name">Normal User</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="base.module_category_accounting_and_finance"/>
+        </record>
+
+        <!-- Invoice Management -->
+        <record model="ir.module.category" id="invoice_management">
+            <field name="name">Invoice Management</field>
+            <field name="sequence">19</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_customer_invoice">
+            <field name="name">View All Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <record model="res.groups" id="groups_view_all_vendor_invoice">
+            <field name="name">View All Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <record model="res.groups" id="groups_create_customer_invoice">
+            <field name="name">Create Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_customer_invoice'))]"/>
+        </record>
+        <record model="res.groups" id="groups_update_customer_invoice">
+            <field name="name">Update Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_customer_invoice'))]"/>
+        </record>
+        <record model="res.groups" id="groups_create_vendor_invoice">
+            <field name="name">Create Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_vendor_invoice'))]"/>
+        </record>
+        <record model="res.groups" id="groups_update_vendor_invoice">
+            <field name="name">Update Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_vendor_invoice'))]"/>
+        </record>
+        <record model="res.groups" id="group_customer_validate_invoice">
+            <field name="name">Validate Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_vendor_validate_invoice">
+            <field name="name">Validate Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+
+        <record model="res.groups" id="group_customer_refund_invoice">
+            <field name="name">Refund Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_first_validate_invoice">
+            <field name="name">First Validate Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_submit_vendor_invoice">
+            <field name="name">Submit Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_first_validate_vendor_invoice">
+            <field name="name">First Validate Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_vendor_refund_invoice">
+            <field name="name">Refund Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+
+        <record model="res.groups" id="group_set_to_draft_customer_invoice">
+            <field name="name">Set to Draft Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_vendor_settodraft_invoice">
+            <field name="name">Set to Draft Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+
+        <record model="res.groups" id="group_customer_cancel_invoice">
+            <field name="name">Cancel Customer Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="group_vendor_cancel_invoice">
+            <field name="name">Cancel Vendor Invoice</field>
+            <field name="category_id" ref="invoice_management"/>
+        </record>
+        <record model="res.groups" id="groups_invoice_master">
+            <field name="name">Invoice Master</field>
+            <field name="category_id" ref="invoice_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_customer_validate_invoice')), (4, ref('group_vendor_validate_invoice')),
+                    (4, ref('group_vendor_cancel_invoice')), (4, ref('group_customer_cancel_invoice')),
+                    (4, ref('group_set_to_draft_customer_invoice')), (4, ref('group_vendor_settodraft_invoice')),
+                    (4, ref('group_customer_refund_invoice')), (4, ref('group_vendor_refund_invoice')), (4, ref('group_submit_vendor_invoice')),
+                    (4, ref('group_first_validate_invoice')), (4, ref('group_first_validate_vendor_invoice')),
+                    ]"/>
+        </record>
+
+         <!-- Account Payment -->
+        <record model="ir.module.category" id="category_account_payment">
+            <field name="name">Payment Management</field>
+            <field name="sequence">20</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_sale_account_payment">
+            <field name="name">View All Sale Payment</field>
+            <field name="category_id" ref="category_account_payment"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <record model="res.groups" id="groups_create_sale_account_payment">
+            <field name="name">Register Sale Payment</field>
+            <field name="category_id" ref="category_account_payment"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_sale_account_payment'))]"/>
+        </record>
+
+        <record model="res.groups"
+                id="groups_view_all_purchase_account_payment">
+            <field name="name">View All Purchase Payment</field>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+            <field name="category_id" ref="category_account_payment"/>
+        </record>
+        <record model="res.groups" id="groups_create_purchase_account_payment">
+            <field name="name">Register Purchase Payment</field>
+            <field name="category_id" ref="category_account_payment"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_purchase_account_payment'))]"/>
+        </record>
+        <record model="res.groups" id="groups_confirm_account_payment">
+            <field name="name">Confirm Payment</field>
+            <field name="category_id" ref="category_account_payment"/>
+        </record>
+        <record model="res.groups" id="groups_cancel_account_payment">
+            <field name="name">Cancel Payment</field>
+            <field name="category_id" ref="category_account_payment"/>
+        </record>
+
+        <record model="res.groups" id="groups_master_account_payment">
+            <field name="name">Account Payment Master</field>
+            <field name="category_id" ref="category_account_payment"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_create_sale_account_payment')),
+                   (4, ref('groups_create_purchase_account_payment')),
+                   (4, ref('groups_confirm_account_payment')),
+                   (4, ref('groups_cancel_account_payment'))
+                   ]"/>
+        </record>
+
+        <!-- Voucher Management -->
+        <record model="ir.module.category" id="receipts_management">
+            <field name="name">Receipts Management</field>
+            <field name="sequence">21</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_receipts_entries">
+            <field name="name">View All Receipts</field>
+            <field name="category_id" ref="receipts_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <record model="res.groups" id="groups_create_receipts_entries">
+            <field name="name">Create/Update Receipts</field>
+            <field name="category_id" ref="receipts_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_view_all_receipts_entries'))]"/>
+        </record>
+        <record model="res.groups" id="groups_receipts_master">
+            <field name="name">Receipts Master</field>
+            <field name="category_id" ref="receipts_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_create_receipts_entries'))]"/>
+        </record>
+
+        <!-- Journal Management -->
+        <record model="ir.module.category" id="journal_management">
+            <field name="name">Journal Entry Management</field>
+            <field name="sequence">22</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_journal_entries">
+            <field name="name">View All Journal Entries</field>
+            <field name="category_id" ref="journal_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <!--<record model="res.groups" id="groups_view_own_journal_entries">-->
+            <!--<field name="name">View All Own Journal Entries</field>-->
+            <!--<field name="category_id"-->
+                   <!--ref="journal_management"/>-->
+            <!--<field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>-->
+        <!--</record>-->
+        <record model="res.groups" id="groups_create_journal_entries">
+            <field name="name">Create/Update Journal Entries</field>
+            <field name="category_id" ref="journal_management"/>
+            <field name="implied_ids" eval="[(4, ref('groups_view_all_journal_entries'))]"/>
+        </record>
+        <record model="res.groups" id="groups_cancel_journal_entries">
+            <field name="name">Cancel Journal Entries</field>
+            <field name="category_id" ref="journal_management"/>
+        </record>
+        <record model="res.groups" id="groups_reverse_journal_entries">
+            <field name="name">Reverse Journal Entries</field>
+            <field name="category_id" ref="journal_management"/>
+        </record>
+        <record model="res.groups" id="groups_post_journal_entries">
+            <field name="name">Post Journal Entries</field>
+            <field name="category_id" ref="journal_management"/>
+        </record>
+        <record model="res.groups" id="groups_journal_master">
+            <field name="name">Journal Entry Master</field>
+            <field name="category_id"
+                   ref="journal_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_cancel_journal_entries')),
+                   (4, ref('groups_reverse_journal_entries')),
+                   (4, ref('groups_post_journal_entries')),
+                   (4, ref('groups_create_journal_entries')),
+                   ]"/>
+        </record>
+
+        <!-- Budget Management -->
+        <record model="ir.module.category" id="budget_management">
+            <field name="name">Budget Management</field>
+            <field name="sequence">23</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_budget_entries">
+            <field name="name">View All Budget</field>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+            <field name="category_id" ref="budget_management"/>
+        </record>
+        <record model="res.groups" id="groups_create_budget_entries">
+            <field name="name">Create Budget</field>
+            <field name="category_id" ref="budget_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_view_all_budget_entries'))]"/>
+        </record>
+        <record model="res.groups" id="groups_budget_master">
+            <field name="name">Budget Master</field>
+            <field name="category_id" ref="budget_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_create_budget_entries'))]"/>
+        </record>
+
+        <!-- Asset Management -->
+        <record model="ir.module.category" id="asset_management">
+            <field name="name">Asset Management</field>
+            <field name="sequence">24</field>
+        </record>
+        <record model="res.groups" id="groups_view_all_asset">
+            <field name="name">View All Asset</field>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+            <field name="category_id" ref="asset_management"/>
+        </record>
+        <record model="res.groups" id="groups_update_all_asset">
+            <field name="name">Update Assset</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_view_all_asset'))]"/>
+        </record>
+        <record model="res.groups" id="groups_asset_confirm">
+            <field name="name">Assset Confirm</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_update_all_asset'))]"/>
+        </record>
+        <record model="res.groups" id="groups_compute_depreciation_asset">
+            <field name="name">Compute Depreciation</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_update_all_asset'))]"/>
+        </record>
+
+        <record model="res.groups" id="groups_modify_depreciation_asset">
+            <field name="name">Modify Depreciation</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_update_all_asset'))]"/>
+        </record>
+        <record model="res.groups" id="groups_asset_closing">
+            <field name="name">Asset Closing</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_update_all_asset'))]"/>
+        </record>
+        <record model="res.groups" id="group_generate_asset_entries">
+            <field name="name">Generate Asset Entries</field>
+            <field name="category_id" ref="asset_management"/>
+        </record>
+
+        <record model="res.groups" id="groups_asset_master">
+            <field name="name">Asset Master</field>
+            <field name="category_id" ref="asset_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('groups_asset_confirm')),
+                   (4, ref('groups_compute_depreciation_asset')),
+                   (4, ref('groups_modify_depreciation_asset')),
+                   (4, ref('groups_asset_closing')),
+                   (4, ref('group_generate_asset_entries'))
+                   ]"/>
+        </record>
+        <record model="res.groups" id="groups_asset_configuration">
+            <field name="name">Asset Configuration</field>
+            <field name="category_id" ref="asset_management"/>
+        </record>
+
+        <!-- Reporting Management -->
+        <record model="ir.module.category" id="reporting_management">
+            <field name="name">Reporting Management</field>
+            <field name="sequence">25</field>
+        </record>
+
+        <record model="res.groups" id="group_account_reporting">
+            <field name="name">View Basic Reports</field>
+            <field name="category_id" ref="reporting_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+
+        <record model="res.groups" id="group_account_all_reporting">
+            <field name="name">View All Reports</field>
+            <field name="category_id" ref="reporting_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_reporting'))]"/>
+        </record>
+
+        <!-- Chart off Account Management -->
+        <record model="ir.module.category" id="chart_of_account_management">
+            <field name="name">Chart of Account</field>
+            <field name="sequence">26</field>
+        </record>
+        <record model="res.groups" id="group_chart_of_account_view_all">
+            <field name="name">Chart of Account View All</field>
+            <field name="category_id" ref="chart_of_account_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+        <record model="res.groups" id="group_chart_of_account_master">
+            <field name="name">Chart of Account Master</field>
+            <field name="category_id" ref="chart_of_account_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_chart_of_account_view_all'))]"/>
+        </record>
+
+        <record model="res.groups" id="group_accounting_dashboard">
+            <field name="name">Account Dashboard</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_account_normal_user'))]"/>
+        </record>
+
+        <!-- Accounting & Finance-->
+        <record model="res.groups" id="account.group_account_manager">
+            <field name="implied_ids"
+                   eval="[
+                   (4, ref('product_extension.group_all_products_full_access')),
+                   (4, ref('groups_invoice_master')),
+                   (4, ref('groups_budget_master')),
+                   (4, ref('groups_asset_master')),
+                   (4, ref('groups_journal_master')),
+                   (4, ref('groups_master_account_payment')),
+                   (4, ref('base.group_partner_manager')), (4, ref('group_account_reporting'))
+                   ]"/>
+        </record>
+
+        <!-- Account Configuration-->
+        <record model="ir.module.category" id="account_configuration">
+            <field name="name">Account Configuration</field>
+            <field name="sequence">18</field>
+        </record>
+
+        <record model="res.groups" id="group_account_configuration">
+            <field name="name">Account Configuration</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_account_normal_user'))]"/>
+            <field name="category_id" ref="account_configuration"/>
+        </record>
+
+        <!-- Update Currency Rates -->
+        <record id="group_update_currency_rates" model="res.groups">
+            <field name="name">Update Currency Rates</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+            <field name="comment">Update Currency Rates</field>
+        </record>
+
+    </data>
+</odoo>

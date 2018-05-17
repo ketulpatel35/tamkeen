@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherited_service_panel_wizard_view_for_coc"
+                model="ir.ui.view">
+            <field name="name">service.panel.wizard.view.inherit</field>
+            <field name="model">service.panel.wizard</field>
+            <field name="inherit_id" ref="service_configuration_panel.service_panel_wizard_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='service_panel']" position="inside">
+                    <field name="coc_confg"
+                           attrs="{'readonly': [('overtime', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='overtime']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('coc_confg','=',True)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_project_charter_milestone"
+              inherit_id="project_management.report_project_charter">
+
+        <xpath expr="//table[@name='project_approval_information']"
+               position="after">
+            <!--Project Payment Milestones-->
+            <table class="table table-bordered"
+                   width="100%" height="100%"
+                   style="border: 1px solid #000000;font-size:13px" name="project_milestone">
+                <tbody>
+                    <tr>
+                        <td height="10%" colspan="4"
+                            class="text-left td_bg">
+                            <b>5. Project Milestones</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th height="10%"
+                            class="text-center td_bg2">
+                            <b>#</b>
+                        </th>
+                        <th height="10%"
+                            class="text-center td_bg2">
+                            <b>Milestone Name</b>
+                        </th>
+                        <th height="10%"
+                            class="text-center td_bg2">
+                            <b>Due Date as per<br/>
+                                Contract / WO</b>
+                        </th>
+                        <th height="10%"
+                            class="text-center td_bg2">
+                            <b>Milestone Value<br/>
+                                (SAR)</b>
+                        </th>
+                    </tr>
+                    <tr
+                        t-foreach="o.milestones_schedule_ids" t-as="mile">
+                        <td height="10%"
+                            class="text-center">
+                            <span
+                                t-esc="mile_index+1"/>
+                        </td>
+                        <td height="10%"
+                            class="text-center">
+                            <span
+                                t-esc="mile.name"/>
+                        </td>
+                        <td height="10%"
+                            class="text-center">
+                            <span
+                                t-esc="mile.due_date"/>
+                        </td>
+                        <td height="10%"
+                            class="text-center">
+                            <span
+                                t-esc="mile.estimated_value"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </xpath>
+
+    </template>
+</odoo>

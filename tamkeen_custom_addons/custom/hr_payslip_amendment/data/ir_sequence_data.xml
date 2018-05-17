@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for sale.order -->
+        <record id="seq_payslip_amendment" model="ir.sequence">
+            <field name="name">Payslip Amendment</field>
+            <field name="code">hr.payslip.amendment</field>
+            <field name="prefix">PA</field>
+            <field name="padding">5</field>
+        </record>
+
+    </data>
+</odoo>

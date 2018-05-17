@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <!-- Loan -->
+            <t t-if="widget.employee_data.is_lrta">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-university"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">
+                                Loan Management
+                            </span>
+                            <div class="dash-btn">
+                                <t t-if="widget.employee_data.is_lrta">
+                                    <button class="btn btn-info btn-xs loan_request_to_approve">
+                                        Request to Approve
+                                    </button>
+                                    <span class="btn btn-info btn-xs-num loan_request_to_approve">
+                                        <t t-esc="widget.employee_data.loan_request_to_approve"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

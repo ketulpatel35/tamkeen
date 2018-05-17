@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <menuitem parent="emp_self_services.sub_mian_empinfo_menu"
+                  name="Experience" id="exp_employee_menu" sequence="100"
+                  action="emp_self_services.action_hr_experience_tree"/>
+
+        <menuitem parent="emp_self_services.sub_mian_empinfo_menu"
+                  name="Training" id="training_employee_menu" sequence="200" action="emp_self_services.action_hr_training_tree"/>
+
+        <menuitem parent="emp_self_services.sub_mian_empinfo_menu"
+                  name="Qualification" id="qualification_employee_menu" sequence="300" action="emp_self_services.action_hr_qualification_tree"/>
+
+    </data>
+</odoo>

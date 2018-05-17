@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='#employee_contract' t-operation='after'>
+            <t t-if="widget.employee_data.is_recruitment">
+                <div class="col-md-3 col-sm-6">
+                    <div class="details">
+                        <h4 class="title-btn">
+                            RECRUITMENT <i class="fa fa-user"/>
+                        </h4>
+                        <span class="sub">
+                            <a href="javascript:;"
+                               class="dashboard-block positions_vacant">
+                                <div>
+                                    Vacant Positions
+                                </div>
+                            </a>
+                            <a href="javascript:;"
+                               class="dashboard-block positions_occupied">
+                                <div>
+                                    Occupied Positions
+                                </div>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

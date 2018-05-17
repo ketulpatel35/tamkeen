@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+         <record id="cost_center_report_print_link_view" model="ir.ui.view">
+            <field name="name">cost.center.report.print.link</field>
+            <field name="model">cost.center.report.print.link</field>
+            <field name="arch" type="xml">
+                <form string="Excel Output">
+                    <separator colspan="4" string="Please save file as .xls excel format"/>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <field name="cost_center_xls_output" filename='name' readonly='1'/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+           <!--=============== Cost Center XLS Report
+           Wizard==================-->
+        <record id="cost_center_report_xls_view" model="ir.ui.view">
+            <field name="name">cost.center.report.xls.view</field>
+            <field name="model">cost.center.report.xls</field>
+            <field name="arch" type="xml">
+                <form string="Cost Centre Report">
+                    <group colspan="2" col="4">
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                    </group>
+                    <group>
+                        <field name="budget_type"/>
+                    </group>
+                    <separator string="Filter Cost Centres"/>
+                    <group>
+                        <field name="cost_center_ids" nolabel="1"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button type="object" name="print_cost_report"
+                                    string="Generate XLS"
+                                    class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+         <!--Overtime Report Menu Action-->
+        <record model="ir.actions.act_window"
+                id="wizard_print_cost_center_xls_report">
+            <field name="name">Cost Centre Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cost.center.report.xls</field>
+            <field name="view_id" ref="cost_center_report_xls_view"/>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+         <menuitem name="Cost Center Report Generation"
+                   id="cost_center_excel_report"
+                  parent="account.account_reports_management_menu" sequence="2"
+                  action="wizard_print_cost_center_xls_report"/>
+    </data>
+</odoo>

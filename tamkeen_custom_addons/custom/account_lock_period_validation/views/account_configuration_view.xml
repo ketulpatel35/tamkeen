@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="account.menu_finance" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+                (4, ref('account_lock_period_validation.group_lock_transaction_finance')),
+            ]"/>
+        </record>
+    
+    
+        <record id="account.menu_finance_entries" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+                (4, ref('account_lock_period_validation.group_lock_transaction_finance')),
+            ]"/>
+        </record>
+
+        <menuitem name="Audit" sequence="2000" parent="account.menu_finance_entries" id="audit_journal_entry_parent"
+            groups="account_lock_period_validation.group_lock_transaction_finance"/>
+        <record id="view_account_config_settings_fiscal_year" model="ir.ui.view">
+            <field name="name">view.account.config.settings.fiscal.year</field>
+            <field name="model">account.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="Configure Fiscal Year" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="execute_custom" class="oe_highlight"/>
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <field name="company_id" invisible="1"
+                        options="{'no_create': True}"
+                        class="oe_inline"/>
+                    <field name="has_default_company" invisible="1" />
+                    <field name="has_chart_of_accounts" invisible="1"/>
+                    <field name="complete_tax_set" invisible="1"/>
+                    <group string="Fiscal Year">
+                        <label for="id" string="Fiscal Year Last Day"/>
+                        <div>
+                            <field name="fiscalyear_last_month" class="oe_inline" readonly="1"/>
+                            <span style="margin-right:5px;"></span>
+                            <field name="fiscalyear_last_day" class="oe_inline oe_text_right" readonly="1"/>
+                        </div>
+                        <label for="id" string="Lock Entries"/>
+                        <div>
+                            <div>
+                                <label for="fiscalyear_lock_date"/>
+                                <field name="fiscalyear_lock_date" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_config_fiscal_year" model="ir.actions.act_window">
+            <field name="name">Journal Entry Lock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.config.settings</field>
+            <field name="view_id" ref="view_account_config_settings_fiscal_year"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_account_config_fiscal_year" parent="account_lock_period_validation.audit_journal_entry_parent"
+            sequence="1" action="action_account_config_fiscal_year" groups="account_lock_period_validation.group_lock_transaction_finance"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <template id="report_hr_payroll_bank_transfer">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <tr t-call="report.external_layout">
+                        <div class="page">
+                        <div class="oe_structure">
+                        <div class="row">
+                            <table class="table table-bordered" width="100%" >
+                                <tr>
+                                    <td>
+                                        <strong>H</strong>
+                                    </td>
+                                     <td>
+                                        <strong>ARNB</strong>
+                                     </td>
+                                     <td>
+                                        <strong>1958</strong>
+                                     </td>
+                                     <td>
+                                        <strong>N</strong>
+                                     </td>
+                                     <td>
+                                        <strong>27042014.Ex1</strong>
+                                     </td>
+                                     <td>
+                                        <strong>0108095136900011</strong>
+                                     </td>
+                                     <td>
+                                        <strong>SAR</strong>
+                                     </td>
+                                     <td>
+                                        <strong>28042014</strong>
+                                     </td>
+                                     <td>
+                                        <strong>sum_nets</strong>
+                                     </td>
+                                     <td>
+                                        <strong>27042014.Ex1</strong>
+                                     </td>
+                                     <td>
+                                        <strong>27042014</strong>
+                                     </td>
+                                     <td>
+                                        <strong>1-225205</strong>
+                                     </td>
+                                     <td>
+                                        <strong>salary of month</strong>
+                                     </td>
+                                </tr>
+                                <t t-set="payment_data"
+                                   t-value="get_employees_payslips(o.run_ids)"/>
+                                <tr t-foreach="payment_data" t-as="b">
+                                    <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('H_Allowance')" />
+                                    </td>
+                                    <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_net')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_bank_account')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_name')" />
+                                    </td>
+                                    <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_bank_code')" />
+                                    </td>
+                                     <t t-set="my_data"
+                                   t-value="get_month(o.run_ids)"/>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="my_data" />
+                                    </td>
+                                    <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_basic')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('H_Allowance')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('other_allowance')" />
+                                    </td>
+                                    <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_bank_code')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('Deduction')" />
+                                    </td>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="b.get('employee_identification')" />
+                                    </td>
+                                     <t t-set="this_data"
+                                   t-value="get_nets(o.run_ids)"/>
+                                     <td style='text-align: center; padding: 5px;'>
+                                        <span t-esc="this_data" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        </div>
+                        </div>
+                    </tr>
+                    </t>
+                </t>
+        </template>
+    </data>
+</odoo>

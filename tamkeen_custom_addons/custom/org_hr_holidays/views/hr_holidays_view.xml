@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_holiday_status_inherit_for_om"
+            model="ir.ui.view">
+        <field name="name">view.holiday.status.inherit.for.om
+        </field>
+        <field name="model">hr.holidays.status</field>
+        <field name="inherit_id"
+               ref="hr_holidays_extension.view_holiday_status_inherit_for_extension"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group name="valid" colspan="4" col="4">
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <field name="employee_sub_group_id"
+                           domain="[('parent_id', '!=', False)]"/>
+                    <field name="personnel_sub_area_id" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_job_inherit_for_job_template_for_grade"
+            model="ir.ui.view">
+        <field name="name">hr.job.inherit.for.job.template.for.grade</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id"
+               ref="org_structure_payroll.hr_job_inherit_for_payroll_structure"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']/group/field[@name='grade_level_id']"
+                   position="after">
+                <field name="maximum_allowed_annual_balance"/>
+                <field name="maximum_accumulative_balance"/>
+                <field name="trial_period"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

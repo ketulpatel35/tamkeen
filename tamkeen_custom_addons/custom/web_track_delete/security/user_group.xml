@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="0">
+        <!-- Allowed group to delete the data. -->
+        <record id="group_track_delete" model="res.groups">
+            <field name="name">Can Delete</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="comment">the user can delete the data from the list view and using the delete menu.</field>
+        </record>      
+    </data>    
+</openerp>

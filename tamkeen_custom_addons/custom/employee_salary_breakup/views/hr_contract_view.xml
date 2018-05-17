@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- hr contract -->
+    <record id="contract_view_salary_breakup_form" model="ir.ui.view">
+        <field name="name">contract.view.salary.breakup.form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']" position="after">
+                <page string="Salary Breakup" name="salary_breakup">
+                    <field name="salary_breakup_ids"
+                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}">
+                        <tree>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

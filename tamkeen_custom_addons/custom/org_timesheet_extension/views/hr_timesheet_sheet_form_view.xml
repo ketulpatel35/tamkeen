@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--Contract view inherit for timesheet management-->
+    <record id="tamkeen_timesheet_view_inherited_timesheet_management"
+            model="ir.ui.view">
+        <field name="name">hr.timesheet.timesheet</field>
+        <field name="model">hr_timesheet_sheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
+        <field name="arch" type="xml">
+            <field name="department_id" position="replace"/>
+            <field name="company_id" position="replace"/>
+            <xpath expr="//form/header" position="replace">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                    <button name="action_submit_for_timesheet_approval"
+                            type="object"
+                            string="Submit for Approval "
+                            class="btn-primary"
+                            states="draft"/>
+                    <!-- Manager -->
+                    <button name="timesheet_service_validate1" type="object"
+                            string="Manager Approval " class="btn-primary"
+                            states="confirm"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='confirm'
+                            context="{'trigger': 'Rejected'}"/>
+                    <!-- VP -->
+                    <button name="timesheet_service_validate2" type="object"
+                            states="vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='vp_approval'
+                            context="{'trigger': 'Rejected'}"/>
+                    <!-- HR -->
+                    <button name="timesheet_service_validate4" type="object"
+                            string="HR Approval" class="btn-primary"
+                            states="hr_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='hr_approval'
+                            context="{'trigger': 'Rejected'}"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Return"
+                            states='hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+                    <!-- Approve -->
+                    <button name="timesheet_service_validate5"
+                            type="object"
+                            string="Approve" class="btn-primary"
+                            states="ceo_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='ceo_approval'
+                            context="{'trigger': 'Rejected'}"/>
+                    <button name="timesheet_closed" string="Closed"
+                            type="object" states="done"/>
+                </header>
+            </xpath>
+            <xpath expr="//form/sheet/div[@class='oe_title']"
+                   position="replace">
+                <div class="oe_title">
+                    <field name="user_id" invisible="1"/>
+                </div>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="replace">
+                <group>
+                    <group>
+                        <label for="date_from" string="Timesheet Period"/>
+                        <div><field name="date_from" class="oe_inline"/> to <field name="date_to" class="oe_inline"/></div>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="before">
+                <group>
+                    <group>
+                        <field name="employee_id"
+                               required="1"/>
+                        <field name="job_id"/>
+                        <field name="org_unit"/>
+                        <field name="company_id"/>
+                    </group>
+
+                    <group>
+                        <field name="employee_company_id" readonly="1"/>
+                        <field name="timesheet_type" readonly="1"/>
+                        <field name="department_id"  readonly="1"/>
+                        <field name="timesheet_approval_policy_id"
+                               required="1" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//page[@class='o_hr_timesheet_sheet_details']" position="before">
+                <!--<page string="Time Recording Details"-->
+                      <!--name="timesheet_recording_details">-->
+                    <!--<field name="timesheet_line_ids"-->
+                           <!--context="{'employee_id':employee_id}">-->
+                        <!--<tree editable="bottom">-->
+                            <!--<field name="date" required="1"/>-->
+                            <!--<field name="employee_id" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="schedule_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="working_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="timesheet_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="public_holiday_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="leave_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="absence_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="additional_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="overtime_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="total_paid_hours" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="total_unpaid_hours"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="affected_payroll" required="1"-->
+                                   <!--readonly="1"/>-->
+                            <!--<field name="status"/>-->
+                        <!--</tree>-->
+                    <!--</field>-->
+                <!--</page>-->
+                <page string="Endorsement" name="timesheet_endorsment">
+                    <group>
+                        <field name="endorsement_timesheet_required"
+                               invisible="1"/>
+                        <field name="endorsement_timesheet_text" nolabel="1"
+                               widget="html"/>
+                    </group>
+                    <group>
+                        <field name="endorsement_timesheet_approved"/>
+                    </group>
+                </page>
+                <!--Approvals Page-->
+                <page string="Approvals" name="approvals">
+                    <div>
+                        The approval/refusal information will be
+                        displayed here.
+                    </div>
+                    <group>
+                        <group
+                                attrs="{'invisible':[('time_mngr_user_id','=',False)]}">
+                            <field name="time_mngr_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_mngr_approval_date"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_vp_user_id','=',False)]}">
+                            <field name="time_vp_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_vp_approval_date"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_hr_user_id','=',False)]}">
+                            <field name="time_hr_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_hr_approval_date"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_rejected_user_id','=',False)]}">
+                            <field name="time_rejected_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_rejected_date"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_ceo_user_id','=',False)]}">
+                            <field name="time_ceo_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_ceo_approval_date"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_final_approval_user_id','=',False)]}">
+                            <field name="time_final_approval_user_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_final_approval_date"/>
+                        </group>
+                        <group colspan="4" col="4"
+                               attrs="{'invisible':[('timesheet_submitted_by','=',False)]}">
+                            <field name="timesheet_submitted_by" colspan="2"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="timesheet_submit_date"
+                                   colspan="2"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('time_returned_user_id','=',False)]}"
+                                colspan="4" col="4">
+                            <field name="time_returned_user_id"
+                                   colspan="2" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="time_returned_date" colspan="2"/>
+                        </group>
+                        <group
+                                attrs="{'invisible':[('timesheet_submitted_by','=',False)]}"
+                                colspan="4" col="4">
+                            <field name="time_waiting_time"
+                                   colspan="2"/>
+                            <field name="expected_approval_date_as_sla"
+                                   attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                        </group>
+                    </group>
+                </page>
+                 <page name="service_logs" string="Service Logs">
+                            <field name="time_service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="time_request_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view"
+            id="view_company_inherit_for_timesheet_policy">
+        <field name="name">res.company.group_email.inherit.coc</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.view_company_inherit_for_service_panel"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='policies']"
+                   position="inside">
+                <group string="Timesheet Policy">
+                    <field name="timesheet_policy_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

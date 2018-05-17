@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Skills Management"
+                  parent="hr.menu_human_resources_configuration"
+                  id="menu_hr_skill_mgt"/>
+
+        <!-- Employee -->
+        <record model="ir.ui.view" id="view_employee_skill_form">
+            <field name="name">hr.employee.skill.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="emp_self_services.view_employee_documents_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath
+                        expr="//page[@name='skills_main_page']/notebook/page[@name='trainings']"
+                        position="after">
+                    <page string="Skills" groups="hr.group_hr_user">
+                        <field name="skill_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="skill_level"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Skill -->
+        <record model="ir.ui.view" id="view_skill_form">
+            <field name="name">hr.skill.form</field>
+            <field name="model">hr.skill</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Skill">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button name="submit_to_hr" string="Submit"
+                                type="object"
+                                class="oe_highlight"
+                                states="draft"/>
+                        <button name="skill_hr_approved" string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                states="hr_approval"
+                                groups="hr_employee_customization.group_update_emp_info"/>
+                        <button name="skill_hr_rejected" string="Reject"
+                                type="object"
+                                class="oe_highlight"
+                                states="hr_approval"
+                                groups="hr_employee_customization.group_update_emp_info"/>
+                        <field name="active" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <!--<field name="emp_line" readonly="1"/>-->
+                            <!--<field name="employee_company_id" readonly="1"/>-->
+                            <!--<field name="skill_level" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>-->
+                            <field name="active" select="1" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="comment" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                        </group>
+                        <group>
+                            <field name="requirements" widget="html"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="reject_reason"
+                                   attrs="{'invisible': [('state', 'not in', ('reject'))]}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_skill_form">
+            <field name="name">Skill</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.skill</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Skills"
+                  parent="menu_hr_skill_mgt"
+                  id="menu_open_view_skill_form"
+                  action="open_view_skill_form"/>
+
+        <record model="ir.ui.view" id="view_hr_skill_tree">
+            <field name="name">hr.skill.tree</field>
+            <field name="model">hr.skill</field>
+            <field name="type">tree</field>
+            <field name="field_parent">child_ids</field>
+            <field name="arch" type="xml">
+                <tree string="Skills">
+                    <field name="name"/>
+                    <field name="emp_line"/>
+                    <field name="skill_level"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tamkeen_hr_skill_search" model="ir.ui.view">
+            <field name="name">hr.skill.search</field>
+            <field name="model">hr.skill</field>
+            <field name="arch" type="xml">
+                <search string="Qualification">
+                    <field name="emp_line"/>
+                    <field name="employee_company_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--<record model="ir.actions.act_window" id="open_view_skill_tree">-->
+        <!--<field name="name">Skills structure</field>-->
+        <!--<field name="res_model">hr.skill</field>-->
+        <!--<field name="view_type">tree</field>-->
+        <!--<field name="view_id" ref="view_hr_skill_tree"/>-->
+        <!--</record>-->
+
+        <record id="hr_employee_normal_action_tree" model="ir.actions.act_window">
+            <field name="name">Employees</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="domain">[('skill_ids','=', active_ids)]</field>-->
+        </record>
+
+        <record id="tamkeen_hr_skill_reject_form_view" model="ir.ui.view">
+            <field name="name">skill.reject.reason</field>
+            <field name="model">tamkeen.hr.skill.reject</field>
+            <field name="arch" type="xml">
+                <form string="Rejection Reason">
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="reject_skill" string="Reject"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_employee_skill_open" model="ir.values">
+            <field eval="'tree_but_open'" name="key2"/>
+            <field eval="'hr.skill'" name="model"/>
+            <field name="name">Employees by Skills</field>
+            <field eval="'ir.actions.act_window,%d'%hr_employee_normal_action_tree" name="value"/>
+        </record>
+
+                <!-- qualifications -->
+    <act_window id="action_archive_unarchive_skill"
+                multi="True"
+                key2="client_action_multi" name="Archive/Unarchive"
+                res_model="emp.archive.unarchive"
+                src_model="hr.skill"
+                groups="hr_employee_customization.group_create_emp_profile"
+                view_mode="form" target="new" view_type="form"/>
+
+    </data>
+</odoo>

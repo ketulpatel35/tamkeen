@@ -1,0 +1,62 @@
+<odoo>
+    <data>
+        <record model="crm.stage" id="crm.stage_lead1">
+            <field name="name">New</field>
+            <field name="probability">10</field>
+            <field name="on_change">1</field>
+            <field name="sequence">1</field>
+            <field name="state">new</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead2">
+            <field name="name">Opportunity Qualification</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">2</field>
+            <field name="state">qualification</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead3">
+            <field name="name">Meeting</field>
+            <field name="probability">30</field>
+            <field name="on_change">1</field>
+            <field name="sequence">3</field>
+            <field name="state">meeting</field>
+        </record>
+        <record model="crm.stage" id="stage_lead31">
+            <field name="name">Proposal</field>
+            <field name="probability">40</field>
+            <field name="on_change">1</field>
+            <field name="sequence">4</field>
+            <field name="state">proposition</field>
+        </record>
+        <record model="crm.stage" id="stage_lead32">
+            <field name="name">Bidding</field>
+            <field name="probability">60</field>
+            <field name="on_change">1</field>
+            <field name="sequence">5</field>
+            <field name="state">bidding</field>
+        </record>
+        <record model="crm.stage" id="stage_lead33">
+            <field name="name">Negotiation</field>
+            <field name="probability">75</field>
+            <field name="on_change">1</field>
+            <field name="sequence">6</field>
+            <field name="state">negotiation</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead4">
+            <field name="name">Closed-Won</field>
+            <field name="fold" eval="False"/>
+            <field name="probability">100</field>
+            <field name="on_change">1</field>
+            <field name="sequence">70</field>
+            <field name="state">won</field>
+        </record>
+        <record model="crm.stage" id="crm.stage_lead41">
+            <field name="name">Closed-Lost</field>
+            <field name="fold" eval="True"/>
+            <field name="probability">0</field>
+            <field name="on_change">1</field>
+            <field name="sequence">71</field>
+            <field name="state">lost</field>
+        </record> 
+    </data>
+</odoo>

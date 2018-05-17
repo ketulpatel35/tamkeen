@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Employee -->
+    <record id="view_employee_form_inherit_for_org_structure"
+            model="ir.ui.view">
+        <field name="name">view.employee.form.inherit.for.org.structure</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!--<field name="job_id" position="attributes">-->
+            <!--<attribute name="string">Main Position</attribute>-->
+            <!--<attribute name="readonly">True</attribute>-->
+            <!--<attribute name="required">True</attribute>-->
+            <!--</field>-->
+            <!--<field name="department_id" position="attributes">-->
+            <!--<attribute name="string">Organization Unit</attribute>-->
+            <!--</field>-->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="assigned_positions" icon="fa-list"
+                        class="oe_stat_button"
+                        type="object" string="Assigned Position(Acting)">
+                </button>
+            </xpath>
+            <field name="department_id" position="replace"/>
+            <field name="job_id" position="replace"/>
+            <field name="parent_id" position="replace"/>
+            <xpath expr="//notebook/page[@name='public']"
+                   position="before">
+                <page string="Relationship" name="relationship">
+                    <group string="Organization Management" colspan="4" col="4">
+                        <field name="job_id" string="Main Position" readonly="1"/>
+                        <field name="job_template_id" readonly="1"/>
+                        <!--<field name="parent_id" attrs="{'required': [('reporting_to_required','=', True)]}" readonly="1"/>-->
+                        <field name="parent_id" readonly="1"/>
+                        <field name="department_id"
+                               string="Organization Unit" readonly="1"/>
+                        <field name="hod_id" readonly="1"/>
+                        <field name="reporting_to_required" invisible="1"/>
+                    </group>
+                    <group colspan="4" col="4" string="Enterprise Structure">
+                        <field name='personnel_area_id' readonly="1"/>
+                        <field name='personnel_sub_area_id' readonly="1"/>
+                    </group>
+                    <group string="Personnel Structure" colspan="4" col="4">
+                        <field name="employee_group_id" readonly="1"/>
+                        <field name="employee_sub_group_id" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group colspan="4" col="4">
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!--<record id="hr_saudi_inherit_for_short_name"-->
+            <!--model="ir.ui.view">-->
+        <!--<field name="name">hr.saudi.inherit.for.short.name</field>-->
+        <!--<field name="model">hr.employee</field>-->
+        <!--<field name="type">form</field>-->
+        <!--<field name="inherit_id"-->
+               <!--ref="hr_saudi_filed.hr_saudi_inherit"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<field name="name" position="after">-->
+                <!--<field name="short_name" required="1"/>-->
+            <!--</field>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record id="view_partner_tree2_for_position"
+            model="ir.ui.view">
+        <field name="name">view.partner.tree2.for.position</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_partner_tree2"/>
+        <field name="arch" type="xml">
+            <field name="job_id" position="replace"/>
+            <field name="department_id" position="replace"/>
+            <field name="company_id" position="replace"/>
+            <field name="work_email" position="replace"/>
+            <field name="work_phone" position="replace"/>
+            <field name="name" position="after">
+                <field name="job_id" string="Position"/>
+                <field name="department_id" string="Organization Unit"/>
+                <field name="parent_id"/>
+                <field name="hod_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

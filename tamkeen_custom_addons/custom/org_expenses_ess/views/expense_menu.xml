@@ -1,0 +1,32 @@
+<odoo>
+
+    <!-- ESS Expense Management-->
+    <menuitem id="menu_employee_expense_for_ess_main"
+              name="Expense Management"
+              groups="org_expenses_extension.group_expense_manager_approval"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="45"/>
+    <!-- Expense Request -->
+    <menuitem id="menu_expense_request_ess"
+              name="Expense Request"
+              parent="menu_employee_expense_for_ess_main"
+               groups="org_expenses_extension.group_expense_normal_user"
+              action="open_expense_ess_requests"
+              sequence="25"/>
+
+    <!-- MSS Loan Management -->
+    <menuitem id="menu_manager_expense_for_ess_main"
+              name="Expense Management"
+              parent="emp_self_services.sub_mian_mss_menu"
+              groups="org_expenses_extension.group_expense_manager_approval"
+              sequence="1300"/>
+
+    <!-- Expense Request to be Approve -->
+    <menuitem id="menu_timesheet_request_mss"
+              name="Expense Requests To Approve"
+              parent="menu_manager_expense_for_ess_main"
+              groups="org_expenses_extension.group_expense_manager_approval"
+              action="open_expense_mngr_request_approval"
+              sequence="1"/>
+
+</odoo>

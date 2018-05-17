@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_uuid_wizard_generation" model="ir.ui.view">
+            <field name="name">UUID Generation</field>
+            <field name="model">uuid.wizard.generation</field>
+            <field name="arch" type="xml">
+                <form string="UUID Generation Wizard">
+                    <div attrs="{'invisible': [('token', '!=', False)]}">
+                        <h4>This wizard will help you to generate a UUID that
+                              can be used for authentication.</h4>
+                    </div>
+                    <group>
+                        <field name="token"
+                               attrs="{'invisible': [('token', '=', False)]}" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="generate_uuid"
+                            string="Generate UUID" type="object"
+                            class="btn-primary"
+                                attrs="{'invisible': [('token', '!=', False)]}"/>
+                        <button string="Cancel"
+                            class="btn-default"
+                            special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_uuid_wizard_generation" model="ir.actions.act_window">
+            <field name="name">UUID Generation wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">uuid.wizard.generation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_uuid_wizard_generation"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="uuid_generation_menu"
+                  action="act_uuid_wizard_generation" parent="base.menu_automation" />
+
+    </data>
+</odoo>

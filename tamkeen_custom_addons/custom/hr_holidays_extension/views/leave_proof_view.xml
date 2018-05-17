@@ -1,0 +1,46 @@
+<odoo>
+
+    <record id="leave_proof_form_view" model="ir.ui.view">
+        <field name="name">Leave Proof</field>
+        <field name="model">leave.type.proof.documents</field>
+        <field name="arch" type="xml">
+            <form string="Leave Proof">
+                <sheet string="Leave Proof">
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="mandatory"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="leave_proof_tree_view" model="ir.ui.view">
+        <field name="name">Leave Proof</field>
+        <field name="model">leave.type.proof.documents</field>
+        <field name="arch" type="xml">
+            <tree string="Leave Proof">
+                <field name="name"/>
+                <field name="mandatory"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="leave_proof_action">
+        <field name="name">Leave Proof</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">leave.type.proof.documents</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new proof.
+            </p>
+            <p>
+                Press create button to create a new Proof.
+            </p>
+        </field>
+    </record>
+</odoo>

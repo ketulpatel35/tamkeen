@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <!-- Payroll -->
+            <t t-if="widget.employee_data.is_eps">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-money"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">
+                                Payroll
+                            </span>
+                            <div class="dash-btn">
+                                <t t-if="widget.employee_data.is_eps">
+                                    <button class="btn btn-info btn-xs employee_payslip">
+                                        Employee Payslip
+                                    </button>
+                                    <span class="btn btn-info btn-xs-num employee_payslip">
+                                        <t t-esc="widget.employee_data.employee_payslip"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

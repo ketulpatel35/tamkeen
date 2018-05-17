@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Account Segment At Line Level -->
+    <record id="acc_seg_line_level" model="res.groups">
+        <field name="name">Segments Line Level</field>
+        <field name="category_id"
+               ref="purchase_requisition_config.purchase_requisition"/>
+    </record>
+
+</odoo>

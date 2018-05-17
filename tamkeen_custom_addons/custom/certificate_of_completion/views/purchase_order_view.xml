@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- coc inherit purchase order form -->
+    <record id="purchase_order_form_purchase_config_inherit_coc"
+            model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.coc</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id"
+               ref="purchase_config.purchase_order_required_payment"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="replace"/>
+            <xpath expr="//page[@name='terms']" position="replace"/>
+            <xpath expr="//page[1]" position="after">
+                <page name="milestones_schedule"
+                      string="Milestones Schedule">
+                    <field name="milestones_schedule_ids"
+                           attrs="{'readonly': [('state','not in',('draft','sent'))]}">
+                        <tree string="Milestones Schedule" editable="bottom">
+                            <field name="name" required="1"/>
+                            <field name="percentage" required="1"/>
+                            <field name="amount"/>
+                            <field name="description"/>
+                            <field name="percentage_completion" invisible="1"/>
+                            <field name="milestone_achieved"/>
+                            <field name="purchase_order_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="total_percentage"
+                               class="oe_subtotal_footer_separator"/>
+                    </group>
+                </page>
+                <page name="terms" string="Terms &amp; Conditions">
+                    <group>
+                        <field name="payment_term_id"
+                               required="1"
+                               attrs="{'readonly': [('state','not in',('draft','sent'))]}"/>
+                    </group>
+                    <group string="Additional Terms">
+                        <field name="notes"
+                               attrs="{'readonly': [('state','not in',('draft','sent'))]}"
+                               nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//div[@name='button_box']/button[@name='action_view_invoice']"
+                   position="before">
+                <button type="object"
+                        name="action_view_certificate_of_completion"
+                        class="oe_stat_button" icon="fa-list"
+                        groups="certificate_of_completion.group_coc_normal_user"
+                        attrs="{'invisible':[('state', 'in', ('draft','sent','to approve','bid','budget_confirmed','cancel'))]}">
+                    <field name="coc_count" widget="statinfo"
+                           string="Certificate of Completion"/>
+                    <field name="certificate_of_completion_ids" invisible="1"/>
+                </button>
+            </xpath>
+            <xpath expr="//div[@name='button_box']/button[@name='action_view_invoice']"
+                   position="after">
+                <button type="object" string="Payments"
+                        groups="certificate_of_completion.group_coc_normal_user"
+                        name="action_view_po_related_payments"
+                        class="oe_stat_button" icon="fa-list"
+                        attrs="{'invisible':[('state', 'in', ('draft','sent','to approve','bid','budget_confirmed','cancel'))]}">
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

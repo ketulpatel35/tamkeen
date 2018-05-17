@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+       <record id="email_template_work_resumption_approve_to_manager"
+                model="mail.template">
+            <field name="name">Work Resumption To Be Approved
+            </field>
+            <field name="model_id"
+                   ref="employee_leave_summary.model_work_resumption" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.parent_id.work_email | safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject"> Work Resumption To Be Approved </field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.parent_id.name},
+<br>
+<p style="padding-left: 4em;">
+Employee ${object.employee_id.name}.
+<br>
+Reporting work resumption on date  ${object.date_resumption.split(' ')[0]} (${object.actual_number_of_leave_days} day/s).
+<br>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+         <record id="email_template_work_resumption_approve_by_manager"
+                model="mail.template">
+            <field name="name">Work resumption approve to manager
+            </field>
+            <field name="model_id"
+                   ref="employee_leave_summary.model_work_resumption" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject"> Work Resumption To Be Approved </field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+<br>
+Your Reporting work resumption on date  ${object.date_resumption.split(' ')[0]} (${object.actual_number_of_leave_days} day/s).
+is approved by manager ${user.partner_id.name},
+<br>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_work_resumption_approve_by_hr_manager"
+                model="mail.template">
+            <field name="name">Work resumption approve by HR manager
+            </field>
+            <field name="model_id"
+                   ref="employee_leave_summary.model_work_resumption" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject"> Work Resumption To Be Approved
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+<br>
+Your Reporting work resumption on date  ${object.date_resumption.split(' ')[0]} (${object.actual_number_of_leave_days} day/s).
+is approved by HR manager ${user.partner_id.name},
+<br>
+<br />
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+
+            </field>
+        </record>
+
+    </data>
+ </odoo>

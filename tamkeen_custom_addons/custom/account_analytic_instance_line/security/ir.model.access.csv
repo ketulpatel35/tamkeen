@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_instance_line,access.account.instance.line,model_account_instance_line,base.group_user,1,0,0,0
+access_account_instance_line_account_user,access.account.instance.line.accountant,model_account_instance_line,account.group_account_user,1,0,0,0
+access_account_invoice_line_account__invoice,access.account.instance.line.account.invoice,model_account_instance_line,account.group_account_invoice,1,1,1,1

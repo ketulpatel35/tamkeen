@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_employee_appraisal" model="report.paperformat">
+            <field name="name">European A4 Custom</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">25</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="employee_appraisal_report_action"
+                model="employee.appraisal"
+                string="Employee Appraisal"
+                report_type="qweb-pdf"
+                name="hr_appraisal_evaluation.emp_appraisal_template"
+                file="hr_appraisal_evaluation.emp_appraisal_template"
+                paperformat="hr_appraisal_evaluation.paperformat_employee_appraisal"/>
+
+        <template id="emp_appraisal_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="hr_appraisal_evaluation.emp_appraisal_header_footer">
+                        <div class="page">
+                            <style>
+                                .header_block
+                                {
+                                background-color:#EF6C00;
+                                border:3px solid black;
+                                border-radius:3px;
+                                padding:5px;
+                                }
+                                .col-xs-1, .col-xs-11, .2nd
+                                {
+                                font-style:bold;
+                                border:1px solid black;
+                                }
+                                .objective_table
+                                {
+                                background-color:#EF6C00;
+                                padding:5px;
+                                }
+                                .objective, .behvaiour
+                                {
+                                border:1px solid black;
+                                paddding:5px;
+                                width:98%;
+                                }
+                                .Obj_rating
+                                {
+                                border:1px solid black;
+                                padding2px;
+                                }
+                                .obj_box
+                                {
+                                border:0px;
+                                }
+                                .box
+                                {
+                                border:1px solid black;
+                                }
+                                .behaviour_table
+                                {
+                                border:1px solid black;
+                                padding:2px;
+                                }
+                                .rating tr td
+                                {
+                                padding:5px;
+                                }
+                            </style>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">A
+                                        </div>
+                                        <div class="col-xs-11">PERSONAL DATA
+                                            (please fill in the areas
+                                            highlighted in gray)
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table class="table table-bordered"
+                                           style="border:1px solid black;">
+                                        <tr>
+                                            <td>EMPLOYEE NAME</td>
+                                            <td>EMPLOYEE NO.</td>
+                                            <td colspan="2">IMMEDIATE
+                                                MANAGER/SUPERVISOR NAME
+                                            </td>
+                                            <td>TWO LEVELS ABOVE MANAGER NAME
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color:#89C4F4;">
+                                            <td>
+                                                <span t-if="o.emp_id"
+                                                      t-field="o.emp_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-if="o.emo_no"
+                                                      t-field="o.emo_no"/>
+                                            </td>
+                                            <td colspan="2">
+                                                <span t-if="o.immediate_manager"
+                                                      t-field="o.immediate_manager.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-if="o.to_upper_manager"
+                                                      t-field="o.to_upper_manager.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>JOB TITLE</td>
+                                            <td></td>
+                                            <td colspan="2">DATE OF JOINING
+                                            </td>
+                                            <td>DATE IN PRESENT JOB</td>
+                                        </tr>
+                                        <tr style="background-color:#89C4F4;">
+                                            <td>
+                                                <span t-if="o.job_title"
+                                                      t-field="o.job_title.name"/>
+                                            </td>
+                                            <td></td>
+                                            <td colspan="2">
+                                                <span t-if="o.date_of_joining"
+                                                      t-field="o.date_of_joining"/>
+                                            </td>
+                                            <td>
+                                                <span t-if="o.current_date"
+                                                      t-field="o.current_date"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>DEPARTMENT</td>
+                                            <td>SECTION</td>
+                                            <td colspan="3">PERIOD COVERED IN
+                                                THIS REPORT
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color:#89C4F4;">
+                                            <td>
+                                                <span t-if="o.department_id"
+                                                      t-field="o.department_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-if="o.section"
+                                                      t-field="o.section"/>
+                                            </td>
+                                            <td style="background-color:white;">
+                                                FROM:
+                                                <span t-if="o.period_from"
+                                                      t-field="o.period_from"/>
+                                            </td>
+                                            <td style="background-color:white;">
+                                                TO:
+                                            </td>
+                                            <td>
+                                                <span t-if="o.period_to"
+                                                      t-field="o.period_to"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">B
+                                        </div>
+                                        <div class="col-xs-6 2nd">OBJECTIVES
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            Weightage
+                                        </div>
+                                        <div class="col-xs-1 text-center">
+                                            <span t-if="o.objective_weightage"
+                                                  t-field="o.objective_weightage"/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <t t-foreach="o.objective" t-as="obj">
+                                        <div class="container-fluid objective_table">
+                                            <div class="row">
+                                                <div class="col-xs-4">
+                                                    Objective
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.objectives"
+                                                              t-field="obj.objectives.objective_name"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    KPI/ Target/ Measurement
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.kpi_measurement"
+                                                              t-field="obj.kpi_measurement"/>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-xs-2">-->
+                                                    <!--Achievement Date-->
+                                                    <!--<br/>-->
+                                                    <!--<div class="objective">-->
+                                                        <!--<span t-if="o.achievement_date"-->
+                                                              <!--t-field="o.achievement_date"/>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <div class="col-xs-2">
+                                                    Weightage
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.weightage"
+                                                              t-field="obj.weightage"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="container-fluid">
+                                                    <div class="col-xs-5 Obj_rating">
+                                                        <span t-if="obj.obj_self_rating"
+                                                              t-field="obj.obj_self_rating"/>
+                                                    </div>
+                                                    <div class="col-xs-2 "></div>
+                                                    <div class="col-xs-5 Obj_rating">
+                                                        <span t-if="obj.obj_manager_rating"
+                                                              t-field="obj.obj_manager_rating"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="col-xs-1 obj_box">
+                                                    Mid Year
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.emp_mid_year_date"
+                                                              t-field="obj.emp_mid_year_date"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-1  obj_box">
+                                                    End Year
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.emp_end_year_date"
+                                                              t-field="obj.emp_end_year_date"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    Employee Comments
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.emp_comments"
+                                                              t-field="obj.emp_comments"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-1 obj_box">
+                                                    Mid Year
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.manager_mid_year_date"
+                                                              t-field="obj.manager_mid_year_date"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-1 obj_box">
+                                                    End Year
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.manager_end_year_date"
+                                                              t-field="obj.manager_end_year_date"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    Manager/Supervisor Comments
+                                                    <br/>
+                                                    <div class="objective">
+                                                        <span t-if="obj.manager_comments"
+                                                              t-field="obj.manager_comments"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <br/>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <h3>
+                                                    <b>Objective Agreed By:
+                                                        <span t-if="o.agreed_date"
+                                                              t-field="o.agreed_date"/>
+                                                    </b>
+                                                </h3>
+                                            </div>
+                                            <div class="col-xs-6 text-center pull-right">
+                                                <h3>
+                                                    <div class="col-xs-6">
+                                                        <b>Total Weightage</b>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        100%
+                                                    </div>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="container-fluid"
+                                         style="font-size:10px;">
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Employee</strong>
+                                        </div>
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Date</strong>
+                                        </div>
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Immediate
+                                                manager/Supervisor
+                                            </strong>
+                                        </div>
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Date</strong>
+                                        </div>
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Department Head</strong>
+                                        </div>
+                                        <div class="col-xs-2 text-center"
+                                             style="border-top:1px solid black;">
+                                            <strong>Date</strong>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">C
+                                        </div>
+                                        <div class="col-xs-6 2nd">BEHAVIORAL
+                                            COMPETENCIES
+                                        </div>
+                                        <div class="col-xs-4 text-center">
+                                            Weightage
+                                        </div>
+                                        <div class="col-xs-1 text-center">
+                                            <span t-if="o.behaviour_total_weightage"
+                                                  t-field="o.behaviour_total_weightage"/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <t t-foreach="o.behaviour_comp"
+                                       t-as="behaviour">
+                                        <div class="container-fluid behaviour_table">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <h3>
+                                                        <b>
+                                                            <span t-if="behaviour.name"
+                                                                  t-field="behaviour.name.behaviour_name"/>
+                                                        </b>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-5">
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.region"
+                                                              t-field="behaviour.region"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    Defination
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.definaition"
+                                                              t-field="behaviour.definaition"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    Expected Level
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.expected_level"
+                                                              t-field="behaviour.expected_level"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="col-xs-2">
+                                                    Self Rating
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.emp_behaviour_self_rating"
+                                                              t-field="behaviour.emp_behaviour_self_rating"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    Manager/Supervisor Rating
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.manager_behaviour_rating"
+                                                              t-field="behaviour.manager_behaviour_rating"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    Improvement Areas
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.improvement_area"
+                                                              t-field="behaviour.improvement_area"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="col-xs-6">
+                                                    Employee Behaviour
+                                                    Evidences
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.emp_evidence"
+                                                              t-field="behaviour.emp_evidence"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    Manager/Supervisor
+                                                    Behaviour Evidence
+                                                    <br/>
+                                                    <div class="behvaiour">
+                                                        <span t-if="behaviour.manager_evidence"
+                                                              t-field="behaviour.manager_evidence"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                </div>
+                                <br/>
+                                <!--<hr style="border-left:0px;border-right:0px;border-top:1px solid black;-->
+                                <!--border-bottom:1px solid black;"></hr>-->
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">D
+                                        </div>
+                                        <div class="col-xs-11">STRENGTHS AND
+                                            AREAS FOR IMPROVEMENT
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table width="100%">
+                                        <tr>
+                                            <th class="box" colspan="2">
+                                                <center>Strengths</center>
+                                            </th>
+                                            <th class="box" colspan="2">
+                                                <center>Area Of Improvement
+                                                </center>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td width="25%">
+                                                <strong>Technical</strong>
+                                                <br/>
+                                                <div class="col-xs-11 box">
+                                                    <span t-if="o.emo_technical"
+                                                          t-field="o.emo_technical"/>
+                                                </div>
+                                            </td>
+                                            <td width="25%">
+                                                <strong>Behavioral</strong>
+                                                <br/>
+                                                <div class="col-xs-11 box">
+                                                    <span t-if="o.emo_behaviour"
+                                                          t-field="o.emo_behaviour"/>
+                                                </div>
+                                            </td>
+                                            <td width="25%">
+                                                <strong>Technical</strong>
+                                                <br/>
+                                                <div class="col-xs-10 box">
+                                                    <span t-if="o.manager_technical"
+                                                          t-field="o.manager_technical"/>
+                                                </div>
+                                                <div class="col-xs-1 box">
+                                                    <!--<span t-if="" t-field=""/>-->
+                                                </div>
+                                            </td>
+                                            <td width="25%">
+                                                <strong>Behavioral</strong>
+                                                <br/>
+                                                <div class="col-xs-10 box">
+                                                    <span t-if="o.manager_behaviour"
+                                                          t-field="o.manager_behaviour"/>
+                                                </div>
+                                                <div class="col-xs-1 box">
+                                                    <!--<span t-if="" t-field=""/>-->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <br/>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">E
+                                        </div>
+                                        <div class="col-xs-11">CAREER
+                                            DISCUSSION
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <strong>Career Development
+                                                </strong>
+                                                <br/>
+                                            </td>
+                                            <td>
+                                                <strong>Requirement &amp; Time
+                                                    Frame
+                                                </strong>
+                                                <br/>
+                                            </td>
+                                        </tr>
+                                        <t t-foreach="o.career_discussion"
+                                           t-as="career">
+                                            <tr>
+                                                <td width="50%">
+                                                    <span t-if="career.career_discusion"
+                                                          t-field="career.career_discusion"/>
+                                                    <br/>
+                                                    <div class="col-xs-11 box">
+                                                        <span t-if="career.description"
+                                                              t-field="career.description"/>
+                                                    </div>
+                                                </td>
+                                                <td width="50%">
+                                                    <span></span>
+                                                    <br/>
+                                                    <div class="col-xs-11 box">
+                                                        <span t-if="career.requirements"
+                                                              t-field="career.requirements"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                                <br/>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">F
+                                        </div>
+                                        <div class="col-xs-11">INDIVIDUAL
+                                            DEVELOPMENT PLAN
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Development
+                                                    Objectives(Competency-
+                                                    Based Development)
+                                                </th>
+                                                <th>Justifications/ ReasonsIs
+                                                    this development is a
+                                                    result of one of the
+                                                    following?
+                                                </th>
+                                                <th>Detailed
+                                                    Descriptions(Details what
+                                                    kind of specific
+                                                    development required)
+                                                </th>
+                                                <th>Development Options</th>
+                                                <th>Action Steps /
+                                                    Interventions
+                                                </th>
+                                                <!--<th>Success Measures</th>-->
+                                                <th>Target Completion Date</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.individual_development_plans"
+                                               t-as="idp">
+                                                <tr>
+                                                    <td>
+                                                        <span t-if="idp.development_obj"
+                                                              t-field="idp.development_obj"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="idp.Justification"
+                                                              t-field="idp.Justification"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="idp.detail_description"
+                                                              t-field="idp.detail_description"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="idp.development_options"
+                                                              t-field="idp.development_options"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="idp.intervention"
+                                                              t-field="idp.intervention"/>
+                                                    </td>
+                                                    <!--<td>-->
+                                                        <!--<span t-if="idp.success_measurre"-->
+                                                              <!--t-field="idp.success_measurre"/>-->
+                                                    <!--</td>-->
+                                                    <td>
+                                                        <span t-if="idp.target_completion_date"
+                                                              t-field="idp.target_completion_date"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="idp.remark"
+                                                              t-field="idp.remark"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br/>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-1 text-center">G
+                                        </div>
+                                        <div class="col-xs-11">FINAL RATING AND
+                                            APPROVALS
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table class="table table-bordered rating">
+                                        <tr>
+                                            <td>
+                                                <div class="col-xs-6">
+                                                    Objectives Average Rating
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <span t-if="o.mng_obj_avg_rating"
+                                                          t-field="o.mng_obj_avg_rating"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-xs-6">Behaviour
+                                                    Competencies Average Rating
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <span t-if="o.mng_behaviour_comp_avg_rating"
+                                                          t-field="o.mng_behaviour_comp_avg_rating"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-xs-6">Weighted
+                                                    Average Rating
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <span t-if="o.mng_weightage_avg_rating"
+                                                          t-field="o.mng_weightage_avg_rating"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="col-xs-6">
+                                                    <b>FINAL RATING</b>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <span t-if="o.mng_final_rate"
+                                                          t-field="o.mng_final_rate"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-xs-6">
+                                                    <b>FINAL RATING AFTER
+                                                        CALIBRATION
+                                                    </b>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <span t-if="o.mng_final_rate_after_calibration"
+                                                          t-field="o.mng_final_rate_after_calibration"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <br/>
+                                <br/>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="container-fluid header_block">
+                                        <div class="col-xs-12 text-center">
+                                            <p>
+                                                <strong>
+                                                    Director reprot to CEO + VP
+                                                    + Executive Objective
+                                                    Weight 70%
+                                                    <br/>
+                                                    All other Grade Objective
+                                                    Weight 50%
+                                                </strong>
+                                            </p>
+                                            <br/>
+                                            <p>
+                                                <strong>
+                                                    each objective is 10% and
+                                                    the maximum is 40%.
+                                                    <br/>
+                                                    The total of the weightings
+                                                    on the annual performance
+                                                    <br/>
+                                                    review form must add up to
+                                                    100%
+                                                </strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="emp_appraisal_header_footer">
+            <t t-call="hr_appraisal_evaluation.emp_appraisal_header"/>
+            <t t-raw="0"/>
+            <t t-call="hr_appraisal_evaluation.emp_appraisal_footer"/>
+        </template>
+
+        <template id="emp_appraisal_header">
+            <div class="header">
+                <style>
+                    .header_title
+                    {
+                    background-color:#EF6C00;
+                    border:2px solid black;
+                    border-radius:5px;
+                    padding:5px;
+                    color:white;
+                    }
+                </style>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="header_title">
+                            <h3>
+                                <b>PERFORMANCE MANAGEMENT FORM</b>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="pull-right">
+                            <img class="img-responsive"
+                                 src="/hr_appraisal_evaluation/static/description/icon.png"
+                                 width="100%" height="100px"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="emp_appraisal_footer">
+            <div class="footer">
+                <div class="container-fluid"
+                     style="border-top:1px solid black;">
+                    <div class="row text-center">
+                        <span>Page</span>
+                        <span class="page"/>
+                        of
+                        <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

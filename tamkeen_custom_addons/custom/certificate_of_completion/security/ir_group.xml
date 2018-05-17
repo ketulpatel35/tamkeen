@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <!-- Certificate Of Completion -->
+        <record model="ir.module.category" id="coc_management">
+            <field name="name">Certificate Of Completion</field>
+            <field name="sequence">18</field>
+        </record>
+
+        <!-- Normal User -->
+        <record id="group_coc_normal_user" model="res.groups">
+            <field name="name">Normal User</field>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- View all -->
+        <record id="group_coc_view_all_coc" model="res.groups">
+            <field name="name">View All</field>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- Manager Approval -->
+        <record id="group_coc_manager_approval" model="res.groups">
+            <field name="name">Manager Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- VP Approval -->
+        <record id="group_coc_vp_approval" model="res.groups">
+            <field name="name">VP Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- CEO Approval -->
+        <!--<record id="group_coc_ceo_approval" model="res.groups">-->
+            <!--<field name="name">CEO Approval</field>-->
+            <!--<field name="implied_ids"-->
+                   <!--eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>-->
+            <!--<field name="category_id" ref="coc_management"/>-->
+        <!--</record>-->
+
+        <!-- HR Approval -->
+        <!--<record id="group_coc_hr_approval" model="res.groups">-->
+            <!--<field name="name">HR Approval</field>-->
+            <!--<field name="category_id" ref="coc_management"/>-->
+            <!--<field name="implied_ids"-->
+                   <!--eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>-->
+        <!--</record>-->
+
+        <!-- Budget Approval -->
+        <!--<record id="group_coc_budget_approval" model="res.groups">-->
+            <!--<field name="name">Budget Approval</field>-->
+            <!--<field name="category_id" ref="coc_management"/>-->
+            <!--<field name="implied_ids"-->
+                   <!--eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>-->
+        <!--</record>-->
+
+        <!-- Procurement first review -->
+        <record id="group_coc_procurement_first_review" model="res.groups">
+            <field name="name">Procurement First Review</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- business owner approval -->
+        <record id="group_coc_business_owner_approval" model="res.groups">
+            <field name="name">Business Owner Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- Procurement Second review -->
+        <record id="group_coc_procurement_second_review" model="res.groups">
+            <field name="name">Procurement Second Review</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- PMO approval -->
+        <record id="group_coc_pmo_approval" model="res.groups">
+            <field name="name">PMO Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- Finance approval -->
+        <record id="group_coc_finance_processing" model="res.groups">
+            <field name="name">Finance Processing</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- Can approve or refuse -->
+        <record id="group_coc_self_approval_srvs" model="res.groups">
+            <field name="name">Can Approve/Refuse His/Her Requests</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('certificate_of_completion.group_coc_normal_user'))]"/>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+        <!-- COC Configuration -->
+        <record id="group_coc_configuration" model="res.groups">
+            <field name="name">COC Configuration</field>
+            <field name="category_id" ref="coc_management"/>
+        </record>
+
+    </data>
+</odoo>

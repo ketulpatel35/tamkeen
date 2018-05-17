@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- service proof documents form view -->
+    <record model="ir.ui.view" id="service_proof_documents_form_view">
+        <field name="name">service.proof.documents.form.view</field>
+        <field name="model">service.proof.documents</field>
+        <field name="arch" type="xml">
+            <form string="Service Proof Documents">
+                <sheet>
+                    <group col="4" colspan="4">
+                        <field name="model_id"/>
+                        <field name="name"/>
+                        <field name="mandatory"/>
+                        <field name="active"/>
+                    </group>
+                    <h3>Description</h3>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

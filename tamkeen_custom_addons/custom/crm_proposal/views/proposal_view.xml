@@ -1,0 +1,207 @@
+<odoo>
+    <data>
+        <record id="view_proposal_line_form" model="ir.ui.view">
+            <field name="name">crm.proposal.line.form</field>
+            <field name="model">crm.proposal.line</field>
+            <field name="arch" type="xml">
+                <form string="Proposal Line">
+                    <group>
+                        <group>
+                            <field name="name" required="True" />
+                            <field name="product_uom_qty"/>
+                            <field name="lead_id" invisible="True" />
+                            <field name="proposal_id" invisible="True" />
+                            <field name="company_id" invisible="True" />
+                            <field name="currency_id" invisible="True" />
+                            
+                        </group>
+                        <group>
+                            <field name="price_unit"/>
+                            <field name="discount"/>
+                            <field name="price_total"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_proposal_line_tree" model="ir.ui.view">
+            <field name="name">crm.proposal.line.tree</field>
+            <field name="model">crm.proposal.line</field>
+            <field name="arch" type="xml">
+                <tree string="Proposal Lines" editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    
+                    <field name="name" required="True" />
+                    <field name="product_uom_qty"/>
+                    <field name="price_unit" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                    <field name="discount" />
+                    <field name="price_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                    
+                    <field name="proposal_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_proposal_form" model="ir.ui.view">
+            <field name="name">crm.proposal.form</field>
+            <field name="model">crm.proposal</field>
+            <field name="arch" type="xml">
+                <form string="Opportunity Proposal">
+                <header>
+                    <button type="object" name="test_move_state" class="oe_highlight" string="Move State"></button>
+                    <field name="state" widget="statusbar" statusbar_visible="new,writing,submitted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        
+                        <button name="action_open_revision"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-chevron-left"
+                            string="Prev Revision"
+                            context="{'revision': parent_id}"
+                            attrs="{'invisible': [('parent_id', '=', False)]}">
+                        </button>
+                        <button name="action_create_revision"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-plus"
+                            confirm="Are you sure you want to close the current revision and create new one ?"
+                            attrs="{'invisible': ['|',('state', 'not in', ['writing', 'submitted']),('child_id','!=',False)]}">
+                            <field name="revision" widget="statinfo" string="New Revision"/>
+                        </button>
+                        <button name="action_open_revision"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-chevron-right"
+                            string="Next Revision"
+                            context="{'revision': child_id}"
+                            attrs="{'invisible': [('child_id', '=', False)]}">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" domain="[('customer','=',True),('parent_id','=', False), ('is_company', '=', True)]" context="{'search_default_customer':1, 'show_address': 1, 'search_default_company':1}" options='{"always_reload": True}' attrs="{'required':True}"/>
+                            <field name="lead_id" />
+                            <field name="revision_display" readonly="True"/>
+                        </group>
+                        <group>
+                            <field name="type" required="True"/>
+                            
+                            <field name="currency_id" invisible="True"/>
+                            <field name="company_id" invisible="True"/>
+                            <field name="parent_id" invisible="True"/>
+                            <field name="child_id" invisible="True"/>
+                            <field name="display_name" invisible="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Proposal Items">
+                            <field name="line_ids" mode="tree"></field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="selling_value" readonly="True" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                
+                                <field name="subtotal" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="discount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="lines_discount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_discount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                
+
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="total" />
+                                    <button name="button_dummy"
+                                        states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                
+                            </group>
+                            
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Internal Notes">
+                            <field name="notes" widget="html" />
+                        </page>
+                        <page string="Schedule">
+                            <group>
+                                <group>
+                                    <field name="planned_review_duration" />
+                                    <field name="actual_start_date" />
+                                    <field name="actual_release_date" />
+                                </group>
+                                <group>
+                                    <field name="proposal_writing_duration" />
+                                    <field name="assignment_date" />
+                                    <field name="planned_start_date" />
+                                    <field name="planned_release_date" />
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Delivery Info">
+                            
+                        </page>
+
+                        <page string="Terms &amp; Conditions">
+                            <field name="terms" widget="html" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_proposal_tree" model="ir.ui.view">
+            <field name="name">crm.proposal.tree</field>
+            <field name="model">crm.proposal</field>
+            <field name="arch" type="xml">
+                <tree string="Proposals"
+                    decoration-primary="state=='new'"
+                    decoration-bf="state=='new' or child_id==False"
+                    decoration-danger="child_id!=False or state in ['revised']"
+                    decoration-success="state=='writing'">
+                    <field name="revision_display"></field>
+                    <field name="name"></field>
+                    <field name="partner_id"></field>
+                    <field name="lead_sequence"></field>
+                    <field name="type"></field>
+                    <field name="selling_value"></field>
+                    <field name="total"></field>
+                    <field name="state"></field>
+                    <field name="child_id" invisible="True"></field>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_proposal_search" model="ir.ui.view">
+            <field name="name">crm.proposal.search</field>
+            <field name="model">crm.proposal</field>
+            <field name="arch" type="xml">
+                <search string="Search Proposals">
+                    <field name="name" string="Proposal" filter_domain="['|',('name','ilike',self),('note','ilike',self)]"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="lead_id"/>
+                    <separator/>
+                    <filter string="Last Revisions" name="last_revision" domain="[('child_id','=',False)]"/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Opportunity" domain="[]" context="{'group_by':'lead_id'}"/>
+                        <filter name="customer" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Release Month" domain="[]" context="{'group_by':'planned_release_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

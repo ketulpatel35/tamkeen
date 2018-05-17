@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_order_form_inherit_for_proposal" model="ir.ui.view">
+        <field name="name">view.sale.order.form.inherit.for.proposal</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <!--<page string="Proposation"-->
+                      <!--groups="crm_proposal.group_update_proposal">-->
+                    <!--<group colspan="4" col="4">-->
+                        <!--<field name="assignment_date"/>-->
+                        <!--<field name="planned_start_date"/>-->
+                        <!--<field name="proposal_writing_duration"/>-->
+                        <!--<field name="planned_review_duration"/>-->
+                        <!--<field name="planned_release_date"/>-->
+                        <!--<field name="proposal_status"/>-->
+                    <!--</group>-->
+                    <!--<group colspan="4" col="4">-->
+                        <!--<field name="actual_start_date"/>-->
+                        <!--<field name="actual_release_date"/>-->
+                    <!--</group>-->
+                    <!--<group class="oe_subtotal_footer oe_right" colspan="2"-->
+                           <!--name="proposal_total">-->
+                        <!--<field name="total_proposal_value" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+                    <!--</group>-->
+                <!--</page>-->
+                <!--<page string="Bidding" groups="crm_proposal.group_update_bid">-->
+                    <!--<group colspan="4" col="4">-->
+                        <!--<field name="submission_date"/>-->
+                        <!--<field name="bid_status"/>-->
+                        <!--<field name="financial_proposal_ranking"/>-->
+                        <!--<field name="guarantee_issue"/>-->
+                        <!--<field name="saudi_certificate"/>-->
+                    <!--</group>-->
+                    <!--<group string="Bid Notes">-->
+                        <!--<field name="bid_notes" nolabel="1"/>-->
+                    <!--</group>-->
+                    <!--<group string="Bid Questions">-->
+                        <!--<field name="bid_questions" nolabel="1"/>-->
+                    <!--</group>-->
+                <!--</page>-->
+                <page name="milestones_schedule"
+                      string="Milestones Schedule">
+                    <field name="milestones_schedule_ids">
+                        <tree string="Milestones Schedule" editable="bottom">
+                            <field name="name" required="1"/>
+                            <field name="percentage" required="1"/>
+                            <field name="amount"/>
+                            <field name="description"/>
+                            <field name="sale_order_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="total_percentage"
+                               class="oe_subtotal_footer_separator"/>
+                    </group>
+                </page>
+                <!--<page name="attachment"-->
+                      <!--string="Attachment">-->
+                    <!--<field name="attachment_ids" nolabel="1">-->
+                        <!--<tree editable="bottom" delete="false"-->
+                              <!--create="false">-->
+                            <!--<field name="name" readonly="1"/>-->
+                            <!--<field name="description"-->
+                                   <!--readonly="1"/>-->
+                            <!--&lt;!&ndash;<field name="mandatory" readonly="1"/>&ndash;&gt;-->
+                            <!--<field name="document"-->
+                                   <!--filename="document_file_name"/>-->
+                            <!--<field name="document_file_name"-->
+                                   <!--invisible="1"/>-->
+                        <!--</tree>-->
+                    <!--</field>-->
+                <!--</page>-->
+                <page string="Terms &amp; Conditions">
+                    <group>
+                        <field name="term_condition" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

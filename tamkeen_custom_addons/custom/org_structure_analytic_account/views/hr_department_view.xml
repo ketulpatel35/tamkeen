@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Department -->
+    <record id="view_department_for_analytic_org_structure"
+            model="ir.ui.view">
+        <field name="name">view.department.for.analytic.org.structure</field>
+        <field name="model">hr.department</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="organization_structure.view_department_form_for_org_structure"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='relationship']"
+                   position="after">
+                <page string="Accounting">
+                    <group>
+                        <field name="default_analytic_account_id"
+                               required="1"/>
+                    </group>
+                    <group string="Other Analytic Accounts">
+                        <field name="other_analytic_account_ids"
+                               nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

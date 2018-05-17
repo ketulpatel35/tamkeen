@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Bill Batch Approval Wizard View -->
+        <record id="vendor_bill_batch_approval_wizard_form" model="ir.ui.view">
+            <field name="name">Vendor Bill Batch Approval Wizard</field>
+            <field name="model">vendor.bill.batch.approval</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Bill Batch Approval"
+                      class="oe_form_configuration">
+                    <group>
+                        <div>
+                            Validate vendor bill.
+                        </div>
+                    </group>
+                    <footer>
+                        <button name="vendor_bill_batch_approval"
+                                string="Valiate" type="object"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Bill Batch Approval Wizard Action View -->
+        <act_window
+                id="action_vendor_bill_batch_approval_wizard_form"
+                name="Vendor Bill Batch Approval"
+                res_model="vendor.bill.batch.approval"
+                src_model="account.invoice"
+                view_id="account.invoice_supplier_tree"
+                target="new"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"/>
+
+    </data>
+</openerp>

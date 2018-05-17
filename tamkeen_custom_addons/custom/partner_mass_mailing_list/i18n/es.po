@@ -1,0 +1,87 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* partner_mass_mailing_list
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-05 06:08+0000\n"
+"PO-Revision-Date: 2016-12-05 06:08+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: partner_mass_mailing_list
+#: model:ir.actions.act_window,name:partner_mass_mailing_list.action_partner_mail_list
+msgid "Add to mailing list"
+msgstr "Añadir a lista de correos"
+
+#. module: partner_mass_mailing_list
+#: model:ir.ui.view,arch_db:partner_mass_mailing_list.partner_mail_list_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model,name:partner_mass_mailing_list.model_partner_mail_list_wizard
+#: model:ir.ui.view,arch_db:partner_mass_mailing_list.partner_mail_list_wizard_form
+msgid "Create contact mailing list"
+msgstr "Crear contacto de lista de correos"
+
+#. module: partner_mass_mailing_list
+#: model:ir.ui.view,arch_db:partner_mass_mailing_list.partner_mail_list_wizard_form
+msgid "Create contacts"
+msgstr "Crear contactos"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_display_name
+msgid "Display Name"
+msgstr "mostrar nombre"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard___last_update
+msgid "Last Modified on"
+msgstr "Última actualización por"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_mail_list
+msgid "Mailing List"
+msgstr "Lista de correos"
+
+#. module: partner_mass_mailing_list
+#: model:ir.model.fields,field_description:partner_mass_mailing_list.field_partner_mail_list_wizard_partners
+msgid "Partners"
+msgstr "Empresas"
+
+#. module: partner_mass_mailing_list
+#: model:ir.ui.view,arch_db:partner_mass_mailing_list.partner_mail_list_wizard_form
+msgid "or"
+msgstr "o"

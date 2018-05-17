@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="payroll_rule_request_employee" model="ir.rule">
+            <field name="name">Normal User</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id),('display_in_ess','=',True)]</field>
+            <field name="groups" eval="[(4,ref('group_payroll_normal_user'))]"/>
+        </record>
+        <record id="payroll_rule_request_manager" model="ir.rule">
+            <field name="name">Manager</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="domain_force">[('employee_id.user_id.id', '=',user.id),('employee_id.parent_id.user_id.id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('group_manager_approval'))]"/>
+        </record>
+        <record id="payroll_rule_request_auditor" model="ir.rule">
+            <field name="name">Payroll Editor</field>
+            <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4,ref('hr_payroll_customization.group_payroll_auditor'))]"/>
+        </record>
+    </data>
+</odoo>

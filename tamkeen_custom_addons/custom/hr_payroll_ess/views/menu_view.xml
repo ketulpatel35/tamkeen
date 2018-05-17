@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+
+        <!-- Payroll Normal User-->
+        <menuitem name="Payroll Management"
+                  id="payroll_main_menu_ess"
+                  parent="emp_self_services.sub_mian_ess_menu" sequence="2000"
+                  groups="hr_payroll_ess.group_payroll_normal_user"/>
+        <menuitem name="My Payslip"
+                  id="my_payslip_menu_ess"
+                  parent="payroll_main_menu_ess" sequence="1"
+                  groups="hr_payroll_ess.group_payroll_normal_user" action="action_view_employee_hr_payslip"/>
+        <!-- Payroll Manager-->
+        <menuitem name="Payroll Management"
+                  id="payroll_main_menu_mss"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  groups="hr_payroll_ess.group_manager_approval"/>
+        <menuitem name="Employee Payslip"
+                  id="payslip_menu_mss_child"
+                  parent="payroll_main_menu_mss" sequence="1"
+                  action="employee_payslip_manager_action"
+                  groups="hr_payroll_ess.group_manager_approval"/>
+    </data>
+</odoo>

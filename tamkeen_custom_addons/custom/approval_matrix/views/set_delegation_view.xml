@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- set.delegate.user tree view -->
+    <record id="set_delegate_user_tree_view" model="ir.ui.view">
+        <field name="name">set.delegate.user.tree.view</field>
+        <field name="model">set.delegate.user</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date_form"/>
+                <field name="date_to"/>
+                <field name="employee_id"/>
+                <field name="delegate_user"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- set.delegate.user form view -->
+    <record id="set_delegate_user_from_view" model="ir.ui.view">
+        <field name="name">set.delegate.user.form.view</field>
+        <field name="model">set.delegate.user</field>
+        <field name="arch" type="xml">
+            <form string="Set Delegate User">
+                <header>
+                    <button name="send_for_approval" type="object"
+                            states="draft" string="Confirm"
+                            class="oe_highlight" />
+                    <button name="manager_approval" type="object"
+                            states="send_for_approval"
+                            string="Manager Approval"
+                            class="oe_highlight" />
+                    <button name="cancel_approval"
+                            type="object"
+                            states="approved"
+                            string="Cancel Delegation"
+                            class="oe_highlight" />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="all_object"/>
+                        <field name="allowed_object_ids"
+                               options="{'no_create': True}"
+                               widget="many2many_tags"
+                               attrs="{'invisible': [('all_object','=',True)]}"/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="employee_id" readonly="1" />
+                        <field name="current_user" readonly="1" />
+                        <field name="immediate_manager" readonly="1"/>
+                        <field name="delegate_user"
+                               required="1"
+                               options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="date_form" required="1"/>
+                        <field name="date_to" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- set.delegate.user action view -->
+    <record id="set_delegate_user_action" model="ir.actions.act_window">
+        <field name="name">Set Delegate User</field>
+        <field name="res_model">set.delegate.user</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

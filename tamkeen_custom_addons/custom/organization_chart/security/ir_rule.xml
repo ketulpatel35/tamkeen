@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="property_rule_normal_user" model="ir.rule">
+            <field name="name">Normal User</field>
+            <field name="model_id" ref="model_tree_chart_config"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_tree_chart_user'))]"/>
+        </record>
+        <record id="property_rule_tree_charts_configuration" model="ir.rule">
+            <field name="name">Tree Charts Configuration</field>
+            <field name="model_id" ref="model_service_request"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_tree_chart_config'))]"/>
+        </record>
+    </data>
+</odoo>

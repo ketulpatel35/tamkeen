@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<!-- Add Attachment Fields in Company view -->
+		<record model="ir.ui.view" id="form_view_company_add_attachment_size">
+			<field name="name">form.view.company.add_attachment.size</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="model">res.company</field>
+			<field name="arch" type="xml">
+				<xpath expr='//notebook' position="inside">
+					<page string="Attachments">
+						<separator string="Attachments" />
+						<group>
+							<field name="attachment_size" />
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</odoo>

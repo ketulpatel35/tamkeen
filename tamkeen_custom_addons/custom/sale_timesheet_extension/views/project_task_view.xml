@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Form View to invisible procurement and sale order line
+     -->
+    <record id="view_sale_service_inherit_form2_tasks" model="ir.ui.view">
+        <field name="name">project.task.sale.service</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="sale_timesheet.view_sale_service_inherit_form2"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='procurement_id']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='sale_line_id']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

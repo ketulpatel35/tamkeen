@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="seq_asset_seq_id" model="ir.sequence">
+            <field name="name">Asset Number</field>
+            <field name="code">assetsq.id</field>
+            <field name="prefix">ABC</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+        <record id="seq_asset_number_custom" model="ir.sequence">
+            <field name="name">Asset Sequence</field>
+            <field name="code">asset.number.custom</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False" />
+        </record>
+
+    </data>
+</openerp>

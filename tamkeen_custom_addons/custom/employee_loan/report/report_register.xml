@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Report Register -->
+        <report id="loan_request_report_register"
+                model="hr.employee.loan"
+                string="Loan Request Report"
+                name="employee_loan.loan_request_report"
+                file="employee_loan.loan_request_report"
+                report_type="qweb-pdf" />
+
+        <report id="loan_clearance_report_register"
+                model="hr.employee.loan"
+                string="Loan Clearance Report"
+                name="employee_loan.loan_clearance_report"
+                file="employee_loan.loan_clearance_report"
+                report_type="qweb-pdf" />
+
+    </data>
+</odoo>

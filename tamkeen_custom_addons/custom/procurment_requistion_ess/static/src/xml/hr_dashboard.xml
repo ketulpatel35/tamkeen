@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <!-- Purchase Requisition -->
+            <t t-if="widget.employee_data.is_prta">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-shopping-cart"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">
+                                Purchase Requisition
+                            </span>
+                            <div class="dash-btn">
+                                <t t-if="widget.employee_data.is_prta">
+                                    <button class="btn btn-info btn-xs procurement_requisition_to_approve">
+                                        Requests to Approve
+                                    </button>
+                                    <span class="btn btn-info btn-xs-num procurement_requisition_to_approve">
+                                        <t t-esc="widget.employee_data.procurement_requisition_to_approve"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

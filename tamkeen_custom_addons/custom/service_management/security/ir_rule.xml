@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="property_rule_request_employee" model="ir.rule">
+        <field name="name">Normal User</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('group_service_user'))]"/>
+    </record>
+    <record id="property_rule_request_manager" model="ir.rule">
+        <field name="name">Manager Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('employee_id.service_manager_id.user_id.id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('group_service_bu_manager_approval'))]"/>
+    </record>
+    <record id="property_rule_request_vp" model="ir.rule">
+        <field name="name">VP Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('employee_id.service_vp_id.user_id.id','=',user.id)]</field>
+        <!-- <field name="domain_force">['|',('create_uid','=',user.id),'|',('employee_id.department_id.id','in',[user.employee_ids[0].department_id.id]),('employee_id.department_id.id','child_of', [user.employee_ids[0].department_id.id])]</field> -->
+        <field name="groups" eval="[(4,ref('group_service_vp_approval'))]"/>
+    </record>
+
+    <record id="property_rule_adminis_approval_srvs" model="ir.rule">
+        <field name="name">Administration Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.administration_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_administration_approval'))]"/>
+    </record>
+    <record id="property_rule_oe_approval_srvs" model="ir.rule">
+        <field name="name">OE Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.oe_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_oe_approval'))]"/>
+    </record>
+    <record id="property_rule_ta_approval_srvs" model="ir.rule">
+        <field name="name">TA Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.ta_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_ta_approval'))]"/>
+    </record>
+    <record id="property_rule_hr_approval_srvs" model="ir.rule">
+        <field name="name">HR Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.hr_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_hr_approval'))]"/>
+    </record>
+    <record id="property_rule_finance_approval_srvs" model="ir.rule">
+        <field name="name">Finance Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.finance_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_finance_approval'))]"/>
+    </record>
+    <record id="property_rule_procurement_approval_srvs" model="ir.rule">
+        <field name="name">Procurement Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.procurement_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_prcrmnt_approval'))]"/>
+    </record>
+    <record id="property_rule_ss_vp_approval_srvs" model="ir.rule">
+        <field name="name">Shared Services VP Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.ss_vp_approval','=',True)]</field>
+        <field name="groups" eval="[(4,ref('group_service_ss_vp_approval'))]"/>
+    </record>
+    <record id="property_rule_ceo_approval_srvs" model="ir.rule">
+        <field name="name">CEO Approval</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[('service_type_id.ceo_approval','=',True),('employee_id.service_ceo_id.user_id.id','=',user.id)]</field>
+        <!-- <field name="domain_force">[('service_type_id.ceo_approval','=',True)]</field> -->
+        <field name="groups" eval="[(4,ref('group_service_ceo_approval'))]"/>
+    </record>
+    <record id="property_rule_all_srvs" model="ir.rule">
+        <field name="name">View All Services Requests</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('group_service_all_requests'))]"/>
+    </record>
+    <record id="property_rule_request_general_manager" model="ir.rule">
+        <field name="name">Services Configuration</field>
+        <field name="model_id" ref="model_service_request"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('group_service_config'))]"/>
+    </record>
+</odoo>

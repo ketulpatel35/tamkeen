@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem id="menu_employment_contract"
+              name="Employment Contract"
+              parent="hr_contract.hr_menu_contract"
+              action="employment_contract_action"
+              sequence="4"/>
+
+</odoo>

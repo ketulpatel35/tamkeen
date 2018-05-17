@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_view_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+        <field name="arch" type="xml">
+            <!--<field name="partner_id" position="attributes">-->
+            <!--<attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>-->
+            <!--&lt;!&ndash;<attribute name="groups">res_partner_extension.group_all_partner</attribute>&ndash;&gt;-->
+            <!--</field>-->
+            <field name="user_id" position="attributes">
+                <attribute name="string">Account Manager</attribute>
+            </field>
+            <field name="partner_id" position="before">
+                <field name="client_type"/>
+            </field>
+            <field name="partner_id" position="attributes">
+                <attribute name="attrs">{'invisible': [('client_type', '!=','existing')
+                    ]}</attribute>
+            </field>
+            <xpath expr="//label[@for='contact_name']"
+                   position="attributes">
+                <attribute name="attrs">{'invisible': [('client_type', '=','existing')
+                    ]}</attribute>
+            </xpath>
+            <field name="contact_name" position="attributes">
+                <attribute name="attrs">{'invisible': [('client_type', '=','existing')
+                    ]}</attribute>
+            </field>
+            <field name="title" position="attributes">
+                <attribute name="attrs">{'invisible': [('client_type', '=','existing')
+                    ]}</attribute>
+            </field>
+            <xpath
+                    expr="//notebook/page[@name='extra']/group/group[@name='categorization']"
+                    position="before">
+                <group string="Reported By">
+                    <field name="reported_by"/>
+                    <field name="method"/>
+                </group>
+            </xpath>
+            <xpath
+                    expr="//form/header/button[@name='%(crm.action_crm_lead2opportunity_partner)d']" position="attributes">
+                <attribute name="context">{'default_client_type': client_type}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_lead_view_inherit_for_oppor" model="ir.ui.view">
+        <field name="name">crm.lead.view.inherit.for.oppor</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="attributes">
+                <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+                <attribute name="groups">res_partner_extension.group_all_partner</attribute>
+            </field>
+            <field name="date_deadline" position="replace"/>
+            <field name="user_id" position="attributes">
+                <attribute name="string">Account Manager</attribute>
+            </field>
+            <xpath expr="//notebook" position="inside">
+                <page string="Qualification">
+                    <group>
+                        <field name="qualification_status"/>
+                    </group>
+                </page>
+                <page string="Analysis">
+                    <group>
+                        <field name="opportunity_analysis" widget="html"/>
+                    </group>
+                </page>
+                <page string="Proposation"
+                      groups="crm_customization.group_update_proposal">
+                    <field name="proposal_ids">
+                        <form string="Proposal">
+                            <sheet>
+                                <group colspan="4" col="4">
+                                    <field name="assignment_date"/>
+                                    <field name="planned_start_date"/>
+                                    <field name="proposal_writing_duration"/>
+                                    <field name="planned_review_duration"/>
+                                    <field name="planned_release_date"/>
+                                    <field name="actual_start_date"/>
+                                    <field name="actual_release_date"/>
+                                    <field name="proposal_status"/>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right" colspan="2"
+                                       name="proposal_total">
+                                    <field name="total_proposal_value" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </sheet>
+                        </form>
+                        <tree>
+                            <field name="assignment_date"/>
+                            <field name="planned_start_date"/>
+                            <field name="proposal_writing_duration"/>
+                            <field name="planned_review_duration"/>
+                            <field name="planned_release_date"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_release_date"/>
+                            <field name="proposal_status"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Bidding" groups="crm_customization.group_update_bid">
+                    <field name="bidding_ids">
+                        <form string="Bidding">
+                            <!--<header>-->
+                                <!--<field name="bid_status"-->
+                                       <!--widget="statusbar"/>-->
+                            <!--</header>-->
+                            <sheet>
+                                <group colspan="4" col="4">
+                                    <field name="submission_date"/>
+                                    <field name="financial_proposal_ranking"/>
+                                    <field name="guarantee_issue"/>
+                                    <field name="saudi_certificate"/>
+                                    <field name="bid_status"/>
+                                </group>
+                                <group string="Bid Notes">
+                                    <field name="bid_notes" nolabel="1"/>
+                                </group>
+                                <group string="Bid Questions">
+                                    <field name="bid_questions" nolabel="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                        <tree>
+                            <field name="submission_date"/>
+                            <field name="financial_proposal_ranking"/>
+                            <field name="guarantee_issue"/>
+                            <field name="saudi_certificate"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="attachment"
+                      string="Attachment">
+                    <field name="attachment_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="description"/>
+                            <!--<field name="mandatory" readonly="1"/>-->
+                            <field name="document"
+                                   filename="document_file_name"/>
+                            <field name="document_file_name"
+                                   invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Extra">
+                    <group>
+                        <group>
+                            <!--<field name="bid_type"/>-->
+                            <field name="last_question_date"/>
+                            <field name="proposal_submission_date"/>
+                            <field name="estimated_budget"/>
+                        </group>
+                        <group>
+                            <field name="date_deadline"/>
+                            <field name="language_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <!--<xpath-->
+            <!--expr="//form//sheet//h2[@class='o_row']//div//label[@for='planned_revenue']"-->
+            <!--position="attributes">-->
+            <!--<attribute name="string">Estimated Budget</attribute>-->
+            <!--</xpath>-->
+            <xpath
+                    expr="//form//sheet//group//label[@for='next_activity_id']"
+                    position="before">
+                <field name="bid_type"/>
+                <field name="project_type"/>
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_set_won']"
+                   position="after">
+                <button name="forward_to_account_manager"
+                        string="Forward To Account Manager" type="object"
+                        class="oe_highlight o_wow"
+                        attrs="{'invisible': ['|', ('active','=',False), ('probability', '=', 100)]}" groups="sales_team.group_sale_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="crm_lead_view_inherit_for_oppor_tree" model="ir.ui.view">
+        <field name="name">crm.lead.view.inherit.for.oppor.tree</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <field name="date_action" position="before">
+                <field name="bid_type"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_case_opportunities_filter_inherit"
+            model="ir.ui.view">
+        <field name="name">view.crm.case.opportunities.filter.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="arch" type="xml">
+            <filter name="won" position="before">
+                <filter string="Un-Qualified" name="un_qualified"
+                        domain="['&amp;', ('stage_id.probability', '=', 10), ('stage_id.fold', '=', True)]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!--<record id="view_crm_lead2opportunity_partner_inherit"-->
+    <!--model="ir.ui.view">-->
+    <!--<field name="name">view.crm.lead2opportunity.partner.inherit</field>-->
+    <!--<field name="model">crm.lead2opportunity.partner</field>-->
+    <!--<field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner"/>-->
+    <!--<field name="arch" type="xml">-->
+    <!--<field name="action" position="attributes">-->
+    <!--<attribute name="attrs">{''}</attribute>-->
+    <!--</field>-->
+    <!--</field>-->
+    <!--</record>-->
+</odoo>

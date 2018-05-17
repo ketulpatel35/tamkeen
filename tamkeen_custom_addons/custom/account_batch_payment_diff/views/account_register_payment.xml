@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- account register payment -->
+    <record id="view_account_payment_register" model="ir.ui.view">
+        <field name="name">view.account.payment.register</field>
+        <field name="model">account.register.payments</field>
+        <field name="inherit_id"
+               ref="account.view_account_payment_from_invoices"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position="after">
+                <group name='account_payment_int'
+                       attrs="{'invisible': [('payment_difference', '=', 0.0)]}">
+                    <label for="payment_difference"/>
+                    <div>
+                        <field name="payment_difference"/>
+                        <field name="payment_difference_handling" widget="radio" nolabel="1"/>
+                    </div>
+                    <field name="writeoff_account_id" string="Post Difference In"
+                        attrs="{'invisible': [('payment_difference_handling','=','open')], 'required': [('payment_difference_handling', '=', 'reconcile')]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+
+        <!-- inherit purchase payment report for coc -->
+        <template id="purchase_payment_report_coc"
+                  inherit_id="purchase_order_report.purchase_payment_report_template">
+            <xpath expr="//table[2]" position="replace">
+                <!-- Payments Information -->
+                <table class="table table-bordered foobar"
+                       width="100%"
+                       style="border:1px solid black;border-collapse:collapse;font-size:13px;align:center;">
+                    <tbody>
+                        <tr>
+                            <td height="10%" colspan="6"
+                                style="border:1px solid black;">
+                                <b>Payments Summary</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b>Total PO Amount</b>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b># Paid
+                                    Payments
+                                </b>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b>Amount Paid</b>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b>Planned Amount Outstanding</b>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b>Actual Amount Outstanding</b>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <b>Difference</b>
+                            </td>
+                        </tr>
+                        <t t-set="payment_data"
+                           t-value="get_payment_status(o)"/>
+                        <t t-set="paid_amount" t-value="payment_data['paid_amount']"/>
+                        <t t-set="actual_paid"
+                           t-value="o.coc_outstanding_amount_difference()"/>
+                        <t t-set="planned_amount_outstanding"
+                           t-value="o.amount_total - paid_amount"/>
+                        <t t-set="actual_amount_outstanding"
+                           t-value="o.amount_total - actual_paid"/>
+                        <t t-set="difference"
+                           t-value="planned_amount_outstanding - actual_amount_outstanding"/>
+                        <tr>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="o.amount_total"/>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="payment_data['paid_count']"/>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="paid_amount"/>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="planned_amount_outstanding"/>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="actual_amount_outstanding"/>
+                            </td>
+                            <td height="10%"
+                                style="border:1px solid black;">
+                                <span t-esc="difference"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

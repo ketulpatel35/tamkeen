@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Org Business trip Form View -->
+    <record id="org_business_trip_form_views" model="ir.ui.view">
+        <field name="name">org.business.trip.form.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="arch" type="xml">
+            <form string="Business Trip">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+
+                    <button name="action_submit_request" type="object"
+                            string="Submit" class="btn-primary"
+                            groups="org_business_trip.group_bt_normal_user"
+                            states="draft"/>
+
+                    <!--Manager -->
+                    <button name="action_submit_to_vp_approval"
+                            type="object" string="Manager Approval"
+                            groups="org_business_trip.group_bt_manager_approval"
+                            context="{'state': 'mngr_approval'}"
+                            class="btn-primary" states="mngr_approval"/>
+
+                    <!-- Manager Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_business_trip.group_bt_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- Manager Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_business_trip.group_bt_manager_approval"
+                            states='mngr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- VP -->
+                    <button name="action_submit_to_hr_approval"
+                            type="object" states="vp_approval"
+                            context="{'state': 'vp_approval'}"
+                            groups="org_business_trip.group_bt_vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+
+
+                    <!-- VP Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_business_trip.group_bt_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- VP Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_business_trip.group_bt_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- HR Approval -->
+                    <button name="action_submit_to_budget_approval"
+                            type="object"
+                            string="Hr Approval" class="btn-primary"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states="hr_approval"/>
+
+                    <!-- HR Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- HR Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='hr_approval'/>
+
+                    <!-- Budget Approval -->
+                    <button name="action_submit_to_hr_review"
+                            type="object"
+                            string="Budget Approval" class="btn-primary"
+                            groups="org_business_trip.group_bt_budget_approval"
+                            states="budget_approval"/>
+
+                    <!-- Budget Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_business_trip.group_bt_budget_approval"
+                            states='budget_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- Budget Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_business_trip.group_bt_budget_approval"
+                            states='budget_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- Budget Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="org_business_trip.group_bt_budget_approval"
+                            states='budget_approval'/>
+
+                    <!-- HR Review -->
+                    <button name="action_submit_to_ceo_approval"
+                            type="object"
+                            string="Hr Review" class="btn-primary"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states="final_hr_approval"/>
+
+                    <!-- HR Review Return -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Return"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='final_hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- HR Review Reject -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action" string="Reject"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='final_hr_approval'
+                            context="{'trigger': 'Reject'}"/>
+
+                    <!-- Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="org_business_trip.group_bt_hr_approval"
+                            states='final_hr_approval'/>
+
+                    <!-- CEO -->
+                    <button name="action_submit_to_finance_processing"
+                            type="object"
+                            groups="org_business_trip.group_bt_ceo_approval"
+                            string="CEO Approval" class="btn-primary"
+                            states="ceo_approval"/>
+
+                    <!-- Financial Processing -->
+                    <button name="action_generate_journal_entry"
+                            type="object"
+                            groups="org_business_trip.group_bt_finance_approval"
+                            attrs="{'invisible':['|', ('account_move_id', '!=', False), ('state', '!=', 'finance_processing')]}"
+                            string="Generate Journal Entry"
+                            class="btn-primary"/>
+
+                    <button name="action_submit_to_final_finance_processing"
+                            type="object"
+                            attrs="{'invisible':['|', ('account_move_id', '=', False), ('state', '!=', 'finance_processing')]}"
+                            groups="org_business_trip.group_bt_finance_approval"
+                            string="Finance Approval" class="btn-primary"/>
+
+                    <!-- Final HR Approval -->
+                    <!--<button name="action_submit_to_finance_processing"-->
+                    <!--type="object"-->
+                    <!--groups="org_business_trip.group_bt_hr_approval"-->
+                    <!--string="HR Approval" class="btn-primary"-->
+                    <!--states="final_hr_approval"/>-->
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_service_management_request"
+                                icon="fa-calendar">
+                            <div class="o_stat_info">
+                                <field name="service_request_count"
+                                       class="o_stat_value"/>
+                                <span class="o_stat_text">
+                                    Service Request
+                                </span>
+                            </div>
+                        </button>
+                        <button name="action_open_journal_entries"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                string="Accounting Entries"
+                                groups="org_business_trip.group_bt_finance_approval"
+                                attrs="{'invisible': [('account_move_id', '=', False)]}"
+                                type="object">
+                        </button>
+                    </div>
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1"
+                               attrs="{'invisible':[('name', '=', False)]}"
+                               class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   readonly="1" required="1"/>
+                            <field name="job_id" readonly="1" required="1"/>
+                            <field name="org_unit_type" readonly="1"
+                                   required="1"/>
+                        </group>
+                        <group>
+                            <field name="employee_company_id" readonly="1"
+                                   required="1"/>
+                            <field name="company_id" readonly="1"
+                                   required="1"/>
+                            <field name="department_id" readonly="1"
+                                   required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="trip_purpose"
+                               attrs="{'readonly':[('state', '!=', 'draft')]}" widget="radio" options="{'horizontal': true}"/>
+                        <field name="purpose_reason"
+                               attrs="{'invisible': [('trip_purpose', '!=', 'other')], 'required': [('trip_purpose', '=', 'other')]}"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="business_trip_policy_id"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   domain="[('is_business_trip', '=', True)]"
+                                   required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="state_id" required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"
+                                   context="{'search_with_country':True}"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <label for="analytic" string="Cost Center"/>
+                            <div name="analytic" class="address_format">
+                                <field name="account_analytic_id"
+                                       style="width: 80%"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                <i class="fa fa-warning"
+                                   attrs="{'invisible': [('is_analytic_acc_diff', '=', False)]}"
+                                   style="font-size:15px;color:yellow;width: 20%"></i>
+                            </div>
+                            <field name="country_id"
+                                   readonly="1" required="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="is_analytic_acc_diff" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="about_service" widget='html'
+                           readonly="1"/>
+                    <group>
+                        <group>
+                            <field name="actual_start_date" required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="number_of_days"/>
+                            <field name="trip_departure_date" required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="total_request_days"/>
+                            <field name="budget"
+                                   groups="org_business_trip.group_bt_budget_approval"
+                                   attrs="{'readonly': [('state', '!=', 'budget_approval')]}"/>
+                        </group>
+                        <group>
+                            <field name="actual_end_date" required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="maximum_allowed_travel_days"/>
+                            <field name="trip_return_date" required="1"
+                                   attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="hr_holidays_id" readonly="1"
+                                   attrs="{'invisible':[('hr_holidays_id', '=', False)]}"/>
+                            <field name="budget_exception_reason"
+                                   attrs="{'invisible': [('budget','!=','exceptional_out_budget')],'required': [('budget','=','exceptional_out_budget'), ('state','=','budget_approval')],'readonly':[('state','!=','budget_approval')]}"
+                                   groups="org_business_trip.group_bt_budget_approval"/>
+                        </group>
+                    </group>
+                    <div>
+                        <label string="Is your accommodation provided ?"
+                               for="is_accommodation_provide"/>
+                        <field name="is_accommodation_provide" widget="radio"
+                               attrs="{'readonly':[('state', '!=', 'draft')]}"
+                               nolabel="1"/>
+                    </div>
+                    <!--<div>-->
+                        <!--<label string="Is your trip considered as invitation?"-->
+                               <!--for="is_invitation"/>-->
+                        <!--<field name="is_invitation" widget="radio"-->
+                               <!--attrs="{'readonly':[('state', '!=', 'draft')]}"-->
+                               <!--nolabel="1"/>-->
+                    <!--</div>-->
+                    <!--<div name="if_is_invitation_yes"-->
+                         <!--attrs="{'invisible': [('is_invitation','=', 'no')]}">-->
+                        <!--<label string="Is your ticket provided (not by our company)?"-->
+                               <!--for="is_ticket_provided"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'no')]}"/>-->
+                        <!--<field name="is_ticket_provided"-->
+                               <!--widget="radio"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'no')], 'readonly':[('state', '!=', 'draft')]}"/>-->
+                        <!--<br/>-->
+                        <!--<label string="Is your accommodation provided (not by our company)?"-->
+                               <!--for="is_accommodation_provided"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'no')]}"/>-->
+                        <!--<field name="is_accommodation_provided"-->
+                               <!--widget="radio"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'no')], 'readonly':[('state', '!=', 'draft')]}"/>-->
+                    <!--</div>-->
+                    <!--<div name="if_is_invitation_no"-->
+                         <!--attrs="{'invisible': [('is_invitation','=', 'yes')]}">-->
+                        <!--<label string="Would you like the HR department to book your ticket/s?"-->
+                               <!--for="is_invitation"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'yes')]}"/>-->
+                        <!--<field name="book_ticket" widget="radio"-->
+                               <!--attrs="{'invisible': [('is_invitation','=', 'yes')], 'readonly':[('state', '!=', 'draft')]}"/>-->
+                    <!--</div>-->
+                    <!--<field name="about_service" widget='html' readonly="1"/>-->
+                    <notebook>
+                        <!-- Calculation -->
+                        <page string="Calculation" name="calculation">
+                            <group group="colspan=4" col="4"
+                                   attrs="{'invisible': [('trip_purpose', '!=', 'training')]}">
+                                <field name="training_description"
+                                       attrs="{'required': [('trip_purpose', '=', 'training')]}"/>
+                                <field name="vendor_name" attrs="{'required': [('trip_purpose', '=', 'training')]}"/>
+                                <field name="total_training_cost" attrs="{'required': [('trip_purpose', '=', 'training')]}"/>
+                                <field name="currency_id"
+                                       groups="base.group_multi_currency"
+                                       required="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="company_currency_id"
+                                       invisible="1"/>
+                                <!--<button name="add_total_training_cost"-->
+                                        <!--string="Add Total Training Cost"-->
+                                        <!--type="object"/>-->
+                            </group>
+                            <field name="bt_allowance_cal_ids"
+                                   readonly="1">
+                                <tree editable="bottom">
+                                    <field name="bt_allowance_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="per_day_amount" widget="float" type="char"/>
+                                    <field name="amount" widget="float" type="char"/>
+                                    <field name="account_id" readonly="1"/>
+                                    <field name="remarks"/>
+                                    <field name="business_trip_id"
+                                           invisible="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_estimation_cost" class="oe_subtotal_footer_separator"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="total_amount"
+                                       class="oe_subtotal_footer_separator"
+                                       widget="monetary"
+                                       options="{'currency_field': 'company_currency_id'}"/>
+                            </group>
+                        </page>
+                        <!-- additional_services -->
+                        <!--<page string="Additional Services"-->
+                              <!--name="additional_services">-->
+                            <!--<group col="2">-->
+                                <!--&lt;!&ndash;<label string="Additional Services"&ndash;&gt;-->
+                                <!--&lt;!&ndash;for="additional_services"/>&ndash;&gt;-->
+                                <!--<field name="additional_services"-->
+                                       <!--colspan="2"-->
+                                       <!--attrs="{'readonly':[('state', '!=', 'draft')]}"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="service_request_ids"-->
+                                       <!--context="{'linked_with_business_trip': True}"-->
+                                       <!--attrs="{'invisible':[('additional_services','=',False)], 'readonly':[('state', '!=', 'draft')]}"-->
+                                       <!--nolabel="1"/>-->
+                            <!--</group>-->
+                        <!--</page>-->
+                        <!-- Endorsement -->
+                        <page string="Endorsement"
+                              name="endorsement"
+                              attrs="{'invisible':[('endorsement_for_bt','=',False)]}">
+                            <group>
+                                <field name="endorsement_text" nolabel="1"
+                                       widget="html"/>
+                            </group>
+                            <group>
+                                <field name="endorsement_required"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <field name="endorsement_for_bt"
+                                   invisible="1"/>
+                        </page>
+                        <page name="accounting_information"
+                              group="org_business_trip.group_bt_hr_approval,"
+                              attrs="{'invisible':[('state', 'not in', ['finance_processing', 'hr_approval'])]}"
+                              string="Accounting Information">
+                            <group>
+                                <group>
+                                    <field name="accounting_date"
+                                           attrs="{'readonly':[('state', 'not in', ['hr_approval', 'finance_processing'])], 'required':[('state', 'in', ['hr_approval', 'finance_processing'])]}"/>
+                                    <!--<field name="debit_account_id"-->
+                                           <!--readonly="1"-->
+                                           <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"-->
+                                           <!--attrs="{'required':[('state', '=', 'finance_processing')]}"/>-->
+                                    <field name="product_id"
+                                           readonly="1"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                </group>
+                                <group>
+                                   <field name="journal_id"
+                                           domain="[('type', 'in', ['bank', 'cash'])]"
+                                           readonly="1"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="credit_account_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                           readonly="1"
+                                           attrs="{'required':[('state', '=', 'finance_processing')]}"/>
+                                    <field name="paid_to_employee"
+                                           attrs="{'readonly':[('state', 'not in', ['finance_processing', 'hr_approval'])]}"/>
+                                    <field name="account_move_id"
+                                           invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <!--Approvals Page-->
+                        <page string="Approvals" name="approvals">
+                            <div>
+                                The approval/refusal information will be
+                                displayed here.
+                            </div>
+                            <group>
+                                <group
+                                        attrs="{'invisible':[('bt_manager_user_id','=',False)]}">
+                                    <field name="bt_manager_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_manager_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_vp_user_id','=',False)]}">
+                                    <field name="bt_vp_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_vp_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_hr_user_id','=',False)]}">
+                                    <field name="bt_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_hr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_budget_user_id','=',False)]}">
+                                    <field name="bt_budget_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_budget_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_ceo_user_id','=',False)]}">
+                                    <field name="bt_ceo_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_ceo_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_final_hr_user_id','=',False)]}">
+                                    <field name="bt_final_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_final_hr_approval_date"/>
+                                </group>
+                                <group attrs="{'invisible':[('bt_finance_user_id','=',False)]}">
+                                    <field name="bt_finance_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_finance_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('bt_rejected_user_id','=',False)]}">
+                                    <field name="bt_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_rejected_date"/>
+                                </group>
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('bt_submitted_by','=',False)]}">
+                                    <field name="bt_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="bt_submit_date"
+                                           colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('bt_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="bt_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="service_logs" string="Service Logs">
+                            <field name="service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="business_trip_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="business_trip_proof"
+                              string="Attachment/s"
+                              attrs="{'invisible': [('proof_required', '!=', True)]}">
+                            <field name="proof_required" invisible="1"/>
+                            <group>
+                                <field name="business_trip_proof_ids" nolabel="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" delete="false"
+                                          create="false">
+                                        <field name="name" readonly="1"/>
+                                        <field name="description"
+                                               readonly="1"/>
+                                        <field name="mandatory" readonly="1"/>
+                                        <field name="document"
+                                               filename="document_file_name"/>
+                                        <field name="document_file_name"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                    <field name="remarks" placeholder="Remarks.."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- End of Service Form View Send Request behalf of other Employee -->
+    <record id="business_trip_req_behalf_form_view" model="ir.ui.view">
+        <field name="name">business.trip.req.behalf.form.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="inherit_id" ref="org_business_trip_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_business_trip.group_bt_on_behalf_of_other'))]"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{'readonly':[('state', '!=', 'draft')]}
+                </attribute>
+                <attribute name="domain">[(1,'=',1)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- End of Service Form View for HR -->
+    <record id="business_trip_req_hr_form_view" model="ir.ui.view">
+        <field name="name">business.trip.req.hr.form.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="inherit_id" ref="org_business_trip_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_business_trip.group_bt_hr_approval'))]"/>
+        <field name="arch" type="xml">
+            <field name="bt_allowance_cal_ids" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{'readonly': [('state', 'not in',
+                    ['hr_approval', 'final_hr_approval'])]}</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- for finance group -->
+    <record id="business_trip_req_finance_form_view" model="ir.ui.view">
+        <field name="name">business.trip.req.finance.form.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="inherit_id" ref="org_business_trip_form_views"/>
+        <field name="groups_id"
+               eval="[(4, ref('org_business_trip.group_bt_finance_approval'))]"/>
+        <field name="arch" type="xml">
+            <!--<field name="debit_account_id" position="attributes">-->
+                <!--<attribute name="readonly">0</attribute>-->
+                <!--<attribute name="attrs">{-->
+                    <!--'readonly':[('state', '!=', 'finance_processing')],-->
+                    <!--'required':[('state', '=', 'finance_processing')]-->
+                    <!--}</attribute>-->
+            <!--</field>-->
+            <field name="product_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{
+                    'readonly':[('state', '!=', 'finance_processing')],
+                    'required':[('state', '=', 'finance_processing')]
+                    }</attribute>
+            </field>
+            <field name="journal_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{
+                    'readonly':[('state', '!=', 'finance_processing')],
+                    'required':[('state', '=', 'finance_processing')]
+                    }</attribute>
+            </field>
+            <field name="credit_account_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{
+                    'readonly':[('state', '!=', 'finance_processing')],
+                    'required':[('state', '=', 'finance_processing')]
+                    }</attribute>
+            </field>
+            <field name="bt_allowance_cal_ids" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{'readonly': [('state', 'not in',
+                    ['hr_approval', 'finance_processing'])]}</attribute>
+            </field>
+            <xpath expr="//field[@name='bt_allowance_cal_ids']/tree/field[@name='account_id']"
+                   position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Business Trip Tree View-->
+    <record id="org_business_trip_tree_view" model="ir.ui.view">
+        <field name="name">org.business.trip.tree.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="arch" type="xml">
+            <tree string="Business Trip">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="state_id"/>
+                <field name="account_analytic_id"/>
+                <field name="trip_departure_date"/>
+                <field name="trip_return_date"/>
+                <field name="total_request_days"/>
+                <field name="total_amount" sum="Total Amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Business Trip Search View -->
+    <record id="org_business_trip_search_view" model="ir.ui.view">
+        <field name="name">org.business.trip.search.view</field>
+        <field name="model">org.business.trip</field>
+        <field name="arch" type="xml">
+            <search string="Business Trip">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="account_analytic_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+                <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                <filter name="pending_finance_approval"
+                        string="Pending Finance Approval"
+                        domain="[('state','in',['finance_processing'])]"/>
+                <filter name="additional_service_required"
+                        string="Additional Service Required"
+                        domain="[('service_request_count','&gt;',0)]"/>
+                <filter name="leave_req_creted"
+                        string="Leave Request Created"
+                        domain="[('hr_holidays_id','!=',False)]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_department_id" string="Department"
+                            context="{'group_by':'department_id'}"/>
+                    <filter name="group_country_id" string="Country"
+                            context="{'group_by':'country_id'}"/>
+                    <filter name="group_state_id" string="City"
+                            context="{'group_by':'state_id'}"/>
+                    <filter name="group_account_analytic_id"
+                            string="Cost Center"
+                            context="{'group_by':'account_analytic_id'}"/>
+                    <filter name="state" string="State"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Business Trip Action view -->
+    <record id="org_business_trip_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Business Trip</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+    <!-- View All Business Trip -->
+    <record id="action_bt_request_for_view_all"
+            model="ir.actions.act_window">
+        <field name="name">Business Trip</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to add new document
+            </p>
+        </field>
+    </record>
+
+    <!-- action hr approval Business Trip -->
+    <record id="action_bt_request_for_hr_approval"
+            model="ir.actions.act_window">
+        <field name="name">HR Approval</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_hr_approval':1,'readonly_by_pass': True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+    <!-- action finance approval Business Trip -->
+    <record id="action_bt_request_for_finance_approval"
+            model="ir.actions.act_window">
+        <field name="name">Finance Approval</field>
+        <field name="res_model">org.business.trip</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_pending_finance_approval':1,
+            'readonly_by_pass': True}
+        </field>
+        <field name="domain">[]</field>
+    </record>
+
+</odoo>

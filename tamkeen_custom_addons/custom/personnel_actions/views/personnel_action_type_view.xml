@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Personnel Actions View-->
+    <record id="personnel_action_type_tree_view" model="ir.ui.view">
+        <field name="name">personnel.action.tree.view</field>
+        <field name="model">personnel.action.type</field>
+        <field name="arch" type="xml">
+            <tree string="Personnel Action Type">
+                <field name="name"/>
+                <field name="employee_list_to_display"/>
+                <field name="vacant"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Personnel Actions Search view -->
+    <record id="personnel_action_type_search_view" model="ir.ui.view">
+        <field name="name">personnel.action.search.view</field>
+        <field name="model">personnel.action.type</field>
+        <field name="arch" type="xml">
+            <search string="Personnel Action Type">
+                <field name="name"/>
+                <field name="employee_list_to_display"/>
+                <field name="vacant"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Personnel Actions Form view -->
+    <record id="personnel_action_type_form_view" model="ir.ui.view">
+        <field name="name">personnel.action.form.view</field>
+        <field name="model">personnel.action.type</field>
+        <field name="arch" type="xml">
+            <form string="Personnel Action Type">
+                <sheet string="Personnel Actions">
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <notebook>
+                        <page string="Transactions" name="transactions">
+                            <group name="position">
+                                <group string="Position">
+                                    <field name="erase_prior_occupied_by"/>
+                                    <field name="fill_occupied_by"/>
+                                </group>
+                                <group string="Organization Unit">
+                                    <div>..........</div>
+                                </group>
+                            </group>
+                            <group name="employee">
+                                <group string="Employee">
+                                    <field name="erase_prior_main_position"/>
+                                    <field name="fill_main_position"/>
+                                </group>
+                                <group string="Compensation Profile">
+                                    <field
+                                            name="create_new_compensation_profile"/>
+                                    <field name="update_compensation_profile"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Restriction">
+                            <group>
+                                <group string="Employees List to Display">
+                                    <field name="employee_list_to_display"/>
+                                </group>
+                                <group string="Positions List to Display">
+                                    <field name="vacant"/>
+                                    <field name="occupied"/>
+                                    <field name="un_occupied"/>
+                                    <field name="obsolete"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Reason For Action">
+                            <field name="reason_action_ids">
+                                <form>
+                                    <sheet>
+                                        <group colspan="4" col="4">
+                                            <field name="name"/>
+                                            <field name="code"/>
+                                        </group>
+                                        <group>
+                                            <field name="description"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Controllers">
+                            <group colspan="4" col="4">
+                                <field name="prior_position_required"/>
+                                <field name="new_position_required"/>
+                                <field name="prior_grade_required"/>
+                                <field name="new_grade_required"/>
+                                <field name="prior_basic_salary_required"/>
+                                <field name="new_basic_salary_required"/>
+                                <field name="prior_position_editable"/>
+                            </group>
+                        </page>
+                        <page string="Extra">
+                            <group colspan="4" col="4">
+                                <field name="applied_to_recruitment_cycle"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Personnel Action -->
+    <record id="action_personnel_action_type_view"
+            model="ir.actions.act_window">
+        <field name="name">Personnel Action Type</field>
+        <field name="res_model">personnel.action.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

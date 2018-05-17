@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!--TImesheet Configuration -->
+    <!-- Configuration main menu -->
+    <menuitem name="Configuration" id="timesheet_configration"
+              sequence="30" parent="hr_timesheet.timesheet_menu_root"/>
+     <!-- Timesheet type -->
+    <menuitem name="Timesheet Type"
+              id="timesheet_configration_panel"
+              sequence="1"
+              action="act_open_timesheet_configuration_panels_view"
+              parent="timesheet_configration"/>
+      <!-- Timesheet Stages -->
+    <menuitem name="Stages" id="timesheet_configuration_stages"
+              sequence="2"
+              action="act_open_timesheet_panel_displayed_stages_view"
+              parent="timesheet_configration"/>
+
+</odoo>

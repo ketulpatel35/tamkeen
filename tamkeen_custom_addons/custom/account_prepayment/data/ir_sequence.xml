@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Prepaid Expense Sequence -->
+        <record id="seq_prepaid_expense" model="ir.sequence">
+            <field name="name">Prepaid Expense</field>
+            <field name="code">prepaid.expense</field>
+            <field name="prefix">PRE/%(range_year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Deferred Revenue Sequence -->
+        <record id="seq_deferred_revenue" model="ir.sequence">
+            <field name="name">Deferred Revenue</field>
+            <field name="code">deferred.revenue</field>
+            <field name="prefix">DER/%(range_year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

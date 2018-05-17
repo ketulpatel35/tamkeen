@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payroll_summary_template">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <center>
+                                <div style="font-size:20px">Payroll Summary <span t-esc="o.name"/></div>
+                        </center><br/>
+                        <div style="font-size:10px;">
+                            Print Date : <span t-esc="time.strftime('%Y-%m-%d')"/>
+                        </div>
+                        <div class="row">
+                            <table class="table table-bordered foobar" width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px">
+                                <tbody>
+                                    <tr>
+                                        <td height="10%" width="6%"><b>#</b></td>
+                                        <td height="10%"><b>Department Name </b></td>
+                                        <td height="10%"><b>Wages</b></td>
+                                        <td height="10%"><b>OverTime</b></td>
+                                        <td height="10%"><b>Transport Allowance</b></td>
+                                        <td height="10%"><b>Other Allowance</b></td>
+                                        <td height="10%"><b>Gross</b></td>
+                                        <!--<td height="10%"><b>Taxable Gross</b></td>-->
+                                        <!--<td height="10%"><b>Federal Income Tax</b></td>-->
+                                        <!--<td height="10%"><b>EE Pension Contrib</b></td>-->
+                                        <td height="10%"><b>Other Deductions</b></td>
+                                        <td height="10%"><b>Total Deductions</b></td>
+                                        <!--<td height="10%"><b>ER Pension Contrib.</b></td>-->
+                                        <td height="10%"><b>Net Salary</b></td>
+                                    </tr>
+                                    <t t-set="count" t-value="0"/>
+                                    <t t-set="count_salary" t-value="0"/>
+                                    <t t-set="count_ot" t-value="0"/>
+                                    <t t-set="count_transportation" t-value="0"/>
+                                    <t t-set="count_allowances" t-value="0"/>
+                                    <t t-set="count_gross" t-value="0"/>
+                                    <!--<t t-set="count_taxable_gross" t-value="0"/>-->
+                                    <!--<t t-set="count_fit" t-value="0"/>-->
+                                    <!--<t t-set="count_ee_pension" t-value="0"/>-->
+                                    <t t-set="count_deductions" t-value="0"/>
+                                    <t t-set="count_deductions_total" t-value="0"/>
+                                    <!--<t t-set="count_er_contributions" t-value="0"/>-->
+                                    <t t-set="count_net" t-value="0"/>
+                                    <tr t-foreach="get_details_by_run(o.run_ids)" t-as="run_data">
+                                        <td height="10%" width="10%">
+                                            <t t-set="count" t-value="count + 1"/>
+                                            <span t-esc="count"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('name', '-')"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('salary', '-')"/>
+                                            <t t-set="count_salary" t-value="count_salary + run_data.get('salary', 0)"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('ot', '-')"/>
+                                            <t t-set="count_ot" t-value="count_ot + run_data.get('ot', 0)"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('transportation', '-')"/>
+                                            <t t-set="count_transportation" t-value="count_transportation + run_data.get('transportation', 0)"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('allowances', '-')"/>
+                                            <t t-set="count_allowances" t-value="count_allowances + run_data.get('allowances', 0)"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('gross', '-')"/>
+                                            <t t-set="count_gross" t-value="count_gross + run_data.get('gross', 0)"/>
+                                        </td>
+                                        <!--<td height="10%">-->
+                                            <!--<span t-esc="run_data.get('taxable_gross', '-')"/>-->
+                                            <!--<t t-set="count_taxable_gross" t-value="count_taxable_gross + run_data.get('taxable_gross', 0)"/>-->
+                                        <!--</td>-->
+                                        <!--<td height="10%">-->
+                                            <!--<span t-esc="run_data.get('fit', '-')"/>-->
+                                            <!--<t t-set="count_fit" t-value="count_fit + run_data.get('fit', 0)"/>-->
+                                        <!--</td>-->
+                                        <!--<td height="10%">-->
+                                            <!--<span t-esc="run_data.get('ee_pension', '-')"/>-->
+                                            <!--<t t-set="count_ee_pension" t-value="count_ee_pension + run_data.get('ee_pension', 0)"/>-->
+                                        <!--</td>-->
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('deductions', '-')"/>
+                                            <t t-set="count_deductions" t-value="count_deductions + run_data.get('deductions', 0)"/>
+                                        </td>
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('deductions_total', '-')"/>
+                                            <t t-set="count_deductions_total" t-value="count_deductions_total + run_data.get('deductions_total', 0)"/>
+                                        </td>
+                                        <!--<td height="10%">-->
+                                            <!--<span t-esc="run_data.get('er_contributions', '-')"/>-->
+                                            <!--<t t-set="count_er_contributions" t-value="count_er_contributions + run_data.get('er_contributions', 0)"/>-->
+                                        <!--</td>-->
+                                        <td height="10%">
+                                            <span t-esc="run_data.get('net', '-')"/>
+                                            <t t-set="count_net" t-value="count_net + run_data.get('net', 0)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%" width="10%">
+                                        </td>
+                                        <td height="10%">
+                                            <b>Total</b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_salary"/></b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_ot"/></b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_transportation"/></b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_allowances"/></b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_gross"/></b>
+                                        </td>
+                                        <!--<td height="10%">-->
+                                            <!--<b><t t-esc="count_taxable_gross"/></b>-->
+                                        <!--</td>-->
+                                        <!--<td height="10%">-->
+                                            <!--<b><t t-esc="count_fit"/></b>-->
+                                        <!--</td>-->
+                                        <!--<td height="10%">-->
+                                            <!--<b><t t-esc="count_ee_pension"/></b>-->
+                                        <!--</td>-->
+                                        <td height="10%">
+                                            <b><t t-esc="count_deductions"/></b>
+                                        </td>
+                                        <td height="10%">
+                                            <b><t t-esc="count_deductions_total"/></b>
+                                        </td>
+                                        <!--<td height="10%">-->
+                                            <!--<b><t t-esc="count_er_contributions"/></b>-->
+                                        <!--</td>-->
+                                        <td height="10%">
+                                            <b><t t-esc="count_net"/></b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <h4>For,
+                                <b><span t-esc="o.company_id.name"/></b>
+                            </h4>
+                            <br/><br/><br/>
+                            <span>General <b>Manager</b><br/>
+                            Authorised Signature</span>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Download link -->
+    <record id="payslip_summary_dow_link_view" model="ir.ui.view">
+        <field name="name">payslip.summary.dow.link</field>
+        <field name="model">payslip.summary.dow</field>
+        <field name="arch" type="xml">
+            <form string="Excel Output">
+                <separator colspan="4" string="Please save file as .xls excel format"/>
+                <group>
+                    <field name="name" invisible="1"/>
+                    <field name="payslip_summary_xls_output" filename='name' readonly='1'/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

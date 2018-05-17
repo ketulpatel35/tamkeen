@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="Milestones"
+              id="menu_project_milestones"
+              parent="project.menu_project_management"
+              action="action_view_project_milestones"
+              sequence="3"
+              groups="project.group_project_user,project_management.group_view_all_project"/>
+</odoo>

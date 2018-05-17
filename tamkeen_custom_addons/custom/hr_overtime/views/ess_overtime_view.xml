@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Kanban view for OT Request -->
+    <record model="ir.ui.view" id="overtime_request_kanban_view">
+        <field name="name">overtime.statement.request.kanban</field>
+        <field name="model">overtime.statement.request</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_stock_kanban">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="cost_center_id"/>
+                <field name="account_analytic_id"/>
+                <field name="currency_id"/>
+                <field name="total_actual_hours" widget="float_time"/>
+                <field name="stage_id"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click oe_semantic_html_override">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <a name="action_open_employee_form"
+                                           type="object">
+                                            <field name="employee_id"/>
+                                        </a>
+                                    </div>
+                                    <div class="o_secondary"><field
+                                            class="o_secondary"
+                                            name="employee_company_id"/></div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content o_visible">
+                                <div class="row">
+                                    <div class="col-xs-5 o_kanban_primary_left">
+                                        <a type="open">
+                                            <div class="btn btn-primary">
+                                                <span t-if="record.name.raw_value">
+                                                    <t t-esc="record.name.value"/>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-7 o_kanban_primary_right">
+                                        <t t-if="record.stage_id.value">
+                                            <div>
+                                                <a class="oe_kanban_stock_picking_type_list">
+                                                    Status
+                                                </a>
+                                                <field name="stage_id"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="record.total_actual_hours.value">
+                                            <div>
+                                                <a class="oe_kanban_stock_picking_type_list">
+                                                    Actual Hours
+                                                </a>
+                                                <field name="total_actual_hours"/>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="container o_kanban_card_content o_visible">
+                                    <div class="row">
+                                        <t t-if="record.waiting_time.value">
+                                            <a>
+                                                Waiting Time : <field
+                                                    name="waiting_time"/>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="overtime_pre_request_search_view_inherit_for_ess"
+            model="ir.ui.view">
+        <field name="name">overtime.pre.request.search.view.inherit.for.ess</field>
+        <field name="model">overtime.pre.request</field>
+        <field name="inherit_id"
+               ref="hr_overtime.overtime_pre_request_search_view"/>
+        <field name="arch" type="xml">
+            <filter name='pending_budget_approval' position="after">
+                <filter string="Pending Approvals" name="pending_approval"
+                        domain="['|','&amp;',('employee_id.overtime_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.overtime_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.overtime_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')
+        ]"/>
+            </filter>
+        </field>
+    </record>
+    <record id="open_overtime_pre_ess_requests" model="ir.actions.act_window">
+        <field name="name">Overtime Pre-Approval Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">overtime.pre.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+                {'readonly_by_pass': True}
+            </field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Pre-Request.
+            </p><p>
+            Press create button to apply for any overtime request, The system
+            will take care from the approval.
+        </p>
+        </field>
+    </record>
+
+    <record id="open_overtime_mngr_pre_request_approval"
+            model="ir.actions.act_window">
+        <field name="name">Pre-Approval Request To Approve</field>
+        <field name="res_model">overtime.pre.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_approval':1, 'readonly_by_pass': True}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.overtime_manager_id.user_id.id','=',uid),'|',('employee_id.overtime_vp_id.user_id.id','=',uid),('employee_id.overtime_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+    <record id="open_overtime_request_ess_requests"
+            model="ir.actions.act_window">
+        <field name="name">Overtime Claim Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">overtime.statement.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new request.
+            </p><p>
+            Press create button to apply for any overtime request, The system
+            will take care from the approval.
+        </p>
+        </field>
+    </record>
+
+    <record id="open_overtime_mngr_request_approval"
+            model="ir.actions.act_window">
+        <field name="name">Claim Request To Approve</field>
+        <field name="res_model">overtime.statement.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_approval':1}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.overtime_manager_id.user_id.id','=',uid),'|',('employee_id.overtime_vp_id.user_id.id','=',uid),('employee_id.overtime_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

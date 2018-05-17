@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_login_attempt_config,access_login_attempt_config,model_login_attempt_config,,1,0,0,0
+access_login_attempt,access_login_attempt,model_login_attempt,,1,0,0,0
+

@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_payslip_amendment_form_for_overtime" model="ir.ui.view">
+        <field name="name">view.payslip.amendment.form.for.overtime</field>
+        <field name="model">hr.payslip.amendment</field>
+        <field name="inherit_id"
+               ref="hr_payslip_amendment.view_payslip_amendment_form"/>
+        <field name="arch" type="xml">
+            <field name="input_id" position="after">
+                <field name="loan_installment_id" readonly="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

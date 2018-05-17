@@ -1,0 +1,57 @@
+<odoo>
+
+    <record id="view_payslip_amendment_search_int" model="ir.ui.view">
+        <field name="name">hr.payslip.amendment.search.int</field>
+        <field name="model">hr.payslip.amendment</field>
+        <field name="inherit_id"
+               ref="hr_payslip_amendment.view_payslip_amendment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Employee"
+                        name="gby_employee_id"
+                        context="{'group_by':'employee_id'}"
+                        help="Group by Employee"/>
+                <filter string="Payroll Period"
+                        name="gby_pay_period_id"
+                        context="{'group_by':'pay_period_id'}"
+                        help="Group by Payroll Period"/>
+                <filter string="Salary Rule"
+                        name="gby_input_id"
+                        context="{'group_by':'input_id'}"
+                        help="Group by salary Rule Input"/>
+                <filter string="Status"
+                        name="gby_state"
+                        context="{'group_by':'state'}"
+                        help="Group by Status"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_payslip_amendment_confirm_view" model="ir.ui.view">
+        <field name="name">hr.payslip.amendment.confirm.view</field>
+        <field name="model">hr.payslip.amendment.confirm</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Draft Amendment">
+                <p class="oe_grey">
+                    Are you sure you want to confirm the selected amendments?
+                </p>
+                <footer>
+                    <button string="Confirm"
+                            name="payslip_amendment_confirm" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_hr_payslip_amendment_confirm"
+                multi="True"
+                key2="client_action_multi" name="Confirm Selected Amendment/s"
+                res_model="hr.payslip.amendment.confirm"
+                src_model="hr.payslip.amendment"
+                view_mode="form" target="new" view_type="form"
+                groups="hr_payroll.group_hr_payroll_user"/>
+
+</odoo>

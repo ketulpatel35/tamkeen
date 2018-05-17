@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        
+        <!-- ESS -->
+        <menuitem name="General Services" id="ess_service_request_menu" parent="emp_self_services.sub_mian_ess_menu" sequence="3" groups="service_management.group_service_user"/>
+
+        <menuitem name="HR General Services" id="ess_hr_service_request_menu" parent="ess_service_request_menu" sequence="31" action="service_management.action_service_ess_requests" groups="service_management.group_service_user"/>
+
+        <menuitem name="Recruitment General Services" id="ess_rcrtmnt_service_request_menu" parent="ess_service_request_menu" sequence="32" action="service_management.action_rcrtmnt_service_ess_requests" groups="service_management.group_service_hiring_srvs"/>
+
+        <menuitem name="Administration General Services" id="ess_admin_service_request_menu" parent="ess_service_request_menu" sequence="33" action="service_management.action_admns_service_ess_requests" groups="service_management.group_service_user"/>
+
+        <!-- MSS -->
+        <!-- <menuitem id="main_service_request_menu" name="General Services" parent="emp_self_services.mian_ess_menu" sequence="5" groups="service_management.group_service_bu_manager_approval"/>
+        
+        <menuitem name="Requests To Approve" id="service_request_approval_menu" parent="main_service_request_menu" sequence="51" action="service_mngr_request_approval" groups="service_management.group_service_bu_manager_approval"/> -->
+        <!--  -->
+          <menuitem id="service_request_management_ess_manager"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  name="General Service Management" sequence="3"/>
+        <menuitem name="General Services To Approve" id="service_request_approval_menu" parent="service_request_management_ess_manager" sequence="51" action="service_management.service_mngr_request_approval" groups="service_management.group_service_bu_manager_approval"/>
+        
+
+    </data>
+</odoo>

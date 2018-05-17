@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Sub-Task action for Parent Task-->
+    <record id="action_project_sub_task" model="ir.actions.act_window">
+        <field name="name">Task</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+        <field name="context">{
+            'default_milestones_schedule_id': context.get('milestones_schedule_id', False),
+            'default_parent_task_id': active_id,
+            'default_project_id': context.get('project_id', False),
+            'default_start_date': context.get('start_date', False),
+            'default_date_deadline': context.get('date_deadline', False)
+            }</field>
+        <field name="domain">[('parent_task_id','=',[active_id])]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Here, you can create new sub-tasks
+            </p>
+            <p>
+                You can now manage your sub-tasks in order to get things done efficiently. 
+                Track progress, discuss, attach documents, etc.
+            </p>
+        </field>
+    </record>
+
+    <record id="project_sub_task_smart_button_view" model="ir.ui.view">
+        <field name="name">project.sub.task.view.smart.button.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="action"
+                     context="{'project_id': project_id,
+                               'milestones_schedule_id': milestones_schedule_id,
+                               'start_date': start_date,
+                               'date_deadline': date_deadline,}"
+                     name="%(project_task_hierarchy.action_project_sub_task)d" 
+                     icon="fa-tasks">
+                 <field string="Sub Tasks" name="sub_task_count" widget="statinfo" />
+                </button>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="project_sub_task_view" model="ir.ui.view">
+        <field name="name">project.sub.task.view.form</field>
+        <field name="model">project.task</field>
+        <field eval="2" name="priority"/>
+        <field name="inherit_id" ref="project_milstone_schedule.project_task_form_milestone"/>
+        <field name="arch" type="xml">
+            <field name="milestones_schedule_id" position="after">
+                <field name="parent_task_id" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"
+                       domain="[('project_id', '=', project_id)]"
+                       attrs="{'invisible': [('parent_task_id','=',False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

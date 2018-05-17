@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- project.task.type form view inherit -->
+    <record id="task_type_for_all_obj" model="ir.ui.view">
+            <field name="name">project.task.type.form.inherit</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_ids']"
+                   position="attributes">
+                <attribute name="groups">project_management.group_project_configuration</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="after">
+                <group string="Display Stage">
+                    <group>
+                        <field name="for_task"/>
+                        <field name="for_risk"/>
+                        <field name="for_document"/>
+                    </group>
+                    <group>
+                        <field name="for_issue"/>
+                        <field name="for_milestone"/>
+                    </group>
+                </group>
+            </xpath>
+            <field name="fold" position="after">
+                <field name="is_default_new_project"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- project.task.type tree view inherit -->
+    <record id="task_type_tree_inherit" model="ir.ui.view">
+        <field name="name">project.task.type.tree.inherit</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_tree"/>
+        <field name="arch" type="xml">
+            <field name="fold" position="after">
+                <field name="is_default_new_project"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

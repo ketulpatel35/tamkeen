@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_employee_documents_form" model="ir.ui.view">
+        <field name="name">hr.employee.inherit.form</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+            <field name="address_id" position="attributes">
+                <attribute name="required">True</attribute>
+                <attribute name="options">{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000, 'always_reload': True, 'highlight_first_line': True}</attribute>
+            </field>
+            <field name="work_email" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+
+            <!--<field name="work_phone" position="attributes">-->
+            <!--<attribute name="required">True</attribute>-->
+            <!--</field>-->
+            <!--<field name="department_id" position="attributes">-->
+            <!--<attribute name="required">True</attribute>-->
+            <!--</field>-->
+
+            <!--<field name="address_home_id" position="attributes">-->
+            <!--<attribute name="required">True</attribute>-->
+            <!--</field>-->
+            <field name="birthday" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+            <field name="mobile_phone" position="attributes">
+                <attribute name="required">False</attribute>
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </field>
+            <!--<field name="parent_id" position="attributes">-->
+            <!--<attribute name="required">1</attribute>-->
+            <!--</field>-->
+            <field name="country_id" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+            <field name="gender" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+            <field name="marital" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+            <!--<page groups="hr.group_hr_user" position="after">-->
+            <xpath expr="//notebook//page[2]" position="attributes">
+                <attribute name="groups">hr_employee_customization.group_view_emp_info</attribute>
+            </xpath>
+            <xpath expr="//notebook//page[3]" position="attributes">
+                <attribute name="groups">hr_employee_customization.group_view_emp_info</attribute>
+            </xpath>
+            <xpath expr="//page[3]" position="after">
+                <!--<page string="Sponsorship" groups="hr.group_hr_manager,hr.group_hr_user">-->
+                <page string="Sponsorship" groups="hr_employee_customization.group_view_emp_info">
+                    <group string="Sponsor Details">
+                        <field name="sponsorname"/>
+                        <field name="sponsoraddress" />
+                        <field name="sponsorphone" />
+                    </group>
+                </page>
+                <!--<page string="Experiences" groups="hr.group_hr_manager,hr.group_hr_user" >-->
+                <page string="Qualifications" name="skills_main_page">
+                    <notebook>
+                        <page string="Experiences" name="experiences"
+                              groups="hr_employee_customization.group_view_emp_info">
+                            <field name="experiences_line_id" nolabel="1" required="1">
+                                <form string="Experiences">
+                                    <group colspan="4" col="4">
+                                        <field name="company_name" required="1"/>
+                                        <field name="job_name" required="1"/>
+                                        <field name="date_of_join" required="1"/>
+                                        <field name="date_of_leave" required="1"/>
+                                        <field name="responsibility" required="1"/>
+                                        <field name="emp_line" invisible="1"/>
+                                    </group>
+                                </form>
+                                <tree string="Experiences">
+                                    <field name="emp_line" invisible="1"/>
+                                    <field name="company_name" required="1"/>
+                                    <field name="job_name" required="1"/>
+                                    <field name="date_of_join" required="1"/>
+                                    <field name="date_of_leave" required="1"/>
+                                    <field name="period_month_year"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Education" name="qualifications"
+                              groups="hr_employee_customization.group_view_emp_info">
+                            <field name="qualifications_line_id" nolabel="1" required="1">
+                                <tree string="Qualifications" editable="bottom">
+                                    <field name="emp_line" invisible="1"/>
+                                    <field name="source_name" required="1"/>
+                                    <field name="qualification_date" required="1"/>
+                                    <field name="qualifications" required="1"/>
+                                    <field name="major" required="1"/>
+                                    <field name="specialist" required="1"/>
+                                    <field name="gpa" required="1"/>
+                                    <field name="grade"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Trainings" name="trainings"
+                              groups="hr_employee_customization.group_view_emp_info">
+                            <field name="trainings_line_id" nolabel="1" required="1">
+                                <form string="Trainings">
+                                    <field name="emp_line" invisible="1"/>
+                                    <field name="source_name" required="1"/>
+                                    <field name="title" required="1"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="days_or_hours" required="1"/>
+                                    <field name="number_of_days" required="1"/>
+                                    <field name="type" required="1"/>
+                                </form>
+                                <tree string="Trainings" editable="bottom">
+                                    <field name="emp_line" invisible="1"/>
+                                    <field name="source_name" required="1"/>
+                                    <field name="title" required="1"/>
+                                    <field name="start_date" required="1"/>
+                                    <field name="end_date" required="1"/>
+                                    <field name="days_or_hours" required="1"/>
+                                    <field name="number_of_days" required="1"/>
+                                    <field name="type" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_own_employee_info_filter" model="ir.ui.view">
+        <field name="name">My Information</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[2]" position="before">
+                <filter string="My Information" name="employee_info" help="Employee Information" domain="[('user_id','=', uid)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="open_view_employee_only" model="ir.actions.act_window">
+        <field name="name">My Profile</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain"> [('user_id','=',uid)] </field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="open_view_employee_colleagues" model="ir.actions.act_window">
+        <field name="name">My Colleagues</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+    </record>
+
+    <record id="action_hr_my_contract" model="ir.actions.act_window">
+        <field name="name">My Contract</field>
+        <field name="res_model">hr.contract</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('employee_id.user_id','=',uid)]
+        </field>
+    </record>
+
+    <record id="action_hr_department_contracts" model="ir.actions.act_window">
+        <field name="name">Employees Contracts</field>
+        <field name="res_model">hr.contract</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            ['|',('employee_id.user_id','=',uid),('employee_id.parent_id.user_id','=',uid)]
+        </field>
+        <field name="context">{'search_default_current':1}</field>
+        <field name="search_view_id" ref="hr_contract.hr_contract_view_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="user_selection_form_view" model="ir.ui.view">
+        <field name="name">user.selection.form.view</field>
+        <field name="model">user.selection</field>
+        <field name="arch" type="xml">
+            <form string="User Selection">
+                <group string="Select User For Next Approval">
+                    <field name="conf_history_line_id" invisible="1"/>
+                    <field name="user_id"
+                           options="{'no_quick_create':True,'no_create_edit':True}"/>
+                </group>
+                <footer>
+                    <button name="update_users_approvals" string="Assign"
+                            type="object" class="oe_highlight"/>
+                    <button string="Close" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

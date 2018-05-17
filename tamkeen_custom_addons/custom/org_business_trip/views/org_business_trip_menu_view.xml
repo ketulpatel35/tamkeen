@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Business Trip Main Menu Root -->
+    <menuitem id="org_business_trip_root_menu"
+              name="Business Trip"
+              web_icon="org_business_trip,static/description/icon_01.jpg"/>
+
+    <!-- Business Trip main Menu -->
+    <menuitem id="org_business_trip_main_menu"
+              name="Business Trip"
+              parent="org_business_trip_root_menu"
+              sequence="1"/>
+
+    <!-- Business Trip Sub main menu -->
+    <menuitem id="org_business_trip_request_menu"
+              name="Business Trip Request"
+              parent="org_business_trip_main_menu"
+              sequence="1"/>
+
+    <!-- Hr Approval -->
+    <menuitem id="org_bt_request_hr_approval_menu"
+              action="action_bt_request_for_hr_approval"
+              parent="org_business_trip_request_menu"
+              groups="org_business_trip.group_bt_hr_approval"
+              name="HR Approval"
+              sequence="1"/>
+
+    <!-- Finance Approval -->
+    <menuitem id="org_bt_request_finance_approval_menu"
+              action="action_bt_request_for_finance_approval"
+              parent="org_business_trip_request_menu"
+              groups="org_business_trip.group_bt_finance_approval"
+              name="Finance Approval"
+              sequence="2"/>
+
+    <!-- View All -->
+    <menuitem id="org_bt_request_view_all_menu"
+              action="action_bt_request_for_view_all"
+              parent="org_business_trip_request_menu"
+              name="View All Requests"
+              groups="org_business_trip.group_bt_view_all"
+              sequence="3"/>
+
+    <!-- C Configuration -->
+    <!-- C Business Trip Configuration main menu -->
+    <menuitem name="Configuration"
+              id="org_business_trip_configuration_menu"
+              groups="org_business_trip.group_bt_configuration"
+              sequence="2"
+              parent="org_business_trip_root_menu"/>
+
+    <!-- C service panel -->
+    <menuitem id="org_business_trip_panel_menu"
+              name="Business Trip Type"
+              groups="org_business_trip.group_bt_configuration"
+              action="action_service_panel_business_trip"
+              parent="org_business_trip_configuration_menu"
+              sequence="1"/>
+
+    <!-- C Service Panel Stages -->
+    <menuitem id="org_business_trip_stages_menu"
+              name="Stages"
+              groups="org_business_trip.group_bt_configuration"
+              action="action_displayed_stages_business_trip"
+              parent="org_business_trip_configuration_menu"
+              sequence="2"/>
+
+    <!-- C Countries Group -->
+    <menuitem id="org_business_trip_countries_group_menu"
+              name="Countries Group"
+              groups="org_business_trip.group_bt_configuration"
+              action="bt_countries_group_action_views"
+              parent="org_business_trip_configuration_menu"
+              sequence="3"/>
+
+    <!-- C Country -->
+    <menuitem id="org_business_trip_country_menu"
+              name="Country"
+              groups="org_business_trip.group_bt_configuration"
+              action="base.action_country"
+              parent="org_business_trip_configuration_menu"
+              sequence="4"/>
+
+    <!-- C Allowance -->
+    <menuitem id="org_business_trip_allowance_menu"
+              name="Business Trip Items"
+              groups="org_business_trip.group_bt_configuration"
+              action="business_trip_allowance_action_views"
+              parent="org_business_trip_configuration_menu"
+              sequence="4"/>
+
+</odoo>

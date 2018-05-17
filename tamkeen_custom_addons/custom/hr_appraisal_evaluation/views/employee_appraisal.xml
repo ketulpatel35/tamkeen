@@ -1,0 +1,388 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="employee_appraisal_tree">
+            <field name="name">employee.appraisal.list</field>
+            <field name="model">employee.appraisal</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state in ('cancel')"
+                      decoration-info="state in ('sent_for_review',
+                      'agreed_for_review', 'sent_for_hr_approval')">
+                    <field name="emo_no"/>
+                    <field name="emp_id"/>
+                    <field name="immediate_manager"/>
+                    <field name="to_upper_manager"/>
+                    <field name="job_title"/>
+                    <field name="date_of_joining"/>
+                    <!--<field name="department_id"/>-->
+                    <field name="section"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="employee_appraisal_form">
+            <field name="name">employee.appraisal.form</field>
+            <field name="model">employee.appraisal</field>
+            <field name="arch" type="xml">
+                <form string="Employee Appraisal Form">
+                    <header>
+                        <button name="sent_for_review"
+                                type="object" states="draft"
+                                string="Send for Review" class="oe_highlight"
+                                groups="base.group_user"/>
+                        <button name="agreed_for_review"
+                                type="object"
+                                states="sent_for_review"
+                                string="Reviewed" class="oe_highlight"
+                                groups="hr_appraisal_evaluation.group_app_manager_approval"/>
+                        <button name="sent_for_hr_approval"
+                                type="object"
+                                states="agreed_for_review"
+                                string="Send for HR Approval" class="oe_highlight"
+                                groups="hr_appraisal_evaluation.group_app_manager_approval"/>
+
+                        <button name="set_to_draft"
+                                type="object"
+                                states="sent_for_review"
+                                string="Set to Draft"
+                                groups="hr_appraisal_evaluation.group_app_manager_approval"/>
+
+                        <button name="set_to_draft"
+                                type="object"
+                                states="agreed_for_review"
+                                string="Set to Draft"
+                                groups="hr_appraisal_evaluation.group_app_hr_approval"/>
+
+                        <button name="close"
+                                type="object"
+                                states="sent_for_hr_approval"
+                                string="Confirm" class="oe_highlight"
+                                groups="hr_appraisal_evaluation.group_app_hr_approval"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,sent_for_review,agreed_for_review,
+                               sent_for_hr_approval,close"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_right oe_button_box">
+                            <button name="get_manager_objective"
+                                    class="oe_stat_button" icon="fa-bars" type="object"
+                                    help="get Objective Manager">
+                                <div class="o_form_field o_stat_info">
+                                    <span class="o_stat_text">Manager
+                                        <br/>Objective
+                                    </span>
+                                </div>
+                            </button>
+                        </div>
+                        <group string="Employee Personal Information">
+                            <h3><field name="appraisal_sequence" readonly="1"/></h3>
+                        </group>
+                        <div class="container-fluid">
+                            <div class="col-md-4">
+                                <group>
+                                    <field name="emp_id" readonly="1"/>
+                                    <field name="f_employee_no" invisible="1"/>
+                                    <field name="emo_no" readonly="1"/>
+                                    <field name="immediate_manager"
+                                           readonly="1" options="{'no_open': True}"/>
+                                    <field name="to_upper_manager"
+                                           readonly="1" options="{'no_open': True}"/>
+                                    <field name="appraisal_year_id"
+                                           readonly="1" invisible="1"/>
+                                </group>
+                            </div>
+                            <div class="col-md-4">
+                                <group>
+                                    <!--<field name="department_id" readonly="1" options="{'no_open': True}"/>-->
+                                    <field name="job_title" readonly="1" options="{'no_open': True}"/>
+                                    <field name="section" readonly="1"/>
+                                    <field name="imdt_mgr_reviewed"
+                                           string="Review Complete !"
+                                           attrs="{'invisible':[('state','!=','sent_for_review')]}"
+                                           groups="hr_appraisal_evaluation.group_app_manager_approval"
+                                    />
+                                    <field name="current_app_year_rec"
+                                           readonly="1" invisible="1"/>
+                                </group>
+                            </div>
+                            <div class="col-md-4">
+                                <group>
+                                    <field name="date_of_joining" readonly="1"/>
+                                    <field name="appraisal_term" readonly="1"/>
+                                    <field name="period_from" readonly="1"/>
+                                    <field name="period_to" readonly="1"/>
+                                </group>
+                            </div>
+                        </div>
+                        <notebook>
+                            <page string="Objectives" name="objectives">
+                                <group>
+                                    <group>
+                                        <field name="objective_weightage" readonly="1"/>
+                                    </group>
+                                    <!--<group>-->
+                                        <!--<field name="achievement_date"/>-->
+                                    <!--</group>-->
+                                </group>
+                                <field name="objective">
+                                    <tree string="Objectives"
+                                          editable="bottom">
+                                        <field name="temp_objective"/>
+                                        <field name="objectives" invisible="1"/>
+                                        <field name="kpi_measurement" widget="many2many_tags" string="KPI" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                        <field name="kpi_description"/>
+                                        <!--<field name="department_id" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                                        <field name="weightage"/>
+                                        <field name="achievement_date"/>
+                                        <field name="self_rating"
+                                               options="{'no_quick_create':True,'no_create_edit':True}" invisible="1"/>
+                                        <field name="manager_rating" options="{'no_quick_create':True,'no_create_edit':True}"
+                                               groups="hr_appraisal_evaluation.group_app_manager_approval,hr_appraisal_evaluation.group_app_hr_approval"
+                                               invisible="1"/>
+                                        <field name="emp_evidence"/>
+                                        <field name="check_emp_comment"/>
+                                        <field name="emp_comments" height="10px" attrs="{'invisible':[('check_emp_comment', '=', False)]}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_obj_weight" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page string="Behavioral Competencies">
+                                <group>
+                                    <field name="behaviour_total_weightage" readonly="1"/>
+                                </group>
+                                <field name="behaviour_comp">
+                                    <tree string="Behavioural Competencies"
+                                          delete="false" create="false"
+                                          editable="bottom">
+                                        <field name="behaviour_comp_id" invisible="1"/>
+                                        <field name="name" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                        <field name="region" readonly="1"/>
+                                        <field name="definaition" readonly="1"/>
+                                        <field name="weightage" readonly="1" invisible="1"/>
+                                        <field name="expected_level"
+                                               domain="[('type','=','behaviour')]"
+                                               required="1"
+                                               options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                        <field name="emp_behaviour_self_rating"
+                                               domain="[('type','=','rating')]"
+                                               options="{'no_quick_create':True,'no_create_edit':True}"
+                                               invisible="1"/>
+                                        <field name="manager_behaviour_rating"
+                                               domain="[('type','=','rating')]"
+                                               groups="hr_appraisal_evaluation.group_app_manager_approval,hr_appraisal_evaluation.group_app_hr_approval"
+                                               options="{'no_quick_create':True,'no_create_edit':True}"
+                                               invisible="1"/>
+                                        <field name="improvement_area"
+                                               groups="hr_appraisal_evaluation.group_app_manager_approval,hr_appraisal_evaluation.group_app_hr_approval"
+                                               invisible="1"/>
+                                        <field name="emp_evidence"/>
+                                        <field name="check_emp_evidence"/>
+                                        <field name="emp_evidence_text" height="10px" attrs="{'invisible':[('check_emp_evidence', '=', False)]}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_beh_weight" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page name='strengths_areas'
+                                  string="Strengths &amp; Areas">
+                                <group>
+                                    <group string="Strength">
+                                        <field name="emo_technical" height="10px" required="1"/>
+                                        <field name="emo_behaviour" height="10px" required="1"/>
+                                    </group>
+                                    <group string="Area For Improvement">
+                                        <field name="manager_technical"
+                                               height="10px"
+                                               required="1"/>
+                                        <field name="manager_behaviour"
+                                               height="10px"
+                                               required="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="CAREER DISCUSSION">
+                                <group string="Career Discussion and Requirements">
+                                    <field name="career_discussion" nolabel="1">
+                                        <tree string="Career Discussion" editable="bottom">
+                                            <field name="career_id" invisible="1"/>
+                                            <field name="career_discusion"/>
+                                            <field name="description"/>
+                                            <field name="requirements"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Individual Development Plan">
+                                <field name="individual_development_plans">
+                                    <tree string="IDP" editable="bottom">
+                                        <field name="emp_ref_id" invisible="1"/>
+                                        <field name="development_obj"/>
+                                        <field name="Justification"
+                                               options="{'no_quick_create':True,'no_create_edit':True}"
+                                               domain="[('type', '=', 'justification')]"/>
+                                        <field name="detail_description"/>
+                                        <field name="development_options"
+                                               options="{'no_quick_create':True,'no_create_edit':True}"
+                                               domain="[('type','=','development')]"/>
+                                        <field name="intervention"
+                                               string="Action Steps"/>
+                                        <!--<field name="success_measurre"/>-->
+                                        <field name="target_completion_date"
+                                               string="Target Completion Date"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Final Rating &amp; Approval"
+                                  groups="hr.group_hr_manager,hr_admin.group_hr_admin">
+                                <group string="Manager Average Ratings">
+                                    <group>
+                                        <field name="mng_obj_avg_rating"/>
+                                        <field name="mng_behaviour_comp_avg_rating"/>
+                                        <field name="mng_weightage_avg_rating"/>
+                                    </group>
+                                    <group>
+                                        <field name="mng_final_rate"/>
+                                        <field name="mng_final_rate_after_calibration"
+                                               options="{'no_quick_create':True,'no_create_edit':True}" domain="[('type', '=', 'rating')]"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        <group string="Define" groups="hr_appraisal_evaluation.group_app_manager_approval,hr_appraisal_evaluation.group_app_hr_approval">
+                            <group>
+                                <field name="agreed_status"
+                                       attrs="{'required':[('state','in',['agreed_for_review'])]}"/>
+                                <field name="agreed_date" attrs="{'required':[('state','in',['agreed_for_review'])]}"/>
+                            </group>
+                            <group>
+                                <field name="exception_agreed"
+                                       attrs="{'invisible':[('agreed_status','!=','mutual_agreed_with_exception')],
+                                       'required':[('agreed_status','=','mutual_agreed_with_exception')]}"/>
+                                <field name="obj_total_weightage" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="employee_appraisal_form_user" model="ir.ui.view">
+            <field name="name">employee.appraisal.form.user</field>
+            <field name="model">employee.appraisal</field>
+            <field name="inherit_id" ref="employee_appraisal_form"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('base.group_user') ])]"/>
+            <field name="arch" type="xml">
+                <!-- Objective for employee -->
+                <xpath expr="//field[@name='objective']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+
+                <!--<xpath expr="//field[@name='achievement_date']"-->
+                       <!--position="attributes">-->
+                    <!--<attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>-->
+                <!--</xpath>-->
+                <!-- Behaviour for employee -->
+                <xpath expr="//field[@name='behaviour_comp']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+                <!-- Strength & Area -->
+                <xpath expr="//field[@name='emo_technical']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='emo_behaviour']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+                <!-- Career Discussion -->
+                <xpath expr="//field[@name='career_discussion']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+                <!-- individual development plans -->
+                <xpath expr="//field[@name='individual_development_plans']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="employee_appraisal_action">
+            <field name="name">Performance Management</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.appraisal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('current_app_year_rec','!=',False)]</field>
+            <field name="view_id" ref="employee_appraisal_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Generate the Employee Appraisal
+                </p>
+            </field>
+        </record>
+
+        <!-- Search view -->
+        <record id="employee_appraisal_search_view" model="ir.ui.view">
+            <field name="name">Employee Apprisal Search</field>
+            <field name="model">employee.appraisal</field>
+            <field name="arch" type="xml">
+                <search string="Employee App Search">
+                    <field name="emp_id"/>
+                    <field name="f_employee_no"/>
+                    <field name="state"/>
+                    <filter string="Pending HR Approvals"
+                            name="hr_appr_to_approve"
+                            domain="[('state','=','sent_for_hr_approval')]"/>
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'emp_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="apprisal_with_default_search_action"
+                model="ir.actions.act_window">
+            <field name="name">Performance Management</field>
+            <field name="res_model">employee.appraisal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="domain">[('current_app_year_rec','!=',False), ('state','=','sent_for_hr_approval')]</field>-->
+            <field name="domain">[('current_app_year_rec','!=',False)]</field>
+            <field name="context">{'search_default_group_employee_id':1,
+                'search_default_hr_appr_to_approve':1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new .
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+
+
+        <!-- actions -->
+        <!--<menuitem name="Employee Performance Appraisal" id="emp_appraisal"-->
+                  <!--parent="hr_appraisal_evaluation_employee"-->
+                  <!--action="employee_appraisal_action"-->
+                  <!--groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager"/>-->
+
+    </data>
+</odoo>

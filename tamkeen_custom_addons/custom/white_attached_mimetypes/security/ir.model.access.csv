@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_white_mimetype","white.mimetype","model_white_mimetype",,1,1,1,1

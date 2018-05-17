@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bill_batch_approval,access_bill_batch_approval,model_bill_batch_approval,,1,1,1,0
+access_vendor_bill_batch_approval,access.vendor.bill.batch.approval,model_vendor_bill_batch_approval,,1,1,1,0
+access_vendor_batch_payment_line,access.vendor.bill.batch.approval,model_vendor_bill_batch_approval,,1,1,1,0

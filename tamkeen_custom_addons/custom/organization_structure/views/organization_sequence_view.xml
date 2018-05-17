@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Organization Unit -->
+        <record id="organization_unit_sequence_id_view" model="ir.sequence">
+            <field name="name">Organization Unit</field>
+            <field name="code">hr.department</field>
+            <field name="prefix">ORG</field>
+            <field name="padding">6</field>
+        </record>
+        <!-- Organization Unit -->
+        <record id="position_sequence_id_view" model="ir.sequence">
+            <field name="name">Position</field>
+            <field name="code">hr.job</field>
+            <field name="prefix">POSN</field>
+            <field name="padding">6</field>
+        </record>
+    </data>
+</odoo>

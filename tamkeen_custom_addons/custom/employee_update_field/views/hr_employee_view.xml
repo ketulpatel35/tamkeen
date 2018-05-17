@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <!-- Remove My Colleagues from emp_self_service module -->
+        <delete model="ir.ui.menu" id="emp_self_services.emp_colleagues" />
+    </data>
+
+    <record id="tamkeen_view_employee_form" model="ir.ui.view">
+        <field name="name">tamkeen.view.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <form string="Employee">
+                    <sheet>
+                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+                        <div>
+                            <h3>
+                                <group>
+                                    <group colspan="2" col="2">
+                                        <field name="is_current_employee"/>
+                                        <field name="name" placeholder="Employee's Name"
+                                               attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                       'required': [('is_current_employee', '!=', False)]}"/>
+                                        <field name="short_name" attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                                         'invisible': [('is_current_employee', '=', False)],
+                                                                         'required': [('is_current_employee', '!=', False)]}"/>
+                                        <field name="name_eng"
+                                               attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                       'required': [('is_current_employee', '!=', False)]}"/>
+                                    </group>
+                                    <newline/>
+                                    <group>
+                                        <group><field name="f_employee_no" readonly="1"/></group>
+                                        <group></group>
+                                    </group>
+                                    <group>
+                                    <field name="category_ids" widget="many2many_tags"
+                                           placeholder="e.g. Part Time"
+                                           options="{'no_create_edit': True}"
+                                           groups="hr.group_hr_user"
+                                           attrs="{'readonly': [('is_current_employee', '!=', False)],
+                                                   'invisible': [('is_current_employee', '=', False)]}"/>
+                                    </group>
+                                </group>
+                            </h3>
+                        </div>
+                        <notebook>
+                            <page name="public" string="Public Information">
+                                <group>
+                                    <group string="Contact Information">
+                                        <field name="address_id"
+                                            context="{'show_address': 1}"
+                                            options='{"always_reload": True, "highlight_first_line": True}'
+                                            domain = "[('working_address','=',True)]"
+                                            readonly="1"/>
+                                        <field name="mobile_phone" attrs="{'readonly': [('is_current_employee', '=', False)]}"/>
+                                        <field name="work_location" readonly="1"/>
+                                        <field name="work_email" widget="email" readonly="1"/>
+                                        <field name="work_phone" attrs="{'readonly': [('is_current_employee', '=', False)]}"/>
+                                    </group>
+                                    <group string="Position">
+                                        <field name="department_id" readonly="1"/>
+                                        <field name="job_id" invisible="1"/>
+                                        <field name="parent_id" readonly="1"/>
+                                        <field name="employee_role" colspan="2" invisible="1"/>
+                                        <field name="coach_id" invisible="1"/>
+                                        <field name="calendar_id" readonly="1"/>
+                                    </group>
+                                </group>
+                                <field name="notes" placeholder="Other Information ..." colspan="4" invisible="1"/>
+                            </page>
+                            <page name="personal_information" string="Personal Information">
+                                <notebook>
+                                    <page name="citizenship_info" string="Citizenship &amp; Other Information">
+                                        <group>
+                                            <group>
+                                                <field name="accommodation_provided" readonly="1"
+                                                       attrs="{'invisible': [('is_current_employee', '=', False)]}"/>
+                                                <field name="insurance_covered" readonly="1"
+                                                       attrs="{'invisible': [('is_current_employee', '=', False)]}"/>
+                                                <field name="insurance_cover_date" readonly="1"
+                                                       attrs="{'invisible':[('insurance_covered','=',False)]}" />
+                                                <field name="country_id" readonly="1"/>
+                                            </group>
+                                            <group attrs="{'invisible': [('is_current_employee', '=', False)]}">
+                                                <field name="bankorcash" invisible="1"/>
+                                                <field name="bank_locked" readonly="1"/>
+                                                <field name="bank_locked_start_date" readonly="1"/>
+                                                <field name="bank_id" readonly="1"/>
+                                                <field name="bank_account" readonly="1"/>
+                                            </group>
+                                            <group attrs="{'invisible':[('current_country_code','!=','SA')]}">
+                                                <field name="current_country_code" invisible="1"/>
+                                                <field name="identification_id" readonly="1"
+                                                       attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="id_exp_date" readonly="1"
+                                                       attrs="{'invisible':[('is_current_employee', '=', False)]}"
+                                                       context="{'english_date':True}"/>
+                                                <field name="id_exp_date_hijri" context="{'hijri_date':True}" 
+                                                       placeholder="e.g: 1417-10-20" readonly="1"
+                                                       attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="gosi_number" readonly="1"
+                                                       attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                            </group>
+                                        </group>
+                                    </page>
+
+                                    <page string="Passport Information" name="passport_information"
+                                          attrs="{'invisible':[('is_current_employee', '=', False)]}">
+                                        <group>
+                                            <group>
+                                                <field name="passport_id"  readonly="1"
+                                                       groups="hr.group_hr_user"/>
+                                                <field name="passport_exp_date"
+                                                       attrs="{'required':[('current_country_code','!=','SA')],
+                                                               'readonly': [('is_current_employee', '=', False)]}"
+                                                       context="{'english_date':True}"/>
+                                                <field name="passport_exp_date_hijri"
+                                                       attrs="{'required':[('current_country_code','!=','SA')],
+                                                               'readonly': [('is_current_employee', '=', False)]}"
+                                                       context="{'hijri_date':True}" placeholder="e.g: 1417-10-20" class="oe_inline" />
+                                            </group>
+                                        </group>
+                                    </page>
+                                    <page name="iqama_info" string="Iqama Information"
+                                          attrs="{'invisible': ['|',('current_country_code','=','SA'),('is_current_employee', '=', False)]}">
+                                        <group>
+                                            <field name="job_as_visa" readonly="1"/>
+                                            <field name="iqama_number" readonly="1"/>
+                                            <field name="iqama_exp_date"
+                                                   context="{'english_date':True}"
+                                                   attrs="{'readonly': [('is_current_employee', '!=', False),
+                                                                        ('current_country_code', '=', 'SA')]}"/>
+                                            <field name="iqama_exp_date_hijri"
+                                                   context="{'hijri_date':True}"
+                                                   placeholder="e.g: 1417-10-20" class="oe_inline"
+                                                   attrs="{'readonly': [('is_current_employee', '!=', False),
+                                                                        ('current_country_code', '=', 'SA')]}"/>
+                                        </group>
+                                    </page>
+                                    <page name="contact_info" string="Contact Information" attrs="{'invisible':[('is_current_employee', '=', False)]}">
+                                        <group>
+                                            <group>
+                                                <field name="address_home_id"
+                                                       context="{'show_address': 1}"
+                                                       required="0"
+                                                       readonly="1"
+                                                       options='{"always_reload": True, "highlight_first_line": True}'/>
+                                                <field name="address_details" readonly="1"/>
+                                                <field name="home_phone_number"
+                                                       attrs="{'readonly': [('is_current_employee', '=', False)]}"/>
+                                            </group>
+                                            <group>
+                                                <field name="personal_mobile_number" required="True" attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                                                                             'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="post_code" required="1" attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                                                             'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="zip_code" required="1" attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                                                            'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="personal_email" required="1" attrs="{'readonly': [('is_current_employee', '=', False)],
+                                                                                                  'invisible':[('is_current_employee', '=', False)]}"/>
+                                            </group>
+                                        </group>
+                                    </page>
+                                    <page name="birth_info" string="Birth &amp; Status Information">
+                                        <group>
+                                            <group string="Status">
+                                                <field name="gender" readonly="1"/>
+                                                <field name="religion" readonly="1" attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="blood_type" attrs="{'readonly': [('is_current_employee', '=', False)]}"/>
+                                                <field name="emp_experience" readonly="1" attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                                <field name="marital" readonly="1" attrs="{'invisible':[('is_current_employee', '=', False)]}"/>
+                                            </group>
+                                            <group string="Birth" attrs="{'invisible':[('is_current_employee', '=', False)]}">
+                                                <field name="birthday_hijri" context="{'hijri_date':True}"
+                                                       placeholder="e.g: 1417-10-20" class="oe_inline"
+                                                       readonly="1"/>
+                                                <field name="birthday" context="{'english_date':True}"
+                                                       readonly="1"/>
+                                            </group>
+                                        </group>
+                                    </page>
+                                </notebook>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+        </field>
+    </record>
+
+    <record id="tamkeen_view_employee_list" model="ir.actions.act_window.view">
+            <field name="name">Employees</field>
+            <field name="sequence" eval="2"/>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr.view_employee_tree"/>
+            <field name="act_window_id" ref="emp_self_services.open_view_employee_only"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+    </record>
+
+    <record id="tamkeen_open_view_employee_list" model="ir.actions.act_window.view">
+            <field name="name">Employees</field>
+            <field name="sequence" eval="3"/>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="tamkeen_view_employee_form"/>
+            <field name="act_window_id" ref="emp_self_services.open_view_employee_only"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+    </record>
+
+    <!-- Add My Colleagues menu under Colleagues -->
+    <menuitem id="employee_colleagues" name="Colleagues"
+              parent="emp_self_services.sub_mian_empinfo_menu"
+              sequence="3000"/>
+
+    <record id="tamkeen_open_form_view_my_colleagues" model="ir.actions.act_window.view">
+            <field name="name">My Colleagues</field>
+            <field name="sequence" eval="3"/>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="tamkeen_view_employee_form"/>
+            <field name="act_window_id" ref="emp_self_services.open_view_employee_colleagues"/>
+    </record>
+
+    <record id="tamkeen_view_employee_my_colleagues_list" model="ir.actions.act_window.view">
+            <field name="name">My Colleagues</field>
+            <field name="sequence" eval="2"/>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr.view_employee_tree"/>
+            <field name="act_window_id" ref="emp_self_services.open_view_employee_colleagues"/>
+    </record>
+
+    <menuitem id="emp_my_colleagues" name="My Colleagues"
+              parent="employee_colleagues"
+              action="emp_self_services.open_view_employee_colleagues" 
+              sequence="1"/>
+
+</odoo>

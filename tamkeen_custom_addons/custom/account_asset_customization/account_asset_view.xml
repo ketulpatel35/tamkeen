@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="account_asset_form_inherit7" model="ir.ui.view">
+            <field name="name">account.asset.asset.form.inherit</field>
+            <field name="model">account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='validate']" position="after">
+                    <button name="send_to_close" states="open" string="Send to Close" type="object" class="oe_highlight"/>
+                </xpath>
+
+                <xpath expr="//button[@name='set_to_close']" position="replace">
+                    <button name="set_to_close" states="to_close" string="Set to Close" type="object" class="oe_highlight"/>
+                </xpath>
+
+                <xpath expr="//button[@name='set_to_draft']" position="replace">
+                    <button name="set_to_draft" states="to_close" string="Set to Draft" type="object" />
+                </xpath>
+
+                <xpath expr="//field[@name='depreciation_line_ids']"
+                       position="after">
+                    <group class="oe_subtotal_s oe_right">
+                        <field name="total_depreciation_value" class="oe_subtotal_footer_separator" widget="monetary"/>
+                    </group>
+                </xpath>
+                
+                <xpath
+                        expr="//field[@name='depreciation_line_ids']/form"
+                        position="replace">
+                    <form string="Depreciation Lines">
+                        <group>
+                            <group>
+                                <field name="parent_state" invisible="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="sequence" readonly="1"/>
+                                <field name="move_id" readonly="1"/>
+                                <field name="move_check" readonly="1"/>
+                                <field name="parent_state" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="amount" widget="monetary"/>
+                                <field name="depreciation_date"/>
+                                <field name="depreciated_value" readonly="1"/>
+                                <field name="remaining_value" readonly="1"/>
+                            </group>
+                        </group>
+                    </form>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

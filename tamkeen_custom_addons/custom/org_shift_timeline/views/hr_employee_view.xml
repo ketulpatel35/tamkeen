@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Shift Timeline -->
+    <record id="view_employee_form_for_timeline" model="ir.ui.view">
+        <field name="name">hr.employee.for.timeline</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" icon="fa-file-o"
+                        name="button_shift_timeline" type="object"
+                        string="Shift Timeline">
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

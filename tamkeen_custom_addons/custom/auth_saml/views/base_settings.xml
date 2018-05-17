@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Inherit from the configuration form to add a setting. -->
+
+    <record id="auth_saml_base_settings_form" model="ir.ui.view">
+        <field name="name">auth_saml_base_settings_form</field>
+        <field name="model">base.config.settings</field>
+        <field name="inherit_id" ref="base_setup.view_general_configuration"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='module_auth_oauth']" position="after">
+                <!--<group>-->
+                    <!--<field name="allow_saml_uid_and_internal_password" class="oe_inline"/>-->
+                <!--</group>-->
+                <div>
+                <field name="allow_saml_uid_and_internal_password" class="oe_inline"/>
+                <label for="allow_saml_uid_and_internal_password"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

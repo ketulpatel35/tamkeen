@@ -1,0 +1,2 @@
+id,name,model_id/id,group_id/id,perm_create,perm_read,perm_write,perm_unlink
+access_move_line_log_all,access_move_line_log_all,journal_entry_log.model_account_move_log,,1,1,1,1

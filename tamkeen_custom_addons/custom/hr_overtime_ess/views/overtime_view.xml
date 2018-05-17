@@ -1,0 +1,121 @@
+<odoo>
+
+    <record id="open_overtime_pre_ess_requests" model="ir.actions.act_window">
+        <field name="name">Overtime Pre Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">overtime.pre.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to create a new Pre-Request.
+          </p><p>
+            Press create button to apply for any overtime request, The system
+            will take care from the approval.
+          </p>
+        </field>
+    </record>
+
+    <record id="overtime_pre_request_search_view_inherit_for_ess"
+            model="ir.ui.view">
+        <field name="name">overtime.pre.request.search.view.inherit.for.ess</field>
+        <field name="model">overtime.pre.request</field>
+        <field name="inherit_id"
+               ref="hr_overtime.overtime_pre_request_search_view"/>
+        <field name="arch" type="xml">
+            <filter name='pending_budget_approval' position="after">
+                <filter string="Pending Approval" name="pending_approval"
+                        domain="['|','&amp;',('employee_id.overtime_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.overtime_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.overtime_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')
+        ]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="open_overtime_mngr_pre_request_approval"
+                model="ir.actions.act_window">
+        <field name="name">Overtime Pre-Request To Approve</field>
+        <field name="res_model">overtime.pre.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_approval':1, 'readonly_by_pass': True}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.overtime_manager_id.user_id.id','=',uid),'|',('employee_id.overtime_vp_id.user_id.id','=',uid),('employee_id.overtime_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+    <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+    <record id="open_overtime_request_ess_requests"
+            model="ir.actions.act_window">
+        <field name="name">Overtime Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">overtime.statement.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="filter" eval="True"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to create a new request.
+          </p><p>
+            Press create button to apply for any overtime request, The system
+            will take care from the approval.
+          </p>
+        </field>
+    </record>
+
+    <record id="overtime_request_search_view_inherit_for_ess"
+            model="ir.ui.view">
+        <field name="name">overtime.request.search.view.inherit.for.ess</field>
+        <field name="model">overtime.pre.request</field>
+        <field name="inherit_id"
+               ref="hr_overtime.overtime_request_search_view"/>
+        <field name="arch" type="xml">
+            <filter name='pending_budget_approval' position="after">
+                <filter string="Pending Approval" name="pending_approval"
+                        domain="['|','&amp;',('employee_id.overtime_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.overtime_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.overtime_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')
+        ]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="open_overtime_mngr_request_approval"
+                model="ir.actions.act_window">
+        <field name="name">Overtime Request To Approve</field>
+        <field name="res_model">overtime.pre.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending_approval':1, 'readonly_by_pass': True}
+        </field>
+        <field name="domain">
+            ['|',('employee_id.overtime_manager_id.user_id.id','=',uid),'|',('employee_id.overtime_vp_id.user_id.id','=',uid),('employee_id.overtime_ceo_id.user_id.id','=',uid)
+            ]
+        </field>
+    <field name="filter" eval="True"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                For approval only.
+            </p>
+            <p>
+                For approval only.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

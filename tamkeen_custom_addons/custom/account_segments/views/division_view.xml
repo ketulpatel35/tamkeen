@@ -1,0 +1,43 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+    <!--<data>-->
+        <!--<record id="division_form_view" model="ir.ui.view">-->
+            <!--<field name="name">division.form</field>-->
+            <!--<field name="model">bs.division</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<sheet>-->
+                        <!--<group col="4" colspan="2">-->
+                            <!--<field name="code"/>-->
+                            <!--<field name="name"/>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<field name="note"/>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="division_tree_view" model="ir.ui.view">-->
+            <!--<field name="name">division.tree</field>-->
+            <!--<field name="model">bs.division</field>-->
+            <!--<field name="arch" type="xml">-->
+              <!--<tree>-->
+                  <!--<field name="code"/>-->
+                  <!--<field name="name"/>-->
+              <!--</tree>-->
+          <!--</field>-->
+        <!--</record>-->
+        <!--<record id="action_division" model="ir.actions.act_window">-->
+            <!--<field name="name">Division</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">bs.division</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="view_id" ref="division_tree_view"/>-->
+        <!--</record>-->
+
+        <!--<menuitem id="menu_division" action="action_division" name="Division" parent="account.menu_finance_configuration"/>-->
+    <!--</data>-->
+<!--</odoo>-->

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Sequences for employee ID -->
+    <record id="vendor_registration_sequence" model="ir.sequence">
+        <field name="name">Vendor Registration Sequence</field>
+        <field name="code">vendor.registration</field>
+        <field name="prefix">VEN</field>
+        <field name="padding">4</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+          <record id="seq_acc_voucher_custom" model="ir.sequence">
+            <field name="name">Request Number</field>
+            <field name="code">service.request</field>
+            <field name="prefix">SR</field>
+            <field name="padding">7</field>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</openerp>

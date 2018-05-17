@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- vendor.activities.categories form view -->
+        <record id="vendor_activities_categories_form_view" model="ir.ui.view">
+            <field name="name">vendor.activities.categories.form.view</field>
+            <field name="model">vendor.activities.categories</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Activities Categories">
+                    <sheet>
+                        <group col="4" colspan="1">
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>
+                            <field name="sequence"/>
+                            <field name="view_type"/>
+                        </group>
+                        <group string="Activities">
+                            <field name="activities_ids" nolabel="1"/>
+                        </group>
+                        <group string="Description">
+                            <field name="note" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- vendor.activities.categories tree view -->
+        <record id="vendor_activities_categories_tree_view" model="ir.ui.view">
+            <field name="name">vendor.activities.categories.tree.view</field>
+            <field name="model">vendor.activities.categories</field>
+            <field name="arch" type="xml">
+                <tree string="VendorActivitiesCategories">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- vendor.activities.categories action view -->
+        <record id="action_vendor_activities_categories"
+                model="ir.actions.act_window">
+            <field name="name">Activities Categories</field>
+            <field name="res_model">vendor.activities.categories</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- vendor.activities form view -->
+        <record id="vendor_activities_form_view" model="ir.ui.view">
+            <field name="name">vendor.activities.form.view</field>
+            <field name="model">vendor.activities</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Activities">
+                    <sheet>
+                        <group col="4" colspan="1">
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>
+                            <field name="category_id" required="1"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Description">
+                            <field name="note" nolabel="1"/>
+                        </group>
+                        <group invisible="1">
+                            <field name="view_type" invisible="1"/>
+                            <field name="vendor_reg_ids"
+                                   invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- vendor.activities tree view -->
+        <record id="vendor_activities_tree_view" model="ir.ui.view">
+            <field name="name">vendor.activities.tree.view</field>
+            <field name="model">vendor.activities</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Activities">
+                    <!--<field name="sequence"/>-->
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="category_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- vendor.activities action view -->
+        <record id="action_vendor_activities"
+                model="ir.actions.act_window">
+            <field name="name">Vendor Activities</field>
+            <field name="res_model">vendor.activities</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>

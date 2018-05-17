@@ -1,0 +1,33 @@
+<odoo>
+
+    <!-- ESS End of Service Management-->
+    <menuitem id="eos_ess_main_menu"
+              name="End of Service Management"
+              groups="org_end_of_service.group_eos_normal_user"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="46"/>
+
+    <!-- End of Service Request -->
+    <menuitem id="eos_request_ess_menu"
+              name="End of Service Request"
+              groups="org_end_of_service.group_eos_normal_user"
+              parent="eos_ess_main_menu"
+              action="action_eos_requests_ess"
+              sequence="25"/>
+
+    <!-- MSS End of Service -->
+    <menuitem id="eos_mss_approval_main_menu"
+              name="End of Service Management"
+              groups="org_end_of_service.group_eos_manager_approval,org_end_of_service.group_eos_vp_approval,org_end_of_service.group_eos_ceo_approval"
+              parent="emp_self_services.sub_mian_mss_menu"
+              sequence="1301"/>
+
+    <!-- End of Service Request to be Approve -->
+    <menuitem id="eos_request_mss_approval_menu"
+              name="End of Service Requests To Approve"
+              groups="org_end_of_service.group_eos_manager_approval,org_end_of_service.group_eos_vp_approval,org_end_of_service.group_eos_ceo_approval"
+              parent="eos_mss_approval_main_menu"
+              action="action_eos_requests_approval_mss"
+              sequence="1"/>
+
+</odoo>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hr_dashboard.dashboard">
+        <!--style which removes the control panel from dashboard-->
+        <style type="text/css">
+            .o_control_panel.o_breadcrumb_full, .oe_view_nocontent {
+                display: none;
+            }
+        </style>
+        <!--View-->
+        <div class="openerp oe_kanban_view col-xs-12 col-md-12 col-lg-12 col-sm-8">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="media">
+                        <a class="pull-left my_profile">
+                            <img class="media-object dp img-circle"
+                                 t-att-src="'data:image/png;base64,'+widget.employee_data.image"
+                                 style="width: 100px;height:100px;"/>
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading"><span t-esc="widget.employee_data.display_name"/></h4>
+                            <h5 t-if="widget.employee_data.job_id"><span t-esc="widget.employee_data.job_id[1]"/></h5>
+                            <h5><span t-esc="widget.employee_data.work_email"/></h5>
+                            <hr style="margin:8px auto"/>
+                            <t t-foreach="widget.employee_data.categories" t-as="c">
+                                <span class="label label-default"><t t-esc="c"/></span>
+                            </t>
+                            <br/>
+                            <span><small>Last login:<span t-esc="widget.employee_data.last_login"/></small></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Dashboard buttons-->
+                <div class="col-md-8" style="padding-top: 16px">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6">
+                                <a href="javascript:;" class="dashboard-block employee_team_members">
+                                    <div class="rotate">
+                                        <i class="fa fa-users"/>
+                                    </div>
+                                    <div class="details">
+                                        <span class="title">Team Members</span>
+                                        <span class="sub">
+                                            <t t-esc="widget.employee_data.employee_team_members"/>
+                                        </span>
+                                    </div><!--/details-->
+                                    <i class="fa fa-chevron-right fa-2x more"></i>
+                                </a><!--/dashboard-block1-->
+                            </div>
+                            <div class="col-md-3 col-sm-6"
+                                 id="employee_contract">
+                                <a href="javascript:;" class="dashboard-block contract">
+                                    <div class="rotate">
+                                        <i class="fa fa-fw fa-book"></i>
+                                    </div>
+                                    <div class="details">
+                                        <span class="title">
+                                            Compensation Profile</span>
+                                        <span class="sub">
+                                            <t t-esc="widget.employee_data.emp_team_contracts_count"/>
+                                        </span>
+                                    </div><!--/details-->
+                                    <i class="fa fa-chevron-right fa-2x more"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--dashboard boxes-->
+            <div class="col-md-15 main-dashboard">
+            </div>
+
+            <!-- #################### Use Letter ##################### -->
+            <!--Charts-->
+            <!--<canvas id="myChart" width="1000px" height="900px"/>-->
+            <!--label for charts-->
+            <!--<div class="main-content">-->
+            <!--<div class="container-fluid">-->
+            <!--<div class="row">-->
+            <!--<div class="col-md-7">-->
+            <!--<div class="panel">-->
+            <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title">Payroll</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--<canvas id="myChart" width="1000px" height="900px"/>-->
+            <!--<button id="generate_payroll_pdf" class="btn btn-default"-->
+            <!--data-placement="bottom" title="Download Pdf!">-->
+            <!--<i class="fa fa-2x fa-file-pdf-o"/> Download-->
+            <!--</button>-->
+
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="col-md-7">-->
+            <!--<div class="panel">-->
+            <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title">Total Worked Hours</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--<canvas id="attendanceChart" width="1000px" height="900px"/>-->
+            <!--<button id="generate_attendance_pdf" class="btn btn-default"-->
+            <!--data-placement="bottom" title="Download Pdf">-->
+            <!--<i class="fa fa-2x fa-file-pdf-o"/> Download-->
+            <!--</button>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="col-md-10">-->
+            <!--<h4>Employee Details</h4>-->
+            <!--<table id="emp_details" class="display nowrap" cellspacing="0" width="100%">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th>Employee</th>-->
+            <!--<th>Badge Id</th>-->
+            <!--<th>Job</th>-->
+            <!--<th>Department</th>-->
+            <!--<th>Work Phone</th>-->
+            <!--<th>Work Email</th>-->
+            <!--<th>Work Location</th>-->
+            <!--<th>Gender</th>-->
+            <!--<th>Birthday</th>-->
+            <!--<th>Marital Status</th>-->
+            <!--<th>Passport ID</th>-->
+            <!--<th>Medic Exam</th>-->
+            <!--<th>Public Info</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr t-foreach="widget.employee_data.emp_table" t-as="e">-->
+            <!--<td><span t-esc="e['employee']"/></td>-->
+            <!--<td><span t-esc="e['badge_id']"/></td>-->
+            <!--<td><span t-esc="e['job']"/></td>-->
+            <!--<td><span t-esc="e['department']"/></td>-->
+            <!--<td><span t-esc="e['work_phone']"/></td>-->
+            <!--<td><span t-esc="e['work_email']"/></td>-->
+            <!--<td><span t-esc="e['work_location']"/></td>-->
+            <!--<td><span t-esc="e['gender']"/></td>-->
+            <!--<td><span t-esc="e['birthday']"/></td>-->
+            <!--<td><span t-esc="e['marital']"/></td>-->
+            <!--<td><span t-esc="e['passport_id']"/></td>-->
+            <!--<td><span t-esc="e['medic_exam']"/></td>-->
+            <!--<td><span t-esc="e['public_info']"/></td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--</table>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+    </t>
+</templates>

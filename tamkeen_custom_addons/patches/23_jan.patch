@@ -1,0 +1,371 @@
+diff --git a/custom/employee_leave_summary/models/employee_leave_summary.py b/custom/employee_leave_summary/models/employee_leave_summary.py
+index 35884fd..f9cdafc 100644
+--- a/custom/employee_leave_summary/models/employee_leave_summary.py
++++ b/custom/employee_leave_summary/models/employee_leave_summary.py
+@@ -20,6 +20,65 @@ from odoo import models, fields, api
+ class EmployeeLeaveSummary(models.Model):
+     _name = 'employee.leave.summary'
+ 
++    @api.multi
++    def _get_allocate_leave(self):
++        for rec in self:
++            holidays_rec = self.env['hr.holidays'].search([('employee_id', '=', rec.employee_id.id),
++                                            ('holiday_status_id', '=', rec.holiday_status_id.id),
++                                            ('state', '=', 'validate'),
++                                            ('type', '=', 'add'),
++                                            ])
++            for holidays in holidays_rec:
++                if holidays.number_of_days_temp:
++                    rec.allocate_leave += holidays.number_of_days_temp
++
++    @api.multi
++    def _get_approved_leave(self):
++        for rec in self:
++            holidays_rec = self.env['hr.holidays'].search([('employee_id', '=', rec.employee_id.id),
++                                                           ('holiday_status_id', '=', rec.holiday_status_id.id),
++                                                           ('state', '=', 'validate'),
++                                                           ('type', '=', 'remove'),
++                                                           ])
++            availed_leave = self.env['work.resumption'].search(
++                [('holiday_status_id', '=', rec.holiday_status_id.id), ('employee_id', '=', rec.employee_id.id), ('state', '=', 'validate')])
++            for availed in availed_leave:
++                if availed.actual_number_of_leave_days:
++                    rec.availed_leave += availed.actual_number_of_leave_days
++            for holidays in holidays_rec:
++                if holidays.number_of_days_temp:
++                    rec.approved_leave += holidays.number_of_days_temp
++            rec.approved_leave = rec.approved_leave - rec.availed_leave
++
++    @api.multi
++    def _get_applied_leave(self):
++        for rec in self:
++            holidays_rec = self.env['hr.holidays'].search([('employee_id', '=', rec.employee_id.id),
++                                                           ('holiday_status_id', '=', rec.holiday_status_id.id),
++                                                           ('state', 'not in', ('validate', 'draft', 'cancel')),
++                                                           ('type', '=', 'remove'),
++                                                           ])
++            for holidays in holidays_rec:
++                if holidays.number_of_days_temp:
++                    rec.applied_leave += holidays.number_of_days_temp
++
++    @api.multi
++    def _get_balance_allocate(self):
++        for rec in self:
++            rec.opening_balance = 10.00
++            rec.balance_allocate += (rec.opening_balance + rec.allocate_leave) - (rec.approved_leave + rec.availed_leave)
++
++    @api.multi
++    def _get_yearly_balance(self):
++        for rec in self:
++            rec.yearly_balance += (rec.opening_balance + rec.yearly_allocate_leave)-  (rec.approved_leave + rec.availed_leave)
++
++    # @api.multi
++    # def _get_availed_leave(self):
++    #     for rec in self:
++    #         availed_leave = self.env['work.resumption'].search([('holiday_status_id', '=', rec.holiday_status_id.id), ('employee_id', '=', rec.employee_id.id)])
++    #         rec.availed_leave += availed_leave.actual_number_of_leave_days
++
+     employee_id = fields.Many2one('hr.employee', string='Employee')
+     holiday_status_id = fields.Many2one('hr.holidays.status',
+                                         string='Leave Type')
+@@ -27,13 +86,15 @@ class EmployeeLeaveSummary(models.Model):
+                                   related='employee_id.contract_id',
+                                   string='Current Contract',
+                                   help='Latest contract of the employee')
+-    opening_balance = fields.Float(string='Opening Balance')
++    opening_balance = fields.Float(compute='_get_balance_allocate', string='Opening Balance')
+     yearly_allocate_leave = fields.Float(string='Yearly Allocate')
+-    allocate_leave = fields.Float(string='Allocated Leave')
+-    approved_leave = fields.Float(string='Approved Leave')
+-    availed_leave = fields.Float(string='Availed Leave')
+-    balance_allocate = fields.Float(string='Balance Allocate')
+-    yearly_balance = fields.Float(strig='Yearly Balance')
++    allocate_leave = fields.Float(compute='_get_allocate_leave', string='Allocated Leave')
++    approved_leave = fields.Float(compute='_get_approved_leave', string='Approved Leave')
++    availed_leave = fields.Float(compute='_get_approved_leave', string='Availed Leave')
++    balance_allocate = fields.Float(compute='_get_balance_allocate', string='Balance Allocate')
++    yearly_balance = fields.Float(compute='_get_yearly_balance', strig='Yearly Balance')
++    applied_leave = fields.Float(compute='_get_applied_leave', string='Applied Leave')
++
+ 
+     @api.model
+     def _cron_employee_leave_summary(self):
+@@ -44,10 +105,10 @@ class EmployeeLeaveSummary(models.Model):
+         employee_lst = list(set(employee_lst))
+         employee_rec = self.env['hr.employee']\
+             .search([('id', 'not in', employee_lst)])
+-        holiday_status_rec = self.env['hr.holidays.status'].search([])
+         for employee in employee_rec:
+-            if employee.contract_id:
+-                for holiday in holiday_status_rec:
++            if employee.contract_id and employee.contract_id.grade_level:
++                for holiday in \
++                        employee.contract_id.grade_level.holidays_status_ids:
+                     self.create({'employee_id': employee.id,
+                                  'contract_id': employee.contract_id.id,
+                                  'holiday_status_id': holiday.id})
+diff --git a/custom/employee_leave_summary/models/hr_holiday.py b/custom/employee_leave_summary/models/hr_holiday.py
+index 29e0169..f5a9fbc 100644
+--- a/custom/employee_leave_summary/models/hr_holiday.py
++++ b/custom/employee_leave_summary/models/hr_holiday.py
+@@ -19,6 +19,6 @@ class HrHolidays(models.Model):
+             'date_to': self.date_to,
+             'actual_date_from': self.date_from,
+             'hr_holiday_id': self.id,
+-
++            'holiday_status_id': self.holiday_status_id.id
+         })
+         return res
+diff --git a/custom/employee_leave_summary/models/hr_work_resumption.py b/custom/employee_leave_summary/models/hr_work_resumption.py
+index e282136..1491a4d 100755
+--- a/custom/employee_leave_summary/models/hr_work_resumption.py
++++ b/custom/employee_leave_summary/models/hr_work_resumption.py
+@@ -35,7 +35,7 @@ class WorkResumption(models.Model):
+                 if end_date >= start_date:
+                     diff_date = end_date - start_date
+                     get_day = diff_date.days
+-            rec.number_of_leave_days = get_day
++            rec.number_of_leave_days = get_day + 1
+ 
+     @api.depends('actual_date_from', 'actual_date_to')
+     def get_actual_number_of_leave_days(self):
+@@ -49,10 +49,12 @@ class WorkResumption(models.Model):
+                                                '%Y-%m-%d').date()
+                 end_date = datetime.strptime(rec.actual_date_to,
+                                              '%Y-%m-%d').date()
++                print 'AAAAAAAAAAAa', start_date, end_date
+                 if end_date >= start_date:
+                     diff_date = end_date - start_date
+                     get_day = diff_date.days
+-            rec.actual_number_of_leave_days = get_day
++                    print 'GGGGGGGGGGGGGGg', get_day
++            rec.actual_number_of_leave_days = get_day + 1
+ 
+     @api.onchange('date_resumption')
+     def onchange_date_resumption(self):
+@@ -115,6 +117,7 @@ class WorkResumption(models.Model):
+     hr_holiday_id = fields.Many2one('hr.holidays', 'Leave ref')
+     is_currect_user = fields.Boolean('is Currect User',
+                                      compute='_check_currect_user')
++    holiday_status_id = fields.Many2one('hr.holidays.status', string='Leave Types')
+ 
+     @api.model
+     def create(self, vals):
+diff --git a/custom/employee_leave_summary/views/employee_leave_summary_view.xml b/custom/employee_leave_summary/views/employee_leave_summary_view.xml
+index 653133c..01882fc 100644
+--- a/custom/employee_leave_summary/views/employee_leave_summary_view.xml
++++ b/custom/employee_leave_summary/views/employee_leave_summary_view.xml
+@@ -72,6 +72,7 @@
+                     <field name="opening_balance"/>
+                     <field name="yearly_allocate_leave"/>
+                     <field name="allocate_leave"/>
++                    <field name="applied_leave"/>
+                     <field name="approved_leave"/>
+                     <field name="availed_leave"/>
+                     <field name="balance_allocate"/>
+diff --git a/custom/employee_leave_summary/views/hr_work_resumption_view.xml b/custom/employee_leave_summary/views/hr_work_resumption_view.xml
+index 3acef01..e1ad8c6 100644
+--- a/custom/employee_leave_summary/views/hr_work_resumption_view.xml
++++ b/custom/employee_leave_summary/views/hr_work_resumption_view.xml
+@@ -109,6 +109,7 @@
+                             <field name="date_resumption"
+                                    attrs="{'readonly':[('state','not in',['draft'])],
+                                    'required':[('state','in',['draft'])]}"/>
++                            <field name="holiday_status_id" invisble="1"/>
+                         </group>
+                         <field name="comment" placeholder="Comments..."/>
+                     </sheet>
+diff --git a/custom/hr_contract_grade_level/__manifest__.py b/custom/hr_contract_grade_level/__manifest__.py
+index 383b52e..2c9b208 100755
+--- a/custom/hr_contract_grade_level/__manifest__.py
++++ b/custom/hr_contract_grade_level/__manifest__.py
+@@ -17,6 +17,7 @@
+     'depends': [
+         'hr_contract',
+         'menu_sequence',
++        'hr',
+         # 'hr_contract_state'
+     ],
+     'data': [
+diff --git a/custom/hr_contract_grade_level/models/hr_contract.py b/custom/hr_contract_grade_level/models/hr_contract.py
+index 68b4057..6d603fb 100755
+--- a/custom/hr_contract_grade_level/models/hr_contract.py
++++ b/custom/hr_contract_grade_level/models/hr_contract.py
+@@ -56,3 +56,9 @@ class grade_level(models.Model):
+     name = fields.Char('Grade', help='The salary structure grade.')
+     level = fields.Integer('Level', help='The grade level.')
+     wage = fields.Float('Wage', help="Basic Salary for this grade")
++    holidays_status_ids = fields.\
++        Many2many('hr.holidays.status',
++                  'hr_holidays_status_grade_rel',
++                  'grade_id',
++                  'holiday_status_id',
++                  string='Leave Types')
+diff --git a/custom/hr_contract_grade_level/views/hr_contract_view.xml b/custom/hr_contract_grade_level/views/hr_contract_view.xml
+index da39fa0..573fb70 100755
+--- a/custom/hr_contract_grade_level/views/hr_contract_view.xml
++++ b/custom/hr_contract_grade_level/views/hr_contract_view.xml
+@@ -14,6 +14,10 @@
+                             <field name="level" required="1"/>
+                             <field name="wage" required="1"/>
+                         </group>
++                        <group>
++                            <separator string="Leave Types" colspan="4"/>
++                            <field name="holidays_status_ids" nolabel="1" colspan="4"/>
++                        </group>
+                     </sheet>
+                 </form>
+             </field>
+diff --git a/custom/hr_holidays_extension/models/hr_holidays_extend.py b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+index 092d13e..a312feb 100644
+--- a/custom/hr_holidays_extension/models/hr_holidays_extend.py
++++ b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+@@ -1217,7 +1217,7 @@ class HrHolidays(models.Model):
+                                     'Please verify also'
+                                     ' the leaves waiting'
+                                     ' for validation.'))
+-            if leave_days['remaining_leaves'] < 0 or leave_days[
++            if leave_days and leave_days[holiday.holiday_status_id.id]['remaining_leaves'] < 0 or leave_days[holiday.holiday_status_id.id][
+                     'virtual_remaining_leaves'] < 0:
+                 raise ValidationError(_('The number of'
+                                         ' remaining leaves is'
+diff --git a/custom/hr_policy_absence/hr_policy_absence.py b/custom/hr_policy_absence/hr_policy_absence.py
+index 6c36342..0743eec 100644
+--- a/custom/hr_policy_absence/hr_policy_absence.py
++++ b/custom/hr_policy_absence/hr_policy_absence.py
+@@ -71,7 +71,7 @@ class policy_line_absence(models.Model):
+     def onchange_holiday(self):
+         if self.holiday_status_id:
+             self.name = self.holiday_status_id.name
+-            # rec.code = data.code
++            self.code = self.holiday_status_id.code
+ 
+ 
+ class policy_group(models.Model):
+diff --git a/custom/hr_policy_accrual/models/hr_policy_accrual.py b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+index 09804ad..80f97a4 100644
+--- a/custom/hr_policy_accrual/models/hr_policy_accrual.py
++++ b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+@@ -87,11 +87,10 @@ class hr_policy(models.Model):
+         }
+ 
+         srvc_months, dHire = \
+-            self.env['hr.employee'].get_months_service_to_date()
++            employee.get_months_service_to_date()[employee.id]
+         srvc_months = int(srvc_months)
+         if not dToday:
+             dToday = date.today()
+-
+         if line.type != 'calendar':
+             return
+ 
+@@ -274,7 +273,7 @@ class hr_policy(models.Model):
+                 for dJob in line_jobs[line.id]:
+                     job_vals = {
+                         'name': dJob.strftime(OE_DATEFORMAT),
+-                        'exececution_time': datetime.now().strftime(
++                        'execution_time': datetime.now().strftime(
+                             OE_DATETIMEFORMAT),
+                         'policy_line_id': line.id,
+                     }
+diff --git a/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml b/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
+index c085f8e..dbc698c 100644
+--- a/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
++++ b/custom/hr_policy_accrual/views/hr_policy_accrual_view.xml
+@@ -213,7 +213,7 @@
+             <field name="arch" type="xml">
+                 <xpath expr="//group" position="inside">
+                     <group col="2" colspan="2">
+-                        <separator string="Accr Policy"/>
++                        <separator string="Accrual Policy"/>
+                         <br/>
+                         <group col="2" colspan="2">
+                             <field name="accr_policy_ids" nolabel="1"/>
+diff --git a/custom/hr_policy_ot/hr_policy_ot_view.xml b/custom/hr_policy_ot/hr_policy_ot_view.xml
+index 43cfd4b..c950d79 100644
+--- a/custom/hr_policy_ot/hr_policy_ot_view.xml
++++ b/custom/hr_policy_ot/hr_policy_ot_view.xml
+@@ -117,7 +117,7 @@
+             <field name="arch" type="xml">
+                 <xpath expr="//group" position="inside">
+                     <group col="2" colspan="2">
+-                        <separator string="Ot Policy"/>
++                        <separator string="Overtime Policy"/>
+                         <br/>
+                         <group col="2" colspan="2">
+                             <field name="ot_policy_ids" nolabel="1"/>
+diff --git a/custom/hr_wage_increment/models/wage_increment.py b/custom/hr_wage_increment/models/wage_increment.py
+index 8f8a8b4..83fba7d 100755
+--- a/custom/hr_wage_increment/models/wage_increment.py
++++ b/custom/hr_wage_increment/models/wage_increment.py
+@@ -202,7 +202,9 @@ class wage_increment(models.Model):
+                 notes = notes + '\nSuperceded (for wage adjustment) ' \
+                                 'by contract: ' + wage_inc_rec.contract_id.name
+                 vals = {'notes': notes,
+-                        'date_end': False}
++                        'date_end': False,
++                        'from_amend': 'Wage Adjustment'
++                        }
+                 # Set the new contract to the appropriate state
+                 new_contract_rec.signal_confirm_all()
+                 # Terminate the current contract (and trigger appropriate state
+@@ -357,6 +359,7 @@ class hr_contract(models.Model):
+                                             'new_c_id', 'old_c_id',
+                                             string='Wage Increment History')
+     is_active = fields.Boolean('Active', default=True)
++    from_amend = fields.Char(string='From Amendment')
+ 
+     @api.multi
+     def state_renew(self):
+diff --git a/custom/hr_wage_increment/views/hr_contract_view.xml b/custom/hr_wage_increment/views/hr_contract_view.xml
+index e2a2b38..d8ebed2 100644
+--- a/custom/hr_wage_increment/views/hr_contract_view.xml
++++ b/custom/hr_wage_increment/views/hr_contract_view.xml
+@@ -15,7 +15,8 @@
+                                    readonly="1">
+                                 <tree>
+                                     <field name="employee_id"/>
+-                                    <field name="job_id"/>
++                                    <!--<field name="job_id"/>-->
++                                    <field name="from_amend"/>
+                                     <field name="trial_date_start"/>
+                                     <field name="trial_date_end"/>
+                                     <field name="date_start"/>
+diff --git a/custom/purchase_config/views/purchase_view.xml b/custom/purchase_config/views/purchase_view.xml
+index 163839d..8b19eb6 100755
+--- a/custom/purchase_config/views/purchase_view.xml
++++ b/custom/purchase_config/views/purchase_view.xml
+@@ -58,7 +58,7 @@
+                 </xpath>
+ 
+                 <xpath expr="//button[@name='button_draft']" position="attributes">
+-                    <attribute name="states">cancel,sent,confirmed</attribute>
++                    <attribute name="states">confirmed,sent,bid,approved,budget_confirmed, purchase</attribute>
+                 </xpath>
+                 <xpath expr="//button[@name='button_cancel']" position="attributes">
+                     <attribute name="states">confirmed,sent,bid,approved,budget_confirmed</attribute>
+diff --git a/custom/purchase_customization/views/purchase_view.xml b/custom/purchase_customization/views/purchase_view.xml
+index 80fa0d1..02932fb 100755
+--- a/custom/purchase_customization/views/purchase_view.xml
++++ b/custom/purchase_customization/views/purchase_view.xml
+@@ -19,13 +19,13 @@
+                        position="attributes">
+                     <attribute name="states">approved,done</attribute>
+                 </xpath>
+-                <xpath expr="//button[@name='button_draft']"
+-                       position="attributes">
+-                    <attribute name="states">
+-                        sent,bid,budget_confirmed,confirmed
+-                    </attribute>
+-                    <attribute name="string">Return</attribute>
+-                </xpath>
++                <!--<xpath expr="//button[@name='button_draft']"-->
++                       <!--position="attributes">-->
++                    <!--<attribute name="states">-->
++                        <!--approved-->
++                    <!--</attribute>-->
++                    <!--&lt;!&ndash;<attribute name="string">Return</attribute>&ndash;&gt;-->
++                <!--</xpath>-->
+                 <xpath expr="//field[@name='partner_ref']" position="after">
+                     <field name="rfp_ref_num" attrs="{'readonly': [('state','not in',('draft','sent'))]}"/>
+                     <field name="quotation_ref" attrs="{'readonly': [('state','not in',('draft','sent'))]}" />

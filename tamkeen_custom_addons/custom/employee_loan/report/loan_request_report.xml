@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="loan_request_report">
+            <t
+                    t-call="employee_loan.loan_report_header_footer_call_template_id">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <style type="text/css">
+                                    td.text-center{
+                                    align:center;
+                                    }
+                                </style>
+                                <center>
+                                    <!--<span t-if="not o.state in ('validate','leave_approved')">-->
+                                    <!--Draft-->
+                                    <!--</span>-->
+                                    <div style="font-size:20px">Loan
+                                        Request
+                                    </div>
+                                </center>
+                                <br/>
+                                <!-- Employee Info -->
+                                <table class="table table-bordered"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%">
+                                                <b>1</b>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <b>Employee Information</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%"
+                                                rowspan="4">
+
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Name</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Nationality</b>
+                                            </td>
+
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Join Date</b>
+                                            </td>
+                                            <td height="10%" colspan="3"
+                                                class="text-center">
+                                                <b>Employee ID</b>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.name"/>
+                                            </td>
+
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.country_id.name"/>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <!--need to migrate hr_employee_seniority modules-->
+                                                <span t-esc="o.employee_id.initial_employment_date"/>
+                                            </td>
+                                            <td height="10%" colspan="3"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.f_employee_no"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Department</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Job Title</b>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <b>Email Address</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <!--need to migrate hr_employee_seniority modules-->
+                                                <span t-esc="o.employee_id.department_id.name"/>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.job_id.name"/>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.work_email"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Claim Request Information -->
+                                <table class="table table-bordered"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+
+                                        <tr colspan="2">
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%">
+                                                <b>2</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center"
+                                                colspan="4">
+                                                <b>Loan Request
+                                                    Information
+                                                </b>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <b>Cost Center:</b>
+                                                <t t-if="o.account_analytic_id">
+                                                    <span
+                                                            t-esc="o.account_analytic_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <b>Status:</b>
+                                                <t t-if="o.stage_id">
+                                                    <span t-esc="o.stage_id.name"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <b>Request Number:</b>
+                                                <t t-if="o.name">
+                                                    <span t-esc="o.name"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <b t-if="o.loan_issuing_date">
+                                                    Loan Issuing Date:
+                                                </b>
+                                                <t t-if="o.loan_issuing_date">
+                                                    <span
+                                                            t-field="o.loan_issuing_date"
+                                                            t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <b>Loan Type:</b>
+                                                <t
+                                                        t-if="o.loan_approval_policy_id">
+                                                    <span
+                                                            t-esc="o.loan_approval_policy_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <b>Total Amount:</b>
+                                                <t
+                                                        t-if="o.loan_amount">
+                                                    <span
+                                                            t-esc="o.loan_amount"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <b>
+                                                    Total Paid Installment Amount:
+                                                </b>
+                                                <t t-if="o.total_paid_installment_amount">
+                                                    <span t-esc="o.total_paid_installment_amount"/>
+                                                </t>
+                                                <t t-if="not o.total_paid_installment_amount">
+                                                    0.0
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <b>Remaining Installments Total Amount:</b>
+                                                <t t-if="o.remaining_installments_total_amount">
+                                                    <span t-esc="o.remaining_installments_total_amount"/>
+                                                </t>
+                                                <t t-if="not o.remaining_installments_total_amount">
+                                                    0.0
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!--Loan Installment Information-->
+                                <t t-if="o.loan_installment_ids">
+                                    <table class="table table-bordered"
+                                           width="100%" height="100%"
+                                           style="border: 1px solid #000000;font-size:13px">
+                                        <tbody>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%">
+                                                    <b>3</b>
+                                                </td>
+                                                <td height="10%" colspan="4"
+                                                    class="text-center">
+                                                    <b>Installments
+                                                        Information
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%"></td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Due Date</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Amount</b>
+                                                </td>
+
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Status</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Remarks</b>
+                                                </td>
+
+                                            </tr>
+                                            <tr
+                                                    t-foreach="o.loan_installment_ids"
+                                                    t-as="installment">
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%"></td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="installment.due_date"/>
+                                                </td>
+
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="installment.amount"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <!--need to migrate hr_employee_seniority modules-->
+                                                    <span
+                                                            t-esc="installment.state"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="installment.remarks"/>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="loan_report_header_footer_call_template_id">
+            <t
+                    t-call="employee_loan.loan_report_template_header_template_id"/>
+            <t t-raw="0"/>
+        </template>
+
+        <template id="loan_report_template_header_template_id">
+            <div class="header">
+                <div align="right">
+                    <img class="img-responsive"
+                         src="/employee_loan/static/description/icon.png"
+                         width="200px" height="75px"/>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

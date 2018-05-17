@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_service_category_form_for_business_trip"
+            model="ir.ui.view">
+        <field name="name">view.service.category.form.for.business.trip</field>
+        <field name="model">service.category</field>
+        <field name="inherit_id" ref="service_management.view_service_category_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="before">
+                <field name="linked_with_business_trip"/>
+            </field>
+        </field>
+    </record>
+</odoo>

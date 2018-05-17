@@ -1,0 +1,3 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_leave_allocation,access.leave.allocation,model_hr_leave_allocation_batch,hr_holidays_extension.hr_leave_allocation,1,1,1,1
+

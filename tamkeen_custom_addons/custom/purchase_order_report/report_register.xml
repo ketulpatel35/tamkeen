@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Report Register -->
+        <report id="purchase_payment_status_report_reg"
+                model="purchase.order"
+                string="Purchase Order(Payments)"
+                name="purchase_order_report.purchase_payment_report_template"
+                file="purchase_order_report.purchase_payment_report_template"
+                report_type="qweb-pdf" />
+
+    </data>
+</odoo>

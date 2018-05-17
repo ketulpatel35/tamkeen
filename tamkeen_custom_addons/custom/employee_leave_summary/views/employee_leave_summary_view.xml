@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Employee Leave Summary Form View -->
+        <record id="employee_leave_summary_form_view" model="ir.ui.view">
+            <field name="name">employee.leave.summary.form.view</field>
+            <field name="model">employee.leave.summary</field>
+            <field name="priority">30</field>
+            <field name="arch" type="xml">
+                <form string="Employee Leaves Summary">
+                    <sheet string="Employee Leaves Summary">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_leave_request"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o">
+                                <field name="leaves_count"
+                                       widget="statinfo"
+                                       string="Leave/s"/>
+                            </button>
+                        </div>
+                        <group colspan="4" col="4">
+                            <field name="employee_id"/>
+                            <field name="employee_company_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="join_date"/>
+                            <field name="departure_date"/>
+                            <field name="holiday_status_id" widget="selection"/>
+                            <field name="first_request_date"
+                                   invisible="[('code', '!=', 'SICKLV')]"/>
+                            <field name="contract_id" invisible="1"/>
+                            <field name="code"/>
+                            <!--<field name="opening_balance"-->
+                                   <!--groups="hr_holidays.group_hr_holidays_user"/>-->
+
+                            <!--<field name="allocate_leave"-->
+                                   <!--groups="hr_holidays.group_hr_holidays_user"-->
+                                   <!--string="Eligible Leave"/>-->
+                            <!--&lt;!&ndash;<field name="applied_leave"/>&ndash;&gt;-->
+                            <!--<field name="availed_leave"-->
+                                   <!--groups="hr_holidays.group_hr_holidays_user"/>-->
+                            <!--<field name="yearly_balance"-->
+                                   <!--groups="hr_holidays.group_hr_holidays_user"/>-->
+                        </group>
+                        <group string="Allocated Balance" colspan="4" col="4">
+                            <field name="balance_allocate"
+                                   groups="hr_holidays.group_hr_holidays_user"/>
+                            <field name="deducted_balance"/>
+                            <!--<field name="yearly_allocate_leave"-->
+                                   <!--groups="hr_holidays.group_hr_holidays_user"/>-->
+                        </group>
+                        <group string="Requested Balance" colspan="4" col="4">
+                            <field name="approved_leave"/>
+                            <field name="locked_balance"/>
+                        </group>
+                        <group string="Remaining Balance" colspan="4" col="4">
+                            <field name="real_days"/>
+                            <field name="pro_rata_balance"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Employee Leave Summary Tree View -->
+
+        <record id="employee_leave_summary_tree_view" model="ir.ui.view">
+            <field name="name">employee.leave.summary.tree.view</field>
+            <field name="model">employee.leave.summary</field>
+            <field name="priority">30</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Leaves Summary">
+                    <field name="employee_id"/>
+                    <field name="holiday_status_id"/>
+                    <field name="contract_id"
+                           groups="hr_holidays.group_hr_holidays_user"/>
+                    <field name="opening_balance"
+                           groups="hr_holidays.group_hr_holidays_user"/>
+                    <field name="yearly_allocate_leave"
+                           groups="hr_holidays.group_hr_holidays_user"
+                           invisible="1"/>
+                    <field name="allocate_leave"
+                           groups="hr_holidays.group_hr_holidays_user"
+                           string="Eligible Leave"/>
+                    <!--<field name="applied_leave"/>-->
+                    <field name="real_days"/>
+                    <field name="locked_balance"/>
+                    <field name="approved_leave"/>
+                    <field name="availed_leave"
+                           groups="hr_holidays.group_hr_holidays_user"/>
+                    <field name="balance_allocate"
+                           groups="hr_holidays.group_hr_holidays_user"
+                           string="Allocated Balance"/>
+                    <field name="yearly_balance"
+                           groups="hr_holidays.group_hr_holidays_user"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_leave_summary_search_view" model="ir.ui.view">
+            <field name="name">employee.leave.summary.search.view</field>
+            <field name="model">employee.leave.summary</field>
+            <field name="arch" type="xml">
+                <search string="Search Leave">
+                    <field name="employee_id"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="employee_leave_summary_tree_action" model="ir.actions.act_window">
+            <field name="name">Employee Leave Summary</field>
+            <field name="res_model">employee.leave.summary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="employee_leave_summary_tree_view"/>
+            <field name="context">{'search_default_group_employee': 1}</field>
+            <field name="search_view_id" ref="employee_leave_summary_search_view"/>
+        </record>
+
+        <record id="employee_leave_summary_for_employee" model="ir.actions.act_window">
+            <field name="name">Employee Leave Summary</field>
+            <field name="res_model">employee.leave.summary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="employee_leave_summary_tree_view"/>
+            <field name="domain">
+                [('employee_id.user_id','=',uid)]
+            </field>
+            <field name="context">{
+                'search_default_group_employee': 1,
+                }</field>
+            <field name="search_view_id" ref="employee_leave_summary_search_view"/>
+        </record>
+
+        <menuitem
+                id="menu_employee_leave_summary_id"
+                name="Employee Leaves Summary"
+                parent="hr_holidays.menu_hr_holidays_report"
+                action="employee_leave_summary_tree_action"
+                groups="hr_holidays.group_hr_holidays_user"
+                sequence="35"/>
+
+        <menuitem
+                id="menu_employee_leave_summary_for_ess"
+                name="Employee Leaves Summary"
+                parent="emp_self_services.emp_leave_main_menu"
+                groups="hr_holidays_extension.group_leave_manage_normal_user"
+                action="employee_leave_summary.employee_leave_summary_for_employee"
+                sequence="22"/>
+
+    </data>
+</odoo>

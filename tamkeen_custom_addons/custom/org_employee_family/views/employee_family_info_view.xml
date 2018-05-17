@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Employee Family Information Tree View-->
+    <record id="employee_family_info_tree_view" model="ir.ui.view">
+        <field name="name">employee.family.info.tree.view</field>
+        <field name="model">employee.family.info</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Family Info">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="name"/>
+                <field name="arabic_name"/>
+                <field name="id_iqama"/>
+                <field name="passport_no"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Employee Family Information Search view -->
+    <record id="employee_family_info_search_view" model="ir.ui.view">
+        <field name="name">employee.family.info.search.view</field>
+        <field name="model">employee.family.info</field>
+        <field name="arch" type="xml">
+            <search string="Employee Family Info">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="name"/>
+                <field name="arabic_name"/>
+                <field name="id_iqama"/>
+                <field name="passport_no"/>
+                <filter string="Inside KSA"
+                        name="inside_ksa" domain="[('inside_ksa','=',True)]"/>
+                <filter string="Insurance Covered"
+                        name="insurance_covered"
+                        domain="[('insurance_covered','=',True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="employee" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <separator/>
+                    <filter name="groupby_relative"
+                            string="Relative Relationship"
+                            context="{'group_by':'relationship'}"/>
+                    <separator/>
+                    <filter name="groupby_nationality" string="Nationality"
+                            context="{'group_by': 'country_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Employee Family Information Form view -->
+    <record id="employee_family_info_form_view" model="ir.ui.view">
+        <field name="name">employee.family.info.form.view</field>
+        <field name="model">employee.family.info</field>
+        <field name="arch" type="xml">
+            <form string="Employee Family Info">
+                <sheet string="Employee Family Info">
+                    <group>
+                        <group>
+                            <field name="employee_id" required="1" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="name" required="1"/>
+                            <!--<field name="job_name"/>-->
+                        </group>
+                        <group>
+                            <field name="employee_company_id" readonly="1"/>
+                            <field name="arabic_name"/>
+                        </group>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="emergency_contact"/>
+                        <field name="mobile_number"
+                               attrs="{'required': [('emergency_contact', '=', True)]}"/>
+                        <field name="relationship"/>
+                        <field name="gender"/>
+                        <field name="marital_status"/>
+                        <field name="birth_date"/>
+                        <field name="age"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="country_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="id_type"/>
+                        <field name="id_iqama"/>
+                        <field name="passport_no"/>
+                        <field name="passport_expiry_date"/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="inside_ksa"/>
+                        <field name="insurance_covered"/>
+                    </group>
+                    <group string="Remarks" name="remark">
+                        <field name="remarks" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Employee Family Information -->
+    <record id="action_family_info_view"
+            model="ir.actions.act_window">
+        <field name="name">Employee Dependants</field>
+        <field name="res_model">employee.family.info</field>
+        <field name="context">{'search_default_employee': 1}</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Employee Family Information ESS-->
+    <record id="action_family_info_view_ess"
+            model="ir.actions.act_window">
+        <field name="name">Dependants</field>
+        <field name="res_model">employee.family.info</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

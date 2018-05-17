@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vendor_reset_form_view" model="ir.ui.view">
+            <field name="name">vendor.registration.reset.form.view</field>
+            <field name="model">vendor.registration.reset</field>
+            <field name="arch" type="xml">
+                <form string="Reset Reason">
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="reset_date" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="reset_request" string="Reset to draft "
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- LEave Kanban view -->
+        <record model="ir.ui.view" id="hr_employee_leave_kanban_view">
+            <field name="name">hr.holidays.kanban</field>
+            <field name="model">hr.holidays</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey" quick_create="false" create="true" edit="false">
+                    <field name="name"/>
+                    <field name="holiday_status_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="state"/>
+                    <field name="emp_id"/>
+                    <field name="real_days"/>
+                    <field name="employee_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_project oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <h4 class="text-center">
+                                        <a type="open">
+                                            <span
+                                                    t-if="record.holiday_status_id.value">
+                                                Leave Type:
+                                                <field name="holiday_status_id"/>
+                                            </span>
+                                        </a>
+                                    </h4>
+                                    <div class="oe_kanban_partner_categories"/>
+                                    <div class="oe_kanban_partner_links"/>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            Employee Name:
+                                            <field name="employee_id"/>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Start Date:
+                                            <t t-esc="record.date_from.value.split(' ')[0]"/>
+                                            <br/>
+                                            <span  t-if="record.real_days.raw_value">
+                                                Days of Leave: [
+                                                <t
+                                                        t-esc="record.real_days.value.split('.')[0]"/> ]
+                                            </span>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            End Date:
+                                            <t
+                                                    t-esc="record.date_to.value.split(' ')[0]"/>
+                                            <br/>
+                                            <span
+                                                    t-if="record.state.raw_value">
+                                                Status:
+                                                <field name="state"/>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Employee Leaves -->
+        <record id="view_mngr_all_emp_leaves_filter" model="ir.ui.view">
+            <field name="name">Manager Approval Filter</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter" />
+            <field name="arch" type="xml">
+                <!--<filter name="approve" position="before">-->
+                <!--<filter string="Pending Approvals" name="mngr_leaves_to_approve" domain="['&amp;',('type','=','remove'),'&amp;',('employee_id.parent_id.user_id.id','=',uid),('state','=','confirm')]"/>-->
+                <!--</filter>-->
+                <filter name="approve" position="before">
+                    <filter string="Pending Approval" name="leave_pending_approval"
+                            domain="['|','&amp;',('employee_id.leave_manager_id.user_id.id','=',uid),('state','=','confirm'),'|','&amp;',('employee_id.leave_vp_id.user_id.id','=',uid),('state','=','vp'),'&amp;',('employee_id.leave_ceo_id.user_id.id','=',uid),('state','=','ceo')]"/>
+                    <!-- Manager Approval -->
+                    <filter string="Manager Approval" name="manager_approval"
+                            domain="[('employee_id.leave_manager_id.user_id.id','=',uid),('state','=','confirm')]"/>
+                    <!-- VP Approval -->
+                    <filter string="VP Approval" name="vp_pending_approval"
+                            domain="[('employee_id.leave_vp_id.user_id.id','=',uid),('state','=','vp')]"/>
+                    <!-- CEO Approval -->
+                    <filter string="CEO Approval" name="ceo_pending_approval"
+                            domain="[('employee_id.leave_ceo_id.user_id.id','=',uid),('state','=','ceo')]"/>
+                </filter>
+            </field>
+        </record>
+        <!-- hr_holidays.request_approve_holidays -->
+        <record model="ir.actions.act_window" id="open_ess_ask_holidays">
+            <field name="name">Leave Request</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <!-- <field name="view_id" ref="hr_holidays.edit_holiday_new"/> -->
+            <field name="context">{'default_type': 'remove',
+                'search_default_group_type': 1, 'readonly_by_pass': True}</field>
+            <field name="domain">
+                [('type','=','remove'),('employee_id.user_id','=',uid)]
+            </field>
+            <field name="search_view_id" ref="hr_holidays.view_hr_holidays_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new leave request.
+                </p><p>
+                Once you have recorded your leave request, it will be sent
+                to a manager for validation. Be sure to set the right leave
+                type (recuperation, legal holidays, sickness) and the exact
+                number of open days related to your leave.
+            </p>
+            </field>
+        </record>
+
+
+        <record id="request_emp_mngr_approve_holidays" model="ir.actions.act_window">
+            <field name="name">Requests To Approve</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="view_type">form</field>
+            <field name="domain">
+                [('type','=','remove'),('state','in',['ceo', 'vp',
+                'confirm']),'|',('employee_id.leave_manager_id.user_id.id','=',uid),'|',('employee_id.leave_vp_id.user_id.id','=',uid),('employee_id.leave_ceo_id.user_id.id','=',uid)]
+            </field>
+            <field name="context">{'default_type': 'remove',
+                'search_default_leave_pending_approval':1, 'readonly_by_pass': True}</field>
+            <field name="search_view_id" ref="hr_holidays.view_hr_holidays_filter"/>
+        </record>
+
+        <record id="request_emp_mngr_holidays_calendar_view"
+                model="ir.actions.act_window">
+            <field name="name">Leaves Calendar</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="domain">[('type','=','remove')]</field>
+            <field name="context">{'default_type': 'remove'}</field>
+            <field name="search_view_id" ref="hr_holidays.view_hr_holidays_filter"/>
+        </record>
+
+        <menuitem id="emp_leave_main_menu" name="Leaves"
+                  parent="emp_self_services.sub_mian_ess_menu" sequence="20" />
+
+        <menuitem
+                id="menu_employee_leave_summary_for_ess"
+                name="Employee Leave Balance"
+                parent="emp_leave_main_menu"
+                groups="hr_holidays_extension.group_leave_manage_normal_user"
+                action="hr_holidays_extension.employee_leave_summary_for_employee"
+                sequence="22"/>
+
+        <menuitem id="emp_leave" name="Leaves" parent="emp_leave_main_menu"
+                  action="open_ess_ask_holidays" sequence="21" />
+
+        <menuitem id="leave_management_ess_manager"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  name="Leave Management" sequence="3"/>
+        <menuitem id="emp_leaves_mngr_approval"
+                  name="Leave Requests To Approve"
+                  parent="leave_management_ess_manager"
+                  action="request_emp_mngr_approve_holidays" sequence="32" />
+        <menuitem id="emp_leaves_mngr_calendar" parent="leave_management_ess_manager"
+                  action="request_emp_mngr_holidays_calendar_view"
+                  sequence="32" />
+
+    </data>
+</odoo>

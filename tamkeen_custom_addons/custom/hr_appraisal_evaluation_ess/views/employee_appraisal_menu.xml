@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+
+
+        <!--Employee create own Appriasal -->
+        <!--<menuitem name="Employee Appraisal"-->
+        <!--id="employee_appraisal_mian_ess_menu"-->
+        <!--parent="emp_self_services.sub_mian_ess_menu"-->
+        <!--groups="base.group_user"/>-->
+        <menuitem id="performance_management_ess_employee"
+                  parent="emp_self_services.sub_mian_ess_menu"
+                  name="Performance Management" sequence="3"/>
+        <menuitem name="Performance Management" id="1employee_appraisal_ess"
+                  parent="performance_management_ess_employee"
+                  action="employee_appraisal_action_ess"/>
+        <menuitem id="performance_management_ess_manager"
+                  parent="emp_self_services.sub_mian_mss_menu"
+                  name="Performance Management" sequence="3"/>
+        <menuitem name="Employee Performance To Approve"
+                  id="manager_employee_appraisal_ess"
+                  parent="performance_management_ess_manager"
+                  action="manager_appraisal_action_ess"/>
+
+
+
+    </data>
+</odoo>

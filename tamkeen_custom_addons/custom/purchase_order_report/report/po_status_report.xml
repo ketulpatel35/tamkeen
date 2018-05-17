@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_purchase_order_status" model="report.paperformat">
+            <field name="name">European A4 Custom</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">25</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="purchase_requisition_action_template"
+                model="purchase.order"
+                string="Purchase Order Status"
+                report_type="qweb-pdf"
+                name="purchase_order_report.po_status_template"
+                file="purchase_order_report.po_status_template"
+                paperformat="purchase_order_report.paperformat_purchase_order_status"/>
+
+
+        <template id="po_status_template">
+            <t t-call="report.html_container">
+
+                <t t-call="purchase_order_report.po_status_header_footer">
+                    <div class="page">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <style>
+                                    .table tr:nth-child(even)
+                                    {
+                                    background-color: #f2f2f2
+                                    border:1px solid black;
+                                    font-size:11px;
+                                    }
+                                    .table tr, th
+                                    {
+                                    padding:3px;
+                                    }
+                                    .table tr, td
+                                    {
+                                    font-size:11px;
+                                    }
+                                </style>
+				<t t-set="no_invoice" t-value="0"/>
+                                <t t-set="amt_invoice" t-value="0"/>
+                                <t t-set="amt_not_invoice" t-value="0"/>
+                                <t t-set="amt_paid" t-value="0"/>
+                                <t t-set="amt_not_paid" t-value="0"/>
+                                <t t-set="total_amt_paid" t-value="0"/>
+                                <t t-set="total_amt_not_paid" t-value="0"/>
+                                <t t-set="total_po_amt" t-value="0"/>
+                                <t t-set="total_no_invoice" t-value="0"/>
+                                <t t-set="total_amt_inv" t-value="0"/>
+                                <t t-set="total_amt_not_inv" t-value="0"/>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color:#D4D4D4; padding-left:10px;" colspan="12">
+                                                <i>Last Update on : <span t-esc="time.strftime('%d-%m-%Y')"/></i>
+                                            </th>
+                                            <th style="background-color:#2C82C9; color:white;" colspan="2">
+                                                <center>
+                                                    <i>To be updated by AP Team</i>
+                                                </center>
+                                            </th>
+                                        </tr>
+                                        <tr style="background-color:#888888; color:white;">
+                                            <th><center>PR Number</center></th>
+                                            <th><center>Reference</center></th>
+                                            <th><center>PO Company Number</center></th>
+                                            <th width="7%"><center>Order Date</center></th>
+                                            <th><center>Supplier</center></th>
+                                            <th><center>Cost Center</center></th>
+                                            <th><center>Benificiery</center></th>
+                                            <th><center>Currency</center></th>
+                                            <th><center>Total PO Amount</center></th>
+                                            <th><center># of Invoice Received</center></th>
+                                            <th><center>Amount of Invoices</center></th>
+                                            <th><center>Not Invoiced</center></th>
+                                            <th style="background-color:#2C82C9">
+                                                <center>Total of Paid invoices</center>
+                                            </th>
+                                            <th style="background-color:#2C82C9">
+                                                <center>Total of Non Paid Invoices</center>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="docs" t-as="o">
+                                            <tr>
+                                                <td><center><t t-if="o.partner_ref">
+                                                    <span t-field="o.partner_ref"/></t>
+                                                    <t t-if="not o.partner_ref">
+                                                        <span>N/A</span></t>
+                                                    </center></td>
+                                                <td><center><t t-if="o.name"><span t-field="o.name"/></t></center></td>
+                                                <td><center><t t-if="o.po_company_number">
+                                                    <span t-field="o.po_company_number"/></t>
+                                                    <t t-if="not o.po_company_number">
+                                                        <span>N/A</span></t>
+                                                    </center></td>
+                                                <td width="7%"><center><t t-if="o.date_order">
+                                                    <span t-field="o.date_order"
+                                                          t-field-options='{"format": "dd-MMM-yyyy"}'/></t>
+                                                </center></td>
+                                                <td><center><t t-if="o.partner_id">
+                                                    <span t-field="o.partner_id.name"/></t>
+                                                    <t t-if="not o.partner_id">
+                                                        <span>N/A</span></t>
+                                                    </center></td>
+                                                <td><center><t t-if="o.cost_centre_id">
+                                                    <span t-field="o.cost_centre_id"/></t>
+                                                    <t t-if="not o.cost_centre_id">
+                                                        <span>N/A</span></t>
+                                                    </center></td>
+                                                <td><center><t t-if="o.buyer_name">
+                                                    <span t-field="o.buyer_name"/></t>
+                                                    <t t-if="not o.buyer_name">
+                                                        <span>N/A</span></t>
+                                                    </center></td>
+                                                <td><center><t t-if="o.currency_id">
+                                                    <span t-field="o.currency_id.name"/></t></center></td>
+                                                <td><center><t t-if="o.amount_total">
+                                                    <span t-field="o.amount_total"/></t>
+                                                    <t t-if="not o.amount_total">
+                                                        <span>0</span></t>
+                                                    <t t-set="total_po_amt" t-value="total_po_amt + o.amount_total"/>
+                                                </center></td>
+                                                <td><center><t t-if="o.invoice_count">
+                                                    <span t-field="o.invoice_count"/></t>
+                                                    <t t-if="not o.invoice_count">
+                                                        <span>0</span></t>
+                                                    <t t-set="total_no_invoice"
+                                                       t-value="total_no_invoice + o.invoice_count"/>
+                                                    </center></td>
+                                                <td><center>
+                                                    <t t-foreach="o.invoice_ids" t-as="invoice">
+                                                        <t t-if="invoice.state != 'draft' or invoice.state != 'cancel'">
+                                                            <t t-set="amt_invoice"
+                                                               t-value="amt_invoice + invoice.amount_total"/>
+                                                        </t>
+                                                    </t>
+                                                    <t t-esc="amt_invoice"/>
+                                                    <t t-set="total_amt_inv"
+                                                       t-value="total_amt_inv + amt_invoice"/>
+                                                </center></td>
+                                                <td>
+                                                    <center>
+                                                        <!--<t t-foreach="o.invoice_ids" t-as="invoice">-->
+                                                            <!--<t t-if="invoice.state != 'draft' or invoice.state != 'cancel'">-->
+                                                                <!--<t t-set="amt_not_invoice"-->
+                                                                   <!--t-value="amt_not_invoice +-->
+                                                                   <!--(invoice.amount_total - amt_invoice)"/>-->
+                                                        <!--</t>-->
+                                                        <t t-set="amt_not_invoice"
+                                                                   t-value="amt_not_invoice +
+                                                                   (o.amount_total - amt_invoice)"/>
+                                                        <t t-esc="amt_not_invoice"/>
+                                                        <t t-set="total_amt_not_inv"
+                                                           t-value="total_amt_not_inv + amt_not_invoice"/>
+                                                    </center>
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <t t-foreach="o.invoice_ids" t-as="invoice">
+                                                            <t t-if="invoice.state == 'paid'">
+                                                                <t t-set="amt_paid"
+                                                                   t-value="amt_paid + invoice.amount_total"/>
+                                                            </t>
+                                                        </t>
+                                                        <t t-esc="amt_paid"/>
+                                                        <t t-set="total_amt_paid"
+                                                           t-value="total_amt_paid + amt_paid"/>
+                                                    </center>
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <t t-foreach="o.invoice_ids" t-as="invoice">
+                                                            <t t-if="invoice.state == 'paid'">
+                                                                <t t-set="amt_not_paid"
+                                                                   t-value="amt_not_paid + (amt_invoice - amt_paid)"/>
+                                                            </t>
+                                                        </t>
+                                                        <t t-esc="amt_not_paid"/>
+                                                        <t t-set="total_amt_not_paid"
+                                                           t-value="total_amt_not_paid + amt_not_paid"/>
+                                                    </center>
+                                                </td>
+                                            </tr>
+					    <t t-set="no_invoice" t-value="0"/>
+                                            <t t-set="amt_invoice" t-value="0"/>
+                                            <t t-set="amt_not_invoice" t-value="0"/>
+                                            <t t-set="amt_paid" t-value="0"/>
+                                            <t t-set="amt_not_paid" t-value="0"/>
+                                        </t>
+                                        <tr style="background-color:#D4D4D4; font-size:15px;">
+                                            <th colspan="8"><center>Total</center></th>
+                                            <td><center><t t-esc="total_po_amt"/></center></td>
+                                            <td><center><t t-esc="total_no_invoice"/></center></td>
+                                            <td><center><t t-esc="total_amt_inv"/></center></td>
+                                            <td><center><t t-esc="total_amt_not_inv"/></center></td>
+                                            <td><center><t t-esc="total_amt_paid"/></center></td>
+                                            <td><center><t t-esc="total_amt_not_paid"/></center></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="po_status_header_footer">
+            <t t-call="purchase_order_report.po_status_header"/>
+            <t t-raw="0"/>
+            <t t-call="purchase_order_report.po_status_footer"/>
+        </template>
+
+        <template id="po_status_header">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3-5">
+                        <div>
+                            <img class="img-responsive"
+                                 src="/purchase_order_report/static/description/icon.png" height="75px"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-1-5">
+                        <div class="text-center">
+                            <h3><b>Purchase Order</b></h3>
+                        </div>
+                    </div>
+                    <div class="col-xs-4"/>
+                </div>
+            </div>
+        </template>
+
+        <template id="po_status_footer">
+            <div class="footer">
+                <div class="container-fluid" style="border-top:1px solid black;">
+                    <div class="row text-center">
+                        <span>Page </span><span class="page" /> of <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

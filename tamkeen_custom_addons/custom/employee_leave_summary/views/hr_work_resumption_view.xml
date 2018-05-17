@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Work Resumption Sequence -->
+        <record id="seq_work_resumption_id" model="ir.sequence">
+            <field name="name">Work Resumption</field>
+            <field name="code">work.resumption</field>
+            <field name="prefix">WR</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="hr_work_resumption_form_view" model="ir.ui.view">
+            <field name="name">hr.work.resumption.form.view</field>
+            <field name="model">work.resumption</field>
+            <field name="arch" type="xml">
+                <form string="Work Resumption" create="false">
+                    <header>
+                        <!--attrs="{'invisible':['|',('state','!=','draft'), ('is_currect_user','!=',True), ('create_uid','!=',False)]}"-->
+                        <button string="Submit for Approval"
+                                name="action_confirm"
+                                attrs="{'invisible':[('state','!=','draft')]}"
+                                type="object" class="oe_highlight"/>
+
+                        <button string="Manager Approval"
+                                name="action_manager_approve"
+                                states="confirm"
+                                type="object" class="oe_highlight"
+                                groups="hr_holidays_extension.group_leave_bu_manager_approval"/>
+
+                        <button string="VP Approval"
+                                name="action_vp_approve"
+                                states="vp" type="object"
+                                groups="hr.group_hr_manager"
+                                class="oe_highlight"/>
+
+                        <!--groups="hr_holidays_extension.senior_hr_approval_group"-->
+
+                        <button string="HR Approval"
+                                name="action_hr_approval"
+                                states="validate1"
+                                groups="hr_holidays.group_hr_holidays_user"
+                                type="object" class="oe_highlight"/>
+
+                        <button string="Senior Hr Approved"
+                                name="action_senior_hr_approval"
+                                states="validate2"
+                                groups="hr_holidays_extension.senior_hr_approval_group"
+                                type="object" class="oe_highlight"/>
+
+                        <button string="CEO Approved"
+                                name="action_ceo_approval"
+                                states="ceo"
+                                groups="hr_holidays_extension.group_leave_ceo_approval"
+                                type="object" class="oe_highlight"/>
+
+                        <button string="Reset to Draft"
+                                name="reset_to_draft"
+                                states="confirm"
+                                groups="hr_holidays_extension.group_leave_bu_manager_approval"
+                                type="object" class="oe_highlight"/>
+
+                        <button string="Reset to Draft"
+                                name="reset_to_draft"
+                                states="validate1"
+                                groups="hr_holidays.group_hr_holidays_user"
+                                type="object" class="oe_highlight"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm"
+                               statusbar_colors="{&quot;confirm&quot;:&quot;blue&quot;,&quot;validate1&quot;:&quot;blue&quot;,&quot;refuse&quot;:&quot;red&quot;}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" required="1" readonly="1"/>
+                                <field name="employee_company_id" readonly="1"/>
+                                <field name="hr_holiday_id" readonly="1"/>
+                                <field name="create_uid" invisible="1"/>
+                                <field name="is_currect_user" invisible="1"/>
+                                <!--<field name="rest_days"/>-->
+                                <!--<field name="public_days"/>-->
+                            </group>
+                            <group>
+                                <!--<field name="leave_id" required="1"-->
+                                <!--widget="selection"-->
+                                <!--attrs="{'readonly':[('state','not in',['draft'])]}"/>-->
+                                <field name="diff_days_leaves"/>
+                                <field name="skip_notification" groups="hr_holidays.group_hr_holidays_user"/>
+                                <field name="holiday_status_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Schedule">
+                                <label for="number_of_leave_days"
+                                       string="Leave Duration"/>
+                                <div>
+                                    <group col="3">
+                                        <field name="date_from" nolabel="1" class="oe_inline" readonly="1"/>
+                                        <label string="-" class="oe_inline"/>
+                                        <field name="date_to" readonly="1"
+                                               nolabel="1" class="oe_inline"/>
+                                    </group>
+                                    <div>
+                                        <field name="number_of_leave_days" class="oe_inline" readonly="1"/>
+                                        days
+                                    </div>
+                                </div>
+                            </group>
+                            <group string="Actual">
+                                <label for="actual_number_of_leave_days"
+                                       string="Leave Duration"/>
+                                <div>
+                                    <group col="3">
+                                        <field name="actual_date_from"
+                                               attrs="{'readonly':[('state','not in',['draft'])]}"
+                                               nolabel="1" class="oe_inline" readonly="1"/>
+                                        <label string="-" class="oe_inline"/>
+                                        <field name="actual_date_to"
+                                               attrs="{'readonly':[('state','not in',['draft'])]}"
+                                               nolabel="1" class="oe_inline" readonly="1"/>
+                                    </group>
+                                    <div>
+                                        <field name="actual_number_of_leave_days"
+                                               class="oe_inline" readonly="1"/>
+                                        days
+                                    </div>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="date_resumption"
+                                   attrs="{'readonly':[('state','not in',['draft'])],
+                                   'required':[('state','in',['draft'])]}"/>
+                        </group>
+                        <field name="comment" placeholder="Comments..."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_work_resumption_tree_view" model="ir.ui.view">
+            <field name="name">hr.work.resumption.tree.view</field>
+            <field name="model">work.resumption</field>
+            <field name="arch" type="xml">
+                <tree string="Work Resumption">
+                    <field name="name"/>
+                    <field name="holiday_status_id"/>
+                    <field name="employee_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Work Resumption Search View -->
+        <record id="view_work_resumption_filter" model="ir.ui.view">
+            <field name="name">Work Resumption</field>
+            <field name="model">work.resumption</field>
+            <field name="arch" type="xml">
+                <search string="Search Work Resumption">
+                    <field name="employee_id"/>
+                    <filter string="Pending Approvals" name="mngr_wr_to_approve" domain="['|', ('state','in',['validate1', 'confirm']), ('employee_id.parent_id.user_id','=',uid)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hr_work_resumption" model="ir.actions.act_window">
+            <field name="name">Work Resumption</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.resumption</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="request_emp_mngr_approve_work_resumption" model="ir.actions.act_window">
+            <field name="name">Requests To Approve</field>
+            <field name="res_model">work.resumption</field>
+            <field name="view_type">form</field>
+            <field name="domain">
+                ['|', ('state','in',['validate1', 'confirm']),('employee_id.user_id', '=', uid)]
+            </field>
+            <!--<field name="context">{'search_default_mngr_wr_to_approve':1}</field>-->
+            <field name="search_view_id" ref="view_work_resumption_filter"/>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="menu_hr_work_resumption_main"
+                  name="Work Resumption"
+                  parent="hr_holidays.menu_hr_holidays_root"
+                  groups="hr_holidays.group_hr_holidays_user"
+                  sequence="4"/>
+        <!--groups="hr_holidays.group_hr_holidays_manager,hr_holidays.group_hr_holidays_user"-->
+        <menuitem id="menu_hr_work_resumption_sub"
+                  name="Work Resumption"
+                  parent="menu_hr_work_resumption_main"
+                  sequence="4"
+                  action="action_hr_work_resumption"
+                  groups="hr_holidays.group_hr_holidays_user"
+        />
+        <!--groups="hr_holidays.group_hr_holidays_manager,hr_holidays.group_hr_holidays_user"-->
+
+        <!--<menuitem id="menu_hr_work_resumption_for_emp"-->
+                  <!--name="Work Resumption"-->
+                  <!--parent="emp_self_services.emp_leave_main_menu"-->
+                  <!--sequence="22"-->
+                  <!--groups="hr_holidays_extension.group_leave_manage_normal_user"-->
+                  <!--action="action_hr_work_resumption"-->
+        <!--/>-->
+        <!--<menuitem id="menu_hr_work_resumption_for_mng"-->
+                  <!--name="Work Resumption To Approve"-->
+                  <!--parent="emp_self_services.sub_mian_mss_menu"-->
+                  <!--sequence="33"-->
+                  <!--action="request_emp_mngr_approve_work_resumption"-->
+        <!--/>-->
+
+        <!--<record id="hr_holidays_work_resumption" model="ir.ui.view">-->
+            <!--<field name="name">hr.holidays.work.resumption</field>-->
+            <!--<field name="model">hr.holidays</field>-->
+            <!--<field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//form/sheet/div[@class='oe_title']"-->
+                       <!--position="before">-->
+                    <!--<div class="oe_button_box" name="button_box">-->
+                        <!--&lt;!&ndash;<button name="button_work_resumption" type="object"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="oe_stat_button" icon="fa-list"&ndash;&gt;-->
+                                <!--&lt;!&ndash;attrs="{'invisible': [('count_work_resumption', '=', 0)]}" invisible="1">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<field name="count_work_resumption"&ndash;&gt;-->
+                                   <!--&lt;!&ndash;widget="statinfo"&ndash;&gt;-->
+                                   <!--&lt;!&ndash;string="Work Resumption"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<button name="get_leave_summary_report"&ndash;&gt;-->
+                                <!--&lt;!&ndash;type="object"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="oe_stat_button">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<b>Leave Summary</b>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_order_form_inherit" model="ir.ui.view">
+            <field name="name">view.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']"
+                       position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']"
+                       position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']"
+                       position="attributes">
+                    <attribute name="context">{'cost_centre_id': cost_centre_id}</attribute>
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

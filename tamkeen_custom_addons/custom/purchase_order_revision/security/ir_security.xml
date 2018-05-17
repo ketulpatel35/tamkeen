@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_purchase_revision" model="res.groups">
+            <field name="name">Purchase Revision</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+    </data>
+</odoo>
+

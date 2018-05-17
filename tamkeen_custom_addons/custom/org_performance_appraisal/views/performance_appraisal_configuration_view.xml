@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Appraisal Performance in Company -->
+    <record model="ir.ui.view"
+            id="res_company_add_performance_appraisal_policy">
+        <field name="name">res.company.add.performance.appraisal.policy</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.view_company_inherit_for_service_panel"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='policies']"
+                   position="inside">
+                <group string="Appraisal Performance Policy">
+                    <field name="performance_appraisal_policy_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- service configuration panel for Appraisal Performance -->
+    <record model="ir.ui.view"
+            id="service_configuration_panel_for_performance_appraisal">
+        <field name="name">service.configuration.panel.for.performance.appraisal
+        </field>
+        <field name="model">service.configuration.panel</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.service_configuration_panel_form"/>
+        <field name="arch" type="xml">
+            <field name="valid_to_date" position="after">
+                <field name="performance_appraisal_type"
+                       attrs="{'invisible': [('is_performance_appraisal', '!=', True)], 'required':[('is_performance_appraisal', '=', True)]}"/>
+                <field name="is_performance_appraisal" invisible="1"/>
+            </field>
+            <xpath expr="//notebook" position="inside">
+                <page name="pa_grade_level" string="Appraisal Performance"
+                      attrs="{'invisible': [('is_performance_appraisal', '!=', True)]}">
+                    <group>
+                        <field name="grade_level_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_use_objectives"
+                                   attrs="{'invisible': [('is_performance_appraisal', '!=', True)]}"/>
+                            <field name="is_use_value"
+                                   attrs="{'invisible': [('is_performance_appraisal', '!=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="is_use_personal_competencies"
+                                   attrs="{'invisible': [('is_performance_appraisal', '!=', True)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="pa_objectives" string="Objectives"
+                              attrs="{'invisible': [('is_use_objectives', '!=', True)]}">
+                            <group>
+                                <group>
+                                    <field name="objectives_out_of_evaluation"
+                                           attrs="{'required':[('is_use_objectives', '=', True)]}"/>
+                                </group>
+                                <group>
+                                    <field name="min_objectives" attrs="{'required':[('is_use_objectives', '=', True)]}"/>
+                                    <field name="max_objectives" attrs="{'required':[('is_use_objectives', '=', True)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="pa_value_items" string="Value Items"
+                              attrs="{'invisible': [('is_use_value', '!=', True)]}">
+                            <group cal="4" colspan="4">
+                                <field name="value_out_of_evaluation"
+                                       attrs="{'required':[('is_use_value', '=', True)]}"/>
+                            </group>
+                            <field name="pa_value_ids">
+                                <tree edit="false">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="active"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="personal_competencies_items"
+                              string="Personal Competencies Items"
+                              attrs="{'invisible': [('is_use_personal_competencies', '!=', True)]}">
+                            <group cal="4" colspan="4">
+                                <field name="pc_out_of_evaluation" attrs="{'required':[('is_use_personal_competencies', '=', True)]}"/>
+                            </group>
+                            <field name="personal_competency_ids">
+                                <tree edit="false">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="active"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Service Configuration Panel for Appraisal Performance -->
+    <record model="ir.actions.act_window"
+            id="action_service_panel_performance_appraisal">
+        <field name="name">Service Configuration Panel</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.configuration.panel</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'performance_appraisal_model': 1}</field>
+        <field name="domain">[('model_id.model','=','performance.appraisal')]
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new service.
+            </p>
+            <p>
+                Press create button to create a new service.
+            </p>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance Stages -->
+    <record model="ir.actions.act_window"
+            id="action_displayed_stages_performance_appraisal">
+        <field name="name">Stages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.panel.displayed.states</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'performance_appraisal_model': 1}</field>
+        <field name="domain">[('model_id.model','=','performance.appraisal')]
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new stage.
+            </p>
+            <p>
+                Press create button to create a new stage.
+            </p>
+        </field>
+    </record>
+
+</odoo>

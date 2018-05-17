@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hr_allocation_by_employees" model="ir.ui.view">
+        <field name="name">hr_payroll_allocation_employees</field>
+        <field name="model">hr.allocation.employees</field>
+        <field name="arch" type="xml">
+            <form string="Leave Allocation Wizard" create="false">
+                <header>
+                    <button icon="fa-cogs" string="Generate" name="compute_sheet" type="object" class="oe_highlight"  />
+                </header>
+                <group>
+                    <label colspan="4" nolabel="1"
+                           string="This wizard will generate allocations request for all selected employee(s) based on the dates and Allocation type." />
+                </group>
+                <group >
+                    <separator string="Employees" colspan="4"/>
+                    <newline/>
+                    <field name="employee_ids" nolabel="1"
+                           context="{'active_id': active_batch_id, 'model': 'hr.leave.allocation.batch'}"/>
+                </group>
+                <group>
+                    <field name="active_batch_id" invisible="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_allocation_by_employees" model="ir.actions.act_window">
+        <field name="name">Generate Leave Allocation</field>
+        <field name="res_model">hr.allocation.employees</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_allocation_by_employees"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

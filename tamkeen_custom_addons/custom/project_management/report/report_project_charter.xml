@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="project_management_assets"
+              inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link
+                    href="/project_management/static/src/css/project_report.css"
+                  rel="stylesheet"/>
+        </xpath>
+    </template>
+
+    <template id="report_project_charter">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            Printed On:
+                            <span
+                                    t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <br/>
+                            <!-- Project General Information -->
+                            <table class="table table-bordered"
+                                   width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px"
+                                   name="project_general_info">
+                                <tbody>
+                                    <tr>
+                                        <td height="10%" colspan="2"
+                                            class="text-left td_bg">
+                                            <b>1. Project General Information
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center td_bg2">
+                                            <b>Project Name</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <span t-esc="o.name"/>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center td_bg2">
+                                            <b>Client Name</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <span
+                                                    t-esc="o.partner_id.name"/>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center td_bg2">
+                                            <b>Type of Project</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <!--<b>Application ()-->
+                                            <!--Infrastructure ()-->
+                                            <!--Info Security ()-->
+                                            <!--Outsourcing ()-->
+                                            <!--Others ()-->
+                                            <!--</b>-->
+                                            <span
+                                                    t-esc="o.project_type.name"/>
+
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!--Project Scope Information-->
+                            <table class="table table-bordered"
+                                   width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px"
+                                   name="project_scope_information">
+                                <tbody>
+                                    <tr>
+                                        <td height="10%" colspan="4"
+                                            class="text-left td_bg">
+                                            <b>2. Project Scope Information</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center td_bg2"
+                                            rowspan="2">
+                                            <b>Project Description</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center" rowspan="2">
+                                            <span
+                                                    t-esc="o.contract"/>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Project Start Date as
+                                                <br/>
+                                                per Contract / WO
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <span
+                                                    t-esc="o.date_start"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Project Expected /
+                                                <br/>
+                                                Actual Start Date
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <span t-field="o.contract_signing_date"
+                                                  t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!--Initial Project Risks-->
+                            <t t-set="risk_data" t-value="o.get_risk_data()"/>
+                            <table class="table table-bordered"
+                                   width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px"
+                                   name="project_risk">
+                                <tbody>
+                                    <tr>
+                                        <td height="10%" colspan="4"
+                                            class="text-left td_bg">
+                                            <b>3. Initial Project Risks</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>#</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Risk Description</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Impact</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Proposed Resolution</b>
+                                        </td>
+                                    </tr>
+                                    <t t-if="risk_data">
+                                        <t t-foreach="risk_data" t-as="risk">
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="risk_index+1"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="risk.description"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <t t-esc="dict(risk.fields_get(allfields=['impact'])['impact']['selection'])[risk.impact]"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span
+                                                            t-esc="risk.required_action"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <!--Project ket stackholders Approval
+                            Information-->
+
+                            <table class="table table-bordered"
+                                   width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px"
+                                   name="project_approval_information">
+                                <tbody>
+                                    <tr>
+                                        <td height="10%" colspan="4"
+                                            class="text-left td_bg">
+                                            <b>4. Project Key Stakeholders
+                                                Approval
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Project Manager</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Project Sponsor</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Client SPOC</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Name</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <span t-esc="o.user_id.name"/>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.project_sponsor_id.name"/>
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.secondary_pm_id.name"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Email</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span t-esc="o.user_id.login"/>
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.project_sponsor_id.login"/>
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.secondary_pm_id.login"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>Signature</b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.user_id.name"/>
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.project_sponsor_id.name"/>
+                                            </b>
+                                        </td>
+                                        <td height="10%"
+                                            class="text-center">
+                                            <b>
+                                                <span
+                                                        t-esc="o.secondary_pm_id.name"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

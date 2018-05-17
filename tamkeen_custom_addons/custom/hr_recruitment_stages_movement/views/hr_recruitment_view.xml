@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<!--<record model="ir.ui.view" id="crm_case_form_view_job_21_inherit">-->
+			<!--<field name="name">hr.applicant.recruitment.form</field>-->
+			<!--<field name="model">hr.applicant</field>-->
+			<!--<field name="inherit_id" ref="hr_recruitment.crm_case_form_view_job" />-->
+			<!--<field name="arch" type="xml">-->
+				<!--<field name="stage_id" position="after" >-->
+					<!--<field name="stage_name_invisible" invisible="1" />-->
+					<!--<button name="print_off_letter" string="Print Offer Letter" type="object"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': ['|',('state', 'not in', ['approved']),'|',-->
+                                <!--('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended'])]}"/>	-->
+                    <!--<button name="send_offer" string="Send Offer Letter" type="workflow"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': ['|',('state', 'not in', ['approved']),'|',-->
+								<!--('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended'])]}"/>-->
+                    <!--<button name="send_off_letter" string="Resend Offer Letter" type="object"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': ['|',('state', 'not in', ['send_offer']),'|',-->
+								<!--('stage_name_invisible', 'not in', ['Under Job Offer','Job Offer Extended','Job Offer Accepted'])]}"/>	-->
+					<!--<button name="rest_to_draft_fun" string="Reset to Draft" type="object" states="reject,approved"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': ['|',('state', 'not in', ['approved','reject']),'|',-->
+                                <!--('stage_name_invisible', 'not in', ['Under Job Offer'])]}"/>	-->
+					<!--<button name="send" string="Send for Approval" type="workflow" -->
+                                <!--class="oe_highlight"                                 -->
+                                <!--attrs="{'invisible': ['|',('state', 'not in', ['draft']),-->
+                                <!--('stage_name_invisible', 'not in', ['Under Job Offer'])]}"-->
+                                <!--/>-->
+                                <!---->
+                    <!--&lt;!&ndash; Buttons shown in under assessment stage &ndash;&gt;-->
+                    <!---->
+                    <!--<button name="send_gia_assessment" string="Send GIA Email" type="object"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': [('stage_name_invisible', 'not in', ['Under Reference Check'])]}"/>-->
+                                <!---->
+                    <!--<button name="send_ppa_assessment" string="Send PPA Email" type="object"-->
+                                <!--class="oe_highlight" -->
+                                <!--attrs="{'invisible': [('stage_name_invisible', 'not in', ['Under Reference Check'])]}"/>-->
+                                <!---->
+                    <!--&lt;!&ndash; Rec Manager  &ndash;&gt;			-->
+					<!--<button name="rec_manager" string="Recruitment Manager Approval" type="workflow" states="rec_manager"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_rec_manager" />-->
+                    <!--<button name="refused" string="Reject" type="workflow" states="rec_manager"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_rec_manager"/> -->
+                    <!---->
+                    <!--&lt;!&ndash; HR Manager  &ndash;&gt;           -->
+                    <!--<button name="hr_manager" string="HR Manager Approval" type="workflow" states="manager_app"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>-->
+                    <!--<button name="refused" string="Reject" type="workflow" states="manager_app"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_hr_manager_rec"/>             -->
+                                <!---->
+                    <!--&lt;!&ndash; Dep Manager  &ndash;&gt;            -->
+                    <!--<button name="dep_manager" string="Department Manager Approval" type="workflow" states="dep_manager"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_dep_manager" />-->
+                    <!--<button name="refused" string="Reject" type="workflow" states="dep_manager"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_dep_manager"/> -->
+                                            <!---->
+                    <!--&lt;!&ndash; CEO Manager  &ndash;&gt;            -->
+                    <!--<button name="ceo_manager" string="CEO Manager Approval"  type="workflow" states="ceo_approval"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_ceo_manager" />-->
+                    <!--<button name="refused" string="Reject" type="workflow" states="ceo_approval"-->
+                                <!--class="oe_highlight" groups="hr_recruitment_stages_movement.group_ceo_manager"/> -->
+                                                   <!---->
+                    <!--<field name="state" widget="statusbar" statusbar_visible="rec_manager,manager_app,dep_manager,ceo_approval,approved,send_offer"-->
+                                <!--statusbar_colors='{"rec_manager":"blue","reject":"red","approved":"red"}'  -->
+                                <!--attrs="{'invisible': [('stage_name_invisible', 'not in', ['Under Job Offer'])]}"/>		-->
+				<!--</field>-->
+
+				<!--<button name="create_employee_from_applicant" position="replace">-->
+					<!--<button string="Create Employee" name="create_employee_from_applicant"-->
+						<!--type="object" class="oe_link oe_inline" style="margin-left: 8px;"-->
+						<!--attrs="{'invisible': ['|','|',('state', 'not in', ['approved','send_offer']),-->
+						<!--('stage_name_invisible', 'not in', ['Job Offer Accepted']),-->
+						<!--('emp_id', '!=', False)]}" />					-->
+				<!--</button>-->
+				<!---->
+				<!--&lt;!&ndash; Add Fields used in reports &ndash;&gt;-->
+				<!---->
+				<!--<field name="reference" position="after">-->
+					<!--<field name="reference2" />-->
+					<!--<field name="overall_gia" />-->
+					<!--<field name="qeyas_result" />-->
+					<!--<field name="overall_eng" />-->
+				<!--</field>				-->
+				<!---->
+				<!---->
+				<!--&lt;!&ndash; Make Contract Section read only if state not draft  &ndash;&gt;-->
+				<!---->
+				<!--<field name="salary_expected" position="replace">-->
+					<!--<field name="salary_expected" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+				<!--</field>-->
+				<!--<field name="salary_expected_extra" position="replace">-->
+					<!--<field name="salary_expected_extra" class="oe_inline" placeholder="Extra advantages..."-->
+					<!--attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+				<!--</field>-->
+				<!--<field name="salary_proposed" position="replace">-->
+					<!--<field name="salary_proposed" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+				<!--</field>-->
+				<!--<field name="salary_proposed_extra" position="replace">-->
+					<!--<field name="salary_proposed_extra" class="oe_inline" placeholder="Extra advantages..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+				<!--</field>				-->
+				<!---->
+				<!--&lt;!&ndash; Make Candidate Name read only if state not draft  &ndash;&gt;-->
+				<!--<field name="partner_name" position="replace">-->
+					<!--<field name="partner_name" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}" />	-->
+				<!--</field>-->
+				<!---->
+				<!--&lt;!&ndash; Add Joining Date in offer accepted stage  &ndash;&gt;-->
+				<!---->
+				<!--<field name="emp_id" position="after">-->
+					<!--<field name="joining_date" attrs="{'invisible': [('stage_name_invisible', 'not in', ['Job Offer Accepted'])]}" />-->
+					<!--<field name="housing_allowance" />	-->
+					<!--<field name="transport_allowance" />-->
+					<!--<field name="basic_salary" />-->
+					<!--<field name="gosi_salary" />					-->
+					<!--<field name="maximum_salary" />-->
+					<!--<field name="net_salary" />-->
+					<!--<field name="grade" />-->
+				<!--</field>-->
+				<!---->
+				<!--&lt;!&ndash; Add Approval logs and make it access by admin &ndash;&gt;-->
+				<!--<group string="Contract" position="after">-->
+				<!--<group string="Approval Logs" colspan="4">-->
+					<!--<field name="approval_logs" nolabel="1" colspan="4" mode="tree">-->
+                                <!--<tree create="false">-->
+                                    <!--<field name="name" />-->
+                                    <!--<field name="user_id"/>-->
+                                    <!--<field name="date"/>-->
+                                <!--</tree>-->
+                            <!--</field>-->
+				<!--</group>-->
+				<!--</group>-->
+				<!---->
+			<!--</field>-->
+		<!--</record>-->
+		
+		<!--&lt;!&ndash; New Application Action &ndash;&gt;-->
+		<!--<record model="ir.actions.act_window" id="crm_case_categ0_act_job2">-->
+            <!--<field name="name">All Application</field>-->
+            <!--<field name="res_model">hr.applicant</field>-->
+            <!--<field name="view_mode">tree,kanban,form,graph,calendar</field>-->
+            <!--<field name="view_id" eval="False"/>-->
+            <!--<field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>-->
+            <!--<field name="context">{}</field>-->
+            <!--<field name="help" type="html">-->
+              <!--<p>-->
+                <!--Odoo helps you track applicants in the recruitment-->
+                <!--process and follow up all operations: meetings, interviews, etc.-->
+              <!--</p><p>-->
+                <!--Applicants and their attached CV are created automatically when an email is sent.-->
+                <!--If you install the document management modules, all resumes are indexed automatically, -->
+                <!--so that you can easily search through their content.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+		<!---->
+		<!--<record model="ir.actions.act_window" id="crm_case_categ0_act_job3">-->
+            <!--<field name="name">To be Approved</field>-->
+            <!--<field name="res_model">hr.applicant</field>-->
+            <!--<field name="view_mode">tree,kanban,form,graph,calendar</field>-->
+            <!--<field name="view_id" eval="False"/>-->
+            <!--<field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>-->
+            <!--<field name="context">{}</field>-->
+            <!--<field name="domain">[('state', '=', 'rec_manager')]           -->
+			<!--</field>-->
+            <!--<field name="help" type="html">-->
+              <!--<p>-->
+                <!--Odoo helps you track applicants in the recruitment-->
+                <!--process and follow up all operations: meetings, interviews, etc.-->
+              <!--</p><p>-->
+                <!--Applicants and their attached CV are created automatically when an email is sent.-->
+                <!--If you install the document management modules, all resumes are indexed automatically, -->
+                <!--so that you can easily search through their content.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!---->
+        <!--<record model="ir.actions.act_window" id="crm_case_categ0_act_job4">-->
+            <!--<field name="name">To be Approved</field>-->
+            <!--<field name="res_model">hr.applicant</field>-->
+            <!--<field name="view_mode">tree,kanban,form,graph,calendar</field>-->
+            <!--<field name="view_id" eval="False"/>-->
+            <!--<field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>-->
+            <!--<field name="context">{}</field>-->
+            <!--<field name="domain">[('state', '=', 'manager_app')]           -->
+			<!--</field>-->
+            <!--<field name="help" type="html">-->
+              <!--<p>-->
+                <!--Odoo helps you track applicants in the recruitment-->
+                <!--process and follow up all operations: meetings, interviews, etc.-->
+              <!--</p><p>-->
+                <!--Applicants and their attached CV are created automatically when an email is sent.-->
+                <!--If you install the document management modules, all resumes are indexed automatically, -->
+                <!--so that you can easily search through their content.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!---->
+        <!--<record model="ir.actions.act_window" id="crm_case_categ0_act_job5">-->
+            <!--<field name="name">To be Approved</field>-->
+            <!--<field name="res_model">hr.applicant</field>-->
+            <!--<field name="view_mode">tree,kanban,form,graph,calendar</field>-->
+            <!--<field name="view_id" eval="False"/>-->
+            <!--<field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>-->
+            <!--<field name="context">{}</field>-->
+            <!--<field name="domain">[('state', '=', 'dep_manager')]           -->
+			<!--</field>-->
+            <!--<field name="help" type="html">-->
+              <!--<p>-->
+                <!--Odoo helps you track applicants in the recruitment-->
+                <!--process and follow up all operations: meetings, interviews, etc.-->
+              <!--</p><p>-->
+                <!--Applicants and their attached CV are created automatically when an email is sent.-->
+                <!--If you install the document management modules, all resumes are indexed automatically, -->
+                <!--so that you can easily search through their content.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!---->
+                <!--<record model="ir.actions.act_window" id="crm_case_categ0_act_job6">-->
+            <!--<field name="name">To be Approved</field>-->
+            <!--<field name="res_model">hr.applicant</field>-->
+            <!--<field name="view_mode">tree,kanban,form,graph,calendar</field>-->
+            <!--<field name="view_id" eval="False"/>-->
+            <!--<field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>-->
+            <!--<field name="context">{}</field>-->
+            <!--<field name="domain">[('state', '=', 'ceo_approval')]           -->
+			<!--</field>-->
+            <!--<field name="help" type="html">-->
+              <!--<p>-->
+                <!--Odoo helps you track applicants in the recruitment-->
+                <!--process and follow up all operations: meetings, interviews, etc.-->
+              <!--</p><p>-->
+                <!--Applicants and their attached CV are created automatically when an email is sent.-->
+                <!--If you install the document management modules, all resumes are indexed automatically, -->
+                <!--so that you can easily search through their content.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>					-->
+
+
+	</data>
+</openerp>

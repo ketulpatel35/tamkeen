@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_root">
+        <field name="groups_id" eval="[(6,0,[ref('hr_payroll_customization.group_payroll_auditor'),ref('hr_payroll.group_hr_payroll_user'), ref('hr_payroll.group_hr_payroll_manager')])]" />
+    </record>
+
+    <!--<record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_configuration">-->
+    <!--<field name="groups_id" eval="[(6,0,[ref('hr_payroll.group_hr_payroll_manager')])]" />-->
+    <!--</record>-->
+
+    <!--<record model="ir.ui.menu" id="hr_payroll.menu_hr_payslip_run">-->
+    <!--<field name="groups_id" eval="[(6,0,[ref('hr_payroll.group_hr_payroll_user')])]" />-->
+    <!--</record>-->
+    <!-- Employee View -->
+    <record id="payroll_hr_employee_view_form_for_group" model="ir.ui.view">
+        <field name="name">payroll.hr.employee.view.form.for.group</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_payroll.payroll_hr_employee_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div//button[@name='%(hr_payroll.act_hr_employee_payslip_list)d']" position="attributes">
+                <attribute name="groups">hr_payroll.group_hr_payroll_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- HR Contract: Form View -->
+    <!--<record id="view_contract_form_inherit_for_wage" model="ir.ui.view">-->
+        <!--<field name="name">hr.contract.form.inherit.state.inherit.wage</field>-->
+        <!--<field name="model">hr.contract</field>-->
+        <!--<field name="inherit_id" ref="hr_contract_state.view_contract_form"/>-->
+        <!--<field name="groups_id" eval="[(6, 0, [ref('hr_payroll.group_hr_payroll_user')])]"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<data>-->
+                <!--<xpath expr="//field[@name='wage']" position="attributes">-->
+                    <!--<attribute name="readonly">0</attribute>-->
+                <!--</xpath>-->
+            <!--</data>-->
+        <!--</field>-->
+    <!--</record>-->
+
+</odoo>

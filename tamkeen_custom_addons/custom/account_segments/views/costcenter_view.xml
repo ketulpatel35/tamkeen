@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="costcentre_search_view" model="ir.ui.view">
+            <field name="name">Cost Center Search View</field>
+            <field name="model">bs.costcentre</field>
+            <field name="arch" type="xml">
+                <search string="Search Cost Center">
+                    <field name="name"/>
+                    <field name="code"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="costcentre_form_view" model="ir.ui.view">
+            <field name="name">costcentre.form.view</field>
+            <field name="model">bs.costcentre</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="4" colspan="2">
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="costcentre_tree_view" model="ir.ui.view">
+            <field name="name">costcentre.tree.view</field>
+            <field name="model">bs.costcentre</field>
+            <field name="arch" type="xml">
+              <tree>
+                  <field name="code"/>
+                  <field name="name"/>
+              </tree>
+          </field>
+        </record>
+
+        <record id="action_costcenter" model="ir.actions.act_window">
+            <field name="name">Cost Centre</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bs.costcentre</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="costcentre_tree_view"/>
+            <field name="search_view_id" ref="costcentre_search_view"/>
+        </record>
+
+        <menuitem id="menu_costcenter" action="action_costcenter" name="Cost Centre" parent="account.menu_finance_configuration"/>
+    </data>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+
+        <!--<record id="payroll_sheet_report_excel_view" model="ir.ui.view">-->
+            <!--<field name="name">Payroll excel report</field>-->
+            <!--<field name="model">hr.payroll.period.end.1</field>-->
+            <!--<field name="inherit_id" ref="hr_payroll_period.payroll_period_end_view" />-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//button[@name='print_payroll_summary']" position="after">-->
+                    <!--<button name="print_report" type="object" string="Print Payroll Excel" attrs="{'invisible': [('ps_generated','=',False)]}"/>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="payroll_sheet_report_excel_view" model="ir.ui.view">-->
+            <!--<field name="name">Payroll excel report</field>-->
+            <!--<field name="model">hr.payroll.period</field>-->
+            <!--<field name="inherit_id" ref="hr_payroll_period.view_payroll_period_form" />-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//header" position="inside">-->
+                    <!--<button name="print_report" type="object" string="Print Payroll Excel"/>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+         <!--<record id='view_sales_data_report_excel_form' model='ir.ui.view'>-->
+            <!--<field name="name">sales.data.report.excel</field>-->
+            <!--<field name="model">sale.report.excel</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<group>-->
+                        <!--<field name="name" invisible="1"/>-->
+                        <!--<field name="file_download" filename="name" readonly="1"/>-->
+                    <!--</group>-->
+                    <!--<footer>-->
+                        <!--<button string="Close" class="oe_link" special="cancel"/>-->
+                    <!--</footer>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</odoo>

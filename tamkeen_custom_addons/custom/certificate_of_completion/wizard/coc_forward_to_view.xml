@@ -1,0 +1,31 @@
+<odoo>
+
+    <!-- coc forward to wizard form view -->
+    <record id="coc_forward_to_wizard_view" model="ir.ui.view">
+        <field name="name">coc.forward.to.wizard.view</field>
+        <field name="model">coc.forward.to.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Forward To">
+                <group>
+                    <field name="state" required="1" string="Forward to"/>
+                    <field name="business_owner"
+                           string="Business Owner"
+                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                           attrs="{'invisible':[('state', '!=', 'business_owner_approval')],
+                           'required':[('state', '=', 'business_owner_approval')]}"/>
+                    <field name="reason" string="Reason"
+                           attrs="{'invisible':[('state', 'not in', ['draft', 'rejected'])],
+                           'required':[('state', 'in', ['draft', 'rejected'])]}"/>
+                </group>
+                <footer>
+                    <button string="Send"
+                            name="coc_forward_to" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

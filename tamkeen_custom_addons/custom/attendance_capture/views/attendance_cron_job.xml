@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.cron" id="attendance_update_cron">
+        <field name="name">Attendance Update</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="(DateTime.now() + timedelta(hours= +(29-DateTime.now().hour))).strftime('%Y-%m-%d 0:15:00')" name="nextcall"/>
+        <field eval="True" name="doall"/>
+        <field eval="'attendance.capture.data'" name="model"/>
+        <field eval="'_update_attendance'" name="function"/>
+        <field eval="'()'" name="args"/>
+    </record>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- dam.conf.history Search View -->
+    <record id="dam_conf_history_search_view" model="ir.ui.view">
+        <field name="name">dam.conf.history.search.view</field>
+        <field name="model">dam.conf.history</field>
+        <field name="arch" type="xml">
+        <search string="Dam Conf History">
+            <field name="name"/>
+            <field name="code"/>
+            <field name="object"/>
+            <field name="current_status"/>
+            <filter name="group_by_object" string="Object"
+                    context="{'group_by':'object'}"/>
+            <filter name="group_by_state" string="Status"
+                    context="{'group_by':'current_status'}"/>
+        </search>
+        </field>
+    </record>
+
+    <!-- dam.conf.history -->
+    <record id="dam_conf_history_tree_view" model="ir.ui.view">
+        <field name="name">dam.conf.history.tree.view</field>
+        <field name="model">dam.conf.history</field>
+        <field name="arch" type="xml">
+            <tree default_order='create_date desc'>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="object"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="dam_conf_history_form_view" model="ir.ui.view">
+        <field name="name">dam.conf.history.form.view</field>
+        <field name="model">dam.conf.history</field>
+        <field name="arch" type="xml">
+            <form string="Dam History">
+                <sheet>
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+                        <field name="object"/>
+                        <field name="current_status"/>
+                    </group>
+                    <field name="history_line_ids">
+                        <tree editable="bottom">
+                            <field name="seq"/>
+                            <field name="dam_conf_line_id"/>
+                            <field name="name"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                            <field name="bypass_user_ids"
+                                   widget="many2many_tags"/>
+                            <field name="approve_by_user_id"/>
+                            <field name="assigned_time"/>
+                            <field name="approve_time"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dam_conf_history_action" model="ir.actions.act_window">
+        <field name="name">Approval Delegation</field>
+        <field name="res_model">dam.conf.history</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

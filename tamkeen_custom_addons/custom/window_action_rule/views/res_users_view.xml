@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+            <record id="view_res_groups_inherit" model="ir.ui.view">
+            <field name="name">res_groups_inherit</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr='//notebook' position="inside">
+                        <page string="Window Actions">
+                                <field name="window_action_access"/>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_res_users_actions_form_inherit" model="ir.ui.view">
+            <field name="name">res.users.form.inherit</field>
+            <field name="model">res.users</field>
+             <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr='//notebook' position="inside">
+                        <page string="Window Actions" >
+                            <field name="window_action_ids" nolabel="1"  colspan="2"/>
+                        </page>
+                    </xpath>
+                </data>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

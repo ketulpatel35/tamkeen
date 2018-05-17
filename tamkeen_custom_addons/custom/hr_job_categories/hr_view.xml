@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_job_form_inherit_for_smart_button"
+                model="ir.ui.view">
+            <field name="name">view.job.form.inherit.for.smart.button</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_job_survey"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']/button[@name='%(hr_recruitment.action_hr_job_applications)d']" position="before">
+                    <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                        <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_job_form" model="ir.ui.view">
+            <field name="name">hr.job.categories</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title']" position="replace">
+                    <group colspan="4" col="4">
+                        <field name="name" placeholder="e.g. Sales Manager"
+                               required="1"/>
+                        <field name="arabic_name" required="1"/>
+                        <field name="category_ids" widget="many2many_tags" placeholder="e.g. Part Time" groups="hr.group_hr_manager"/>
+                    </group>
+                </xpath>
+                <field name="department_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <!--<field name="description" position="attributes">-->
+                    <!--<attribute name="widget">html</attribute>-->
+                <!--</field>-->
+                <!--<field name="description" position="after">-->
+                    <!--<label for="requirements"/>-->
+                    <!--<field name="requirements" widget="html"/>-->
+                <!--</field>-->
+            </field>
+        </record>
+
+        <menuitem parent="hr.menu_hr_root" id="menu_hr_job_for_department" action="hr.action_hr_job" sequence="95" groups="hr_job_categories.group_view_all_job_positions"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="hr_holidays.act_hr_employee_holiday_request"
+                model="ir.actions.act_window">
+            <field name="domain">
+                [('type','=','remove'),('state','=','validate')]
+            </field>
+        </record>
+
+
+        <record id="remove_bank_account_id" model="ir.ui.view">
+            <field name="name">hr.employee.remove</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id"
+                   ref="hr_contract.hr_hr_employee_view_form2" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='bank_account_id']"
+                           position="replace">
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="res_partner_view_smart_buttons_inherit_working" model="ir.ui.view">
+            <field name="name">res.partner.form.payments.working</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="working_address"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_employee_filter_inherit_for_saudi" model="ir.ui.view">
+            <field name="name">Employees</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="name_eng"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_saudi_inherit">
+            <field name="name">hr.employee.saudi</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <field name="category_ids" position="replace"/>
+                <xpath expr="//div[@class='oe_title']" position="replace">
+                    <div>
+                        <h3>
+                            <group>
+                                <group colspan="2" col="2">
+                                    <field name="name" placeholder="Employee's Name"/>
+                                    <field name="short_name" required="1"/>
+                                    <field name="name_eng" required="1"/>
+                                </group>
+                                <newline/>
+                                <group>
+                                    <group><field name="f_employee_no"/></group>
+                                    <group></group>
+                                </group>
+                                <group>
+                                <field name="category_ids" widget="many2many_tags"
+                                       placeholder="e.g. Part Time"
+                                       options="{'no_create_edit': True}"
+                                       groups="hr.group_hr_user"/>
+                                </group>
+                            </group>
+                        </h3>
+                    </div>
+                    <field name="current_country_code" invisible="1"/>
+                </xpath>
+                <!--<field name="name" position="after">-->
+                    <!--<label for="name_eng" class="oe_edit_only">-->
+                        <!--Arabic name-->
+                    <!--</label>-->
+                    <!--<field name="name_eng" required="1"/>-->
+                <!--</field>-->
+
+                <!--<xpath expr="//fields[@name='zip']" position="after">-->
+                    <!--<field name="personal_email" required="1"/>-->
+                    <!--<field name="home_phone_number"/>-->
+                <!--</xpath>-->
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </xpath>
+                <field name="passport_id" position="replace">
+                </field>
+
+                <field name="coach_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+
+                <field name="identification_id" position="attributes">
+                    <attribute
+                            name="attrs">{'required':
+                        [('current_country_code','=','SA')],
+                        'invisible':[('current_country_code','!=','SA')]}
+                    </attribute>
+                </field>
+
+                <xpath expr="//field[@name='identification_id']" position="after">
+                    <field name="id_exp_date" attrs="{'required':
+						[('current_country_code','=','SA')],
+						'invisible':[('current_country_code','!=','SA')]}"
+                        context="{'english_date':True}"
+                    />
+                    <field name="id_exp_date_hijri"
+                           context="{'hijri_date':True}"
+                           placeholder="e.g: 1417-10-20" attrs="{'required':
+						[('current_country_code','=','SA')],
+						'invisible':[('current_country_code','!=','SA')]}"/>
+                    <field name="gosi_number"
+                           attrs="{'invisible':[('current_country_code','!=','SA')]}"/>
+                    <field name="bankorcash" />
+                    <field name="bank_locked" />
+                    <field name="bank_locked_start_date" attrs="{'invisible':[('bank_locked','=',False)],'required':[('bank_locked','=',True)]}"/>
+                    <field name="bank_id" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
+                    <field name="bank_account" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
+                </xpath>
+
+                <xpath expr="//page[2]/group/group" position="after">
+                    <group string="Passport Information">
+                        <field name="passport_id" attrs="{'required':
+						[('current_country_code','!=','SA')]}" groups="hr.group_hr_user"/>
+                        <field name="passport_exp_date" attrs="{'required':
+						[('current_country_code','!=','SA')]}" context="{'english_date':True}"/>
+                        <field name="passport_exp_date_hijri" attrs="{'required':
+						[('current_country_code','!=','SA')]}"
+                               context="{'hijri_date':True}"
+                               placeholder="e.g: 1417-10-20" class="oe_inline" />
+                    </group>
+                    <group string="Iqama Information"
+                           attrs="{'invisible': [('current_country_code','=','SA')]}">
+                        <field name="job_as_visa" attrs="{'required':
+						[('current_country_code','!=','SA')]}"/>
+                        <field name="iqama_number" />
+                        <field name="iqama_exp_date"
+                               context="{'english_date':True}"/>
+                        <field name="iqama_exp_date_hijri"
+                               context="{'hijri_date':True}"
+                               placeholder="e.g: 1417-10-20" class="oe_inline" />
+                    </group>
+                </xpath>
+
+                <field name="gender" position="after">
+                    <field name="religion" required="1"/>
+                    <field name="blood_type" />
+                    <field name="emp_experience" />
+                </field>
+
+                <xpath expr="//field[@name='birthday']" position="attributes">
+                    <attribute name="context">{'english_date':True}</attribute>
+                </xpath>
+
+                <field name="birthday" position="before">
+                    <field name="birthday_hijri"
+                           context="{'hijri_date':True}"
+                           placeholder="e.g: 1417-10-20" class="oe_inline" />
+                </field>
+
+
+                <xpath expr="//field[@name='country_id']" position="before">
+                    <field name="accommodation_provided" />
+                    <field name="insurance_covered" />
+                    <field name="insurance_cover_date"
+                           attrs="{'required':[('insurance_covered','=',True)], 'invisible':[('insurance_covered','=',False)]}" />
+                </xpath>
+                <field name="address_home_id" position="attributes">
+                    <attribute name="domain">[('is_company','!=',True)]</attribute>
+                    <attribute name="required">0</attribute>
+                </field>
+                <field name="address_id" position="attributes">
+                    <attribute name="domain">[('working_address','=',True)]</attribute>
+                </field>
+                <xpath expr="//field[@name='address_home_id']" position="after">
+                    <field name="address_details"/>
+                    <field name="personal_mobile_number" required="True"/>
+                    <field name="post_code" required="1"/>
+                    <field name="zip_code" required="1"/>
+                    <field name="personal_email" required="1"/>
+                    <field name="home_phone_number"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

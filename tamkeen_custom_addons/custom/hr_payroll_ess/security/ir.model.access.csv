@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_hr_payslip_normal_user,access.hr.payslip.normal.user,hr_payroll.model_hr_payslip,hr_payroll_ess.group_payroll_normal_user,1,0,0,0
+access_hr_payslip_line_normal_user,access.hr.payslip.line.normal.user,hr_payroll.model_hr_payslip_line,hr_payroll_ess.group_payroll_normal_user,1,0,0,0
+access_hr_payslip_input_normal_user,access.hr.payslip.input.normal.user,hr_payroll.model_hr_payslip_input,hr_payroll_ess.group_payroll_normal_user,1,0,0,0
+access_hr_payslip_run_normal_user,access.hr.payslip.run.normal.user,hr_payroll.model_hr_payslip_run,hr_payroll_ess.group_payroll_normal_user,1,0,0,0
+access_hr_payslip_worked_days_normal_user,access.hr.payslip.worked_days.normal.user,hr_payroll.model_hr_payslip_worked_days,hr_payroll_ess.group_payroll_normal_user,1,0,0,0
+

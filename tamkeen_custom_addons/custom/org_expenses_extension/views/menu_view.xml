@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Configuration main menu -->
+    <!-- Expense type type -->
+    <menuitem name="Expense Type"
+              id="expense_configration_panel"
+              sequence="1"
+              action="act_open_expense_configuration_panels_view"
+              parent="hr_expense.menu_hr_expense_configuration"/>
+    <!-- Timesheet Stages -->
+    <menuitem name="Stages" id="expense_configuration_stages"
+              sequence="2"
+              action="act_open_expense_panel_displayed_stages_view"
+              parent="hr_expense.menu_hr_expense_configuration"/>
+    <record model="ir.ui.menu" id="hr_expense.menu_hr_expense_sheet_all_to_approve">
+        <field name="name">Expense Request</field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="hr_expense.action_hr_expense_sheet_all_to_approve">
+        <field name="name">Expense Request</field>
+    </record>
+</odoo>

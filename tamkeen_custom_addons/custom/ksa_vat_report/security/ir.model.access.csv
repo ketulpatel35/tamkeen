@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_group_vat_tax_report_tax,group_vat_tax_report_tax,account.model_account_tax,ksa_vat_report.group_vat_tax_report,1,0,1,0
+access_group_vat_tax_report_invoice_line,group_vat_tax_report_invoice_line,account.model_account_invoice_line,ksa_vat_report.group_vat_tax_report,1,0,0,0
+access_group_vat_tax_report_invoice,group_vat_tax_report_invoice,account.model_account_invoice,ksa_vat_report.group_vat_tax_report,1,0,0,0
+access_group_vat_tax_report_date_range,group_vat_tax_report_date_range,date_range.model_date_range,ksa_vat_report.group_vat_tax_report,1,0,0,0

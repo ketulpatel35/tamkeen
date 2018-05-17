@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Bank for Arabic Name -->
+    <record id="view_res_bank_form_for_arabic_name" model="ir.ui.view">
+        <field name="name">view.res.bank.form.for.arabic.name</field>
+        <field name="model">res.bank</field>
+        <field name="inherit_id" ref="base.view_res_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']"
+                   position="after">
+                <field name="arabic_name"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

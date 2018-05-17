@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="paperformat_payroll_registry" model="report.paperformat">
+            <field name="name">European A4 Custom</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">25</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="hr_payroll_register_action"
+                model="hr.payroll.register"
+                string="Pay Slip Summary"
+                report_type="qweb-pdf"
+                name="hr_payroll_register.report_payroll_registry"
+                file="hr_payroll_register.report_payroll_registry"
+                paperformat="hr_payroll_register.paperformat_payroll_registry"/>
+
+
+        <template id="report_payroll_registry">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <!--<t t-call="hr_payroll_register.hr_payroll_register_header_footer">-->
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-foreach="o.get_payroll_details()" t-as="vals">
+                                <center>
+                                    <div style="font-size:20px">
+                                        <span t-esc="o.name"/>
+                                    </div>
+                                    <div class="row" style="font-size:13px;">
+                                        Print Date : <span t-esc="time.strftime('%Y-%m-%d')"/>
+                                    </div>
+                                </center><br/>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <table width="100%">
+                                            <tr>
+                                                <th>Employee Payslips for the Period:</th>
+                                                <td>Month - Year</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Earnings:</th>
+                                                <td>(=Basic + Housing + Transportation + Cashier + Rare + Fixed + Other Earnings)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Deductions:</th>
+                                                <td>(=GOSI + Other Deductions)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="col-xs-6">
+                                        <table width="100%" >
+                                            <tr>
+                                                <td colspan="2"><h3><b>Employee Information</b></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Employee ID</td>
+                                                <td width="60%">:<span t-esc="vals['emp_id']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Employee Name</td>
+                                                <td width="60%">:<span t-esc="vals['emp_name']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Nationality</td>
+                                                <td width="60%">:<span t-esc="vals['nationality']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Job Name</td>
+                                                <td width="60%">:<span t-esc="vals['job_name']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Department</td>
+                                                <td width="60%">:<span t-esc="vals['department']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Cost Center</td>
+                                                <td width="60%">:<span t-esc="vals['emp_id']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Working days</td>
+                                                <td width="60%">:<span t-esc="vals['working_days']['work_day']"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="40%">Hire Date</td>
+                                                <td width="60%">:<span t-esc="vals['hier_date']"/></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-xs-6">
+
+                                        <table width="100%" >
+                                                <tr>
+                                                    <td colspan="2"><h3><b>Salary Information as in Contract</b></h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Basic</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Basic']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Housing</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Housing']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Transportation</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Transportation']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Cashier Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Cashier_Allowance']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Rare Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Rare_Allowance']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Fixed Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Fixed_Allowance']"/></td>
+                                                </tr>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="col-xs-6">
+
+                                        <table width="100%" >
+                                                <tr>
+                                                    <td colspan="2"><h3><b>Salary Information as in Contract</b></h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Basic</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Basic']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Housing</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Housing']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Transportation</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Transportation']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Cashier Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Cashier_Allowance']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Rare Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Rare_Allowance']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Fixed Allowance</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Fixed_Allowance']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Other Earnings</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Other_Earnings']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Total Earnings</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Total_Earnings']"/></td>
+                                                </tr>
+                                        </table>
+
+                                    </div>
+                                    <div class="col-xs-6">
+
+                                        <table width="100%" >
+                                                <tr>
+                                                    <td colspan="2"><h3><b>Deductions</b></h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">GOSI</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['GOSI']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Other Deductions</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Other_Deduction']"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="40%">Total Deductions</td>
+                                                    <td width="60%">:<span t-esc="vals['salary']['Total_Deduction']"/></td>
+                                                </tr>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="col-xs-6 pull-right">
+                                        <h3><b>Net Amount:
+                                            <span t-esc="vals['salary']['Total_Net']"/>
+                                        </b></h3>
+                                    </div>
+                                </div>
+                                <div class="container-fluid" style="page-break-after:always">
+                                    <div class="row">
+                                        <h4>For,
+                                            <b><span t-esc="o.company_id.name"/></b>
+                                        </h4>
+                                        <br/><br/><br/>
+                                        <span>General <b>Manager</b><br/>
+                                            Authorised Signature</span>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

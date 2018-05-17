@@ -1,0 +1,11 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+request_access_right_user,request_access_right,model_service_request,group_service_user,1,1,1,1
+request_access_right_manager,request_access_right,model_service_request,group_service_bu_manager_approval,1,1,1,1
+request_access_right_manager_general,request_access_right,model_service_request,group_service_vp_approval,1,1,1,1
+request_types_access_right_user,request_types_access_right,model_service_type,group_service_user,1,0,0,0
+request_types_access_right_manager,request_types_access_right,model_service_type,group_service_bu_manager_approval,1,0,0,0
+request_types_access_right_manager_general,request_types_access_right,model_service_type,group_service_vp_approval,1,0,0,0
+request_types_access_conf,request.types.access.right.conf,model_service_type,group_service_config,1,1,1,1
+access_service_category,access_service_category,model_service_category,,1,0,0,0
+access_approval_reminder_line,access_approval_reminder_line,model_approval_reminder_line,,1,0,0,0
+access_service_displayed_states,access_service_displayed_states,model_service_displayed_states,,1,0,0,0

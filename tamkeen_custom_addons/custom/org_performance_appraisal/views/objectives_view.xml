@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Objectives Form View -->
+    <record id="pa_objectives_form_views" model="ir.ui.view">
+        <field name="name">pa.objectives.form.view</field>
+        <field name="model">pa.objectives</field>
+        <field name="arch" type="xml">
+            <form string="Objectives" delete="false">
+                <sheet>
+                    <div class="oe_right oe_button_box"
+                         attrs="{'invisible': [('locked_by_hr', '!=', False)]}">
+                        <button name="get_manager_objective"
+                                class="oe_stat_button" icon="fa-bars" type="object"
+                                help="Manager Objective/s">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Manager
+                                    <br/>Objective
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   options="{'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   readonly="1" required="1"/>
+                            <field name="job_id" readonly="1" required="1"/>
+                            <field name="org_unit_type" readonly="1"
+                                   required="1"/>
+                            <field name="company_id"
+                                   attrs="{'readonly': [('locked_by_hr', '!=', False)]}"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="employee_company_id" readonly="1"
+                                   required="1"/>
+                            <field name="department_id" readonly="1"
+                                   required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="goal" required="1"
+                                   attrs="{'readonly': [('locked_by_hr', '!=', False)]}"/>
+                            <field name="weightage" required="1"
+                                   attrs="{'readonly': [('locked_by_hr', '!=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="measurement" required="1"
+                                   attrs="{'readonly': [('locked_by_hr', '!=', False)]}"/>
+                            <!--<field name="calendar_year" required="1" -->
+                                   <!--attrs="{'readonly': [('locked_by_hr', '!=', False)]}"/>-->
+                            <field name="locked_by_hr" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="progress" string="Progress">
+                            <group>
+                                <group>
+                                    <field name="target_date"
+                                           attrs="{'readonly': [('locked_by_hr', '!=', False)]}"/>
+                                    <field name="completed"/>
+                                </group>
+                                <group>
+                                    <field name="actual_date"/>
+                                    <field name="status" required="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="action" string="Action(s)">
+                            <field name="objectives_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="description" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="note" placeholder="Notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Objectives Tree View -->
+    <record id="pa_objectives_tree_view" model="ir.ui.view">
+        <field name="name">pa.objectives.tree.view</field>
+        <field name="model">pa.objectives</field>
+        <field name="arch" type="xml">
+            <tree string="Objectives" delete="false">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="goal"/>
+                <field name="weightage"/>
+                <field name="target_date"/>
+                <field name="actual_date"/>
+                <field name="completed"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="manager_objective_tree" model="ir.ui.view">
+        <field name="name">pa.objectives.tree.view</field>
+        <field name="model">pa.objectives</field>
+        <field name="arch" type="xml">
+            <tree string="Objectives" delete="false" create="false" edit="false">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="goal"/>
+                <field name="weightage"/>
+                <field name="target_date"/>
+                <field name="actual_date"/>
+                <field name="completed"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pa_objectives_search_view" model="ir.ui.view">
+        <field name="name">pa.objectives.search.view</field>
+        <field name="model">pa.objectives</field>
+        <field name="arch" type="xml">
+            <search string="Appraisal Performance Objectives">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="status"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_locked" string="Locked"
+                            domain="[('locked_by_hr', '=', True)]"/>
+                    <filter name="group_objectives_open" string="Open"
+                            domain="[('status', '!=', 'closed')]"/>
+                    <!--<filter name="group_calendar_year" string="Calendar Year"-->
+                            <!--context="{'group_by':'calendar_year'}"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Objectives Action -->
+    <record id="pa_objectives_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Objectives</field>
+        <field name="res_model">pa.objectives</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id.user_id.id', '=', uid)]</field>
+        <field name="context">
+            {'search_default_group_objectives_open': True,
+            'readonly_by_pass': True}
+        </field>
+    </record>
+
+</odoo>

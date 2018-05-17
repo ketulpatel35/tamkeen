@@ -1,0 +1,22 @@
+<odoo>
+    <!-- Personnel Action -->
+    <record id="personnel_action_type_form_view_inherit_for_leave"
+            model="ir.ui.view">
+        <field name="name">personnel.action.type.form.view.inherit.for
+            .leave</field>
+        <field name="model">personnel.action.type</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="personnel_actions.personnel_action_type_form_view"/>
+        <field name="arch" type="xml">
+            <group name="employee" position="after">
+                <group name="leave">
+                    <group string="Leave" colspan="4" col="2">
+                        <field name="create_leave_account"/>
+                        <field name="allocate_balance"/>
+                    </group>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

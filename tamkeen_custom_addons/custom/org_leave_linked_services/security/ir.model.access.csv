@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+service_request_normal_employee,service.request.normal.employee,service_management.model_service_request,hr_holidays_extension.group_leave_manage_normal_user,1,0,0,0

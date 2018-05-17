@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Views qualification -->
+        <record id="hr_qualification_form" model="ir.ui.view">
+            <field name="name">tamkeen.hr.qualifications.form</field>
+            <field name="model">tamkeen.hr.qualifications</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Qualifications">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button name="submit_to_hr" string="Submit"
+                                type="object"
+                                class="oe_highlight"
+                                states="draft"/>
+                        <button name="qualifications_hr_approved" string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                groups="hr_employee_customization.group_update_emp_info"
+                                states="hr_approval"/>
+                        <button name="qualifications_hr_rejected" string="Reject"
+                                type="object"
+                                class="oe_highlight"
+                                groups="hr_employee_customization.group_update_emp_info"
+                                states="hr_approval"/>
+                        <button name="qualification_hr_reset"
+                                string="Reset to draft"
+                                type="object" class="oe_highlight"
+                                groups="hr_employee_customization.group_update_emp_info"
+                                states="hr_approval"/>
+                        <field name="active" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="emp_line" readonly="1"/>
+                            <field name="employee_company_id" readonly="1"  attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="source_name" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="qualification_date" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="qualifications" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="major" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="specialist" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="gpa" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="grade" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                        </group>
+                         <group>
+                            <field name="reject_reason"
+                                   attrs="{'invisible': [('state', 'not in', ('reject'))]}"/>
+                        </group>
+                        <group>
+                            <field name="requirements" widget="html"
+                                   readonly="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--  Views Qualification inherit for hr-->
+        <record id="hr_qualification_form_inherit_for_hr" model="ir.ui.view">
+            <field name="name">tamkeen.hr.qualification.form.inherit.for.hr</field>
+            <field name="model">tamkeen.hr.qualifications</field>
+             <field name="inherit_id" ref="hr_qualification_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="emp_line" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=','draft')]}</attribute>
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_qualification_tree" model="ir.ui.view">
+            <field name="name">tamkeen.hr.qualifications.tree</field>
+            <field name="model">tamkeen.hr.qualifications</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="qualification">
+                    <field name="emp_line"/>
+                    <field name="source_name"/>
+                    <field name="qualification_date"/>
+                    <field name="qualifications"/>
+                    <field name="major"/>
+                    <field name="specialist" />
+                    <field name="gpa" required="1"/>
+                    <field name="grade"/>
+                     <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_tamkeen_qualification_search" model="ir.ui.view">
+            <field name="name">tamkeen.hr.qualification.search</field>
+            <field name="model">tamkeen.hr.qualifications</field>
+            <field name="arch" type="xml">
+                <search string="Qualification">
+                    <field name="emp_line"/>
+                    <field name="employee_company_id"/>
+                    <field name="source_name"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                     <group expand="0" string="Group By">
+                        <filter string="Qualification"
+                                icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'source_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hr_qualification_tree" model="ir.actions.act_window">
+            <field name="name">All Qualification</field>
+            <field name="res_model">tamkeen.hr.qualifications</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="view_id" ref="hr_qualification_tree"/>
+        </record>
+
+        <menuitem id="menu_hr_qualification_view" action="action_hr_qualification_tree" parent="hr.menu_hr_main" name="Qualifications"/>
+        <!-- End qualification Views -->
+
+          <record id="tamkeen_hr_qualifications_reject_form_view"
+                  model="ir.ui.view">
+            <field name="name">qualifications.reject.reason</field>
+            <field name="model">tamkeen.hr.qualification.reject</field>
+            <field name="arch" type="xml">
+                <form string="Rejection Reason">
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <footer>
+                        <button name="reject_qualification" string="Reject"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

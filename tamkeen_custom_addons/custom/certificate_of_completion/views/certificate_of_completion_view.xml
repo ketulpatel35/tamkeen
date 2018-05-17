@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- coc tree view -->
+    <record model="ir.ui.view" id="certificate_of_completion_tree_view">
+        <field name="name">certificate.of.completion.tree.view</field>
+        <field name="model">certificate.of.completion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <tree string="Certificate of Completion" default_order="name">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cost_center_id" readonly="1"/>
+                <field name="account_analytic_id"/>
+                <field name="purchase_order_id"/>
+                <field name="date"/>
+                <field name="payment_term_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- coc tree view without create option -->
+    <record model="ir.ui.view"
+            id="certificate_of_completion_tree_view_no_create">
+        <field name="name">certificate.of.completion.tree.view.no.create</field>
+        <field name="model">certificate.of.completion</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Certificate of Completion" default_order="name"
+                  create="false" delete="false">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cost_center_id" readonly="1"/>
+                <field name="account_analytic_id"/>
+                <field name="purchase_order_id"/>
+                <field name="date"/>
+                <field name="payment_term_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- coc search view -->
+    <record id="certificate_of_completion_search_view" model="ir.ui.view">
+        <field name="name">certificate.of.completion.search.view</field>
+        <field name="model">certificate.of.completion</field>
+        <field name="arch" type="xml">
+            <search string="Certificate of Completion">
+                <field name="name" string="Name"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="date" string="Receiving Date"/>
+                <field name="purchase_order_id"
+                       string="Purchase Order"/>
+                <field name="cost_center_id" string="Cost Center"/>
+                <field name="account_analytic_id" string="Analytic Account"/>
+                <field name="employee_id" string="Employee"/>
+                <group expand="0" string="Group By...">
+                    <filter string="Vendor" icon="terp-personal+"
+                            domain="[]"
+                            context="{'group_by':'partner_id'}"/>
+                    <filter string="Purchase Order" icon="terp-personal+"
+                            domain="[]"
+                            context="{'group_by':'purchase_order_id'}"/>
+                    <filter string="State" icon="terp-personal+"
+                            domain="[]"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- coc form view -->
+    <record model="ir.ui.view" id="certificate_of_completion_form_view">
+        <field name="name">certificate.of.completion.form.view</field>
+        <field name="model">certificate.of.completion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <form string="Certificate of Completion">
+                <header>
+
+                    <!-- Submit for Approval -->
+                    <button name="action_submit_for_coc_approval" type="object"
+                            string="Submit for Approval"
+                            class="btn-primary"
+                            states="draft"/>
+
+                    <!-- Manager -->
+                    <button name="coc_service_validate1" type="object"
+                            string="Manager Approval" class="btn-primary"
+                            states="mngr_approval"
+                            groups="certificate_of_completion.group_coc_manager_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='mngr_approval'
+                            groups="certificate_of_completion.group_coc_manager_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- VP -->
+                    <button name="coc_service_validate2" type="object"
+                            states="vp_approval"
+                            string="VP Approval" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_vp_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='vp_approval'
+                            groups="certificate_of_completion.group_coc_vp_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Budget Approval -->
+                    <!--<button name="coc_service_validate3" type="object"-->
+                            <!--states="budget_approval"-->
+                            <!--string="Budget Approval" class="btn-primary"-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='budget_approval'-->
+                            <!--context="{'trigger': 'Returned'}"-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='budget_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <!-- HR -->
+                    <!--<button name="coc_service_validate4" type="object"-->
+                            <!--string="HR Approval" class="btn-primary"-->
+                            <!--states="hr_approval"-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='hr_approval'-->
+                            <!--context="{'trigger': 'Returned'}"-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='hr_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <!-- Procurement First Review -->
+                    <button name="coc_forward_to_first_review"
+                            type="object"
+                            string="Forward To" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_procurement_first_review"
+                            states="procurement_first_review"/>
+
+                    <!-- Business Owner Approval -->
+                    <button name="coc_service_validate8"
+                            type="object"
+                            string="Approved" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_business_owner_approval"
+                            states="business_owner_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='business_owner_approval'
+                            groups="certificate_of_completion.group_coc_business_owner_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Procurement Second Review -->
+                    <button name="coc_forward_to_second_review"
+                            type="object"
+                            string="Forward To" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_procurement_second_review"
+                            states="procurement_second_review"/>
+
+                    <!-- PMO Approval -->
+                    <button name="coc_service_validate11"
+                            type="object"
+                            string="Approved" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_pmo_approval"
+                            states="pmo_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='pmo_approval'
+                            groups="certificate_of_completion.group_coc_pmo_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- CEO -->
+                    <!--<button name="coc_service_validate5" type="object"-->
+                            <!--string="CEO Approval" class="btn-primary"-->
+                            <!--states="ceo_approval"-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='ceo_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"-->
+                            <!--context="{'trigger': 'Returned'}"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='ceo_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <button name="coc_create_invoice"
+                            groups="certificate_of_completion.group_coc_finance_processing"
+                            attrs="{'invisible':['|',('state','!=','finance_processing'), ('invoice_id','!=',False)]}"
+                            type="object" string="Create Invoice"
+                            class="oe_highlight"/>
+
+                    <!-- Notify -->
+                    <!--<button name="send_notify" string="Notify"-->
+                            <!--type="object"-->
+                            <!--states="hr_approval,ceo_approval,budget_approval"/>-->
+
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <div name="button_box" class="oe_button_box">
+                    </div>
+                    <group attrs="{'invisible':[('name', '=', False)]}">
+                        <h1>
+                            <field name="name" readonly="1" nolabel="1"/>
+                        </h1>
+                    </group>
+                    <div class="container-fluid">
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"
+                                       string="Vendor"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"/>
+                                <field name="purchase_order_id"
+                                       required="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"
+                                       string="Purchase Order"/>
+                                <field name="business_owner"
+                                       readonly="1"
+                                       context="{'business_owner_group': True}"
+                                       states="business_owner_approval"
+                                       attrs="{'invisible':[('business_owner', '=', False)]}"/>
+                                <field name="currency_id" readonly="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="coc_approval_policy_id"
+                                       invisible="1"/>
+                                <field name="employee_id" invisible="1"/>
+                                <field name="is_manual_coc" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="cost_center_id" required="1" readonly="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"
+                                       string="Cost Center"/>
+                                <field name="account_analytic_id"
+                                    options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                    attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"/>
+                                <field name="date" required="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="payment_term_id" readonly="1"/>
+                                <field name="invoice_id"
+                                       readonly="1"
+                                       attrs="{'invisible':[('invoice_id', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <h4>Deliverable</h4>
+                        <group>
+                            <field name="milestones_schedule_id"
+                                   required="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   domain="[('purchase_order_id', '=', purchase_order_id),('milestone_achieved', '=', False)]"/>
+                        </group>
+                        <field name="line_ids"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <tree string="" editable="bottom"
+                                  delete="false" create="false">
+                                <field name="certificate_of_completion_id"
+                                       invisible="1"/>
+                                <field name="purchase_order_id"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       invisible="1"/>
+                                <field name="name"
+                                       readonly="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       domain="[('purchase_order_id', '=', purchase_order_id)]"/>
+                                <field name="rem_percentage"
+                                       readonly="1"/>
+                                <field name="rem_amount"
+                                       readonly="1"/>
+                                <field name="vendor_percentage"
+                                       string="Recieved Vendor Percentage"/>
+                                <field name="vendor_amount"
+                                       string="Recieved Vendor Amount"/>
+                                <field name="accepted_percentage"/>
+                                <field name="accepted_amount"/>
+                                <field name="description"
+                                       readonly="1"/>
+                                <field name="justification"/>
+                                <field name="make_it_as_final_line"/>
+                            </tree>
+                        </field>
+                        <group col="4" colspan="4">
+                            <field name="accepted_received_quantity"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="accepted_received_amount"/>
+                        </group>
+                        <notebook>
+                            <page name="po_order_lines"
+                                  string="Manage Order Line">
+                                <field name="coc_po_order_line_ids"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" create="false">
+                                        <field name="certificate_of_completion_id"
+                                               invisible="1"/>
+                                        <field name="purchase_order_id"
+                                               invisible="1"/>
+                                        <field name="po_order_line_id"
+                                               invisible="1"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="product_qty"
+                                               invisible="1"/>
+                                        <field name="qty_invoiced"
+                                               invisible="1"/>
+                                        <field name="remaining_qty"/>
+                                        <field name="product_uom"
+                                               readonly="1"/>
+                                        <field name="price_unit" readonly="1"/>
+                                        <field name="amount"/>
+                                        <field name="account_analytic_id"
+                                               invisible="1"/>
+                                        <field name="vendor_quantity"
+                                               context="{'vendor_quantity':True}"/>
+                                        <field name="vendor_amount"
+                                               context="{'vendor_amount':True}"/>
+                                        <field name="accepted_quantity"
+                                               context="{'accepted_quantity':True}"/>
+                                        <field name="accepted_amount"
+                                               context="{'accepted_amount':True}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_accepted_quantity"/>
+                                    <field name="total_accepted_amount"
+                                           class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page name="terms" string="Additional Terms">
+                                <group>
+                                    <field name="notes" nolabel="1"
+                                           widget="html" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Endorsement"
+                                  attrs="{'invisible':['|',('endorsement_coc_required','=',False),('endorsement_coc_text','=',False)]}">
+                                <group>
+                                    <field name="endorsement_coc_required"
+                                           invisible="1"/>
+                                    <field name="endorsement_coc_text"
+                                           nolabel="1" widget="html"/>
+                                </group>
+                                <group>
+                                    <field name="endorsement_coc_approved"/>
+                                </group>
+                            </page>
+                            <page string="Approvals" name="approvals">
+                                <div>
+                                    The approval/refusal information will be
+                                    displayed here.
+                                </div>
+                                <group>
+                                    <group
+                                            attrs="{'invisible':[('coc_mngr_user_id','=',False)]}">
+                                        <field name="coc_mngr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_mngr_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_vp_user_id','=',False)]}">
+                                        <field name="coc_vp_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_vp_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_budget_user_id','=',False)]}">
+                                        <field name="coc_budget_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_budget_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_hr_user_id','=',False)]}">
+                                        <field name="coc_hr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_hr_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('procurement_first_user_id','=',False)]}">
+                                        <field name="procurement_first_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="procurement_first_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('bus_owner_approval_user_id','=',False)]}">
+                                        <field name="bus_owner_approval_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="bus_owner_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('procurement_second_user_id','=',False)]}">
+                                        <field name="procurement_second_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="procurement_second_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('pmo_approval_user_id','=',False)]}">
+                                        <field name="pmo_approval_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="pmo_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_ceo_user_id','=',False)]}">
+                                        <field name="coc_ceo_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_ceo_approval_date"/>
+                                    </group>
+
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('coc_rejected_user_id','=',False)]}">
+                                    <field name="coc_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_rejected_date"/>
+                                </group>
+                                <!--<group-->
+                                <!--attrs="{'invisible':[('coc_cancel_user_id','=',False)]}">-->
+                                <!--<field name="coc_cancel_user_id"-->
+                                <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                                <!--<field name="coc_cancel_date"/>-->
+                                <!--</group>-->
+
+                                <group
+                                        attrs="{'invisible':[('coc_return_user_id','=',False)]}">
+                                    <field name="coc_return_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_return_date"/>
+                                </group>
+                                <!--<group-->
+                                <!--attrs="{'invisible':[('coc_closed_user_id','=',False)]}">-->
+                                <!--<field name="coc_closed_user_id"-->
+                                <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                                <!--<field name="coc_closed_date"/>-->
+                                <!--</group>-->
+                                <group
+                                        attrs="{'invisible':[('coc_final_approval_user_id','=',False)]}"
+                                        colspan="4" col="4">
+                                    <field name="coc_final_approval_user_id"
+                                           colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_final_approval_date"
+                                           colspan="2"/>
+                                </group>
+
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('coc_submitted_by','=',False)]}">
+                                    <field name="coc_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_submit_date" colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('coc_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="coc_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </page>
+                            <page name="service_logs" string="Service Logs">
+                                <field name="coc_service_log_ids" readonly="1">
+                                    <tree string="Service Logs">
+                                        <field name="coc_request_id"
+                                               invisible="1"/>
+                                        <field name="user_id"/>
+                                        <field name="activity_datetime"
+                                               readonly="1"/>
+                                        <field name="state_from"/>
+                                        <field name="state_to"/>
+                                        <field name="reason"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="coc_proofs"
+                                  string="Proofs Documents"
+                                  attrs="{'invisible': [('proof_required', '!=', True)]}">
+                                <field name="coc_proof_ids" nolabel="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" delete="false"
+                                          create="false">
+                                        <field name="name" readonly="1"/>
+                                        <field name="description"
+                                               readonly="1"/>
+                                        <field name="mandatory"
+                                               readonly="1"/>
+                                        <field name="document"
+                                               filename="document_file_name"
+                                               attrs="{'required' : [('mandatory', '=', True)]}"/>
+                                        <field name="document_file_name"
+                                               invisible="1"/>
+                                        <field name="certificate_of_completion_id"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                                <field name="proof_required"
+                                       invisible="1"/>
+                            </page>
+                        </notebook>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- coc form view without create -->
+    <record model="ir.ui.view"
+            id="certificate_of_completion_form_view_no_create">
+        <field name="name">certificate.of.completion.form.view.no
+            .create</field>
+        <field name="model">certificate.of.completion</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Certificate of Completion" create="false"
+                  delete="false">
+                <header>
+                    <!-- Submit for Approval -->
+                    <button name="action_submit_for_coc_approval" type="object"
+                            string="Submit for Approval"
+                            class="btn-primary"
+                            states="draft"/>
+
+                    <!-- Manager -->
+                    <button name="coc_service_validate1" type="object"
+                            string="Manager Approval" class="btn-primary"
+                            states="mngr_approval"
+                            groups="certificate_of_completion.group_coc_manager_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='mngr_approval'
+                            groups="certificate_of_completion.group_coc_manager_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- VP -->
+                    <button name="coc_service_validate2" type="object"
+                            states="vp_approval"
+                            string="VP Approval" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_vp_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='vp_approval'
+                            groups="certificate_of_completion.group_coc_vp_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Budget Approval -->
+                    <!--<button name="coc_service_validate3" type="object"-->
+                            <!--states="budget_approval"-->
+                            <!--string="Budget Approval" class="btn-primary"-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='budget_approval'-->
+                            <!--context="{'trigger': 'Returned'}"-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='budget_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_budget_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <!-- HR -->
+                    <!--<button name="coc_service_validate4" type="object"-->
+                            <!--string="HR Approval" class="btn-primary"-->
+                            <!--states="hr_approval"-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='hr_approval'-->
+                            <!--context="{'trigger': 'Returned'}"-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='hr_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_hr_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <!-- Procurement First Review -->
+                    <button name="coc_forward_to_first_review"
+                            type="object"
+                            string="Forward To" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_procurement_first_review"
+                            states="procurement_first_review"/>
+
+                    <!-- Business Owner Approval -->
+                    <button name="coc_service_validate8"
+                            type="object"
+                            string="Approved" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_business_owner_approval"
+                            states="business_owner_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='business_owner_approval'
+                            groups="certificate_of_completion.group_coc_business_owner_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Procurement Second Review -->
+                    <button name="coc_forward_to_second_review"
+                            type="object"
+                            string="Forward To" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_procurement_second_review"
+                            states="procurement_second_review"/>
+
+                    <!-- PMO Approval -->
+                    <button name="coc_service_validate11"
+                            type="object"
+                            string="Approved" class="btn-primary"
+                            groups="certificate_of_completion.group_coc_pmo_approval"
+                            states="pmo_approval"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            states='pmo_approval'
+                            groups="certificate_of_completion.group_coc_pmo_approval"
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- CEO -->
+                    <!--<button name="coc_service_validate5" type="object"-->
+                            <!--string="CEO Approval" class="btn-primary"-->
+                            <!--states="ceo_approval"-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"/>-->
+                    <!--<button-->
+                            <!--name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Return"-->
+                            <!--states='ceo_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"-->
+                            <!--context="{'trigger': 'Returned'}"/>-->
+                    <!--<button name="%(service_configuration_panel.act_open_service_log_wizard)d"-->
+                            <!--type="action"-->
+                            <!--string="Reject"-->
+                            <!--states='ceo_approval'-->
+                            <!--groups="certificate_of_completion.group_coc_ceo_approval"-->
+                            <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <button name="coc_create_invoice"
+                            groups="certificate_of_completion.group_coc_finance_processing"
+                            attrs="{'invisible':['|',('state','!=','finance_processing'), ('invoice_id','!=',False)]}"
+                            type="object" string="Create Invoice"
+                            class="oe_highlight"/>
+
+                    <!-- Notify -->
+                    <!--<button name="send_notify" string="Notify"-->
+                            <!--type="object"-->
+                            <!--states="hr_approval,ceo_approval,budget_approval"/>-->
+
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <div name="button_box" class="oe_button_box">
+                    </div>
+                    <group attrs="{'invisible':[('name', '=', False)]}">
+                        <h1>
+                            <field name="name" readonly="1" nolabel="1"/>
+                        </h1>
+                    </group>
+                    <div class="container-fluid">
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"
+                                       string="Vendor"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"/>
+                                <field name="purchase_order_id"
+                                       required="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"
+                                       string="Purchase Order"/>
+                                <field name="business_owner"
+                                       readonly="1"
+                                       context="{'business_owner_group': True}"
+                                       states="business_owner_approval"
+                                       attrs="{'invisible':[('business_owner', '=', False)]}"/>
+                                <field name="currency_id" readonly="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="coc_approval_policy_id"
+                                       invisible="1"/>
+                                <field name="employee_id" invisible="1"/>
+                                <field name="is_manual_coc" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="cost_center_id" required="1" readonly="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"
+                                       string="Cost Center"/>
+                                <field name="account_analytic_id"
+                                    options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                    attrs="{'readonly':['|', ('is_manual_coc', '=', False), ('state', '!=', 'draft')]}"/>
+                                <field name="date" required="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="payment_term_id" readonly="1"/>
+                                <field name="invoice_id"
+                                       readonly="1"
+                                       attrs="{'invisible':[('invoice_id', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <h4>Deliverable</h4>
+                        <group>
+                            <field name="milestones_schedule_id"
+                                   required="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   domain="[('purchase_order_id', '=', purchase_order_id),('milestone_achieved', '=', False)]"/>
+                        </group>
+                        <field name="line_ids"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <tree string="" editable="bottom"
+                                  delete="false" create="false">
+                                <field name="certificate_of_completion_id"
+                                       invisible="1"/>
+                                <field name="purchase_order_id"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       invisible="1"/>
+                                <field name="name"
+                                       readonly="1"
+                                       options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                       domain="[('purchase_order_id', '=', purchase_order_id)]"/>
+                                <field name="rem_percentage"
+                                       readonly="1"/>
+                                <field name="rem_amount"
+                                       readonly="1"/>
+                                <field name="vendor_percentage"
+                                       string="Recieved Vendor Percentage"/>
+                                <field name="vendor_amount"
+                                       string="Recieved Vendor Amount"/>
+                                <field name="accepted_percentage"/>
+                                <field name="accepted_amount"/>
+                                <field name="description"
+                                       readonly="1"/>
+                                <field name="justification"/>
+                                <field name="make_it_as_final_line"/>
+                            </tree>
+                        </field>
+                        <group col="4" colspan="4">
+                            <field name="accepted_received_quantity"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="accepted_received_amount"/>
+                        </group>
+                        <notebook>
+                            <page name="po_order_lines"
+                                  string="Manage Order Line">
+                                <field name="coc_po_order_line_ids"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" create="false">
+                                        <field name="certificate_of_completion_id"
+                                               invisible="1"/>
+                                        <field name="purchase_order_id"
+                                               invisible="1"/>
+                                        <field name="po_order_line_id"
+                                               invisible="1"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="product_qty"
+                                               invisible="1"/>
+                                        <field name="qty_invoiced"
+                                               invisible="1"/>
+                                        <field name="remaining_qty"/>
+                                        <field name="product_uom"
+                                               readonly="1"/>
+                                        <field name="price_unit" readonly="1"/>
+                                        <field name="amount"/>
+                                        <field name="account_analytic_id"
+                                               invisible="1"/>
+                                        <field name="vendor_quantity"
+                                               context="{'vendor_quantity':True}"/>
+                                        <field name="vendor_amount"
+                                               context="{'vendor_amount':True}"/>
+                                        <field name="accepted_quantity"
+                                               context="{'accepted_quantity':True}"/>
+                                        <field name="accepted_amount"
+                                               context="{'accepted_amount':True}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_accepted_quantity"/>
+                                    <field name="total_accepted_amount"
+                                           class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page name="terms" string="Additional Terms">
+                                <group>
+                                    <field name="notes" nolabel="1"
+                                           widget="html" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Endorsement"
+                                  attrs="{'invisible':['|',('endorsement_coc_required','=',False),('endorsement_coc_text','=',False)]}">
+                                <group>
+                                    <field name="endorsement_coc_required"
+                                           invisible="1"/>
+                                    <field name="endorsement_coc_text"
+                                           nolabel="1" widget="html"/>
+                                </group>
+                                <group>
+                                    <field name="endorsement_coc_approved"/>
+                                </group>
+                            </page>
+                            <page string="Approvals" name="approvals">
+                                <div>
+                                    The approval/refusal information will be
+                                    displayed here.
+                                </div>
+                                <group>
+                                    <group
+                                            attrs="{'invisible':[('coc_mngr_user_id','=',False)]}">
+                                        <field name="coc_mngr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_mngr_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_vp_user_id','=',False)]}">
+                                        <field name="coc_vp_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_vp_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_budget_user_id','=',False)]}">
+                                        <field name="coc_budget_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_budget_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_hr_user_id','=',False)]}">
+                                        <field name="coc_hr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_hr_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('procurement_first_user_id','=',False)]}">
+                                        <field name="procurement_first_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="procurement_first_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('bus_owner_approval_user_id','=',False)]}">
+                                        <field name="bus_owner_approval_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="bus_owner_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('procurement_second_user_id','=',False)]}">
+                                        <field name="procurement_second_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="procurement_second_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('pmo_approval_user_id','=',False)]}">
+                                        <field name="pmo_approval_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="pmo_approval_date"/>
+                                    </group>
+                                    <group
+                                            attrs="{'invisible':[('coc_ceo_user_id','=',False)]}">
+                                        <field name="coc_ceo_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="coc_ceo_approval_date"/>
+                                    </group>
+
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('coc_rejected_user_id','=',False)]}">
+                                    <field name="coc_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_rejected_date"/>
+                                </group>
+                                <!--<group-->
+                                <!--attrs="{'invisible':[('coc_cancel_user_id','=',False)]}">-->
+                                <!--<field name="coc_cancel_user_id"-->
+                                <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                                <!--<field name="coc_cancel_date"/>-->
+                                <!--</group>-->
+
+                                <group
+                                        attrs="{'invisible':[('coc_return_user_id','=',False)]}">
+                                    <field name="coc_return_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_return_date"/>
+                                </group>
+                                <!--<group-->
+                                <!--attrs="{'invisible':[('coc_closed_user_id','=',False)]}">-->
+                                <!--<field name="coc_closed_user_id"-->
+                                <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                                <!--<field name="coc_closed_date"/>-->
+                                <!--</group>-->
+                                <group
+                                        attrs="{'invisible':[('coc_final_approval_user_id','=',False)]}"
+                                        colspan="4" col="4">
+                                    <field name="coc_final_approval_user_id"
+                                           colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_final_approval_date"
+                                           colspan="2"/>
+                                </group>
+
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('coc_submitted_by','=',False)]}">
+                                    <field name="coc_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="coc_submit_date" colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('coc_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="coc_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </page>
+                            <page name="service_logs" string="Service Logs">
+                                <field name="coc_service_log_ids" readonly="1">
+                                    <tree string="Service Logs">
+                                        <field name="coc_request_id"
+                                               invisible="1"/>
+                                        <field name="user_id"/>
+                                        <field name="activity_datetime"
+                                               readonly="1"/>
+                                        <field name="state_from"/>
+                                        <field name="state_to"/>
+                                        <field name="reason"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="coc_proofs"
+                                  string="Proofs Documents"
+                                  attrs="{'invisible': [('proof_required', '!=', True)]}">
+                                <field name="coc_proof_ids" nolabel="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" delete="false"
+                                          create="false">
+                                        <field name="name" readonly="1"/>
+                                        <field name="description"
+                                               readonly="1"/>
+                                        <field name="mandatory"
+                                               readonly="1"/>
+                                        <field name="document"
+                                               filename="document_file_name"
+                                               attrs="{'required' : [('mandatory', '=', True)]}"/>
+                                        <field name="document_file_name"
+                                               invisible="1"/>
+                                        <field name="certificate_of_completion_id"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                                <field name="proof_required"
+                                       invisible="1"/>
+                            </page>
+                        </notebook>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- coc actions -->
+    <record model="ir.actions.act_window"
+            id="certificate_of_completion_action_view">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Generate the Certificate of Completion.
+            </p>
+        </field>
+    </record>
+
+    <record id="act_coc_action_view_tree_view"
+            model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id"
+               ref="certificate_of_completion.certificate_of_completion_tree_view"/>
+        <field name="act_window_id" ref="certificate_of_completion_action_view"/>
+    </record>
+
+    <record id="act_coc_action_view_form_view"
+            model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id"
+               ref="certificate_of_completion.certificate_of_completion_form_view"/>
+        <field name="act_window_id" ref="certificate_of_completion_action_view"/>
+    </record>
+
+    <!-- Action for procurement first review -->
+    <record model="ir.actions.act_window"
+            id="coc_action_procurement_first_review">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'procurement_first_review')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Generate the Certificate of Completion.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for business owner approval -->
+    <record model="ir.actions.act_window"
+            id="coc_action_business_owner_approval">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'business_owner_approval')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Certificate of Completion Business Owner Approval.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for procurement second review -->
+    <record model="ir.actions.act_window"
+            id="coc_action_procurement_second_review">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'procurement_second_review')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Generate the Certificate of Completion.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for PMO Approval -->
+    <record model="ir.actions.act_window"
+            id="coc_action_pmo_approval">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'pmo_approval')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Generate the Certificate of Completion.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for Finance Processing -->
+    <record model="ir.actions.act_window"
+            id="coc_action_finance_processing">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'finance_processing')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Certificate of Completion for Finance Processing.
+            </p>
+        </field>
+    </record>
+
+    <!-- coc action view all -->
+    <record model="ir.actions.act_window"
+            id="coc_action_view_all">
+        <field name="name">Certificate of Completion</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate.of.completion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Certificate of Completion View all Request.
+            </p>
+        </field>
+    </record>
+
+</odoo>

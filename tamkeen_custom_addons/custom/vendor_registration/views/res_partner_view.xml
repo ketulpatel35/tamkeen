@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- view_partner_form -->
+        <record id="view_partner_form_registration_vendor" model="ir.ui.view">
+            <field name="name">view.partner.form.registration.vendor</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='image']" position="before">
+                    <div attrs="{'invisible': [('active', '=', True)]}">
+                        <p style="font-weight: bold;color: red;">
+                            Blacklisted Vendors
+                        </p>
+                    </div>
+                </xpath>
+                <field name="category_id" position="after">
+                    <field name="commercial_registration"/>
+                    <field name="vendor_reg_id" readonly="1"/>
+                </field>
+                <field name="lang" position="after">
+                    <field name="commercial_registration_expiry_date"/>
+                </field>
+                <xpath expr="//button[@name='toggle_active']"
+                       position="replace">
+                    <field name="active" invisible="1"/>
+                    <button class="oe_stat_button" type="object"
+                            name="set_active_inactive"
+                            string="Blacklist"
+                            icon="fa-ban"
+                            context="{'active': True, 'is_vendor': True}"
+                            attrs="{'invisible': [('active', '=', False)]}">
+                    </button>
+                    <button class="oe_stat_button" type="object"
+                            name="set_active_inactive"
+                            string="Un-Blacklist"
+                            widget="boolean_button"
+                            context="{'active': False, 'is_vendor': True}"
+                            attrs="{'invisible': [('active', '!=', False)]}"
+                            icon="fa-check-circle">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <!--view_res_partner_filter-->
+        <record id="view_partner_search_reg_vendor" model="ir.ui.view">
+            <field name="name">view.partner.search.reg.vendor</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='inactive']" position="attributes">
+                    <attribute name="string">Blacklist</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

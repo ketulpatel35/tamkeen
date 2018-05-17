@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="payment_report_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <style type="text/css">
+                                    td.gray-bgcolor {
+                                        background-color:#D3D3D3;
+                                    }
+                                </style>
+
+                                <!-- Payment Details -->
+                                <table class="table table-bordered" width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <td height="10%"><b>Payment #: </b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.name"/>
+                                            </td>
+                                            <td height="10%"><b>Payment Date:</b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.payment_date"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"><b>Name: </b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.partner_id.name"/>
+                                            </td>
+                                            <td height="10%"><b>Amount: </b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.amount"/><span t-esc="o.currency_id.symbol"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"><b>Invoice #: </b></td>
+                                            <td height="10%">
+                                                <t t-foreach="o.invoice_ids" t-as="inv_rec">
+                                                    <span t-esc="inv_rec.number"/>
+                                                    <t t-if="inv_rec">
+                                                        ,
+                                                    </t>
+                                                </t>
+                                            </td>
+                                            <td height="10%"><b>Payment Method: </b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.journal_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"><b>Reference: </b></td>
+                                            <td height="10%">
+                                                <span t-esc="o.communication"/>
+                                            </td>
+                                            <td height="10%"><b>Transaction Type: </b></td>
+                                            <td height="10%">
+                                                <t t-if="o.payment_transaction_id">
+                                                    <span t-esc="o.payment_transaction_id"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%">
+                                                <b>Equivalent Currency:</b>
+                                            </td>
+                                            <td height="10%">
+                                                <span t-esc="o.currency_id.name"/>
+                                            </td>
+                                            <td height="10%"></td>
+                                            <td height="10%"></td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%" colspan="4"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Description -->
+                                <!--<table class="table table-bordered" width="100%" height="100%"-->
+                                       <!--style="border: 1px solid #000000;font-size:13px">-->
+                                    <!--<tbody>-->
+                                        <!--<tr>-->
+                                            <!--<td height="10%" class="gray-bgcolor"><b>Description: </b></td>-->
+                                        <!--</tr>-->
+                                        <!--<tr>-->
+                                            <!--<td height="10%">-->
+                                                <!--<span t-esc="o.narration"/>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+                                    <!--</tbody>-->
+                                <!--</table>-->
+                                <!-- Bank Details -->
+                                <table class="table table-bordered" width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <td height="10%" width="7%"><b>JE #: </b></td>
+                                            <td height="10%" colspan="4">
+                                                <span t-esc="o.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%" colspan="2" width="25%" class="gray-bgcolor">
+                                                <b>A/C Code</b>
+                                            </td>
+                                            <td height="10%" width="25%" class="gray-bgcolor">
+                                                <b>A/C Name</b>
+                                            </td>
+                                            <td height="10%" width="25%" class="gray-bgcolor">
+                                                <b>Dr</b>
+                                            </td>
+                                            <td height="10%" width="25%" class="gray-bgcolor">
+                                                <b>Cr</b>
+                                            </td>
+                                        </tr>
+                                        <t t-foreach="o.get_payment_move_line()" t-as="move_rec">
+                                            <tr t-foreach="move_rec.line_ids" t-as="move_line_rec">
+                                                <td height="10%" colspan="2" width="25%">
+                                                    <span t-esc="move_line_rec.account_id.code"/>
+                                                </td>
+                                                <td height="10%" width="25%">
+                                                    <span t-esc="move_line_rec.account_id.name"/>
+                                                </td>
+                                                <td height="10%" width="25%">
+                                                    <span t-esc="move_line_rec.debit"/>
+                                                </td>
+                                                <td height="10%" width="25%">
+                                                    <span t-esc="move_line_rec.credit"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <!-- Approvement -->
+                                <table class="table table-bordered" width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <td height="10%"><b>Prepared By:</b></td>
+                                            <td height="10%"><b>Reviewed By:</b></td>
+                                            <td height="10%"><b>Approved By:</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%">
+                                                <span t-esc="o.create_uid.name"/>
+                                            </td>
+                                            <td height="10%"></td>
+                                            <td height="10%"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <br/><br/>
+                                    * This document is approved by the system and no need for any further approval.
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

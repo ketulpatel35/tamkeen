@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="local_candidate_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <!--<t t-call="report1.salary_certificate_detail_report_header_footer_call_template_id">-->
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <table class="table table-bordred">
+                                    <tr style="border:1px solid black;">
+                                        <th style="text-align:center; border:1px solid black;"
+                                            width="50%" colspan="2">Job Offer
+                                        </th>
+                                        <th style="text-align:center; border:1px solid black;"
+                                            width="50%" colspan="2">عرض وظيفي
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">
+
+                                        </th>
+                                    </tr>
+                                    <table class="table table-bordred">
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Date:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <span t-esc="time.strftime('%d-%m-%Y')"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>التاريخ</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Ref:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <span t-esc="o.reference2"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>
+                                                    رقم
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="3">
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Candidate:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <span t-esc="o.partner_name"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>المرشح</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Nationality:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <t t-if="o.country_id">
+                                                    <span t-esc="o.country_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>الجنسية</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="3">
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Position:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <t t-if="o.job_id">
+                                                    <span t-esc="o.job_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>الوظيفة</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Department:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center"
+                                                width="50%">
+                                                <t t-if="o.department_id">
+                                                    <span t-esc="o.department_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>إدارة</b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <tr style="border:1px solid black;">
+                                            <th style="text-align:center; border:1px solid black;"
+                                                width="50%" colspan="3">
+                                                <b>Per the following Allowances:</b>
+                                            </th>
+                                            <th style="text-align:center; border:1px solid black;"
+                                                width="50%" colspan="3">
+                                                <b>:</b>
+                                                <b>حسب
+                                                    المزايا
+                                                    التالية
+                                                </b>
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Basic Salary:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="10%"><b>SAR</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center;"
+                                                width="30%" colspan="2">
+                                                <span t-esc="'%.0f'%get_basic(o.salary_proposed, o.housing_allowance, o.transport_allowance)"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="10%">
+                                                <b>ريال سعودي</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>الراتب الأساسي</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Transportation
+                                                    <br/>
+                                                    Allowances:
+                                                </b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="10%"><b>SAR</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center;"
+                                                width="30%" colspan="2">
+                                                <span t-esc="'%.0f'%round(o.transport_allowance,2)"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="10%">
+                                                <b>ريال سعودي</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>بدل نقل</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Housing:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="10%"><b>SAR</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center;"
+                                                width="30%" colspan="2">
+                                                <span t-esc="'%.0f'%round(o.housing_allowance,2)"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="10%">
+                                                <b>ريال سعودي</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>بدل سكن</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Total Salary:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="10%"><b>SAR</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:center;"
+                                                width="30%" colspan="2">
+                                                <span t-esc="'%.0f'%get_total(o.salary_proposed, o.housing_allowance, o.transport_allowance)"/>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="10%">
+                                                <b>ريال سعودي
+                                                    <br/>
+                                                    شهريً
+                                                </b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">
+                                                <b>:</b>
+                                                <b>إجمالي الراتب</b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%"><b>Vacation:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <span t-esc="'%.0f'%o.annual_leave_days"/>
+                                                <br/>
+                                                Working Days
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">leave يوم عمل
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%"><b>:</b><b>الإجازة</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Medical<br/>insurance:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                Provided Per<br/>Company Policy
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">مؤمّن للموظف
+                                                وعائلته
+                                                وفقا<br/>لسياسة الشركة
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%"><b>:</b><b>التأمين الطبي</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Contract Period:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">One Year.
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">سنة واحدة
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%"><b>:</b><b>مدة العقد</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Probation<br/>Period:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">90 Days
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">90 يوم
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%"><b>:</b><b>فترة التجربة</b>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">
+                                                <b>Offer Validity<br/>till:</b>
+                                            </td>
+                                            <td style="border:1px solid black; text-align:left"
+                                                width="25%">One week
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%">أسبوع
+                                            </td>
+                                            <td style="border:1px solid black; text-align:right;"
+                                                width="25%"><b>:</b><b>صلاحية العرض</b>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <tr style="border:1px solid black;">
+                                            <th style="text-align:center; border:1px solid black;"
+                                                width="50%" colspan="2">Please
+                                                indicate your response within a
+                                                <br/>
+                                                week of this offer.
+                                            </th>
+                                            <th style="text-align:center; border:1px solid black;"
+                                                width="50%" colspan="2">يرجى
+                                                إفادتنا خلال اسبوع من استلام
+                                                هذا
+                                                العرض.
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th style="text-align:left; border:1px solid black;"
+                                                width="50%" colspan="2">
+                                                Abdulaziz
+                                                Alnajem
+                                                <br/>
+                                                Human Resources Department
+                                                <br/>
+                                                Tel: 966920023600
+                                            </th>
+                                            <th style="text-align:right; border:1px solid black;"
+                                                width="50%" colspan="2">
+                                                عبدالعزيز
+                                                الناجم
+                                                <br/>
+                                                إدارة الموارد البشرية
+                                                <br/>
+                                                هاتف: 966920023600
+                                            </th>
+                                        </tr>
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <th style="border:1px solid black; text-align:left"
+                                            width="30%">Accepted:
+                                        </th>
+                                        <td style="border:1px solid black; text-align:center"
+                                            width="10%">
+                                            Yes<input type="checkbox"/>
+                                        </td>
+                                        <td style="border:1px solid black; text-align:center;"
+                                            width="10%">
+                                            No<input type="checkbox"/>
+                                        </td>
+                                        <td style="border:1px solid black; text-align:center;"
+                                            width="10%">لا
+                                            <input type="checkbox"/>
+                                        </td>
+                                        <td style="border:1px solid black; text-align:center;"
+                                            width="10%">نعم
+                                            <input type="checkbox"/>
+                                        </td>
+                                        <th style="border:1px solid black; text-align:right;"
+                                            width="30%"><b>:</b>موافق
+                                        </th>
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <tr style="border:1px solid black;">
+                                            <th style="text-align:left; border:1px solid black;"
+                                                width="50%" colspan="2">Name:
+                                                <br/>
+                                                Joining Date:
+                                                <br/>
+                                                Signature:
+                                                <br/>
+                                                Date:
+                                            </th>
+                                            <th style="text-align:right; border:1px solid black;"
+                                                width="50%" colspan="2">
+                                                <b>:</b>الاسم
+
+                                                <br/><b>::</b>
+                                                التاريخ المتوقع للمباشرة
+                                                <br/>
+                                                <b>:</b>
+                                                التوقيع
+                                                <br/>
+                                                <b>:</b>
+                                                التاريخ
+                                            </th>
+                                        </tr>
+                                    </table>
+                                    <table class="table table-bordred">
+                                        <tr>
+                                            <th style="text-align:center; border:1px solid black;">
+                                                Any disclosure of this
+                                                information
+                                                may result in termination of
+                                                this
+                                                offer as per
+                                                <br/>
+                                                company policy.
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

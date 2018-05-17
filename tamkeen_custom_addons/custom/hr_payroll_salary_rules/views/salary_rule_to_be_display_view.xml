@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- salary rule display ess -->
+    <record id="salary_rule_form_view_inherit_arabic_name" model="ir.ui.view">
+        <field name="name">salary.rule.form.view.inherit.arabic.name</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='name']"
+                       position="after">
+                    <label for="arabic_name" class="oe_edit_only"/>
+                    <field name="arabic_name"/>
+                </xpath>
+                <xpath expr="//field[@name='appears_on_payslip']">
+                    <field name="display_in_ess_payslip"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

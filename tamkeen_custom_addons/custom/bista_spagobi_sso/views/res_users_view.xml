@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>    
+    <record id="view_users_form" model="ir.ui.view">
+        <field name="name">res.users.form.inherit</field>
+        <field name="model">res.users</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']" position="after">
+            	<page string='SpagoBI Configuration'>
+            		<group string="SpagoBI">
+                        <field name="spagobi_active"/>
+                        <field name="spagobi_role" attrs="{'invisible': [('spagobi_active', '=', False)], 'required': [('spagobi_active', '=', True)]}"/>
+                    </group>
+            	</page>
+            </xpath>
+       </field>
+    </record>    
+</odoo>

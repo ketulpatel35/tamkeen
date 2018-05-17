@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_all_job_position_rule" model="ir.rule">
+        <field name="name">View All Job Positions</field>
+        <field name="model_id" ref="model_hr_job"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('hr_job_categories.group_view_all_job_positions'))]"/>
+    </record>
+</odoo>

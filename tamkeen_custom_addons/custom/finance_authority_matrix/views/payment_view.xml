@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+        <!-- Purchase Receipt -->
+        <record model="ir.ui.view" id="view_purchase_receipt_form_inherit_for_button">
+            <field name="name">view.purchase.receipt.form.inherit.for.button</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id"
+                   ref="account_voucher.view_purchase_receipt_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='proforma_voucher']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='cancel_voucher']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Sale Receipt -->
+        <record model="ir.ui.view" id="view_sale_receipt_form_inherit_for_button">
+            <field name="name">view.purchase.receipt.form.inherit.for.button</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id"
+                   ref="account_voucher.view_sale_receipt_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='proforma_voucher']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='cancel_voucher']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_receipts_master</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Sale Payments -->
+        <record model="ir.ui.view"
+                id="view_account_payment_form_inherit_for_button">
+            <field name="name">view.account.payment.form.inherit.for.button</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='post']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_confirm_account_payment</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='cancel']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_cancel_account_payment</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/div/button[@name='button_journal_entries']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_view_all_journal_entries</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/div/button[@name='button_invoices']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_view_all_customer_invoice,finance_authority_matrix.groups_view_all_vendor_invoice</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+emp_self_services.id_tamkeen_hr_experiences_users,tamkeen_hr_experiences_user,emp_self_services.model_tamkeen_hr_experiences,base.group_user,1,1,1,0
+emp_self_services.id_tamkeen_hr_qualifications_users,hr_qualifications_user,emp_self_services.model_tamkeen_hr_qualifications,base.group_user,1,1,1,0
+emp_self_services.id_tamkeen_hr_trainings_users,tamkeen_hr_trainings_user,emp_self_services.model_tamkeen_hr_trainings,base.group_user,1,1,1,0

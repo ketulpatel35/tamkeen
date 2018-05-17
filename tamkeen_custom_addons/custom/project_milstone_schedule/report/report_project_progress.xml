@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_project_progress_milestone_report"
+              inherit_id="project_management.report_project_progress_report">
+        <xpath expr="//table[@name='project_progress_general']" position="replace">
+            <table class="table table-bordered"
+                   style="border: 1px solid #000000;font-size:13px;width:100%;"
+                   name="project_progress_general">
+                <thead>
+                    <tr   style="background-color: #B7B7B7;">
+                        <th height="10%" colspan="4"
+                            class="text-left td_bg" style="color:#8b0000;">
+                            <b>Project General Information
+                            </b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td height="10%" width="15px;"
+                            class="table_head">
+                            <b>Project Name</b>
+                        </td>
+                        <td height="10%" width="35%;"
+                            class="table_cell">
+                            <span t-esc="o.name"/>
+                        </td>
+                        <td height="10%" width="15px;"
+                            class="table_head">
+                            <b>
+                                Project Type
+                            </b>
+                        </td>
+                        <td height="10%" width="200px;"
+                            class="table_cell">
+                            <span t-esc="o.project_type.name"/>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10%" width="15px;"
+                            class="table_head">
+                            <b>Project Stage</b>
+                        </td>
+                        <td height="10%" width="35%;"
+                            class="table_cell">
+                            <t t-if="o.project_stage">
+                                <span t-esc="o.project_stage.name"/>
+                            </t>
+                        </td>
+                        <td height="10%" width="15px;"
+                            class="table_head">
+                            <b>
+                                Project Status
+                            </b>
+                        </td>
+                        <td height="10%" width="200px;"
+                            class="table_cell">
+                            <t
+                                    t-esc="dict(o.fields_get(allfields=['project_status'])['project_status']['selection'])[o.project_status]"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Client Name</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell"
+                            colspan="3">
+                            <span
+                                    t-esc="o.partner_id.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Project Manager</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span
+                                    t-esc="o.user_id.name"/>
+                        </td>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Sponsor</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span
+                                    t-esc="o.project_sponsor_id.name"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Project Value (SAR)</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span t-esc="'{0:,.2f}'.format(float(o.contract_value))"/>
+                        </td>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Contract Signing Date</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span
+                                    t-field="o.contract_signing_date"
+                                    t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Invoiced Value(SAR)</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <t t-esc="'{0:,.2f}'.format(float(o.invoiced_values))"/>
+                        </td>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Collected Payment(SAR)</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <t t-esc="'{0:,.2f}'.format(float(o.collected_values))"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>Remaining Payment(SAR)</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell" colspan="3">
+                            <span t-esc="'{0:,.2f}'.format(float(o.remaining_values))"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10%"
+                            class="table_head">
+                            <b>SPI</b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span t-esc="'%.2f'%o.spi"/>
+                        </td>
+                        <td height="10%"
+                            class="table_head">
+                            <b>
+                                Overall % Completion
+                            </b>
+                        </td>
+                        <td height="10%"
+                            class="table_cell">
+                            <span
+                                    t-esc="'%.2f'%o.avg_progress_percentage"/> %
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+        <xpath expr="//table[@name='project_progress_risk']"
+               position="replace"/>
+        <xpath expr="//table[@name='project_progress_issue']"
+               position="replace"/>
+        <xpath expr="//table[@name='project_schedule']"
+               position="after">
+            <!--Project Payment Milestones-->
+            <t t-if="o.milestones_count > 0">
+                <table class="table table-bordered"
+                       width="100%" height="100%"
+                       style="border: 1px solid #000000;font-size:13px" name="project_progress_milestone">
+                    <thead>
+                        <tr   style="background-color: #B7B7B7;">
+                            <td height="10%" colspan="11"
+                                class="text-left td_bg" style="color:#8b0000;">
+                                <b>Project Milestones</b>
+                            </td>
+                        </tr>
+                        <tr  style="background-color: #B7B7B7;">
+                            <th height="10%" width="5.5%"
+                                class="td_bg2 table_head_index">
+                                <b>#</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Milestone Name</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>
+                                    Due Date as per<br/> Contract/<br/>WO/CR
+                                </b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Actual Start Date</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Actual Completion Date</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Contract Milestone Value (SAR)</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>%<br/>
+                                    Completion</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>CoC <br/>
+                                    Obtained?</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Invoiced Value (SAR)</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Collected Payment (SAR)</b>
+                            </th>
+                            <th height="10%"
+                                class="td_bg2 table_head">
+                                <b>Remaining Payments Value (SAR)</b>
+                            </th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        <tr
+                                t-foreach="o.milestones_schedule_ids" t-as="mile">
+                            <td height="10%"
+                                class="table_cell_index">
+                                <span
+                                        t-esc="mile_index+1"/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <span
+                                        t-esc="mile.name"/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <span t-field="mile.due_date"
+                                      t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <span t-field="mile.start_date"
+                                      t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <span t-field="mile.actual_completion_date"
+                                      t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <span t-esc="'{0:,.2f}'.format(float(mile.estimated_value))"/>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <t t-esc="'{0:,.2f}'.format(float(mile.estimated_percentage))"/> %
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <t t-if="mile.is_coc_obtained">
+                                    <t t-esc="{False: False, 'yes': 'Yes', 'no': 'No'}[mile.is_coc_obtained]"/>
+                                </t>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <t t-if="mile.invoiced_value">
+                                    <span t-esc="'{0:,.2f}'.format(float(mile.invoiced_value))"/>
+                                </t>
+
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <t t-if="mile.collected_payment">
+                                    <span t-esc="'{0:,.2f}'.format(float(mile.collected_payment))"/>
+                                </t>
+                            </td>
+                            <td height="10%"
+                                class="table_cell">
+                                <t t-set="remaining"
+                                   t-value="mile.estimated_value - mile.collected_payment"/>
+                                <t t-esc="'{0:,.2f}'.format(float(remaining))"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+            <!--Initial Project Risks-->
+            <t t-set="risk_data" t-value="o.get_risk_data()"/>
+            <t t-if="risk_data">
+                <table class="table table-bordered"
+                       width="100%" height="100%"
+                       style="border: 1px solid #000000;font-size:13px"
+                       name="project_progress_risk">
+                    <thead>
+                        <tr  style="background-color: #B7B7B7;">
+                            <td height="10%" colspan="7"
+                                class="text-left td_bg" style="color:#8b0000;">
+                                <b>Project Risk/s</b>
+                            </td>
+                        </tr>
+                        <tr  style="background-color: #B7B7B7;">
+                            <td height="10%"
+                                class="td_bg2 table_head_index" width="5.5%">
+                                <b>#</b>
+                            </td>
+                            <td height="10%" width="19%"
+                                class="td_bg2 table_head">
+                                <b>Description</b>
+                            </td>
+                            <td height="10%" width="12.5%"
+                                class="td_bg2 table_head">
+                                <b>Responsibility</b>
+                            </td>
+                            <td height="10%" width="13%"
+                                class="td_bg2 table_head">
+                                <b>Impact</b>
+                            </td>
+                            <td height="10%" width="37.5%"
+                                class="td_bg2 table_head">
+                                <b>Proposed Resolution</b>
+                            </td>
+                            <td height="10%"  width="18%"
+                                class="td_bg2 table_head">
+                                <b>Due Date</b>
+                            </td>
+                            <td height="10%"  width="18%"
+                                class="td_bg2 table_head">
+                                <b>Status</b>
+                            </td>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        <t t-if="risk_data">
+                            <t t-foreach="risk_data" t-as="risk">
+                                <tr>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell_index">
+                                        <span
+                                                t-esc="risk_index+1"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="risk.name"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <t
+                                                t-if="risk.main_assignment == 'internal'">
+                                            <span
+                                                    t-esc="risk.assigned_to.name"/>
+                                        </t>
+                                        <t
+                                                t-if="risk.main_assignment == 'external'">
+                                            <span
+                                                    t-esc="risk.assigned_to_external"/>
+                                        </t>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <t t-esc="dict(risk.fields_get(allfields=['impact'])['impact']['selection'])[risk.impact]"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="risk.required_action"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span t-field="risk.due_date"
+                                              t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="risk.stage_id.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+            <!--Initial Project Issue-->
+            <t t-set="issue_data"
+               t-value="o.get_issue_data()"/>
+            <t t-if="issue_data">
+                <table class="table table-bordered"
+                       width="100%" height="100%"
+                       style="border: 1px solid #000000;font-size:13px"
+                       name="project_progress_issue">
+                    <thead>
+                        <tr  style="background-color: #B7B7B7;">
+                            <td height="10%" colspan="7"
+                                class="text-left td_bg" style="color:#8b0000;">
+                                <b>Project Issue/s</b>
+                            </td>
+                        </tr>
+                        <tr  style="background-color: #B7B7B7;">
+                            <td height="10%"
+                                class="td_bg2 table_head_index" width="5.5%">
+                                <b>#</b>
+                            </td>
+                            <td height="10%" width="19%"
+                                class="td_bg2 table_head">
+                                <b>Description</b>
+                            </td>
+                            <td height="10%"  width="12.5%"
+                                class="td_bg2 table_head">
+                                <b>Responsibility</b>
+                            </td>
+                            <td height="10%" width="13%"
+                                class="td_bg2 table_head">
+                                <b>Impact</b>
+                            </td>
+                            <td height="10%"  width="37.5%"
+                                class="td_bg2 table_head">
+                                <b>Proposed Resolution</b>
+                            </td>
+                            <td height="10%"  width="18%"
+                                class="td_bg2 table_head">
+                                <b>Due Date</b>
+                            </td>
+                            <td height="10%"  width="18%"
+                                class="td_bg2 table_head">
+                                <b>Status</b>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="issue_data">
+                            <t t-foreach="issue_data" t-as="issue">
+                                <tr>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell_index">
+                                        <span
+                                                t-esc="issue_index+1"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="issue.name"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <t
+                                                t-if="issue.main_assignment == 'internal'">
+                                            <span
+                                                    t-esc="issue.user_id.name"/>
+                                        </t>
+                                        <t
+                                                t-if="issue.main_assignment == 'external'">
+                                            <span
+                                                    t-esc="issue.assigned_to_external"/>
+                                        </t>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class=" table_cell">
+                                        <t
+                                                t-if="issue.severity">
+                                            <t
+                                                    t-esc="dict(issue.fields_get(allfields=['severity'])['severity']['selection'])[issue.severity]"/>
+                                        </t>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="issue.required_action"/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span t-field="issue.actual_end_date"
+                                              t-field-options='{"format": "dd-MMM-YYYY"}'/>
+                                    </td>
+                                    <td height="10%" style="overflow:hidden;text-overflow: ellipsis;"
+                                        class="table_cell">
+                                        <span
+                                                t-esc="issue.stage_id.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+            <t t-set="vendor_data"
+               t-value="o.get_vendor_data()"/>
+            <!--Project vendor details -->
+            <br/>
+            <br/>
+            <t t-if="vendor_data">
+                <div style="width:500px;">
+                    <table class="table table-bordered"
+                           height="100%"
+                           style="border: 1px solid #000000;font-size:13px;width:100%;"
+                           name="project_vendor_details">
+                        <thead>
+                            <tr   style="background-color: #B7B7B7;">
+                                <td height="10%" colspan="5"
+                                    class="text-left td_bg" style="color:#8b0000;">
+                                    <b>Vendor Details
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr  style="background-color: #B7B7B7;">
+                                <td height="10%" width="5.5%"
+                                    class="td_bg2 table_head_index">
+                                    <b>#</b>
+                                </td>
+                                <td height="10%" width="35%"
+                                    class="td_bg2 table_head">
+                                    <b>Name</b>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="td_bg2 table_head">
+                                    <b>
+                                        PO Value(SAR)
+                                    </b>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="td_bg2 table_head">
+                                    <b>Paid Value (SAR)</b>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="td_bg2 table_head">
+                                    <b>
+                                        Remaining Payments(SAR)
+                                    </b>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="vendor_data" t-as="mile">
+                                <td height="10%" width="5.5%"
+                                    class="table_cell_index">
+                                    <span t-esc="mile_index+1"/>
+                                </td>
+                                <td height="10%" width="35%"
+                                    class="table_cell">
+                                    <t t-if="vendor_data.get(mile)">
+                                        <span t-esc="vendor_data.get(mile)[0]"/>
+                                    </t>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="table_cell">
+                                    <span t-esc="'{0:,.2f}'.format(float(vendor_data.get(mile)[1]))"/>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="table_cell">
+                                    <span t-esc="'{0:,.2f}'.format(float(vendor_data.get(mile)[2]))"/>
+                                </td>
+                                <td height="10%" width="20%"
+                                    class="table_cell">
+                                    <span t-esc="'{0:,.2f}'.format(float(vendor_data.get(mile)[1] - vendor_data.get(mile)[2]))"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

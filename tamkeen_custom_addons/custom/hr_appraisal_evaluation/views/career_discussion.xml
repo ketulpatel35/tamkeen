@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <!--explicit list view definition -->
+        <record model="ir.ui.view" id="career_discussion_tree">
+            <field name="name">career.discussion.tree</field>
+            <field name="model">career.discussion</field>
+            <field name="arch" type="xml">
+                <tree string="Career Discussion">
+                    <field name="career_id" invisible="1"/>
+                    <field name="career_discusion"/>
+                    <field name="description"/>
+                    <field name="requirements"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="career_discussion_form">
+            <field name="name">individual.development.plan.form</field>
+            <field name="model">career.discussion</field>
+            <field name="arch" type="xml">
+                <form string="Career Discussion">
+                    <sheet>
+                        <group>
+                            <field name="career_id" invisible="1"/>
+                            <field name="career_discusion"/>
+                            <field name="description"/>
+                            <field name="requirements"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="career_discussion_action">
+            <field name="name">Career Discussion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">career.discussion</field>
+            <field name="view_id" ref="career_discussion_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

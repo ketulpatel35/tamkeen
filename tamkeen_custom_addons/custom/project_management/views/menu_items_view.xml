@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.menu" id="project.menu_main_pm">
+        <field name="name">Projects Management</field>
+        <field name="groups_id"
+               eval="[(4,ref('project.group_project_manager')), (4,ref('project_management.group_view_assigned_project')),
+               (4,ref('project_management.group_view_all_project')),(4,ref('project_management.group_project_dashboard'))]"/>
+    </record>
+
+    <!--Adding Group to Project Dashboard menu-->
+    <record model="ir.ui.menu" id="project.menu_projects">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_dashboard'))]"/>
+    </record>
+
+    <!-- Project Management Menu -->
+    <menuitem name="Project Management"
+              id="project.menu_project_management"
+              parent="project.menu_main_pm"
+              sequence="2"
+              groups="project_management.group_view_assigned_project,project_management.group_view_all_project,project_management.group_update_project,project_management.group_create_project"/>
+
+    <menuitem name="All Projects"
+              id="menu_all_projects"
+              parent="project.menu_project_management"
+              action="action_project_management"
+              sequence="1"
+              groups="project_management.group_view_all_project"/>
+
+    <menuitem name="Assigned Projects"
+              id="menu_assigned_projects"
+              parent="project.menu_project_management"
+              action="action_assigned_project_management"
+              sequence="2"
+              groups="project_management.group_view_assigned_project"/>
+
+    <menuitem name="Risks"
+              id="menu_project_risks"
+              parent="project.menu_project_management"
+              action="action_view_project_risks"
+              sequence="6"
+              groups="project_management.group_view_all_project"/>
+
+    <menuitem name="Project Documents"
+              id="menu_project_documents"
+              parent="project.menu_project_management"
+              action="action_view_project_documents"
+              sequence="20"
+              groups="project_management.group_view_all_project"/>
+
+    <!-- Configuration -->
+    <record model="ir.ui.menu" id="project.menu_project_config">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_project_general_settings">
+        <field name="groups_id"
+               eval="[(4,ref('base.group_no_one'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_project_config">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_tasks_config">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_project_config_project">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_projects_config">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+    <record model="ir.ui.menu" id="project.menu_project_tags_act">
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_configuration'))]"/>
+    </record>
+
+    <menuitem id="menu_config_project_revenue_stream" name="Revenue Stream"
+              parent="project.menu_project_config"
+              groups='project_management.group_project_configuration'
+              action="project_revenue_streams_action_view"/>
+
+    <menuitem id="menu_config_project_type" name="Project Type"
+              groups='project_management.group_project_configuration'
+              parent="project.menu_project_config"
+              action="project_types_action_view"/>
+     <menuitem id="menu_config_project_state" name="Project Stage"
+              groups='project_management.group_project_configuration'
+              parent="project.menu_project_config"
+              action="project_states_action_view"/>
+    <record model="ir.ui.menu" id="rating_project.rating_rating_menu_project">
+        <field name="groups_id" eval="[(6,0,[ref('base.group_no_one')])]"/>
+    </record>
+
+    <record model="ir.ui.menu" id="project.menu_project_report">
+        <field name="name">Reporting</field>
+        <field name="groups_id"
+               eval="[(4,ref('project_management.group_project_report'))]"/>
+    </record>
+
+    <menuitem name="Risk Analysis"
+              id="menu_risk_analysis"
+              parent="project.menu_project_report"
+              sequence="2"
+              groups="project_management.group_project_report"/>
+
+    <menuitem name="Project analysis"
+              id="menu_project_analysis"
+              parent="project.menu_project_report"
+              sequence="3"
+              groups="project_management.group_project_report"/>
+
+</odoo>

@@ -1,0 +1,210 @@
+<odoo>
+    <data>
+        <!-- Vendor Invoice -->
+        <record model="ir.ui.view"
+                id="account_invoice_supplier_double_validation_inherit">
+            <field name="name">account.invoice.double.validation</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <!-- create option disable -->
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_vendor_validate_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(account.action_account_invoice_payment)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_create_purchase_account_payment, account.group_account_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_vendor_refund_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_vendor_settodraft_invoice,account.group_account_invoice</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='account_id']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_account_normal_user</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="groups">account.group_account_invoice,finance_authority_matrix.group_vendor_cancel_invoice</attribute>
+                </xpath>
+                <xpath expr="//field[@name='tax_line_ids']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_id']"
+                       position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_invoice_master, account.group_account_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Vendor Invoice create option unable based on user -->
+        <record model="ir.ui.view"
+                id="account_invoice_supplier_create_inherit">
+            <field name="name">account.invoice.create.validation</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account_invoice_supplier_double_validation_inherit"/>
+            <field name="groups_id"
+                   eval="[(4, ref('finance_authority_matrix.groups_create_vendor_invoice'))]"/>
+            <field name="arch" type="xml">
+                <!-- create option ubanle -->
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Supplier Invoice create disable for tree view -->
+        <record id="invoice_supplier_tree_create_disable" model="ir.ui.view">
+            <field name="name">invoice.supplier.tree.create.disable</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//tree" position="attributes">
+                     <attribute name="create">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Supplier Invoice create enable for tree view based on group -->
+        <record id="invoice_supplier_tree_create_unable" model="ir.ui.view">
+            <field name="name">invoice.supplier.tree.create.unable</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="groups_id"
+                   eval="[(4, ref('finance_authority_matrix.groups_create_vendor_invoice'))]"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//tree" position="attributes">
+                     <attribute name="create">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+
+        <!-- Vendor Invoice -->
+        <record model="ir.ui.view"
+                id="account_invoice_supplier_double_validation_inherit_for_matrix">
+            <field name="name">account.invoice.double.validation.inherit.for.matrix</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id"
+                   ref="invoice_extension.account_invoice_supplier_double_validation_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_to_first_validate']"
+                       position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_submit_vendor_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='reset_to_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_vendor_settodraft_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='submit_to_fi_manager']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_first_validate_vendor_invoice</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Customer Invoice -->
+        <record model="ir.ui.view" id="account_invoice_double_validation_inherit">
+            <field name="name">account.invoice.double.validation</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//form' position='attributes'>
+                    <attribute name="create">false</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_customer_cancel_invoice</attribute>
+                </xpath>
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_customer_validate_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_set_to_draft_customer_invoice,account.group_account_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(account.action_account_invoice_payment)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_create_sale_account_payment,account.group_account_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_customer_refund_invoice</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//field[@name='account_id']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_account_normal_user</attribute>
+                </xpath>
+                <xpath expr="//field[@name='tax_line_ids']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_id']"
+                       position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_invoice_master, account.group_account_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Customer Invoice create option unable based on group form view -->
+        <record model="ir.ui.view" id="account_invoice_form_create">
+            <field name="name">account.invoice.create</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="account_invoice_double_validation_inherit"/>
+            <field name="groups_id"
+                   eval="[(4, ref('finance_authority_matrix.groups_create_customer_invoice'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr='//form' position='attributes'>
+                    <attribute name="create">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Customer Invoice create disable for tree view -->
+        <record id="cust_invoice_tree_create_disable" model="ir.ui.view">
+            <field name="name">cust.account.invoice.tree.dic</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//tree" position="attributes">
+                     <attribute name="create">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Customer Invoice create enable for tree view based on group -->
+        <record id="cust_invoice_tree_create_unable" model="ir.ui.view">
+            <field name="name">cust.account.invoice.tree.un</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="groups_id"
+                   eval="[(4, ref('finance_authority_matrix.groups_create_customer_invoice'))]"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//tree" position="attributes">
+                     <attribute name="create">true</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Submit First Validate -->
+        <record model="ir.ui.view"
+                id="account_invoice_double_validation_inherit_for_first_validate">
+            <field name="name">account.invoice.double.validation.inherit.for.first.validate</field>
+            <field name="model">account.invoice</field>
+            <field name="priority" eval="18"/>
+            <field name="inherit_id" ref="invoice_extension.account_invoice_double_validation_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_to_fi_manager']"
+                       position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_first_validate_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='reset_to_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_set_to_draft_customer_invoice</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

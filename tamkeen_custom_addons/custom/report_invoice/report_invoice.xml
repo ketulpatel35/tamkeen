@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <report
+                id="report_invoice"
+                model="account.invoice"
+                string="Invoice Report"
+                report_type="qweb-pdf"
+                name="report_invoice.report_invoice_template"
+                file="report_invoice.report_invoice_template"
+        />
+
+    </data>
+</odoo>
+

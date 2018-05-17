@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<odoo>
+     <record id="paperformat_attendance_summary" model="report.paperformat">
+            <field name="name">Attendance Summary</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">45</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+        </record>
+    <report
+            id="report_attendance_summary"
+            string="Attendance Summary"
+            model="hr.attendance"
+            report_type="qweb-pdf"
+            name="hr_attendance_employee_summary.report_attendancessummary"
+            file="hr_attendance_employee_summary.report_attendancessummary"
+            menu="False"/>
+
+     <report
+            id="report_attendance_summary_new"
+            string="Attendance Summary"
+            model="hr.attendance"
+            report_type="qweb-pdf"
+            paperformat="hr_attendance_employee_summary.paperformat_attendance_summary"
+            name="hr_attendance_employee_summary.report_attendance_new"
+            file="hr_attendance_employee_summary.report_attendance_new"
+            menu="False"/>
+
+    <menuitem name="My Attendance Summary"
+              id="attendance_summary_report_menu"
+              parent="hr_attendance_ess.attendance_employee_main_menu"
+              sequence="520" action="action_hr_attendance_summary_employee"/>
+</odoo>

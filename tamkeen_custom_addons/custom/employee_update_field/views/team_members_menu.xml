@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="open_view_members" model="ir.actions.act_window">
+            <field name="name">Members</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="main_team_members_menu" name="Team Members"
+                  parent="emp_self_services.mian_ess_menu" 
+                  groups="emp_self_services.group_mss" sequence="29"/>
+
+        <menuitem id="members_menu" name="Members"
+                  parent="main_team_members_menu" sequence="1"
+                  action="open_view_members"/>
+
+        <menuitem id="contracts_menu" name="Contracts"
+                  parent="main_team_members_menu" sequence="2"
+                  action="hr_contract.action_hr_contract"/>
+
+        <menuitem id="experience_menu" name="Experience"
+                  parent="main_team_members_menu" sequence="3"
+                  action="emp_self_services.action_hr_experience_tree"/>
+
+        <menuitem id="training_menu" name="Training"
+                  parent="main_team_members_menu" sequence="4"
+                  action="emp_self_services.action_hr_training_tree"/>
+
+        <menuitem id="qualification_menu" name="Qualification"
+                  parent="main_team_members_menu" sequence="5"
+                  action="emp_self_services.action_hr_qualification_tree"/>
+
+        <menuitem id="skills_menu" name="Skills"
+                  parent="main_team_members_menu" sequence="6"
+                  action="hr_skill.open_view_skill_form"/>
+
+</odoo>

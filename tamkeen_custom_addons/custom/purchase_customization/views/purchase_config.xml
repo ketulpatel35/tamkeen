@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_invoice_inherit_for_user_id">
+        <field name="name">view.account.invoice.inherit.for.user.id</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_purchase_requisition_tree_inherits">
+        <field name="name">purchase.requisition.tree.inherits</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="attributes" >
+                <attribute name="string">Procurement Requisition Reference</attribute>
+            </field>
+
+            <field name="ordering_date" position="attributes" >
+                <attribute name="invisible">1</attribute>
+            </field>
+
+            <field name="date_end" position="attributes" >
+                <attribute name="invisible">1</attribute>
+            </field>
+
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="purchase_order_requisition_inherit_for_multi_xpath">
+        <field name="name">purchase.order.requisition.inherit.for.multi.xpath</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id"
+               ref="purchase_requisition.view_purchase_requisition_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet/div[@class='pull-left']/label[@for='name']" position="attributes">
+                <attribute name="string">Procurement Requisition Reference</attribute>
+            </xpath>
+
+            <xpath expr="//div[@class='oe_button_box']" position="replace">
+                <div class="oe_button_box" name="button_box" >
+                    <button name="%(purchase_requisition.action_purchase_requisition_list)d" type="action" class="oe_stat_button" icon="fa-list-alt"
+                            attrs="{'invisible': [('state', '=', 'draft')]}" groups="purchase_config.group_budget_approval_po,purchase_requisition_config.group_procurement_officer_pr">
+                        <field name="order_count" widget="statinfo" string="RFQs/Orders"/>
+                    </button>
+                </div>
+            </xpath>
+
+            <field name="name" position="attributes" >
+                <attribute name="required">0</attribute>
+                <attribute name="readonly">1</attribute>
+            </field >
+
+            <xpath expr="//field[@name='schedule_date']" position="attributes">
+                <attribute name="string">Delivery Date</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='date_end']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='ordering_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//group/group[2]/field[@name='origin']" position="attributes">
+                <attribute name="string">Sourcing Document</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="string">Officer</attribute>
+                <attribute name="readonly">1</attribute>
+                <attribute name="context">{'po_officer': True}</attribute>
+                <attribute name="attrs">{'invisible':[('state', 'not in',
+                    ('purchase_app', 'cancel', 'open', 'done','in_progress'))],
+                    'readonly': [('state', 'in', ('in_progress', 'done',
+                    'cancel'))]}</attribute>
+                <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+                <!--<attribute name="groups">purchase.group_purchase_manager</attribute>-->
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']" position="attributes">
+                <attribute name="context">{'line_ids':line_ids}</attribute>
+                <attribute name="attrs">{'readonly': [('state','not in',('draft'))]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']//tree//field[@name='product_id']" position="before">
+                <field name="sn_number" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']" position="after">
+                <separator string="Requests for Quotation" groups="purchase_requisition_config.group_procurement_officer_pr"/>
+                <field name="purchase_ids" groups="purchase_requisition_config.group_procurement_officer_pr,purchase_config.group_budget_approval_po">
+                    <tree string="Purchase Order" create="false">
+                        <field name="name" string="Reference"/>
+                        <field name="date_order" string="Order Date"/>
+                        <field name="partner_id"/>
+                        <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                        <field name="origin"/>
+                        <field name="state"/>
+                        <field name="amount_total"/>
+                    </tree>
+                </field>
+                <separator string="Product/Service Description"/>
+                <field name="product_service_description" nolabel="1"
+                       attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                <separator string="Remarks"/>
+                <field name="remark" nolabel="1" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']" position="after">
+                <div class="pull-right">
+                    <group>
+                        <field name="line_count"  class="oe_right" />
+                    </group>
+                </div>
+            </xpath>
+
+            <!--<xpath expr="//page/separator" position="attributes">-->
+            <!--<attribute name="string">Remarks</attribute>-->
+            <!--</xpath>-->
+        </field>
+
+    </record>
+
+    <record model="ir.ui.view" id="purchase_req_officer_inherit">
+        <field name="name">purchase.req.officer.inherit</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('purchase_requisition_config.group_procurement_review')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="string">Officer</attribute>
+                <attribute name="readonly">1</attribute>
+                <attribute name="context">{'po_officer': True}</attribute>
+                <attribute name="attrs">{'invisible':[('state', 'not in',
+                    ('procurement_review', 'purchase_app', 'cancel', 'open',
+                    'done','in_progress'))],
+                    'readonly': [('state', 'in', ('in_progress', 'done',
+                    'cancel'))]}</attribute>
+                <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+                <!--<attribute name="groups">purchase.group_purchase_manager</attribute>-->
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Change name and action name of Purchase Aggrement -->
+    <record id="purchase_requisition.action_purchase_requisition" model="ir.actions.act_window">
+        <field name="name">Procurement Requisition</field>
+    </record>
+
+    <menuitem
+            id="purchase_requisition.menu_purchase_requisition_pro_mgt"
+            sequence="10"
+            parent="purchase.menu_procurement_management"
+            action="purchase_requisition.action_purchase_requisition"/>
+
+    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+        <field name="name">Quotation</field>
+    </record>
+
+    <record id="view_pr_make_readonly_false" model="ir.ui.view">
+        <field name="name">view.pr.make.readonly.false</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition_config.purchase_req_inherit" />
+        <field name="groups_id" eval="[(6, 0, [ref('purchase_requisition_config.group_procurement_manager_pr')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="purchase_agreement_type_view_config">
+        <field name="name">purchase.agreement.type.view.config</field>
+        <field name="model">purchase.requisition.type</field>
+        <field name="inherit_id"
+               ref="purchase_requisition_config.view_purchase_agreement_type"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='purchase_bud_confirm']"
+                   position="after">
+                <field name="po_rfq"/>
+                <field name="po_bid_received"/>
+                <field name="po_bud_confirm"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

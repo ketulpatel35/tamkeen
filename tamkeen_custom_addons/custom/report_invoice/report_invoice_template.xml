@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_template">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <table class="table table-bordered foobar" width="100%" height="100%"
+                                   style="border: 1px solid #000000;font-size:13px;align:center;">
+                                <tr>
+                                    <td>تمكين للتقنيات</td>
+                                    <td>رقم الفاتورة</td>
+                                    <td><span t-esc="o.number"/></td>
+                                </tr>
+                                <tr>
+                                    <td>7235 العليا-  وحدة رقم 25</td>
+                                    <td>التاريخ</td>
+                                    <td><span t-esc="o.date_invoice"/></td>
+                                </tr>
+                                <tr>
+                                    <td>الرياض 12244 – 2392</td>
+                                    <td>رمز العميل</td>
+                                    <td><span t-esc="o.partner_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td>+966-112-762-936</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b><span
+                                            t-esc="o.partner_id.name"/>
+                                        /السادة </b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>البيان</td>
+                                    <td></td>
+                                    <td>المبلغ</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span t-esc="o.comment"/></td>
+                                    <td></td>
+                                    <td><span t-esc="o.amount_total"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>إجمالي المبلغ المستحق</td>
+                                    <td></td>
+                                    <td><b><span t-esc="o.amount_total"/>
+                                        <span t-esc="o.currency_id.name"/></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>* تفاصيل الفاتورة مرفقة (ملحق 1)</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>يصدر  الشيك باسم / شركة تمكين للتقنيات </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>أو تحويل المبلغ
+                                        إلي حساب الشركة في البنك
+                                        العربي الوطني حسب المعلومات التالية:
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>البنك العربي الوطني</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>حساب رقم : 0108095136900011</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>رقم الأيبان :  SA7830400108095136900011
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td align="center"><b>مدير الإدارة
+                                        المالية</b><br/>مشاعل
+                                        بنت
+                                        أحمد التويجري</td>
+                                    <td align="center" colspan="2">
+                                        <b>مدير عام
+                                            الإدارة المالية والخدمات المساندة
+                                        </b><br/>عبدالله بن عبدالعزيز الرويتع
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

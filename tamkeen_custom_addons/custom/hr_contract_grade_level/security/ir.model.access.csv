@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_contract_grede_level_user,access_hr_contract_level_user,model_grade_level,hr_admin.group_hr_admin,1,1,1,1
+access_hr_contract_gread_level_mgt,access_hr_contract_grede_level_mgt,model_grade_level,hr.group_hr_user,1,0,0,0

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_account_asset_category_disposal_form" model="ir.ui.view">
+        <field name="name">view.account.asset.category.disposal.form</field>
+        <field name="model">account.asset.category</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <group>
+                    <group string="Asset Disposal">
+                        <field name="disposal_journal_id"/>
+                        <field name="disposal_account_id"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_asset_asset_disposal_form" model="ir.ui.view">
+        <field name="name">view.account.asset.asset.disposal.form</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//notebook" position="inside">
+                <page string="Asset Disposal" attrs="{'invisible':[('state','=','draft')]}">
+                    <group colspan="4" col="4">
+                        <field name="disposal_type"/>
+                        <field name="disposal_date"/>
+                        <field name="disposal_journal_id"/>
+                        <field name="disposal_account_id"/>
+                        <field name="disposal_customer_id" attrs="{'invisible':[('disposal_type', '!=', 'sale')]}"/>
+                        <field name="disposal_amount" attrs="{'invisible':[('disposal_type', '!=', 'sale')]}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

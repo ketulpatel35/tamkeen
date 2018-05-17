@@ -1,0 +1,27 @@
+<odoo>
+    <record id="employee_leave_remove_wizard_view" model="ir.ui.view">
+        <field name="name">employee.leave.remove.wizard.view</field>
+        <field name="model">employee.leave.remove.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Remove Employee Leave">
+                <p class="oe_grey">
+                    Are you sure you want to delete the employee loan?
+                </p>
+                <footer>
+                    <button string="Delete"
+                            name="remove_leave" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="action_employee_leave_remove_wizard"
+                multi="True"
+                key2="client_action_multi" name="Delete My Own Request"
+                res_model="employee.leave.remove.wizard"
+                src_model="hr.holidays"
+                view_mode="form" target="new" view_type="form"
+                groups="hr_holidays_extension.group_leave_manage_normal_user"/>
+</odoo>

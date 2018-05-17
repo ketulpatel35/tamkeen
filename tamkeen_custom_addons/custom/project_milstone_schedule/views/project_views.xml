@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Management Form View -->
+    <record id="project_management_form_view_inherit_for_milestone"
+            model="ir.ui.view">
+        <field name="name">project.management.form.view.inherit.for.milestone</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id"
+               ref="project_management.project_management_form_view"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="action"
+                        name="%(project_milstone_schedule.action_view_project_milestones_from_project)d"
+                        icon="fa-files-o">
+                    <field string="Milestone" name="milestones_count"
+                           widget="statinfo"/>
+                </button>
+            </div>
+            <xpath expr="//notebook/page[@name='po_and_contract']"
+                   position="inside">
+                <notebook>
+                    <page name="payment_summary" string="Payment Summary"
+                          groups="project.group_project_manager,project_management.group_create_project,project.group_project_user">
+                        <group col="4" colspan="4">
+                            <field name="invoiced_values"/>
+                            <field name="collected_values"/>
+                            <field name="remaining_values"/>
+                        </group>
+                        <separator string="Vendor Payment Information"/>
+                        <group name="vendor_payment_information">
+                            <field name="vendor_paid_value"/>
+                            <field name="vendor_remaining_value"/>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+            <!--  -->
+        </field>
+    </record>
+    <record id="project_management_form_view_inherit_for_po_contract"
+            model="ir.ui.view">
+        <field name="name">project.management.form.view.inherit.for.po
+            .contract</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id"
+               ref="project_management.project_management_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='po_and_contract']" position="after">
+                <page string="Milestones Details">
+                    <field name="milestones_schedule_ids" readonly="1" context="{'milestones_schedule_ids':milestones_schedule_ids}">
+                        <tree> <!-- editable="bottom" -->
+                            <field name="code" readonly="1"/>
+                            <field name="name" string="Milestone Name"/>
+                            <field name="start_date"/>
+                            <field name="due_date"/>
+                            <field name="estimated_percentage"
+                                   string="Progress completion(%)"/>
+                            <field name="payment_involved"/>
+                            <field name="estimated_value"/>
+                            <field name="is_coc_obtained"/>
+                            <field name="payment_invoiced"/>
+                            <field name="payment_collected"/>
+                            <field name="partner_id"
+                                   domain="[('supplier', '=', True)]"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                            <field name="purchase_order_no"
+                                   string="Vendor Purchase Order#"/>
+                            <field name="vendor_contract_value"/>
+                        </tree>
+                        <!--<field name="project_id" />-->
+                        <!--<field name="purchase_order_id"-->
+                        <!--domain="[('partner_id', '=',
+                        partner_id)]"/>-->
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="total_milestones_value" readonly="1"
+                               class="oe_subtotal_footer_separator"
+                               widget="monetary"/>
+                        <field name="total_estimated_percentage"
+                               invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

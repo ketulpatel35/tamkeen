@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account.menu_finance" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('journal_entry_log.group_journal_entry_log')),
+        ]"/>
+    </record>
+
+    <record id="account.menu_finance_entries" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('journal_entry_log.group_journal_entry_log')),
+        ]"/>
+    </record>
+
+    <record id="account_lock_period_validation.audit_journal_entry_parent" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('journal_entry_log.group_journal_entry_log')),
+        ]"/>
+    </record>
+
+    <record id="view_move_logs_form" model="ir.ui.view">
+        <field name="name">view.move.logs.form</field>
+        <field name="model">account.move.log</field>
+        <field name="arch" type="xml">
+            <form string="Move Logs" create="false" delete="false" edit="false">
+                <header>
+                    <button name="review_log" type="object" string="Reviewed" states="draft"/>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group col="4" colspan="4">
+                        <field name="move_id"/>
+                        <field name="create_date" string="Modified On"/>
+                        <field name="create_uid" string="Modified By"/>
+                    </group>
+                    <separator string="Log"/>
+                    <field name="move_log" colspan="4"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_move_logs_tree" model="ir.ui.view">
+        <field name="name">view.move.logs.tree</field>
+        <field name="model">account.move.log</field>
+        <field name="arch" type="xml">
+            <tree string="Move Logs" create="false" delete="false" edit="false">
+                <field name="move_id"/>
+                <field name="create_date" string="Modified On"/>
+                <field name="create_uid" string="Modified By"/>
+                <field name="move_log"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_move_logs_search" model="ir.ui.view">
+        <field name="name">view.move.logs.search</field>
+        <field name="model">account.move.log</field>
+        <field name="arch" type="xml">
+            <search string="Move Logs">
+                <field name="move_id"/>
+                <field name="create_date" string="Modified On"/>
+                <field name="create_uid" string="Modified By"/>
+                <field name="move_log"/>
+                <filter domain="[('state','=','draft')]" help="Draft" string="Draft" name="draft"/>
+                <filter domain="[('state','=','reviewed')]" help="Reviewed" string="Reviewed" name="reviewed"/>
+                <filter name="today" string="Today" domain="[('create_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),('create_date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+                <filter name="week" string="This Week"
+                            domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d 00:00:00')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d 23:59:59')),
+                            ]"/>
+                <group expand="0" string="Group By">
+                    <filter name="groupby_move_id" string="Journal Entry" context="{'group_by': 'move_id'}"/>
+                    <filter string="Modified By" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_view_move_log" model="ir.actions.act_window">
+        <field name="name">Journal Entry Log</field>
+        <field name="res_model">account.move.log</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_move_logs_search"/>
+        <field name="context">{'search_default_groupby_move_id': True, 'search_default_draft':1}</field>
+    </record>
+
+    <menuitem name="Journal Entry Log" action="action_view_move_log" parent="account_lock_period_validation.audit_journal_entry_parent" id="menu_journal_entry_log"
+        groups="journal_entry_log.group_journal_entry_log"/>
+
+    <record id="view_move_form_logs" model="ir.ui.view">
+        <field name="name">view.move.form.logs</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="attributes">
+                <attribute name="attrs">{'readonly':[('state','=','posted')]}</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Logs" groups="journal_entry_log.group_journal_entry_log">
+                    <group>
+                        <button name="review_entry" type="object" string="Reviewed"/>
+                    </group>
+                    <field name="log_ids" context="{'tree_view_ref':'view_move_logs_tree','form_view_ref':'view_move_logs_form',
+                        'search_view_ref':'view_move_logs_search'}"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

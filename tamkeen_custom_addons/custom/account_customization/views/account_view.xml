@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="account_view_list_inherit_for_name_arabic">
+        <field name="name">account.view.list.inherit.for.name.field</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="name_arabic" required="True"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_view_form_inherit_for_name_arabic">
+        <field name="name">account.view.form.inherit.for.name.arabic</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                - <field name="name_arabic" class="oe_inline" placeholder="الاسم بالعربية" style="width: 6em" required="True"/>
+            </xpath>
+            <field name="user_type_id" position="after">
+                <field name="internal_type_id"/>
+                <field name="category_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_account_form_for_category"
+            model="ir.ui.view">
+        <field name="name">account.analytic.account.form</field>
+        <field name="model">account.analytic.account</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <field name="category_id"/>
+            </field>
+        </field>
+    </record>
+
+
+    <!--<record id="account_move_form_manager_post" model="ir.ui.view">-->
+    <!--<field name="name">account.move.form.manager.post</field>-->
+    <!--<field name="model">account.move</field>-->
+    <!--<field name="inherit_id" ref="account.view_move_form" />-->
+    <!--<field name="arch" type="xml">-->
+    <!--<xpath expr="//button[@name='post']" position="replace">-->
+    <!--<button name="post" states="draft" string="Post"-->
+    <!--type="object" class="oe_highlight" />-->
+    <!--</xpath>-->
+    <!--<xpath expr="//button[@name='button_cancel']" position="replace">-->
+    <!--<button name="button_cancel" states="posted" string="Cancel Entry"-->
+    <!--type="object" groups="account.group_account_manager" />-->
+    <!--</xpath>-->
+    <!--</field>-->
+    <!--</record>-->
+
+    <record id="invoice_form_inherit_for_payment_ids" model="ir.ui.view">
+        <field name="name">invoice.form.inherit.for.payment.ids</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='other_info']" position="after">
+                <page string="Payments" name="payment">
+                    <field name="payment_move_line_ids"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_journal_form_inherit_for_add_group" model="ir.ui.view">
+        <field name="name">view.account.journal.form.inherit.for.add.group</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account_cancel.view_account_journal_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='update_posted']" position="attributes">
+                <attribute name="groups">account.group_account_manager</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Search view of account internal type-->
+    <record id="account_internal_search_view" model="ir.ui.view">
+        <field name="name">Account Internal Type Search</field>
+        <field name="model">account.internal.type</field>
+        <field name="arch" type="xml">
+            <search string="Analytic Internal Type">
+                <field name="name"
+                       filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
+                       string="Name"/>
+                <field name="code"/>
+                <group expand="0" string="Group By">
+                    <filter string="Name" icon="terp-stock_symbol-selection"
+                            domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--Form view for account internal type-->
+    <record id="account_internal_type_form_view" model="ir.ui.view">
+        <field name="name">Account Internal Type Form</field>
+        <field name="model">account.internal.type</field>
+        <field name="arch" type="xml">
+            <form string="Account Internal Type Form">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <notebook>
+                        <page string="Account" name="account">
+                            <field name="account_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view for account internal type-->
+    <record id="account_internal_type_tree_view" model="ir.ui.view">
+        <field name="name">Account Internal Type Tree</field>
+        <field name="model">account.internal.type</field>
+        <field name="arch" type="xml">
+            <tree string="Account Internal Type Tree">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action view for account internal type-->
+    <record id="account_internal_type_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Account Internal Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.internal.type</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create your Internal Type Account
+            </p>
+        </field>
+    </record>
+
+    <!-- menu item for internal account type -->
+    <menuitem id="account_internal_type" name="Account Internal Type"
+              parent="account.menu_analytic_accounting" action="account_internal_type_action_view"
+              sequence="30"/>
+
+
+
+    <!--=========================================-->
+
+
+    <!--Search view of account category-->
+    <record id="account_category_search_view" model="ir.ui.view">
+        <field name="name">Account Category Search</field>
+        <field name="model">account.category</field>
+        <field name="arch" type="xml">
+            <search string="Account Category">
+                <field name="name"
+                       filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
+                       string="Name"/>
+                <field name="code"/>
+                <group expand="0" string="Group By">
+                    <filter string="Name" icon="terp-stock_symbol-selection"
+                            domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!--Form view for account  category-->
+    <record id="account_category_form_view" model="ir.ui.view">
+        <field name="name">Account Category Form</field>
+        <field name="model">account.category</field>
+        <field name="arch" type="xml">
+            <form string="Account Category Form">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <notebook>
+                        <page string="Account" name="account">
+                            <field name="account_ids"/>
+                        </page>
+                        <page string="Analytic Account"
+                              name="analytic_account">
+                            <field name="analytic_account_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--Tree view for account category-->
+    <record id="account_category_tree_view" model="ir.ui.view">
+        <field name="name">Account Category Tree</field>
+        <field name="model">account.category</field>
+        <field name="arch" type="xml">
+            <tree string="Account Category Tree">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Action view for account  category-->
+    <record id="account_icategory_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Account Category</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.category</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create your Account Category
+            </p>
+        </field>
+    </record>
+
+    <!--Meni item for account category-->
+    <menuitem id="account_category_menu_item" name="Account Category"
+              parent="account.menu_analytic_accounting" action="account_icategory_action_view"
+              sequence="32"/>
+
+
+    <record id="view_account_account_group_category" model="ir.ui.view">
+        <field name="name">account.account.category</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Internal Type" domain="[]"
+                        context="{'group_by':'internal_type_id'}"/>
+                <filter string="Category" domain="[]"
+                        context="{'group_by':'category_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_account_group_category"
+            model="ir.ui.view">
+        <field name="name">account.analytic.account.category</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Category" domain="[]"
+                        context="{'group_by':'category_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

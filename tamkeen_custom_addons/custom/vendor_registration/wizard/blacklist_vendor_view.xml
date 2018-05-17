@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="blacklist_vendor_form_view" model="ir.ui.view">
+            <field name="name">blacklist.vendor.form.view</field>
+            <field name="model">blacklist.vendor</field>
+            <field name="arch" type="xml">
+                <form string="Blacklist Vendor">
+                    <group>
+                        <field name="reason" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="blacklistvendor" string="Done"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

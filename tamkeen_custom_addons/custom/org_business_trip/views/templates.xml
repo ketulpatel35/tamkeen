@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Business Trip Request for manager approval -->
+    <record id="bt_request_send_to_manager" model="mail.template">
+        <field name="name">Business Trip Request Manager Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.bt_manager_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.bt_manager_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for VP approval -->
+    <record id="bt_request_send_to_vp" model="mail.template">
+        <field name="name">Business Trip Request VP Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.bt_vp_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.bt_vp_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for HR Review -->
+    <record id="bt_request_send_to_hr_approval" model="mail.template">
+        <field name="name">Business Trip Request HR Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.business_trip_policy_id.hr_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for HR Review -->
+    <record id="bt_request_send_to_budget_approval" model="mail.template">
+        <field name="name">Business Trip Request Budget Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.business_trip_policy_id.budget_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear Budget Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for CEO approval -->
+    <record id="bt_request_send_to_ceo" model="mail.template">
+        <field name="name">Business Trip Request CEO Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.bt_ceo_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.bt_ceo_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for Final HR Review -->
+    <record id="bt_request_send_to_final_hr_approval" model="mail.template">
+        <field name="name">Business Trip Request HR Approval</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.business_trip_policy_id.hr_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip for Finance Processing -->
+    <record id="bt_request_send_to_final_finance_processing"
+            model="mail.template">
+        <field name="name">Business Trip Request Finance Processing</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.business_trip_policy_id.finance_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear Finance Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Business Trip request.
+<br/>
+<b>Business Trip #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip approved -->
+    <record id="bt_request_approved"
+            model="mail.template">
+        <field name="name">Business Trip Request Approved</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Business Trip request has been approved.
+<br/>
+<b>Business Trip #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip return -->
+    <record id="bt_request_return"
+            model="mail.template">
+        <field name="name">Business Trip Request Return</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request Return</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Business Trip request has been returned back to draft state.
+<br/>
+<b>Business Trip #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Business Trip Rejected -->
+    <record id="bt_request_rejected"
+            model="mail.template">
+        <field name="name">Business Trip Request Rejected</field>
+        <field name="model_id"
+               ref="org_business_trip.model_org_business_trip"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Business Trip Request Rejected</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Business Trip request has been Rejected.
+<br/>
+<b>Business Trip #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+</odoo>

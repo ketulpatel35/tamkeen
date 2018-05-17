@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Employee Leave Request -->
+        <record id="employee_leave_request" model="mail.template">
+            <field name="name">Employee Leave Request</field>
+            <field name="model_id" ref="hr.model_hr_employee" />
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Employee Email Template</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Employee Approval.
+<br/>
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+</p>
+<br/>
+<br/>
+			   ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

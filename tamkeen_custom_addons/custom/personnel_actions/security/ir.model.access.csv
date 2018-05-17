@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink","active"
+personnel_action_hr_officer,personnel.action.hr.officer,model_personnel_actions,organization_structure.group_planning_head,1,1,1,1
+personnel_action_type_hr_officer,personnel.action.type.hr.officer,model_personnel_action_type,organization_structure.group_planning_head,1,1,1,1
+reason_for_action_hr_officer,reason.for.action.hr.officer,model_reason_for_action,organization_structure.group_planning_head,1,1,1,1
+

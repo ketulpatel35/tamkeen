@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <!-- <menuitem name="Services Management" id="services_mgmnt_menu" sequence="17" groups="group_service_hr_approval,group_service_administration_approval,group_service_config,group_service_all_requests,group_service_oe_approval,group_service_ta_approval,group_service_finance_approval,group_service_prcrmnt_approval,group_service_audit_all_requests,group_service_ss_vp_approval"/> -->
+
+        <menuitem name="Services Management" id="services_mgmnt_menu" sequence="17"
+        groups="group_service_hr_approval,group_service_administration_approval,group_service_config,group_service_all_requests,group_service_oe_approval,group_service_ta_approval,group_service_finance_approval,group_service_prcrmnt_approval,group_service_audit_all_requests,group_service_ss_vp_approval"
+        web_icon="service_management,static/description/icon.png"/>
+        <!--  -->
+        <menuitem id="services_requests_menu" name="General Services" parent="services_mgmnt_menu" sequence="1" />
+
+        <menuitem name="HR Requests" id="menu_hr_requests" parent="services_requests_menu" sequence="12" action="action_request_hr_services" groups="group_service_hr_approval,group_service_finance_approval,group_service_prcrmnt_approval,group_service_ss_vp_approval"/>
+        
+        <menuitem name="Recruitment Requests" id="menu_rcrtmnt_requests" parent="services_requests_menu" sequence="14" action="action_request_rcrtmnt_services" groups="group_service_oe_approval,group_service_ta_approval,group_service_finance_approval"/>
+
+        <menuitem name="Administration Requests" id="menu_admnstr_requests" parent="services_requests_menu" sequence="15" action="action_request_administration_services" groups="group_service_administration_approval,group_service_finance_approval,group_service_prcrmnt_approval,group_service_ss_vp_approval"/>
+
+        <menuitem name="All Services Requests" id="menu_all_services" parent="services_requests_menu" sequence="15" action="act_all_services" groups="group_service_all_requests,group_service_audit_all_requests"/> 
+        <!--  -->
+        <menuitem id="services_requests_config_menu" name="Configuration" parent="services_mgmnt_menu" sequence="2" groups="group_service_config"/>
+
+        <menuitem name="Service Type" id="menu_services_types" action="act_open_service_types_view" parent="services_requests_config_menu" sequence="21" groups="group_service_config"/>
+        
+        <menuitem name="Service Category" id="menu_services_category" action="act_open_service_category_view" parent="services_requests_config_menu" sequence="22" groups="group_service_config"/>
+
+        <menuitem name="Service Stages" id="menu_services_stages" action="act_open_service_displayed_states_view" parent="services_requests_config_menu" sequence="23" groups="group_service_config"/>        
+
+    </data>
+</openerp>

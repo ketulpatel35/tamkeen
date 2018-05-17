@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="purchase_order_form_inherit_add_readonly"
+                model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.add.readonly</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!-- adding group  -->
+                <!--<field name="validator" position="attributes">-->
+                <!--<attribute name="groups">base.group_user</attribute>-->
+                <!--</field>-->
+                <field name="date_approve" position="attributes">
+                    <attribute name="groups">base.group_user</attribute>
+                </field>
+
+                <!--<xpath expr="//button[@name='button_cancel']"-->
+                <!--position="attributes">-->
+                <!--<attribute name="states">approved,done</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//button[@name='button_draft']"-->
+                <!--position="attributes">-->
+                <!--<attribute name="states">sent,bid,budget_confirmed,confirmed,purchase</attribute>-->
+                <!--</xpath>-->
+                <xpath expr="//field[@name='partner_ref']" position="after">
+                    <field name="rfp_ref_num" attrs="{'readonly': [('state','not in',('draft','sent'))]}"/>
+                    <field name="quotation_ref" attrs="{'readonly': [('state','not in',('draft','sent'))]}" />
+                </xpath>
+                <field name="partner_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>
+                </field>
+                <field name="partner_ref" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('purchase'))]}</attribute>
+                </field>
+                <field name="date_order" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>
+                </field>
+                <!--<field name="origin" position="attributes">-->
+                    <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>-->
+                <!--</field>-->
+                <field name="requisition_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>
+                </field>
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="before">-->
+
+                <!--<field name="state" invisible="1"/>-->
+                <!--</xpath>-->
+                <field name="invoice_status" position="after">
+                    <field name="is_invoice_received" readonly="1"/>
+                    <field name="validate_by_user_id" readonly="1"/>
+                </field>
+
+                <xpath expr="//field[@name='order_line']" position="replace">
+                    <field name="order_line" context="{'order_line':order_line}"
+                           attrs="{'readonly': [('state','not in',('draft'))]}">
+                        <tree string="Purchase Order Lines" editable="bottom">
+                            <field name="state" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="sn_number" readonly="1"/>
+                            <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
+                            <field name="name"/>
+                            <field name="date_planned"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                            <field name="analytic_tag_ids" groups="purchase.group_analytic_accounting" widget="many2many_tags"/>
+                            <field name="product_qty"/>
+                            <field name="qty_received" invisible="not context.get('show_purchase', False)"/>
+                            <field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>
+                            <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}"/>
+                            <field name="price_unit"/>
+                            <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}"/>
+                            <field name="price_subtotal" widget="monetary"/>
+                        </tree>
+                    </field>
+                </xpath>
+
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='analytic_tag_ids']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='product_qty']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='product_uom']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>-->
+                <!--</xpath>-->
+                <!--<xpath expr="//field[@name='order_line']//tree//field[@name='account_analytic_id']" position="attributes">-->
+                <!--<attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent', 'bid'))]}</attribute>-->
+                <!--</xpath>-->
+                <field name="currency_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'sent'))]}</attribute>
+                    <attribute name="options">{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}</attribute>
+                </field>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Cancel Reason" attrs="{'invisible': [('state','not in',('cancel'))]}">
+                        <group>
+                            <field name="cancel_reason"/>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//notebook/page[1]" position="after">
+                    <page string="RFQ &amp; Bid">
+                        <group>
+                            <group>
+                                <field name="bid_received_on"/>
+                                <field name="bid_valid_untill"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_order_search_inherit_2">
+            <field name="name">purchase.order.list.select.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="groups_id" eval="[(6, 0, [ref('purchase_config.group_budget_approval_po')])]"/>
+            <field name="inherit_id" ref="purchase_order_form_inherit_add_readonly" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']" position="replace">
+                    <field name="order_line" context="{'order_line':order_line}"
+                           attrs="{'readonly': [('state','not in',('draft'))]}">
+                        <tree string="Purchase Order Lines" editable="bottom">
+                            <field name="state" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="sn_number" readonly="1"/>
+                            <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="date_planned" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" readonly="1"/>
+                            <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                            <field name="analytic_tag_ids" groups="purchase.group_analytic_accounting" widget="many2many_tags" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="qty_received" invisible="not context.get('show_purchase', False)" readonly="1"/>
+                            <field name="qty_invoiced" invisible="not context.get('show_purchase', False)" readonly="1"/>
+                            <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}" readonly="1"/>
+                            <field name="price_unit" />
+                            <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" readonly="1"/>
+                            <field name="price_subtotal" widget="monetary" readonly="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_request_for_quotation_filter_inh" model="ir.ui.view">
+            <field name="name">request.quotation.select</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id"
+                   ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <!--<xpath expr="field[@name='name']" position="before">-->
+                    <!--<field name="po_company_number"-->
+                           <!--string="PO Company Number"/>-->
+                <!--</xpath>-->
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">['|',('name','ilike',self),('po_company_number','ilike',self)]</attribute>
+                </field>
+                <group position="inside">
+                    <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </field>
+        </record>
+
+        <record id="customize_purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree fonts="bold:message_unread==True"
+                          colors="grey:state=='cancel';
+                          blue:state in ('draft');"
+                          string="Purchase Order">
+                        <field name="origin"/>
+                        <field name="name"/>
+                        <field name="po_company_number"/>
+                        <field name="currency_id"/>
+
+                        <field name="message_unread" invisible="1"/>
+                        <field name="date_order"/>
+                        <field name="date_approve"/>
+
+                        <field name="partner_id"/>
+                        <field name="validate_by_user_id"/>
+                        <field name="company_id"
+                               groups="base.group_multi_company"
+                               widget="selection"/>
+                        <field name="date_planned"
+                               invisible=
+                                       "context.get('quotation_only', False)"/>
+                        <field name="amount_untaxed" sum="Total Untaxed amount"
+                               string="Untaxed"/>
+                        <field name="amount_total" sum="Total amount"/>
+                        <field name="state"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_tree_view_for_confirm" model="ir.ui.view">
+            <field name="name">purchase.order.tree.view.for.confirm</field>
+            <field name="model">purchase.order</field>
+            <!--<field name="inherit_id" ref="purchase.purchase_order_tree"/>-->
+            <field name="arch" type="xml">
+                <tree string="Purchase Order">
+                    <field name="origin"/>
+                    <field name="name" string="PO company Number"/>
+                    <field name="po_company_number" string="Reference"/>
+                    <field name="currency_id"/>
+                    <field name="message_unread" invisible="1"/>
+                    <field name="date_order"/>
+                    <field name="date_approve"/>
+
+                    <field name="partner_id"/>
+                    <field name="validate_by_user_id"/>
+                    <field name="company_id"
+                           groups="base.group_multi_company"
+                           widget="selection"/>
+                    <field name="date_planned"
+                           invisible=
+                                   "context.get('quotation_only', False)"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount"
+                           string="Untaxed"/>
+                    <field name="amount_total" sum="Total amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase_order_tree_view_for_draft_confirm" model="ir.ui.view">
+            <field name="name">purchase.order.tree.view.for.draft.confirm</field>
+            <field name="model">purchase.order</field>
+            <!--<field name="inherit_id" ref="purchase.purchase_order_tree"/>-->
+            <field name="arch" type="xml">
+                <tree string="Purchase Order">
+                    <field name="origin"/>
+                    <field name="name" string="Reference"/>
+                    <field name="currency_id"/>
+                    <field name="message_unread" invisible="1"/>
+                    <field name="date_order"/>
+                    <field name="date_approve"/>
+                    <field name="partner_id"/>
+                    <field name="validate_by_user_id"/>
+                    <field name="company_id"
+                           groups="base.group_multi_company"
+                           widget="selection"/>
+                    <field name="date_planned"
+                           invisible=
+                                   "context.get('quotation_only', False)"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount"
+                           string="Untaxed"/>
+                    <field name="amount_total" sum="Total amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True, 'tree_view_ref': 'purchase_order_tree_view_for_confirm'}</field>
+            <field name="domain">[('state','not in',('draft','sent','bid', 'confirmed'))]</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order.
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+
+        <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="view_ids"
+                   eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase_order_tree_view_for_confirm')})]"/>
+        </record>
+
+
+        <record id="purchase_rfq_po" model="ir.actions.act_window">
+            <field name="name">Quotations/Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,graph,calendar</field>
+            <field name="search_view_id"
+                   ref="purchase.view_purchase_order_filter"/>
+            <field name="view_ids"
+                   eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase_order_tree_view_for_draft_confirm')})]"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a request for quotation.
+                </p>
+                <p>
+                    The quotation contains the history of the
+                    discussion/negotiation
+                    you had with your supplier. Once confirmed, a request for
+                    quotation is converted into a purchase order.
+                </p>
+                <p>
+                    Most propositions of purchase orders are created
+                    automatically
+                    by Odoo based on inventory needs.
+                </p>
+            </field>
+        </record>
+
+        <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+            <field name="domain">[('state','in',('draft','sent','budget_confirmed'))]
+            </field>
+        </record>
+        <record id="purchase.purchase_form_action"
+                model="ir.actions.act_window">
+            <field name="domain">[('state','not in',('draft','sent','budget_confirmed'))]
+            </field>
+        </record>
+
+        <menuitem action="purchase_rfq_po" id="menu_purchase_rfq_po"
+                  parent="purchase.menu_procurement_management"
+                  sequence="7"/>
+
+        <record id="purchase_cancel_reason_view_form" model="ir.ui.view">
+            <field name="name">purchase.cancel.reason.view.form</field>
+            <field name="model">purchase.cancel.reason</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="proceed" string="Proceed" type="object"/>
+                        <button string="cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--<record id="purchase.res_partner_view_purchase_buttons" model="res.partner">-->
+        <!--<field name="groups_id" eval="[(4,ref('account.group_account_user'))]"/>-->
+        <!--</record>-->
+
+        <!-- hide Purchase Default Report -->
+        <report
+            string="Purchase Order"
+            id="purchase.action_report_purchase_order"
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="purchase.report_purchaseorder"
+            file="purchase.report_purchaseorder"
+            menu="False"
+        />
+
+        <report
+            string="Request for Quotation"
+            id="purchase.report_purchase_quotation"
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="purchase.report_purchasequotation"
+            file="purchase.report_purchasequotation"
+            menu="False"
+        />
+
+    </data>
+</openerp>

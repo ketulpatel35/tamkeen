@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Sequences for End of Service -->
+        <record id="seq_org_end_of_service" model="ir.sequence">
+            <field name="name">End of Service</field>
+            <field name="code">org.end.of.service</field>
+            <field name="prefix">EOS</field>
+            <field name="padding">6</field>
+        </record>
+
+    </data>
+</openerp>

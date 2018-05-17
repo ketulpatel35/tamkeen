@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem parent="account.account_management_menu"
+              name="Asset Category"
+              id="account_asset.menu_action_account_asset_asset_list_normal_purchase"
+              action="account_asset.action_account_asset_asset_list_normal_purchase"
+              sequence="1"/>
+</odoo>

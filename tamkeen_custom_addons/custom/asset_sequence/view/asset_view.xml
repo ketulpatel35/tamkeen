@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="asset_sequence_inherit_view">
+        <field name="name">inherit.account.asset.asset</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet//div[@class='oe_title']" position="before">
+                <div>
+                    <label for="asset_sequence_number" class="oe_edit_only" attrs="{'invisible': [('asset_sequence_number','=',False)]}"/>
+                    <h3>
+                        <field name="asset_sequence_number" readonly="1" attrs="{'invisible': [('asset_sequence_number','=',False)]}"/>
+                    </h3>
+                </div>
+            </xpath>
+            <xpath expr="//form//sheet//div[@class='oe_title']" position="inside">
+                <group colspan="4" col="4">
+                    <field name="barcode" class="oe_inline"
+                           attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="manufacturing_serial_number"
+                           class="oe_inline"
+                           attrs="{'readonly':[('state','!=','draft')]}"/>
+                </group>
+                <label for="type_id" class="oe_edit_only" invisible="1"/>
+                <h1>
+                    <field name="type_id" class="oe_inline" invisible="1"
+                           attrs="{'readonly':[('state','!=','draft')]}"/>
+                </h1>
+            </xpath>
+            <field name="invoice_id" position="attributes">
+                <attribute name="domain">[('partner_id', '=', partner_id)]</attribute>
+                <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+            </field>
+            <field name="code" position="after">
+                <field name="employee_id" />
+                <field name="analytic_id" />
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="asset_sequence_inherit_tree_view">
+        <field name="name">inherit.tree.account.asset.asset</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id"
+               ref="account_asset.view_account_asset_asset_purchase_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="barcode"/>
+                <field name="manufacturing_serial_number"/>
+            </field>
+            <field name="category_id" position="before">
+                <field name="type_id" />
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="asset_sequence_inherit_search_view">
+        <field name="name">inherit.search.account.asset.asset</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id"
+               ref="account_asset.view_account_asset_search" />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="barcode" />
+                <field name="manufacturing_serial_number" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

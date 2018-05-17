@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Later -->
+        <!-- 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 
+        'application/vnd.oasis.opendocument.spreadsheet', 'application/vnd.oasis.opendocument.presentation',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation', -->
+        <record id="application_pdf" model="white.mimetype">
+            <field name="name">application/pdf</field>
+            <field name="active">True</field>
+        </record>
+        <record id="application_msword" model="white.mimetype">
+            <field name="name">application/msword</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="application_ms-office" model="white.mimetype">
+            <field name="name">application/vnd.ms-office</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="application_opendocument_text" model="white.mimetype">
+            <field name="name">application/vnd.oasis.opendocument.text</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="application_wordprocessingml_document" model="white.mimetype">
+            <field name="name">application/vnd.openxmlformats-officedocument.wordprocessingml.document</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Images -->
+        <record id="application_images_png" model="white.mimetype">
+            <field name="name">image/png</field>
+            <field name="active">True</field>
+        </record>
+        <record id="application_images_jpeg" model="white.mimetype">
+            <field name="name">image/jpeg</field>
+            <field name="active">True</field>
+        </record>
+        <record id="application_images_gif" model="white.mimetype">
+            <field name="name">image/gif</field>
+            <field name="active">True</field>
+        </record>
+        <record id="application_images_jpg" model="white.mimetype">
+            <field name="name">image/jpg</field>
+            <field name="active">True</field>
+        </record>
+        <!-- end -->
+        <!-- Zip Files -->
+        <record id="application_zip" model="white.mimetype">
+            <field name="name">application/zip</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="application_gzip" model="white.mimetype">
+            <field name="name">application/x-gzip</field>
+            <field name="active">True</field>
+        </record>
+        <!-- end -->
+
+    </data>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--=============== Attendance XLS Report Wizard==================-->
+        <record id="hr_attendance_report_xls_view" model="ir.ui.view">
+            <field name="name">hr.attendance.report.xls.view</field>
+            <field name="model">hr.attendance.report.xls</field>
+            <field name="arch" type="xml">
+                <form string="Attendance XlS Report">
+                    <group>
+                        <field name="department_ids" widget="many2many_tags"
+                               context="{'is_report': True, 'uid': uid}"
+                               required="1"
+                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                    </group>
+                    <group colspan="4" col="4" string="Columns to Display">
+                        <field name="sign_in"/>
+                        <field name="sign_out"/>
+                        <field name="working_hours"/>
+                        <field name="additional_hours"/>
+                        <field name="permission_hours"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button type="object" name="print_report"
+                                    string="Print Excel" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--=============== Attendance XLS Report Wizard for    HR============-->
+        <record id="hr_attendance_report_xls_view_for_hr" model="ir.ui.view">
+            <field name="name">hr.attendance.report.xls.view.for.hr</field>
+            <field name="model">hr.attendance.report.xls</field>
+            <field name="inherit_id" ref="hr_attendance_report_xls.hr_attendance_report_xls_view"/>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_attendance.group_hr_attendance_user') ])]" />
+            <field name="arch" type="xml">
+                <field name="department_ids" position="attributes">
+                    <attribute name="required">0</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window"
+                id="wizard_print_attendance_xls_report">
+            <field name="name">Attendace XlS Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.attendance.report.xls</field>
+            <field name="view_id" ref="hr_attendance_report_xls_view"/>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="attendance_report" name="Reports"
+                  parent="hr_attendance.menu_hr_attendance_root"
+                  sequence="99"
+                  groups="hr_attendance.group_hr_attendance_user"/>
+        <record id="hr_attendance.menu_hr_attendance_report"
+                model="ir.ui.menu">
+            <field name="parent_id" ref="attendance_report"/>
+            <field name="name">Attendance Analysis</field>
+        </record>
+        <menuitem id="attendance_report_xls"
+                  name="Attendance Report Generation"
+                  parent="attendance_report" sequence="1"
+                  action="wizard_print_attendance_xls_report"/>
+
+        <record id="att_report_print_link_view" model="ir.ui.view">
+         <field name="name">att.report.print.link</field>
+         <field name="model">att.report.print.link</field>
+         <field name="arch" type="xml">
+             <form string="Excel Output">
+                   <separator colspan="4" string="Please save file as .xls excel format"/>
+                   <field name="name" invisible="1"/>
+                   <field name="xls_output" filename='name' readonly='1'/>
+                   <footer>
+                       <button string="Cancel" class="oe_link" special="cancel"/>
+                   </footer>
+             </form>
+         </field>
+       </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- personal competency Form View -->
+    <record id="personal_competency_form_views" model="ir.ui.view">
+        <field name="name">personal.competency.form.view</field>
+        <field name="model">personal.competency</field>
+        <field name="arch" type="xml">
+            <form string="Personal Competency Value" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="code" required="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- personal competency Tree View -->
+    <record id="personal_competency_tree_view" model="ir.ui.view">
+        <field name="name">personal.competency.tree.view</field>
+        <field name="model">personal.competency</field>
+        <field name="arch" type="xml">
+            <tree string="Personal Competency" delete="false">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- personal competency Action -->
+    <record id="personal_competency_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Personal Competency</field>
+        <field name="res_model">personal.competency</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+</odoo>

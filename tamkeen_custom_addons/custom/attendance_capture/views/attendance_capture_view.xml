@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="attendance_capture_tree_view" model="ir.ui.view">
+        <field name="name">attendance.capture.form.view</field>
+        <field name="model">attendance.capture.data</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Capture Tree View"
+                  colors="red:error != False or ''">
+                <field name="name"/>
+                <field name="attendance_identifier"/>
+                <field name="machine_identifier"/>
+                <field name="hr_attendance_id" invisible="1"/>
+                <field name="first_in"/>
+                <field name="last_out"/>
+                <field name="diff_first_last"/>
+                <field name="error"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="attendance_capture_form_view" model="ir.ui.view">
+        <field name="name">attendance.capture.form.view</field>
+        <field name="model">attendance.capture.data</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Capture">
+                <sheet>
+                    <h1>
+                        <label for="name"/>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="attendance_identifier"/>
+                            <field name="att_type"/>
+                            <field name="att_status"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="first_in"/>
+                            <field name="last_out"/>
+                            <field name="in_out_per_day"/>
+                            <field name="diff_first_last"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="total"/>
+                            <!--<field name="total_hours" widget="float_time"/>-->
+                        </group>
+                        <group>
+                            <field name="machine_identifier"/>
+                            <field name="location"/>
+                            <field name="hr_attendance_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Error">
+                            <field name="error" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="attendance_capture_data_pivot">
+        <field name="name">attendance.capture.data.pivot</field>
+        <field name="model">attendance.capture.data</field>
+        <field name="arch" type="xml">
+            <pivot string="Attendance Capture">
+                <field name="name"/>
+                <!--<field name="total_hours" type="measure"/>-->
+                <field name="date" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="attendance_capture_data_graph" model="ir.ui.view">
+        <field name="name">hr.attendance.graph</field>
+        <field name="model">attendance.capture.data</field>
+        <field name="arch" type="xml">
+            <graph string="Attendance Capture">
+                <field name="name"/>
+                <field name="date"/>
+                <!--<field name="total_hours" type="measure"/>-->
+            </graph>
+        </field>
+    </record>
+
+    <record id="hr_attendance_capture_filter" model="ir.ui.view">
+        <field name="name">hr_attendance_capture_filter</field>
+        <field name="model">attendance.capture.data</field>
+        <field name="arch" type="xml">
+            <search string="Attendance Capture">
+                <field name="name"/>
+                <filter string="Current Month" domain="[('check_in', '&gt;=', datetime.datetime.now().strftime('%Y-%m-01'))]" />
+                <group expand="0" string="Group By">
+                    <filter name="employee" string="Employee"
+                            context="{'group_by':'name'}"/>
+                    <separator/>
+                    <filter name="groupby_name" string="Month"
+                            context="{'group_by':'first_in'}"/>
+                    <separator/>
+                    <filter name="groupby_status" string="Status"
+                            context="{'group_by': 'att_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_attendance_capture" model="ir.actions.act_window">
+        <field name="name">Attendance Capture</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.capture.data</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_manage_attendances">
+        <field name="groups_id"
+               eval="[(4, ref('hr_attendance_customization.group_hr_attendance_view_all')),(4, ref('attendance_capture.group_hr_attendance_view_fingerprint_data'))]" />
+    </record>
+
+    <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_root">
+        <field name="groups_id"
+               eval="[(4, ref('hr_attendance_customization.group_hr_attendance_view_all')),
+               (4, ref('attendance_capture.group_hr_attendance_view_fingerprint_data')),
+               (4, ref('hr_attendance_customization.group_hr_attendance_configuration'))
+               ]" />
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_attendance_capture" name="Attendance Capture Records"
+              parent="hr_attendance.menu_hr_attendance_manage_attendances"
+              action="action_attendance_capture"
+              sequence="4" groups="attendance_capture.group_hr_attendance_view_fingerprint_data"/>
+
+</odoo>
+

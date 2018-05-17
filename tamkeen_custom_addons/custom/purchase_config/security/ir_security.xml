@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.rule" id="purchase_budget_waiting_rule">
+            <field name="name">Purchase Order waiting confirmation</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="global" eval="False"/>
+        </record>
+        <record id="group_purchase_normal_user" model="res.groups">
+            <field name="name">Normal User</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="group_ceo_approval_po" model="res.groups">
+            <field name="name">CEO Approval</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="group_budget_approval_po" model="res.groups">
+            <field name="name">Budget Approval</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="purchase.group_purchase_user" model="res.groups">
+            <field name="name">Purchase Officer</field>
+        </record>
+        <record id="purchase.group_purchase_manager" model="res.groups">
+            <field name="name">Purchase Manager</field>
+        </record>
+        <record id="group_view_all_po" model="res.groups">
+            <field name="name">View All Purchase Orders</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="group_receive_invoice_po" model="res.groups">
+            <field name="name">Receive Invoice</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="group_receive_shipment_po" model="res.groups">
+            <field name="name">Receive Shipment</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+        </record>
+        <record id="group_purchase_reporting" model="res.groups">
+            <field name="name">Purchase Reports</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+            <field name="implied_ids" eval="[(4, ref('purchase_config.group_view_all_po'))]"/>
+        </record>
+    </data>
+</odoo>
+

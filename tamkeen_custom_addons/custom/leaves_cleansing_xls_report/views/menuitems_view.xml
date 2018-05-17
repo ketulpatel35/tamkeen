@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Leaves Cleansing XLS Report Report Menu -->
+        <menuitem
+                id="menu_leaves_cleansing_xls_report"
+                name="Leaves Balance XLS Report"
+                parent="hr_holidays.menu_hr_holidays_report"
+                action="action_leave_cleansing_xls_report"
+                sequence="36"/>
+        <!--groups="hr_holidays.group_hr_holidays_user"-->
+
+    </data>
+</odoo>

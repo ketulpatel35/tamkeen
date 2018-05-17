@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_normal_user_employee_salary_summary,access.normal.user.employee.salary.summary,employee_salary_summary.model_hr_employee_salary_summary,group_employee_salary_summary_can_print,1,1,1,1
+access_normal_user_salary_summary_print_link,access.normal.user.hr.employee.salary.summary.print.link,employee_salary_summary.model_hr_employee_salary_summary_print_link,group_employee_salary_summary_can_print,1,1,1,1

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- create account and project for leave entries on timesheet -->
+    <record id="account_leave" model="account.analytic.account">
+        <field name="name">Leave</field>
+    </record>
+
+    <record id="project_leave" model="project.project">
+        <field name="name">Leave</field>
+        <field name="analytic_account_id" ref="hr_holiday_timesheet.account_leave"/>
+    </record>
+</odoo>

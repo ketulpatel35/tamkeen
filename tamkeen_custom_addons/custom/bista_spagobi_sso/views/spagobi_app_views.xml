@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="bista_action_base_menu" model="ir.actions.client">
+            <field name="name">SpagoBI</field>
+            <field name="tag">spagobi_app.main</field>
+        </record>
+
+        <menuitem name="SpagoBI" id="spagobi_app" action="bista_action_base_menu" groups="bista_spagobi_sso.spagobi_sso_group"/>
+                
+</odoo>

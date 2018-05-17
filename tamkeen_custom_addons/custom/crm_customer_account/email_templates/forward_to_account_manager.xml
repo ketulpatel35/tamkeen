@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record id="email_update_forward_to_account_manager"
+                model="mail.template">
+            <field name="name">Update to Account Manager</field>
+            <field name="model_id"
+                   ref="crm.model_crm_lead" />
+            <field name="email_from">${user.email}</field>
+            <field name="email_to">${object.user_id.partner_id.email}</field>
+            <field name="email_cc">
+            </field>
+            <field name="subject">Assign Opportunity</field>
+            <field name="body_html"><![CDATA[
+            <p>
+Dear ${object.user_id.name},
+<br/>
+<p style="padding-left: 4em;">
+The ${(object.name or '')|safe} has been assigned to you. Please proceed it.
+<br/>
+</p>
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+            ]]>
+            </field>
+        </record>   
+    </data>
+</odoo>

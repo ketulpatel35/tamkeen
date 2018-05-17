@@ -1,0 +1,45 @@
+<odoo>
+    <!-- ESS Overtime-->
+    <menuitem id="menu_employee_overtime_for_ess_main"
+              name="Overtime Management"
+              parent="emp_self_services.sub_mian_ess_menu"
+              groups="hr_overtime.group_overtime_normal_user"
+              sequence="25"/>
+
+    <menuitem id="menu_overtime_pre_request_ess"
+              name="Employee Overtime Pre-Request"
+              parent="menu_employee_overtime_for_ess_main"
+              groups="hr_overtime.group_overtime_normal_user"
+              action="hr_overtime.open_overtime_pre_ess_requests"
+              sequence="25"/>
+
+    <menuitem id="menu_overtime_request_ess"
+              name="Employee Overtime Claim"
+              parent="menu_employee_overtime_for_ess_main"
+              groups="hr_overtime.group_overtime_normal_user"
+              action="hr_overtime.open_overtime_request_ess_requests"
+              sequence="26"/>
+
+    <!-- MSS Overtime -->
+
+    <menuitem id="menu_manager_overtime_for_ess_main"
+              name="Overtime Management"
+              parent="emp_self_services.sub_mian_mss_menu"
+              groups="hr_overtime.group_overtime_manager_approval"
+              sequence="1225"/>
+
+    <menuitem id="menu_overtime_pre_request_mss"
+              name="Overtime Pre-Requests To Approve"
+              parent="menu_manager_overtime_for_ess_main"
+              groups="hr_overtime.group_overtime_manager_approval"
+              action="hr_overtime.open_overtime_mngr_pre_request_approval"
+              sequence="1"/>
+
+    <menuitem id="menu_overtime_request_mss"
+              name="Overtime Claims To Approve"
+              parent="menu_manager_overtime_for_ess_main"
+              groups="hr_overtime.group_overtime_manager_approval"
+              action="hr_overtime.open_overtime_mngr_request_approval"
+              sequence="10"/>
+
+</odoo>

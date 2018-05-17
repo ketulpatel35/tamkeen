@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_voucher_template_form_view">
+        <t t-call="report.html_container">
+            <t t-call="report.html_container">
+            <t t-set="o" t-value="o.with_context({'lang':user.lang})" />
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <h3 align="center">Journal Entry</h3>
+                        <h1 align="center"><span t-field="o.name"/></h1>
+                        <div>
+                            <div style="float:left;">
+                                <table>
+                                    <tr>
+                                        <td>Reference</td>
+                                        <td>:</td>
+                                        <td><b><p t-field="o.ref"/></b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="float:right;">
+                                <table>
+                                    <tr>
+                                        <td>Date </td>
+                                        <td> : </td>
+                                        <td><b><p t-field="o.date"/></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Journal Type </td>
+                                        <td> : </td>
+                                        <td><b><p t-field="o.journal_id.name"/></b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br/><br/><br/>
+                        <t t-set="total_debit" t-value="0.0"/>
+                        <t t-set="total_credit" t-value="0.0"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Partner</th>
+                                    <th>Product</th>
+                                    <th>Label</th>
+                                    <th>Analytic Account</th>
+                                    <th>Amount Currency</th>
+                                    <th>Currency</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="sale_tbody">
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><p t-field="l.account_id.name"/></td>
+                                    <td><p t-field="l.partner_id.name"/></td>
+                                    <td><p t-field="l.product_id.name"/></td>
+                                    <td><p t-field="l.name"/></td>
+                                    <td><p t-field="l.analytic_account_id.name"/></td>
+                                    <td><p t-field="l.amount_currency"/></td>
+                                    <td><p t-field="l.currency_id.name"/></td>
+                                    <td><p t-field="l.debit"/></td>
+                                    <t t-set="total_debit" t-value="total_debit+l.debit"/>
+                                    <t t-set="total_credit" t-value="total_credit+l.credit"/>
+                                    <td><p t-field="l.credit"/></td>
+                                    <td><p t-field="l.date_maturity"/></td>
+                                </tr>
+                            </tbody>
+                            <tfoot style="background-color:#D3D3D3 !important">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><b><t t-esc="'{0:,.2f}'.format(int(total_debit))" /></b></td>
+                                <td><b><t t-esc="'{0:,.2f}'.format(int(total_credit))" /></b></td>
+                                <td></td>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+        </t>
+    </template>
+
+    <template id="report_voucher_template_form_view_arabic">
+        <t t-call="report.html_container">
+            <t t-call="report.html_container">
+            <t t-set="o" t-value="o.with_context({'lang':user.lang})" />
+            <t t-call="report.external_layout">
+                <div class="page" style="direction:rtl">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <h3 align="center">Journal Entry</h3>
+                        <h1 align="center"><span t-field="o.name"/></h1>
+                        <div>
+                            <div style="float:left;">
+                                <table>
+                                    <tr>
+                                        <td>Reference</td>
+                                        <td>:</td>
+                                        <td><b><p t-field="o.ref"/></b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="float:right;">
+                                <table>
+                                    <tr>
+                                        <td>Date </td>
+                                        <td> : </td>
+                                        <td><b><p t-field="o.date"/></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Journal Type </td>
+                                        <td> : </td>
+                                        <td><b><p t-field="o.journal_id.name"/></b></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br/><br/><br/>
+                        <t t-set="total_debit" t-value="0.0"/>
+                        <t t-set="total_credit" t-value="0.0"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Partner</th>
+                                    <th>Product</th>
+                                    <th>Label</th>
+                                    <th>Analytic Account</th>
+                                    <th>Amount Currency</th>
+                                    <th>Currency</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="sale_tbody">
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><p t-field="l.account_id.name"/></td>
+                                    <td><p t-field="l.partner_id.name"/></td>
+                                    <td><p t-field="l.product_id.name"/></td>
+                                    <td><p t-field="l.name"/></td>
+                                    <td><p t-field="l.analytic_account_id.name"/></td>
+                                    <td><p t-field="l.amount_currency"/></td>
+                                    <td><p t-field="l.currency_id.name"/></td>
+                                    <td><p t-field="l.debit"/></td>
+                                    <t t-set="total_debit" t-value="total_debit+l.debit"/>
+                                    <t t-set="total_credit" t-value="total_credit+l.credit"/>
+                                    <td><p t-field="l.credit"/></td>
+                                    <td><p t-field="l.date_maturity"/></td>
+                                </tr>
+                            </tbody>
+                            <tfoot style="background-color:#D3D3D3 !important">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><b><t t-esc="'{0:,.2f}'.format(int(total_debit))" /></b></td>
+                                <td><b><t t-esc="'{0:,.2f}'.format(int(total_credit))" /></b></td>
+                                <td></td>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+        </t>
+    </template>
+
+    <template id="report_voucher_template_form">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="user.lang == 'en_US'">
+                    <t t-call="voucher_report.report_voucher_template_form_view"/>
+                </t>
+                <t t-if="user.lang != 'en_US'">
+                    <t t-call="voucher_report.report_voucher_template_form_view_arabic"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

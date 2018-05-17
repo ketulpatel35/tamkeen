@@ -1,0 +1,143 @@
+<odoo>
+    <data>
+
+        <record id="view_purchase_requisition_filter_inherit_for_filter" model="ir.ui.view">
+            <field name="name">Pending Approvals</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id"
+                   ref="purchase_requisition.view_purchase_requisition_filter"/>
+            <field name="arch" type="xml">
+                <field name="type_id" position="after">
+                    <filter string="Pending Approvals" name="mngr_pr_to_approve" domain="[('state','in',['ceo', 'tomanager_app', 'vp'])]"/>
+                    <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_budget_all_emp_action" model="ir.actions.act_window">
+            <field name="name"> Procurement Requisition to Approved</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                [('state','!=','draft')]
+            </field>
+            <field name="context">{'search_default_group_state':1, 'search_default_mngr_pr_to_approve':1}</field>
+
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new .
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+
+        <record id="purchase_action_for_pr_employee" model="ir.actions.act_window">
+            <field name="name"> Procurement Requisition </field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                [('employee_ids.user_id.id','=',uid)]
+            </field>
+
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new .
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_requisition_for_officer">
+            <field name="name">Procurement Requisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','not in',('draft','tomanager_app','vp'))]</field>
+            <field name="context">{'search_default_group_state':1}</field>
+            <field name="search_view_id" ref="procurment_requistion_ess.view_purchase_requisition_filter_inherit_for_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to start a new purchase agreement.
+                </p><p>
+                Example of purchase agreements include call for tenders and blanket orders.
+            </p><p>
+                In a call for tenders, you can record the products you need to buy
+                and generate the creation of RfQs to vendors. Once the tenders have
+                been registered, you can review and compare them and you can
+                validate some and cancel others.
+            </p><p>
+                For a blanket order, you can record an agreement for a specifc period
+                (e.g. a year) and you order products within this agreement, benefiting
+                from the negociated prices.
+            </p>
+            </field>
+        </record>
+
+        <!-- Budget Approval -->
+        <record model="ir.actions.act_window" id="action_purchase_requisition_for_budget_approval">
+            <field name="name">Budget Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','budget')]</field>
+            <field name="context">{'search_default_group_state':1}</field>
+            <field name="search_view_id" ref="procurment_requistion_ess.view_purchase_requisition_filter_inherit_for_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to start a new purchase agreement.
+                </p><p>
+                Example of purchase agreements include call for tenders and blanket orders.
+            </p><p>
+                In a call for tenders, you can record the products you need to buy
+                and generate the creation of RfQs to vendors. Once the tenders have
+                been registered, you can review and compare them and you can
+                validate some and cancel others.
+            </p><p>
+                For a blanket order, you can record an agreement for a specifc period
+                (e.g. a year) and you order products within this agreement, benefiting
+                from the negociated prices.
+            </p>
+            </field>
+        </record>
+
+        <!-- -->
+        <!-- Procurement Review Approval -->
+        <record model="ir.actions.act_window" id="action_purchase_requisition_for_procurement_review">
+            <field name="name">Budget Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','procurement_review')]</field>
+            <field name="context">{'search_default_group_state':1}</field>
+            <field name="search_view_id" ref="procurment_requistion_ess.view_purchase_requisition_filter_inherit_for_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to start a new purchase agreement.
+                </p><p>
+                Example of purchase agreements include call for tenders and blanket orders.
+            </p><p>
+                In a call for tenders, you can record the products you need to buy
+                and generate the creation of RfQs to vendors. Once the tenders have
+                been registered, you can review and compare them and you can
+                validate some and cancel others.
+            </p><p>
+                For a blanket order, you can record an agreement for a specifc period
+                (e.g. a year) and you order products within this agreement, benefiting
+                from the negociated prices.
+            </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

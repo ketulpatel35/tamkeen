@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_hr_payroll_manager,access_hr_payroll_ir8a_wizard,model_bank_ir8a_wizard,hr_payroll.group_hr_payroll_user,1,1,1,1
+
+

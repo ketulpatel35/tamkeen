@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="ExportDialog">
+        <t t-jquery='p' t-operation='after'>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">
+                    <strong>Export With Timezone :</strong>
+                    </label>
+                    <input type="checkbox"
+                    class="o_export_with_timezone"
+                    value="export_with_timezone"/>
+                </div>
+            </div>
+            <!--<div class="row">-->
+            <div class="col-md-12 o_select_time_zone" style="padding-bottom:15px;display:none;">
+                <div class="form-group">
+                    <div class="col-md-6" style="padding-left:0px;padding-right:0px;">
+                        <div class="col-md-4" style="padding-left:0px;padding-right:0px;">
+                            <label class="control-label">
+                                <strong>Select Time Zone :</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-8" style="padding-left:0px;padding-right:0px;">
+                            <select style="padding-top:0px;" id="time_zone_selector"/>
+                            <br/>
+                        </div>
+                        <span style="color:red;display:none;" class="o_utc_err_msg">
+                            <b>Warning :</b> Exported file will not be correctly imported in other database.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+</templates>
+

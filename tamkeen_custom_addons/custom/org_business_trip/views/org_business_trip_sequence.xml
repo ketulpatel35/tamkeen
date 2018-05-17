@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Sequences for End of Service -->
+        <record id="seq_business_trip" model="ir.sequence">
+            <field name="name">Business Trip</field>
+            <field name="code">business.trip</field>
+            <field name="prefix">BT</field>
+            <field name="padding">6</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="rule_termination_officer_info" model="ir.rule">
+        <field name="name">View Officer Termination</field>
+        <field name="model_id" ref="model_hr_employee_termination" />
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('hr.group_hr_user'))]" />
+    </record>
+
+    <record id="rule_termination_employee" model="ir.rule">
+        <field name="name">Normal Employee</field>
+        <field name="model_id" ref="model_hr_employee_termination"/>
+        <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    </record>
+
+    <record id="rule_termination_view_all" model="ir.rule">
+        <field name="name">View All Termination</field>
+        <field name="model_id" ref="model_hr_employee_termination"/>
+        <field name="domain_force"> [(1, '=', 1)]</field>
+        <field name="groups" eval="[(4,ref('hr_employee_customization.group_view_emp_info'))]"/>
+    </record>
+
+</odoo>

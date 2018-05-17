@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window"
+                id="attendance_xls_report_for_manager">
+            <field name="name">Attendace XlS Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.attendance.report.xls</field>
+            <!--<field name="view_id"-->
+                   <!--ref="hr_attendance_report_xls.hr_attendance_report_xls_view"/>-->
+            <field name="context">{'active_id': uid, 'ess': True}</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="attendance_xls_report_menu_for_manager"
+                  name="Print Attendance Excel"
+                  parent="emp_self_services.sub_mian_mss_menu" sequence="520"
+                  action="attendance_xls_report_for_manager"/>
+    </data>
+</odoo>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="purchase_order_form_view_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="is_print_res"/>
+                    <field name="is_print_delive"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="purchase_order_form_view_inherit_add_page"
+                model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id"
+                   ref="purchase_config.purchase_order_required_payment"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook" position="inside">
+                    <page string="Deliverable">
+                        <field name="deliverable"/>
+                    </page>
+                    <page string="Responsibility">
+                        <field name="responsibility"/>
+                    </page>
+                </xpath>
+
+                <!--<xpath expr="//page[@name='terms']" position="replace">-->
+                <!--<page name="terms" string="Terms &amp; Conditions">-->
+                <!--<group>-->
+                <!--<group string="Terms &amp; Conditions">-->
+                <!--<field name="notes" attrs="{'readonly': [('state','not in',('draft','sent'))]}" nolabel="1"/>-->
+                <!--</group>-->
+                <!--<group string="General Terms &amp; Conditions">-->
+                <!--<field name="t_and_c" nolabel="1"/>-->
+                <!--</group>-->
+                <!--</group>-->
+                <!--</page>-->
+
+                <!--</xpath>-->
+
+            </field>
+        </record>
+
+        <record id="purchase_config_settings_form_view_inherit"
+                model="ir.ui.view">
+            <field name="name">purchase.config.settings</field>
+            <field name="model">purchase.config.settings</field>
+            <field name="inherit_id"
+                   ref="purchase.view_purchase_configuration"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <group string="General Terms and Conditions">
+                        <field name="notes" widget="html"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

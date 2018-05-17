@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!--explicit list view definition -->
+        <record model="ir.ui.view" id="rating_master_tree">
+            <field name="name">rating.master.tree</field>
+            <field name="model">rating.master</field>
+            <field name="arch" type="xml">
+                <tree string="Rating Master">
+                    <field name="rating_category_id" invisible="1"/>
+                    <field name="name"/>
+                    <field name="rating"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="rating_master_form">
+            <field name="name">rating.master.form</field>
+            <field name="model">rating.master</field>
+            <field name="arch" type="xml">
+                <form string="Rating Mater">
+                    <sheet>
+                        <group>
+                            <field name="rating_category_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="rating"/>
+                            <field name="type"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="rating_master_action">
+            <field name="name">Rating Master</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rating.master</field>
+            <field name="view_id" ref="rating_master_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--<menuitem name="Rating Master" id="rating_master" parent="hr_appraisal_evaluation_configuration"-->
+                  <!--action="rating_master_action"-->
+                  <!--groups="hr.group_hr_manager,hr_admin.group_hr_admin,hr_employee_customization.group_employee_manager"/>-->
+
+    </data>
+</odoo>

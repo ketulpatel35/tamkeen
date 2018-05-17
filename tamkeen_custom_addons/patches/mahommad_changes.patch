@@ -1,0 +1,2591 @@
+diff --git a/custom/auth_ldap_customization/users_ldap_customization.py b/custom/auth_ldap_customization/users_ldap_customization.py
+index 1bbfc8d..1223083 100644
+--- a/custom/auth_ldap_customization/users_ldap_customization.py
++++ b/custom/auth_ldap_customization/users_ldap_customization.py
+@@ -6,7 +6,7 @@
+ #
+ ##############################################################################
+ from odoo import api, models
+-from odoo import tools
++# from odoo import tools
+ import logging
+ _logger = logging.getLogger(__name__)
+ 
+@@ -14,57 +14,93 @@ _logger = logging.getLogger(__name__)
+ class CompanyLDAP(models.Model):
+     _inherit = 'res.company.ldap'
+ 
++    # @api.model
++    # def get_or_create_user(self, conf, login, ldap_entry):
++    #     """
++    #     Retrieve an active resource of model res_users with the specified
++    #     login. Create the user if it is not initially found.
++    #
++    #     :param dict conf: LDAP configuration
++    #     :param login: the user's login
++    #     :param tuple ldap_entry: single LDAP result (dn, attrs)
++    #     :return: res_users id
++    #     :rtype: int
++    #     """
++    #
++    #     user_id = False
++    #     login = tools.ustr(login.lower().strip())
++    #     self.env.cr.execute("SELECT id,"
++    #                         " active FROM res_users WHERE"
++    #                         " lower(login)=%s", (login,))
++    #     res = self.env.cr.fetchone()
++    #     if res:
++    #         if res[1]:
++    #             user_id = res[0]
++    #     elif conf['create_user']:
++    #         _logger.debug("Creating new Odoo user \"%s\" from LDAP" % login)
++    #         values = self.map_ldap_attributes(conf, login, ldap_entry)
++    #         SudoUser = self.env['res.users'].sudo()
++    #         if conf['user']:
++    #             values['active'] = True
++    #             user_id = SudoUser.\
++    #                 browse(conf['user'][0]).copy(default=values).id
++    #
++    #         else:
++    #             '''NOTE --> Check if the employee
++    #              exists by searching him using
++    #               his email got from LDAP information
++    #             , If employee exists...Create him a User
++    #              and link this user by updating the employee
++    #               record with the new created user_id and
++    #                the work phone (extension)
++    #             , If not...He can't log in and a message
++    #              will appear to the user
++    #               (Invalid user or password) '''
++    #
++    #             employee_rec = self.pool.get('hr.employee').search([
++    #                 ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
++    #             if employee_rec:
++    #                 values['email'] = ldap_entry[1]['mail'][0].lower()
++    #                 user_id = SudoUser.create(values).id
++    #                 employee_rec.\
++    #                     write({'user_id': user_id,
++    #                            'work_phone': ldap_entry[1]['telephoneNumber']
++    #                            [0] if ldap_entry[1].get('telephoneNumber')
++    #                            else False})
++    #     return user_id
++
+     @api.model
+     def get_or_create_user(self, conf, login, ldap_entry):
+         """
+         Retrieve an active resource of model res_users with the specified
+         login. Create the user if it is not initially found.
+-
+         :param dict conf: LDAP configuration
+         :param login: the user's login
+         :param tuple ldap_entry: single LDAP result (dn, attrs)
+         :return: res_users id
+         :rtype: int
+         """
+-
+-        user_id = False
+-        login = tools.ustr(login.lower().strip())
+-        self.env.cr.execute("SELECT id,"
+-                            " active FROM res_users WHERE"
+-                            " lower(login)=%s", (login,))
+-        res = self.env.cr.fetchone()
++        employee_rec = False
++        res = super(CompanyLDAP, self).get_or_create_user(conf, login,
++                                                          ldap_entry)
+         if res:
+-            if res[1]:
+-                user_id = res[0]
+-        elif conf['create_user']:
+-            _logger.debug("Creating new Odoo user \"%s\" from LDAP" % login)
+-            values = self.map_ldap_attributes(conf, login, ldap_entry)
+-            SudoUser = self.env['res.users'].sudo()
+-            if conf['user']:
+-                values['active'] = True
+-                user_id = SudoUser.\
+-                    browse(conf['user'][0]).copy(default=values).id
+-
+-            else:
+-                '''NOTE --> Check if the employee
+-                 exists by searching him using
+-                  his email got from LDAP information
+-                , If employee exists...Create him a User
+-                 and link this user by updating the employee
+-                  record with the new created user_id and
+-                   the work phone (extension)
+-                , If not...He can't log in and a message
+-                 will appear to the user
+-                  (Invalid user or password) '''
+-
+-                employee_rec = self.pool.get('hr.employee').search([
+-                    ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
++            user_rec = self.env['res.company'].browse(res)
++            if conf['create_user'] and not conf['user']:
++                '''NOTE --> Check if the employee exists by searching him
++                using his email got from LDAP information If employee exists
++                ...Create him a User and link this user by updating the
++                employee record with the new created user_id and the work
++                phone (extension) If not...He can't log in and a message
++                will appear to the user (Invalid user or password) '''
++                if ldap_entry and ldap_entry[1] and ldap_entry[1]['mail']:
++                    employee_rec = self.env['hr.employee'].search([
++                        ('work_email', '=', ldap_entry[1]['mail'][0].lower())])
+                 if employee_rec:
+-                    values['email'] = ldap_entry[1]['mail'][0].lower()
+-                    user_id = SudoUser.create(values).id
+-                    employee_rec.\
+-                        write({'user_id': user_id,
+-                               'work_phone': ldap_entry[1]['telephoneNumber']
+-                               [0] if ldap_entry[1].get('telephoneNumber')
++                    user_rec.write({'email': ldap_entry[1]['mail'][0].lower()})
++                    employee_rec. \
++                        write({'user_id': user_rec and user_rec.id,
++                               'work_phone': ldap_entry[1]
++                               ['telephoneNumber'][0] if
++                               ldap_entry[1].get('telephoneNumber')
+                                else False})
+-        return user_id
++        return res
+diff --git a/custom/bank_ir8a_payroll_report/__manifest__.py b/custom/bank_ir8a_payroll_report/__manifest__.py
+index 71318c9..da64b4b 100755
+--- a/custom/bank_ir8a_payroll_report/__manifest__.py
++++ b/custom/bank_ir8a_payroll_report/__manifest__.py
+@@ -19,6 +19,7 @@ Export employees payslip details to a formatted bank IR8A text file.
+     'depends': [
+         'hr_payroll_period',
+         'hr_security',
++        'base',
+     ],
+     'data': [
+         # 'report.xml',
+diff --git a/custom/bank_ir8a_payroll_report/res_company.py b/custom/bank_ir8a_payroll_report/res_company.py
+index e530590..6be565c 100755
+--- a/custom/bank_ir8a_payroll_report/res_company.py
++++ b/custom/bank_ir8a_payroll_report/res_company.py
+@@ -15,3 +15,7 @@ class res_company(models.Model):
+                                             '15!d (99-999999999999999)')
+     connect_id = fields.Char(string='Connect ID', default='ABC74849001',
+                              help='Connect ID with the bank.')
++    # payroll_bank = fields.Many2one('res.bank', string='Payroll Bank')
++    payroll_partner_bank =\
++        fields.Many2one('res.partner.bank',
++                        string='Payroll Account Number', required=1)
+diff --git a/custom/bank_ir8a_payroll_report/res_company_view.xml b/custom/bank_ir8a_payroll_report/res_company_view.xml
+index abd22de..c329fd4 100755
+--- a/custom/bank_ir8a_payroll_report/res_company_view.xml
++++ b/custom/bank_ir8a_payroll_report/res_company_view.xml
+@@ -11,6 +11,7 @@
+                        position="after">
+                     <field name="mol_establishment_id"/>
+                     <field name="connect_id"/>
++                    <field name="payroll_partner_bank"/>
+                 </xpath>
+             </field>
+         </record>
+diff --git a/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py b/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
+index dfca6fa..b163640 100755
+--- a/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
++++ b/custom/bank_ir8a_payroll_report/wizard/bank_ir8a_waizard.py
+@@ -3,6 +3,8 @@ from odoo import fields, models, api
+ import base64
+ import datetime
+ from odoo.exceptions import Warning
++from random import randint
++from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+ 
+ 
+ class bank_ir8a_wizard(models.TransientModel):
+@@ -10,7 +12,7 @@ class bank_ir8a_wizard(models.TransientModel):
+     payroll_period_id = fields.Many2one('hr.payroll.period', string='Payroll'
+                                                                     'Period')
+     date_start = fields.Datetime(string='Period Start Date')
+-    date_end = fields.Datetime(string='Period Start Date')
++    date_end = fields.Datetime(string='Period End Date')
+     payment_purpose_code = fields.Selection([('S', 'Salary'), ('B', 'Bonus'),
+                                              ('O', 'Other Payments'),
+                                              ('N', 'Non ACH Payments')],
+@@ -60,10 +62,7 @@ class bank_ir8a_wizard(models.TransientModel):
+                                                          'number.')
+     connect_id = fields.Char(string='Connect ID',
+                              help='Connect ID.')
+-    filename = fields.Char(string='File Name',
+-                           default='WPS.9883.CY.SAR.' + str(
+-                               datetime.datetime.now().strftime("%d%H%M%S%f")[
+-                                   :-1]) + ".txt")
++    filename = fields.Char(string='File Name')
+     data = fields.Binary(string='Export to File', readonly=True)
+     report_destination = fields.Selection(
+         [('bank', 'Bank'), ('other', 'Other')],
+@@ -80,16 +79,16 @@ class bank_ir8a_wizard(models.TransientModel):
+ 
+     @api.onchange('company_id')
+     def onchange_company_id(self):
+-        if self.company_id:
+-            debit_account_number = ''
+-            if self.company_id.bank_ids:
+-                for bank in self.company_id.bank_ids:
+-                    if bank.bank_bic == 'AAAL':
+-                        debit_account_number = bank.acc_number
+-            self.employer_id = self.company_id.company_registry
+-            self.mol_establishment_id = self.company_id.mol_establishment_id
+-            self.debit_account_number = debit_account_number
+-            self.connect_id = self.company_id.connect_id
++        debit_account_number = ''
++        if self.company_id and\
++                self.company_id.payroll_partner_bank and\
++                self.company_id.payroll_partner_bank.acc_number:
++            debit_account_number =\
++                self.company_id.payroll_partner_bank.acc_number
++        self.employer_id = self.company_id.company_registry
++        self.mol_establishment_id = self.company_id.mol_establishment_id
++        self.debit_account_number = debit_account_number
++        self.connect_id = self.company_id.connect_id
+ 
+     @api.one
+     def _compute_salary_rules(self, report_destination, payslip_line_ids):
+@@ -129,7 +128,7 @@ class bank_ir8a_wizard(models.TransientModel):
+     def action_generate_bank_ir8a(self):
+ 
+         for rec in self:
+-            current_datetime = datetime.datetime.now().strftime("%Y-%m-%d")
++            current_datetime = datetime.datetime.now().strftime(DF)
+             if rec.value_date < current_datetime:
+                 raise Warning(
+                     "Value date should not be less then the "
+@@ -137,23 +136,22 @@ class bank_ir8a_wizard(models.TransientModel):
+ 
+             creation_date = datetime.datetime.now().strftime(
+                 "%Y%m%d")  # ("%Y/%m/%d")
+-            value_date = datetime.datetime.strptime(rec.value_date, "%Y-%m-%d")
++            value_date = datetime.datetime.strptime(rec.value_date, DF)
+             value_date = value_date.strftime('%Y%m%d')
+             # employee_id #Beneficiary's Employee ID.
+             # This has to be unique within a file.
+             # bank id #Bank ID/ SWIFT ID to identify the bank.
+             # Payment Amount #Payment amount to the employee. With two decimal
+             # places No preceeding zeros allowed
+-            file_reference = 'WPS.' + str(rec.connect_id) + '.CY.SAR.' + str(
+-                datetime.datetime.now().strftime("%d%H%M%S%f")[
+-                    :-1])  # ("%d%H%M%S%f")[:-3] 'CONv' + str(datetime.datetime
++            file_reference = str(datetime.datetime.now().strftime(
++                "%d%H%M%S%f")[:-1]) + str(randint(111, 999))
++            file_name = 'WPS.9883.CY.SAR.' + file_reference + ".txt"
+             # .now().strftime("%Y%m%d%H%M%S"))
+             # batch_reference = 'W' + str(datetime.datetime.now().
+             # strftime("%Y%m%d%H%M%S"))
++
+             record_number, total_sum = 0, 0.0
+             employee_line, line2 = "", ""
+-            space = ' '
+-
+             payslip_obj = self.env['hr.payslip']
+ 
+             period_payslip_ids = payslip_obj.search([('date_from', '>=',
+@@ -190,18 +188,33 @@ class bank_ir8a_wizard(models.TransientModel):
+                     formatted_net_salary = (
+                         '%.2f' % salary_rules['net_salary']).replace('.', ',')
+ 
+-                    employee_line = \
+-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" \
+-                        "\t%s\r\n" % (formatted_net_salary,
+-                                      payslip.employee_id.bank_account,
+-                                      payslip.employee_id.name,
+-                                      payslip.employee_id.bank_id.bic,
+-                                      rec.payment_narration, space,
+-                                      formatted_beneficiary_basic_salary,
+-                                      formatted_housing_allowance,
+-                                      formatted_other_earnings,
+-                                      formatted_deductions, employee_identity,
+-                                      space, space, space)
++                    # employee_line = \
++                    #     "%s\t%s\t%s\t%s\t%s\t%s\t
++                    # %s\t%s\t%s\t%s\t%s\t%s\t%s" \
++                    #     "\t%s\r\n" % (formatted_net_salary,
++                    #                   payslip.employee_id.bank_account,
++                    #                   payslip.employee_id.name,
++                    #                   payslip.employee_id.bank_id.bic,
++                    #                   rec.payment_narration, space,
++                    #                   formatted_beneficiary_basic_salary,
++                    #                   formatted_housing_allowance,
++                    #                   formatted_other_earnings,
++                    #                   formatted_deductions,
++                    #  employee_identity,
++                    #                   space, space, space)
++
++                    employee_line = "%s\t%s\t%s\t%s\t%s\t\t" \
++                                    "%s\t%s\t%s\t%s\t%s\t\t\t\r\n" %\
++                                    (formatted_net_salary,
++                                     payslip.employee_id.bank_account,
++                                     payslip.employee_id.name,
++                                     payslip.employee_id.bank_id.bic,
++                                     rec.payment_narration,
++                                     formatted_beneficiary_basic_salary,
++                                     formatted_housing_allowance,
++                                     formatted_other_earnings,
++                                     formatted_deductions,
++                                     employee_identity)
+ 
+                     line2 += employee_line
+                     # else:
+@@ -217,13 +230,23 @@ class bank_ir8a_wizard(models.TransientModel):
+                                                      ',')  # The total amount
+             # being paid out through the payment file.
+ 
+-            line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t%s\t%s\r\n" % (
+-                rec.connect_id, rec.debit_account_number, creation_date,
+-                total_sum, value_date, file_reference, space,
+-                rec.mol_establishment_id)
++            # line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t%s\t%s\r\n" % (
++            #     rec.connect_id, rec.debit_account_number, creation_date,
++            #     total_sum, value_date, file_reference, space,
++            #     rec.mol_establishment_id)
++            #
++            # output = line1 + line2
++            # rec.data = base64.encodestring(output.encode('utf-8'))
++
++            line1 = "AAAL\t%s\t%s\tSAR\t%s\t%s\t%s\t%s\t\t%s\r\n" % (
++                rec.connect_id, rec.debit_account_number,
++                creation_date, total_sum, value_date,
++                file_reference, rec.mol_establishment_id)
++            line3 = "-"
++            output = line1 + line2 + line3
++            self.write({'data': base64.encodestring(
++                output.encode('utf-8')), 'filename': file_name})
+ 
+-            output = line1 + line2
+-            rec.data = base64.encodestring(output.encode('utf-8'))
+         return {
+             'type': 'ir.actions.act_window',
+             'res_model': 'bank.ir8a.wizard',
+diff --git a/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py b/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
+index 894b7f7..391d006 100755
+--- a/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
++++ b/custom/default_employee_approval_line/wizard/hr_employee_approval_line.py
+@@ -57,16 +57,17 @@ class default_employee_approval_line(models.TransientModel):
+                 service_vp_id = employee.id
+                 service_ceo_id = employee.id
+ 
+-        employee.service_manager_id = service_manager_id
+-        employee.service_vp_id = service_vp_id
+-        employee.service_ceo_id = service_ceo_id
++        return {'service_manager_id': service_manager_id,
++                'service_vp_id': service_vp_id,
++                'service_ceo_id': service_ceo_id}
+ 
+     @api.multi
+     def action_reset_default_employee_approval_line(self):
+         employee_pool = self.env['hr.employee']
+         employee_ids = employee_pool.search([('active', '=', True)])
+         for employee in employee_ids:
+-            self._get_employee_approval_line(employee)
++            employee_approval_line = self._get_employee_approval_line(employee)
++            employee.write(employee_approval_line)
+ 
+         return {
+             'type': 'ir.actions.act_window',
+diff --git a/custom/emp_self_services/views/hr_empl_view.xml b/custom/emp_self_services/views/hr_empl_view.xml
+index bff83f2..0b0a9b8 100644
+--- a/custom/emp_self_services/views/hr_empl_view.xml
++++ b/custom/emp_self_services/views/hr_empl_view.xml
+@@ -165,9 +165,12 @@
+         <field name="model">hr.holidays</field>
+         <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter" />
+         <field name="arch" type="xml">
+-                <filter name="approve" position="before">
+-                    <filter string="Pending Approvals" name="mngr_leaves_to_approve" domain="['&amp;',('type','=','remove'),'&amp;',('employee_id.parent_id.user_id.id','=',uid),('state','=','confirm')]"/>
+-                </filter>
++                <!--<filter name="approve" position="before">-->
++                    <!--<filter string="Pending Approvals" name="mngr_leaves_to_approve" domain="['&amp;',('type','=','remove'),'&amp;',('employee_id.parent_id.user_id.id','=',uid),('state','=','confirm')]"/>-->
++                <!--</filter>-->
++            <filter name="approve" position="before">
++                <filter string="Pending Approvals" name="mngr_leaves_to_approve" domain="['|',('state','in',['ceo', 'confirm']), ('employee_id.parent_id.user_id','=',uid)]"/>
++            </filter>
+         </field>
+     </record>
+ 
+@@ -176,7 +179,7 @@
+         <field name="res_model">hr.holidays</field>
+         <field name="view_type">form</field>
+         <field name="domain">
+-            ['&amp;',('type','=','remove'),'&amp;',('employee_id.parent_id.user_id.id','=',uid),('state','!=','draft')]
++            ['&amp;',('type','=','remove'),('state','in',['ceo', 'confirm'])]
+         </field>
+         <field name="context">{'default_type': 'remove', 'search_default_mngr_leaves_to_approve':1}</field>
+         <field name="search_view_id" ref="hr_holidays.view_hr_holidays_filter"/>
+diff --git a/custom/fix_contract_duplicate/hr_contract.py b/custom/fix_contract_duplicate/hr_contract.py
+index dbfd7fc..9e8d74f 100755
+--- a/custom/fix_contract_duplicate/hr_contract.py
++++ b/custom/fix_contract_duplicate/hr_contract.py
+@@ -1,10 +1,3 @@
+-# -*- encoding: utf-8 -*-
+-##############################################################################
+-#
+-#    Bista Solutions Pvt. Ltd
+-#    Copyright (C) 2016 (http://www.bistasolutions.com)
+-#
+-##############################################################################
+ 
+ from odoo import models, api
+ 
+diff --git a/custom/hr_contract_custom/hr_contract.py b/custom/hr_contract_custom/hr_contract.py
+index ca4986c..b7d5116 100755
+--- a/custom/hr_contract_custom/hr_contract.py
++++ b/custom/hr_contract_custom/hr_contract.py
+@@ -32,3 +32,4 @@ class hr_contract(models.Model):
+         super(hr_contract, self)._onchange_employee_id()
+         if self.employee_id:
+             self.f_employee_no = self.employee_id.f_employee_no
++            self.department_id = self.employee_id.department_id
+diff --git a/custom/hr_contract_state/views/hr_contract_view.xml b/custom/hr_contract_state/views/hr_contract_view.xml
+index b872361..0cc6fd9 100755
+--- a/custom/hr_contract_state/views/hr_contract_view.xml
++++ b/custom/hr_contract_state/views/hr_contract_view.xml
+@@ -43,7 +43,7 @@
+             <field name="arch" type="xml">
+                 <tree string="Contracts to be Approved">
+                     <field name="employee_id" required='1' readonly='1'/>
+-                    <!--<field name="department_id" />-->
++                    <field name="department_id" />
+                     <field name="job_id"/>
+                     <field name="date_start" required='1' readonly='1'/>
+                     <field name="trial_date_end"/>
+diff --git a/custom/hr_department_sequence/hr_department.py b/custom/hr_department_sequence/hr_department.py
+index 2feb20b..d4f02d3 100755
+--- a/custom/hr_department_sequence/hr_department.py
++++ b/custom/hr_department_sequence/hr_department.py
+@@ -21,7 +21,6 @@ class HrDepartment(models.Model):
+                                 ondelete='cascade')
+     parent_left = fields.Integer(string='Left Parent', index=True)
+     parent_right = fields.Integer(string='Right Parent', index=True)
+-    dep_eng_name = fields.Char(string='Arabic Name')
+ 
+     _parent_name = "parent_id"
+     _parent_store = True
+diff --git a/custom/hr_department_sequence/hr_department_view.xml b/custom/hr_department_sequence/hr_department_view.xml
+index 4fb05a7..1dba1d3 100755
+--- a/custom/hr_department_sequence/hr_department_view.xml
++++ b/custom/hr_department_sequence/hr_department_view.xml
+@@ -7,7 +7,6 @@
+         <field name="arch" type="xml">
+             <xpath expr="//field[@name='name']" position="after">
+                 <field name="code"/>
+-                <field name="dep_eng_name" required="1"/>
+             </xpath>
+             <xpath expr="//field[@name='company_id']" position="after">
+                 <field name="sequence"/>
+@@ -23,7 +22,6 @@
+             <xpath expr="//field[@name='display_name']" position="after">
+                 <field name="code"/>
+                 <field name="sequence"/>
+-                <field name="dep_eng_name"/>
+             </xpath>
+         </field>
+     </record>
+diff --git a/custom/hr_employee_approval_tab/views/hr_view.xml b/custom/hr_employee_approval_tab/views/hr_view.xml
+index 977e908..f9f7c8d 100755
+--- a/custom/hr_employee_approval_tab/views/hr_view.xml
++++ b/custom/hr_employee_approval_tab/views/hr_view.xml
+@@ -1,20 +1,20 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+-	<data>
+-		<record id="employee_approval_delegation_view_form" model="ir.ui.view">
+-			<field name="name">Approval/Delegation Tab</field>
+-			<field name="model">hr.employee</field>
+-			<field name="inherit_id" ref="hr.view_employee_form" />
+-			<field name="arch" type="xml">
+-				<xpath expr='//page[2]' position="after">
++    <data>
++        <record id="employee_approval_delegation_view_form" model="ir.ui.view">
++            <field name="name">Approval/Delegation Tab</field>
++            <field name="model">hr.employee</field>
++            <field name="inherit_id" ref="hr.view_employee_form" />
++            <field name="arch" type="xml">
++                <xpath expr='//page[2]' position="after">
+                     <page string="Approval/Delegation" name="approval_delegation"
+-						  groups="hr_employee_approval_tab.view_employees_approvla_tab">
+-                    	<group>
++                          groups="hr_employee_approval_tab.view_employees_approvla_tab">
++                        <group>
+ 
+-                    	</group>
++                        </group>
+                     </page>
+                 </xpath>
+-			</field>
+-		</record>
+-	</data>
++            </field>
++        </record>
++    </data>
+ </odoo>
+diff --git a/custom/hr_employee_customization/views/hr_employee_view.xml b/custom/hr_employee_customization/views/hr_employee_view.xml
+index 94469c5..6322bc4 100644
+--- a/custom/hr_employee_customization/views/hr_employee_view.xml
++++ b/custom/hr_employee_customization/views/hr_employee_view.xml
+@@ -32,8 +32,8 @@
+         <field name="inherit_id" ref="hr.view_employee_form"/>
+         <field name="arch" type="xml">
+             <field name="mobile_phone" position="after">
+-                <field name="internal_number" />
+-                <field name="short_number" />
++                <field name="internal_number" invisible="1"/>
++                <field name="short_number" invisible="1"/>
+             </field>
+             <xpath expr="//group[@name='active_group']" position="after">
+                 <group string="Duration of Service">
+diff --git a/custom/hr_holidays_extension/__manifest__.py b/custom/hr_holidays_extension/__manifest__.py
+index 0c12e19..9924312 100644
+--- a/custom/hr_holidays_extension/__manifest__.py
++++ b/custom/hr_holidays_extension/__manifest__.py
+@@ -25,6 +25,7 @@
+     ],
+     'data': [
+         'security/ir.model.access.csv',
++        'security/user_groups.xml',
+         'wizard/refuse_leave_reason_view.xml',
+         'views/hr_holidays_view.xml',
+     ],
+diff --git a/custom/hr_holidays_extension/models/hr_holidays_extend.py b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+index 386c80f..c673a9b 100644
+--- a/custom/hr_holidays_extension/models/hr_holidays_extend.py
++++ b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+@@ -322,25 +322,290 @@ class HrHolidays(models.Model):
+     amend = fields.Boolean(string='Amend')
+ 
+     @api.onchange(
+-        'future_balance_value',
+-        'max_allowed_days_value',
+-        'holiday_status_id')
+-    def onchange_future_balance_fields(self):
+-        if self.holiday_status_id and\
+-                self.holiday_status_id.allow_future_balance:
+-            if self.future_balance_value or self.max_allowed_days_value:
+-                self.future_balance = self.future_balance_value
+-                self.max_allowed_days = self.max_allowed_days_value
++        'date_to',
++        'date_from',
++        'employee_id',
++        'holiday_status_id',
++        'half_day')
++    def onchange_date(self):
++        """
++        If there are no date set for date_to,
++         automatically set one 8 hours later than
++        the date_from.
++        Also update the number_of_days.
++        """
++        result = {'domain': {}}
+ 
+-    @api.multi
+-    def onchange_data(self):
+-        dt_to, dt = False, False
+-        holiday_obj = self.env['hr.holidays.public']
+-        future_balance_value = 0.0
++        contract_obj = self.env['hr.contract']
++        ee_obj = self.env['hr.employee']
++        employee = self.employee_id
++        flag_saudi = False
++        nationality_id = employee.country_id.id
++        if (employee.country_id.name == 'Saudi Arabia'):
++            flag_saudi = True
++        else:
++            flag_saudi = False
++        if employee and employee.parent_id:
++            emp_same_manager_ids = ee_obj.\
++                search([('parent_id', '=', employee.parent_id.id),
++                        ('id', '!=', employee.id)]).ids
++        else:
++            emp_same_manager_ids = []
++            # START
++
++        currnet_emp = employee
++
++        holidays_status_obj = self.env['hr.holidays.status']
++        holidays_status_id = []
++        holidays_status_id_both_male_female = []
++        holidays_status_id_both_religin = []
++        holidays_else_id = holidays_status_obj.search(
++            [('is_gender', '=', False), ('is_religion', '=', False)])
++
++        if currnet_emp.religion == 'other':
++            holidays_status_id_both_male_female = holidays_status_obj.\
++                search([('religion', '=', 'o'),
++                        ('is_gender', '=', False)])
++        if currnet_emp.religion == 'muslim':
++            holidays_status_id_both_male_female = holidays_status_obj.\
++                search([('religion', '=', 'm'),
++                        ('is_gender', '=', False)])
++        if currnet_emp.gender == 'male':
++            holidays_status_id_both_religin = holidays_status_obj.\
++                search([('is_religion', '=', False),
++                        ('is_gender', '=', True),
++                        ('gender', '=', 'm')])
++        if currnet_emp.gender == 'female':
++            holidays_status_id_both_religin = holidays_status_obj.\
++                search([('is_religion', '=', False),
++                        ('is_gender', '=', True),
++                        ('gender', '=', 'f')])
++
++        if currnet_emp.gender == 'male':
++            if currnet_emp.religion == 'muslim':
++                holidays_status_id = holidays_status_obj.\
++                    search([('is_religion', '=', True),
++                            ('is_gender', '=', True),
++                            ('gender', '=', 'm'),
++                            ('religion', '=', 'm')])
++            if currnet_emp.religion == 'other':
++                holidays_status_id = holidays_status_obj.\
++                    search([('is_religion', '=', True),
++                            ('is_gender', '=', True),
++                            ('gender', '=', 'm'),
++                            ('religion', '=', 'o')])
++
++        elif currnet_emp.gender == 'female':
++            if currnet_emp.religion == 'muslim':
++                holidays_status_id = holidays_status_obj.\
++                    search([('is_religion', '=', True),
++                            ('is_gender', '=', True),
++                            ('gender', '=', 'f'),
++                            ('religion', '=', 'm')])
++            if currnet_emp.religion == 'other':
++                holidays_status_id = holidays_status_obj.\
++                    search([('is_religion', '=', True),
++                            ('is_gender', '=', True),
++                            ('gender', '=', 'f'),
++                            ('religion', '=', 'o')])
++        all_dic = []
++        if holidays_status_id:
++            all_dic +=\
++                holidays_status_id and\
++                holidays_status_id.ids or []
++        elif holidays_else_id:
++            all_dic +=\
++                holidays_else_id and\
++                holidays_else_id.ids or []
++        elif holidays_status_id_both_religin:
++            all_dic +=\
++                holidays_status_id_both_religin and\
++                holidays_status_id_both_religin.ids or []
++        elif holidays_status_id_both_male_female:
++            all_dic +=\
++                holidays_status_id_both_male_female and\
++                holidays_status_id_both_male_female.ids or []
++        if self.holiday_status_id:
++            if self.holiday_status_id.id not in all_dic:
++                self.holiday_status_id = []
++                # result['value'].update({'holiday_status_id': []})
++
++        cont_ids = contract_obj.\
++            search([('employee_id', '=', employee.id),
++                    ('state', '!=', 'done'),
++                    ('state', '!=', 'draft')])
++        cont_id = 0
++
++        if len(cont_ids) >= 1:
++            cont_id = contract_obj.\
++                search([('employee_id', '=', employee.id),
++                        ('state', '!=', 'done'),
++                        ('state', '!=', 'draft')], limit=1)
++
++        result['domain'].\
++            update({'holiday_status_id': [('id', 'in', all_dic)],
++                    'alternative_emp_id':
++                        [('id', 'in', emp_same_manager_ids)]})
++
++        # result['value'].update({
++        #     'department_id': employee.department_id.id,
++        #     'emp_contract_id': cont_id,
++        #     'nationality_id': nationality_id,
++        #     'alternative_emp_id': '',
++        #     'remaining_leaves_value': 0,
++        #     'max_leaves_value': 0,
++        #     'emp_id': employee.f_employee_no
++        # })
++        date_to = self.date_to
++
++        if self.half_day and self.date_from:
++            date_to = self.date_from
++
++        if self.date_from and not date_to or self.date_from > date_to:
++            date_to = self.date_from
++            # result['value'].update({
++            #     'date_to': date_from,
++            # })
++            date_to = self.date_from
++
++        if not self.date_from or not date_to:
++            self.department_id = employee.department_id.id
++            self.emp_contract_id = cont_id
++            self.nationality_id = nationality_id
++            self.alternative_emp_id = ''
++            self.remaining_leaves_value = 0
++            self.max_leaves_value = 0
++            self.emp_id = employee.f_employee_no
++            self.date_to = date_to
++            return result
++
++        if (self.date_from and date_to) and (self.date_from > date_to):
++            raise Warning(
++                _('The start date must be anterior to the end date.'))
++
++            # No date_to set so far: automatically compute one 8 hours later
+         if self.date_from:
+-            dt = datetime.strptime(self.date_from, OE_DTFORMAT)
+-        if self.date_to:
+-            dt_to = datetime.strptime(self.date_to, OE_DTFORMAT)
++            date_from = self.date_from
++        if date_to and not self.date_from:
++            date_from_with_delta =\
++                datetime.datetime.strptime(
++                    self.date_from,
++                    tools.DEFAULT_SERVER_DATETIME_FORMAT)\
++                - datetime.timedelta(hours=8)
++            date_from = str(date_from_with_delta)
++        dt, dt_to = False, False
++        if self.date_from:
++            dt = datetime.strptime(date_from, OE_DTFORMAT)
++        if date_to:
++            dt_to = datetime.strptime(date_to, OE_DTFORMAT)
++
++        """
++        Update the dates based on the number of days requested.
++        """
++
++        holiday_obj = self.env['hr.holidays.public']
++        sched_tpl_obj = self.env['hr.schedule.template']
++        # sched_detail_obj = self.env['hr.schedule.detail']
++
++        # user = self.env.user
++        # if user and user.tz:
++        #     local_tz = timezone(user.tz)
++        # else:
++        #     local_tz = timezone('Asia/Riyadh')
++
++        if not employee:
++            return result
++
++        # if holiday_status_id:
++        #  hs_data = self.env['hr.holidays.status']
++        # .read(cr, uid, holiday_status_id,
++        #  ['ex_rest_days', 'ex_public_holidays', 'min_days'],
++        #  context=context)
++        # else:
++        #     hs_data = {}
++        ex_rd = self.holiday_status_id.ex_rest_days
++        ex_ph = self.holiday_status_id.ex_public_holidays
++        enable_min_day = self.holiday_status_id.enable_min_day
++        min_days = self.holiday_status_id.min_days
++
++        # Get rest day and the schedule start time on the date the leave begins
++        #
++        rest_days = []
++        # times = tuple()
++
++        if employee.contract_id and employee.contract_id.schedule_template_id:
++            rest_days = sched_tpl_obj.get_rest_days(
++                employee.contract_id.schedule_template_id.id)
++            # times = sched_detail_obj.scheduled_begin_end_times(
++            #     employee.id, employee.contract_id.id, dt)
++        from_weekday = False
++        # if len(times) > 0:
++        #     utcdtStart = times[0][0]
++        # else:
++        #     # If we can't find a schedule, just leave it as the user entered
++        #     # it.
++        if dt:
++            # dtStart = local_tz.localize(dt, is_dst=False)
++            # utcdtStart = dtStart.astimezone(utc)
++            from_weekday = dt.weekday()
++
++        '''
++            0 Monday
++            1 Tuesday
++            2 Wednesday
++            3 Thursday
++            4 Friday
++            ->5 Saturday
++            ->6 Sunday
++        '''
++
++        # Get warning that you can't start from rest day
++        if from_weekday and from_weekday == 4:
++            raise Warning(
++                _('You can not start you'
++                  ' leave from a rest day,'
++                  ' please choose another day.'))
++        if from_weekday and from_weekday == 5 and len(rest_days) == 2:
++            raise Warning(
++                _('You can not start you'
++                  ' leave from a rest day,'
++                  ' please choose another day.'))
++
++        if dt and (holiday_obj.is_public_holiday(dt.date())) and ex_ph:
++            raise Warning(
++                _('You can not start you'
++                  ' leave from a public holiday,'
++                  ' please choose another day.'))
++
++            # If Date from start from the weekend make start from the first
++            # working day.
++        '''
++        if from_weekday == 4 and len(rest_days) == 2:
++            dt += timedelta(days=+2)
++            from_weekday = 6
++        if from_weekday == 4 and len(rest_days) == 1:
++            dt += timedelta(days=+1)
++            from_weekday = 5
++        if from_weekday == 5 and len(rest_days) == 2:
++            dt += timedelta(days=+1)
++            from_weekday = 6
++        '''
++
++        # If next date of date is a rest day or public holiday set as date to
++        '''
++        next_dt_to = dt_to + timedelta(days=+1)
++        while (next_dt_to.weekday() in rest_days)
++         or (holiday_obj.is_public_holiday(cr, uid,
++          next_dt_to.date(), context=context)):
++            if holiday_obj.is_public_holiday(cr,
++             uid, next_dt_to.date(), context=context):
++               dt_to = next_dt_to
++               next_dt_to += timedelta(days=+1)
++            elif next_dt_to.weekday() in rest_days:
++               dt_to = next_dt_to
++               next_dt_to += timedelta(days=+1)
++        '''
++
+         # Compute and update the number of days
+         if (dt_to and dt) and (dt <= dt_to):
+             td = dt_to - dt
+@@ -354,51 +619,8 @@ class HrHolidays(models.Model):
+         ph_days = 0
+         r_days = 0
+         working_days = 0
+-        rest_days = []
+         next_dt = dt
+-        enable_min_day, ex_rd, ex_ph, min_days = False, False, False, False
+-        if self.holiday_status_id:
+-            ex_rd = self.holiday_status_id.ex_rest_days
+-            ex_ph = self.holiday_status_id.ex_public_holidays
+-            enable_min_day = self.holiday_status_id.enable_min_day
+-            min_days = self.holiday_status_id.min_days
+-            if self.holiday_status_id.allow_future_balance:
+-                self.future_balance_value = self.\
+-                    _calculate_emp_future_accrued_days(self.employee_id, dt)
+-            if self.remaining_leaves_value:
+-                self.max_allowed_days_value =\
+-                    future_balance_value + self.remaining_leaves_value
+-                self.curr_remaining_leaves_value =\
+-                    self.future_balance_value +\
+-                    self.remaining_leaves_value - self.real_days
+-
+-        if self.employee_id and\
+-                self.employee_id.contract_id and\
+-                self.employee_id.contract_id.schedule_template_id:
+-            rest_days =\
+-                self.employee_id.contract_id.schedule_template_id\
+-                    .get_rest_days()
+-        if dt:
+-            from_weekday = dt.weekday()
+-            # Get warning that you can't start from rest day
+-            if from_weekday == 4:
+-                raise Warning(_('You can not'
+-                                ' start you leave'
+-                                ' from a rest day,'
+-                                ' please choose'
+-                                ' another day.'))
+-            if from_weekday == 5 and len(rest_days) == 2:
+-                raise Warning(
+-                    _('You can not'
+-                      ' start you leave'
+-                      ' from a rest day,'
+-                      ' please choose another day.'))
+-            if (holiday_obj.is_public_holiday(dt.date())) and ex_ph:
+-                raise Warning(
+-                    _('You can not'
+-                      ' start you leave'
+-                      ' from a public holiday,'
+-                      ' please choose another day.'))
++
+         if not self.half_day:
+             while count_days > 0:
+                 public_holiday = holiday_obj.is_public_holiday(next_dt.date())
+@@ -413,6 +635,23 @@ class HrHolidays(models.Model):
+                     real_days += 1
+                 next_dt += timedelta(days=+1)
+                 count_days -= 1
++                # # public_holiday = (public_holiday and ex_ph)
++                # rest_day = (next_dt.weekday() in rest_days and ex_rd)
++                # if (next_dt.weekday() in rest_days) and not public_holiday:
++                #     r_days += 1
++                #     if not ex_rd:
++                #         real_days += 1
++                # if public_holiday:
++                #     ph_days += 1
++                #     if not ex_ph:
++                #         real_days += 1
++                # if not(next_dt.weekday()
++                #  in rest_days) and not public_holiday:
++                #     real_days += 1
++                #     working_days += 1
++                # next_dt += timedelta(days=+1)
++
++                # count_days -= 1
+         else:
+             public_holiday = holiday_obj.is_public_holiday(next_dt.date())
+             if not (next_dt.weekday() in rest_days) and not public_holiday:
+@@ -420,13 +659,15 @@ class HrHolidays(models.Model):
+                 working_days = 0.5
+ 
+         real_days_so_far = real_days
++
+         return_date = False
++
+         if dt_to:
+             return_date = dt_to + timedelta(days=+1)
+-
+             while (return_date.weekday() in rest_days) or (
+                     holiday_obj.is_public_holiday(return_date)):
+                 return_date = return_date + timedelta(days=+1)
++            return_date = return_date.strftime('%B %d, %Y')
+ 
+         f = 0
+ 
+@@ -448,7 +689,7 @@ class HrHolidays(models.Model):
+                             'tdate': tdate_v,
+                             'date_type': 'e',
+                             'status': 'n',
+-                            'employee_id': self.employee_id.id}
++                            'employee_id': employee.id}
+                         include_exclude_date.append(exclude_date_data)
+ 
+             return_date_weekday = return_date.weekday()
+@@ -464,272 +705,126 @@ class HrHolidays(models.Model):
+                             'tdate': itdate_v,
+                             'date_type': 'i',
+                             'status': 'n',
+-                            'employee_id': self.employee_id.id}
++                            'employee_id': employee.id}
+                         include_exclude_date.append(include_date_data)
+ 
+         total_days = working_days + ph_days + r_days
+ 
+         # Return Remaining Leaves
+-        max_leaves = 0
+-        leaves_taken = 0
+-        remaining_leaves = 0
+-        curr_remaining_leaves = 0
+-
+-        if self.holiday_status_id and self.employee_id:
+-            leaves_bal = self.holiday_status_id.get_days(self.employee_id.id)
+-            max_leaves = leaves_bal.get('max_leaves')
+-            leaves_taken = leaves_bal.get('leaves_taken')
+-            remaining_leaves = leaves_bal.get('remaining_leaves')
+-            if remaining_leaves and real_days:
+-                curr_remaining_leaves = remaining_leaves - real_days
+ 
+-        return {
+-            'real_days': real_days,
+-            'max_leaves': max_leaves,
+-            'leaves_taken': leaves_taken,
+-            'remaining_leaves': remaining_leaves,
+-            'curr_remaining_leaves': curr_remaining_leaves,
+-            'rest_days': rest_days,
+-            'total_days': total_days,
+-            'working_days': working_days,
+-            'public_holiday_days': ph_days,
+-            'return_date': return_date,
+-            'include_exclude_date': include_exclude_date}
+-
+-    @api.onchange('holiday_status_id')
+-    def onchange_holiday_status(self):
++        if self.holiday_status_id and employee:
++            # holi_status_obj = self.env['hr.holidays.status']
++            leaves_bal = self.holiday_status_id.get_days(
++                employee.id)[self.holiday_status_id.id]
++            max_leaves = leaves_bal['max_leaves']
++            leaves_taken = leaves_bal['leaves_taken']
++            remaining_leaves = leaves_bal['remaining_leaves']
++            curr_remaining_leaves = remaining_leaves - real_days
++        else:
++            max_leaves = 0
++            leaves_taken = 0
++            remaining_leaves = 0
++            curr_remaining_leaves = 0
+         flag = False
+         flag_emp = False
+         if self.holiday_status_id:
+-            flag = self.holiday_status_id.attachment_mandatory
+-            allow_trial_period = self.holiday_status_id.allow_trial_period
+-            flag_emp = self.holiday_status_id.alternative_emp_mandatory
+-            if self.employee_id and \
+-                    self.employee_id.contract_id and \
+-                    self.employee_id.contract_id.trial_date_end:
++            this_holiday_status_id = self.holiday_status_id
++            flag = this_holiday_status_id.attachment_mandatory
++            allow_trial_period = this_holiday_status_id.allow_trial_period
++            if employee.contract_id.trial_date_end:
+                 date_format = tools.DEFAULT_SERVER_DATE_FORMAT
+                 date_traial = datetime.strptime(
+-                    self.employee_id.contract_id.trial_date_end, date_format)
++                    employee.contract_id.trial_date_end, date_format)
+                 today = datetime.today()
+                 if date_traial >= today and not allow_trial_period:
+                     raise Warning(
+-                        _('You cannot apply'
+-                          ' for this leave type'
+-                          ' while you are in the'
+-                          ' trial period.\n Please'
+-                          ' contact the HR department.'))
++                        _('You cannot apply for this'
++                          ' leave type while you are'
++                          ' in the trial period.\n'
++                          ' Please contact the HR department.'))
++
++            flag_emp = this_holiday_status_id.alternative_emp_mandatory
++        if employee and employee.department_id:
++            emp_same_manager_ids = ee_obj.search(
++                [('department_id', '=', employee.department_id.id),
++                 ('id', '!=', employee.id)]).ids
++        else:
++            emp_same_manager_ids = []
++
++        # Un-used code
++        cont_ids = contract_obj.\
++            search([('employee_id', '=', employee.id),
++                    ('state', '!=', 'done'),
++                    ('state', '!=', 'draft')])
++        cont_id = 0
++
++        if len(cont_ids) >= 1:
++            cont_id =\
++                contract_obj.search([('employee_id', '=', employee.id),
++                                     ('state', '!=', 'done'),
++                                     ('state', '!=', 'draft')], limit=1)
++
++        if self.date_from:
++            allow_future_balance = self.holiday_status_id.allow_future_balance
++            future_balance_value = 0.0
++            if allow_future_balance:
++                self.future_balance_value =\
++                    self._calculate_emp_future_accrued_days(employee.id,
++                                                            self.date_from)
++                future_balance_value = self.future_balance_value
++            self.max_allowed_days_value =\
++                future_balance_value + self.remaining_leaves_value
++            self.curr_remaining_leaves = future_balance_value + \
++                self.remaining_leaves_value - self.real_days
++            self.curr_remaining_leaves_value = future_balance_value + \
++                self.remaining_leaves_value - self.real_days
++
++        self.department_id = employee.department_id.id,
++        self.working_days_value = working_days
++        self.rest_days_value = r_days
++        self.public_holiday_days_value = ph_days
++        self.real_days_value = real_days
++        self.total_days_value = total_days
++        self.working_days = working_days
++        self.rest_days = r_days
++        self.public_holiday_days = ph_days
++        self.real_days = real_days
++        self.total_days = total_days
++        self.number_of_days_temp = real_days
++        self.return_date = return_date
++        self.return_date_value = return_date
++        self.max_leaves = max_leaves
++        self.max_leaves_value = max_leaves
++        self.remaining_leaves = remaining_leaves
++        self.remaining_leaves_value = remaining_leaves
++        self.curr_remaining_leaves = curr_remaining_leaves
++        self.curr_remaining_leaves_value = curr_remaining_leaves
++        self.leaves_taken = leaves_taken
++        self.leaves_taken_value = leaves_taken
++        self.include_exclude_lines = include_exclude_date
+         self.flag_attachment = flag
++        self.emp_contract_id = cont_id
+         self.flag_emp_mandatory = flag_emp
+-        data = self.onchange_data()
+-        if data.get('max_leaves'):
+-            self.max_leaves_value = data.get('max_leaves')
+-        if data.get('leaves_taken'):
+-            self.leaves_taken_value = data.get('leaves_taken')
+-        if data.get('remaining_leaves'):
+-            self.remaining_leaves_value = data.get('remaining_leaves')
+-        if data.get('curr_remaining_leaves'):
+-            self.curr_remaining_leaves_value = data.get(
+-                'curr_remaining_leaves')
+-        if data.get('rest_days'):
+-            rest_day = data.get('rest_days')
+-            if isinstance(rest_day, list):
+-                rest_day = rest_day[0]
+-            self.rest_days_value = rest_day
+-        if data.get('real_days'):
+-            self.real_days_value = data.get('real_days')
+-        if data.get('total_days'):
+-            self.total_days_value = data.get('total_days')
+-        if data.get('working_days'):
+-            self.working_days_value = data.get('working_days')
+-        if data.get('return_date'):
+-            self.return_date_value = data.get('return_date')
+-
+-    @api.onchange('date_from')
+-    def _onchange_date_from(self):
+-        """ If there are no
+-         date set for date_to,
+-          automatically set one 8 hours later than
+-           the date_from. Also update the number_of_days.
+-        """
+-        if self.date_from:
+-            dt = datetime.strptime(self.date_from, OE_DTFORMAT)
+-            if dt.weekday() == 4:
+-                raise Warning(
+-                    _('You can not start you'
+-                      ' leave from a rest day,'
+-                      ' please choose another day.'))
+-            if self.employee_id \
+-                    and self.employee_id.contract_id \
+-                    and self.employee_id.contract_id.schedule_template_id:
+-                rest_days = self.employee_id. \
+-                    contract_id.schedule_template_id. \
+-                    get_rest_days()
+-                if dt.weekday() == 5 and len(rest_days) == 2:
+-                    raise Warning(
+-                        _('You can not start you'
+-                          ' leave from a rest day,'
+-                          ' please choose another day.'))
+-        data = self.onchange_data()
+-        if data.get('max_leaves'):
+-            self.max_leaves_value = data.get('max_leaves')
+-        if data.get('leaves_taken'):
+-            self.leaves_taken_value = data.get('leaves_taken')
+-        if data.get('remaining_leaves'):
+-            self.remaining_leaves_value = data.get('remaining_leaves')
+-        if data.get('curr_remaining_leaves'):
+-            self.curr_remaining_leaves_value = data.get(
+-                'curr_remaining_leaves')
+-        if data.get('rest_days'):
+-            rest_day = data.get('rest_days')
+-            if isinstance(rest_day, list):
+-                rest_day = rest_day[0]
+-            self.rest_days_value = rest_day
+-        if data.get('real_days'):
+-            self.real_days_value = data.get('real_days')
+-        if data.get('total_days'):
+-            self.total_days_value = data.get('total_days')
+-        if data.get('working_days'):
+-            self.working_days_value = data.get('working_days')
+-        if data.get('return_date'):
+-            self.return_date_value = data.get('return_date')
+-
+-    @api.onchange('date_to')
+-    def _onchange_date_to(self):
+-        """ Update the number_of_days. """
+-        super(HrHolidays, self)._onchange_date_to()
+-        if (self.date_from and self.date_to) and (
+-                self.date_from > self.date_to):
+-            raise Warning(
+-                _('The start date must be anterior to the end date.'))
+-        data = self.onchange_data()
+-        if data.get('max_leaves'):
+-            self.max_leaves_value = data.get('max_leaves')
+-        if data.get('leaves_taken'):
+-            self.leaves_taken_value = data.get('leaves_taken')
+-        if data.get('remaining_leaves'):
+-            self.remaining_leaves_value = data.get('remaining_leaves')
+-        if data.get('curr_remaining_leaves'):
+-            self.curr_remaining_leaves_value = data.get(
+-                'curr_remaining_leaves')
+-        if data.get('rest_days'):
+-            rest_day = data.get('rest_days')
+-            if isinstance(rest_day, list):
+-                rest_day = rest_day[0]
+-            self.rest_days_value = rest_day
+-        if data.get('real_days'):
+-            self.real_days_value = data.get('real_days')
+-        if data.get('total_days'):
+-            self.total_days_value = data.get('total_days')
+-        if data.get('working_days'):
+-            self.working_days_value = data.get('working_days')
+-        if data.get('return_date'):
+-            self.return_date_value = data.get('return_date')
+-
+-    @api.onchange('employee_id')
+-    def _onchange_employee(self):
+-        super(HrHolidays, self)._onchange_employee()
+-        flag_saudi = False
+-        ee_obj = self.env['hr.employee']
+-        holidays_status_obj = self.env['hr.holidays.status']
+-        employee_id = False
+-        if self.employee_id:
+-            employee_id = self.employee_id
+-        if employee_id and self.employee_id.country_id.code == 'SA':
+-            flag_saudi = True
+-        if employee_id and employee_id.country_id:
+-            self.nationality_id = employee_id.country_id.id
++        self.nationality_id = nationality_id
+         self.flag_saudi = flag_saudi
+-        emp_same_manager_ids, result = [], {}
+-        holidays_status_id = []
+-        holidays_status_male_female = []
+-        holidays_status_id_both_religin = []
+-        if employee_id and employee_id.parent_id:
+-            emp_same_manager_ids = ee_obj. \
+-                search([('parent_id', '=', employee_id.parent_id.id),
+-                        ('id', '!=', employee_id.id)])
+-        holidays_else_id = holidays_status_obj.search(
+-            [('is_gender', '=', False), ('is_religion', '=', False)])
+-        if employee_id and employee_id.religion == 'other':
+-            holidays_status_male_female = holidays_status_obj. \
+-                search([('religion', '=', 'o'), ('is_gender', '=', False)])
+-        if employee_id and employee_id.religion == 'muslim':
+-            holidays_status_male_female = holidays_status_obj. \
+-                search([('religion', '=', 'm'), ('is_gender', '=', False)])
+-        if employee_id and employee_id.gender == 'male':
+-            holidays_status_id_both_religin = holidays_status_obj. \
+-                search([('is_religion', '=', False),
+-                        ('is_gender', '=', True),
+-                        ('gender', '=', 'm')])
+-        if employee_id and employee_id.gender == 'female':
+-            holidays_status_id_both_religin = holidays_status_obj. \
+-                search([('is_religion', '=', False),
+-                        ('is_gender', '=', True),
+-                        ('gender', '=', 'f')])
++        self.alternative_emp_id = ''
++        self.emp_id = employee.f_employee_no
+ 
+-        if employee_id and employee_id.gender == 'male':
+-            if employee_id.religion == 'muslim':
+-                holidays_status_id = holidays_status_obj. \
+-                    search([('is_religion', '=', True),
+-                            ('is_gender', '=', True),
+-                            ('gender', '=', 'm'),
+-                            ('religion', '=', 'm')])
+-            if employee_id and employee_id.religion == 'other':
+-                holidays_status_id = holidays_status_obj. \
+-                    search([('is_religion', '=', True),
+-                            ('is_gender', '=', True),
+-                            ('gender', '=', 'm'),
+-                            ('religion', '=', 'o')])
++        result['domain'].update(
++            {'alternative_emp_id': [('id', 'in', emp_same_manager_ids)]})
+ 
+-        elif employee_id and employee_id.gender == 'female':
+-            if employee_id.religion == 'muslim':
+-                holidays_status_id = holidays_status_obj. \
+-                    search([('is_religion', '=', True),
+-                            ('is_gender', '=', True),
+-                            ('gender', '=', 'f'),
+-                            ('religion', '=', 'm')])
+-            if employee_id and employee_id.religion == 'other':
+-                holidays_status_id = holidays_status_obj. \
+-                    search([('is_religion', '=', True),
+-                            ('is_gender', '=', True),
+-                            ('gender', '=', 'f'),
+-                            ('religion', '=', 'o')])
+-        if holidays_status_id and \
+-                holidays_else_id and \
+-                holidays_status_id_both_religin and \
+-                holidays_status_male_female:
+-            all_dic = holidays_status_id + holidays_else_id + \
+-                holidays_status_id_both_religin + holidays_status_male_female
+-            if self.holiday_status_id not in all_dic:
+-                self.public_holiday_days = []
+-            result.update(
+-                {
+-                    'domain': {
+-                        'holiday_status_id': [
+-                            ('id', 'in', all_dic)], 'alternative_emp_id': [
+-                            ('id', 'in', emp_same_manager_ids)]}})
+-        data = self.onchange_data()
+-        if data.get('max_leaves'):
+-            self.max_leaves_value = data.get('max_leaves')
+-        if data.get('leaves_taken'):
+-            self.leaves_taken_value = data.get('leaves_taken')
+-        if data.get('remaining_leaves'):
+-            self.remaining_leaves_value = data.get('remaining_leaves')
+-        if data.get('curr_remaining_leaves'):
+-            self.curr_remaining_leaves_value = data.get(
+-                'curr_remaining_leaves')
+-        if data.get('rest_days'):
+-            rest_day = data.get('rest_days')
+-            if isinstance(rest_day, list):
+-                rest_day = rest_day[0]
+-            self.rest_days_value = rest_day
+-        if data.get('real_days'):
+-            self.number_of_days_temp = data.get('real_days')
+-        if data.get('total_days'):
+-            self.total_days_value = data.get('total_days')
+-        if data.get('working_days'):
+-            self.working_days_value = data.get('working_days')
+-        if data.get('return_date'):
+-            self.return_date_value = data.get('return_date')
++        return result
++
++    # @api.onchange(
++    #     'future_balance_value',
++    #     'max_allowed_days_value',
++    #     'holiday_status_id')
++    # def onchange_future_balance_fields(self):
++    #     if self.holiday_status_id and\
++    #             self.holiday_status_id.allow_future_balance:
++    #         if self.future_balance_value or self.max_allowed_days_value:
++    #             self.future_balance = self.future_balance_value
++    #             self.max_allowed_days = self.max_allowed_days_value
+ 
+     @api.model
+     def create(self, vals):
+@@ -926,23 +1021,30 @@ class HrHolidays(models.Model):
+                 this.action_validate()
+ 
+     @api.multi
++    def add_methods(self):
++        for this in self:
++            this.action_confirm()
++            this._check_validate()
++            this.action_approve()
++            # this.action_validate()
++            this.update_include_exlucded_status()
++            this.set_repeated_message()
++
++    @api.multi
+     def holidays_to_manager(self):
+         today = datetime.today()
+         ir_obj = self.env['ir.attachment']
+         for this in self:
+             if this.type == 'add':
+-                # this.action_approve()
+-                this.update_include_exlucded_status()
+-                this.set_repeated_message()
+-
++                return this.add_methods()
+             contract_dic = this.emp_contract_id
+             exception_bool = this.ex_leave
+             if exception_bool:
+                 if not this.holiday_status_id.hr_appr:
+                     return this.action_confirm()
+                 if this.holiday_status_id.hr_appr:
+-                    return this.action_validate()
+-
++                    # return this.action_validate()
++                    return this.action_approve()
+             date_format = tools.DEFAULT_SERVER_DATE_FORMAT
+ 
+             if ((this.real_days > 0) and
+diff --git a/custom/hr_holidays_extension/views/hr_holidays_view.xml b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+index 77169c2..6030b91 100644
+--- a/custom/hr_holidays_extension/views/hr_holidays_view.xml
++++ b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+@@ -24,12 +24,12 @@
+                                [('refuse_reason', '=', 'False')]}"/>
+                     </group>
+                 </field>
+-                <field name="date_from" position="attributes">
+-                    <attribute name="widget">date</attribute>
+-                </field>
+-                <field name="date_to" position="attributes">
+-                    <attribute name="widget">date</attribute>
+-                </field>
++                <!--<field name="date_from" position="attributes">-->
++                    <!--<attribute name="widget">date</attribute>-->
++                <!--</field>-->
++                <!--<field name="date_to" position="attributes">-->
++                    <!--<attribute name="widget">date</attribute>-->
++                <!--</field>-->
+                 <xpath expr="//form" position="replace">
+                     <form string="Leave Request">
+                         <field name="can_reset" invisible="1"/>
+@@ -58,6 +58,8 @@
+                                     type="object" groups=
+                                             "hr_holidays_extension.group_hr_leave,groups_rules.group_employee_manager"
+                                     class="oe_highlight"/>
++
++                            <!-- Refuse -->
+                             <button string="Refuse" name="action_refuse_wizard"
+                                     states="validate1, validate" type="object"
+                                     groups="hr.group_hr_user"/>
+@@ -67,8 +69,8 @@
+                             <button string="Refuse" name="action_refuse_wizard"
+                                     states="ceo" type="object"
+                                     groups="ceo_group.group_ceo"/>
+-                            <button name="button_amend" string="Amend" type="object" states="validate" />
+-                            <button name="button_cancel" string="Cancel" type="object" states="validate" />
++                            <button name="button_amend" string="Amend" type="object" attrs="{'invisible': ['|', ('type', '=', 'add'), ('state', 'not in', ('validate'))]}"/>
++                            <button name="button_cancel" string="Cancel" type="object" attrs="{'invisible': ['|', ('type', '=', 'add'), ('state', 'not in', ('validate'))]}"/>
+                             <field name="state" widget="statusbar"
+                                    statusbar_visible="draft,confirm,validate1,validate"
+                                    statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}'/>
+@@ -84,10 +86,11 @@
+                             </div>
+                             <group>
+                                 <group>
+-                                    <field name="name"
+-                                           attrs="{'readonly':[('state','!=','draft'),('state','!=','confirm')]}"/>
+                                     <field name="flag_saudi" invisible="1"/>
+-                                    <field name="amend"/>
++                                    <field name="amend" invisible="1"/>
++                                    <field name="employee_id"
++                                           attrs="{'required':[('holiday_type','=','employee')],'readonly':[('state','!=','draft')], 'invisible':[('holiday_type','=','category')]} "
++                                           groups="hr_holidays_extension.group_hr_leave,hr_holidays.group_hr_holidays_user" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                     <field name="holiday_status_id"
+                                            context="{'employee_id':employee_id}"/>
+                                     <label for="number_of_days_temp"
+@@ -96,12 +99,12 @@
+                                         <div attrs="{'invisible': [('type', '=', 'add')]}">
+                                             <field name="date_from"
+                                                    attrs="{'required':[('type', '=', 'remove')], 'readonly': [('amend', '=', True)]}"
+-                                                   class="oe_inline"/>
++                                                   class="oe_inline" widget="date"/>
+                                             <label string="-"
+                                                    class="oe_inline"/>
+                                             <field name="date_to"
+                                                    attrs="{'required':[('type', '=', 'remove')]}"
+-                                                   class="oe_inline"/>
++                                                   class="oe_inline" widget="date"/>
+                                         </div>
+                                         <div>
+                                             <field name="number_of_days_temp"
+@@ -111,19 +114,22 @@
+                                     </div>
+                                 </group>
+                                 <group>
++                                    <field name="name"
++                                           attrs="{'readonly':[('state','!=','draft'),('state','!=','confirm')]}"/>
+                                     <field name="holiday_type"
+                                            attrs="{'readonly':[('type', '=', 'remove'),('state','!=','draft')]}"
+                                            string="Mode"
+                                            groups="hr_holidays.group_hr_holidays_user"
+-                                           context="{'employee_id':employee_id}"/>
+-                                    <field name="employee_id"
+-                                           attrs="{'required':[('holiday_type','=','employee')],'invisible':[('holiday_type','=','category')]}"
+-                                           groups="hr_holidays.group_hr_holidays_user"/>
++                                           context="{'employee_id':employee_id}" invisible="1"/>
++                                    <!--<field name="employee_id"-->
++                                           <!--attrs="{'required':[('holiday_type','=','employee')],'readonly':[('state','!=','draft')], 'invisible':[('holiday_type','=','category')]} "-->
++                                           <!--groups="hr_holidays_extension.group_hr_leave,hr_holidays.group_hr_holidays_user" options="{'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>-->
+                                     <field name="category_id"
+                                            attrs="{'required':[('holiday_type','=','category')], 'readonly': [('type', '=', 'remove'),('state','!=','draft'), ('state','!=','confirm')], 'invisible':[('holiday_type','=','employee')]}"/>
+                                     <field name="department_id"
+                                            groups="hr_holidays.group_hr_holidays_user"
+                                            attrs="{'readonly':['|','|' ,('type','=','add'),('holiday_type','=','category'),('state','=', 'validate')],'invisible':[('holiday_type','=','category')]}"/>
++                                    <field name="emp_id"/>
+                                     <field name="ex_leave"
+                                            groups="hr.group_hr_user"
+                                            attrs="{'readonly':[('state','!=','draft')],'invisible': [('type', '=', 'add')]}"/>
+@@ -316,5 +322,17 @@
+                 </data>
+             </field>
+         </record>
++
++         <record id="view_holiday_request_on_behalf" model="ir.ui.view">
++            <field name="name">holiday.request.on.behalf</field>
++            <field name="model">hr.holidays</field>
++            <field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason" />
++            <field name="groups_id" eval="[(6, 0, [ref('hr_holidays_extension.group_request_on_behalf_others')])]"/>
++            <field name="arch" type="xml">
++                <xpath expr="//field[@name='employee_id']" position="attributes">
++                    <attribute name="domain">[('id','!=',False)]</attribute>
++                </xpath>
++            </field>
++        </record>
+     </data>
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_payroll_period/wizard/payroll_period_end.py b/custom/hr_payroll_period/wizard/payroll_period_end.py
+index 6ea7196..9cb54a0 100644
+--- a/custom/hr_payroll_period/wizard/payroll_period_end.py
++++ b/custom/hr_payroll_period/wizard/payroll_period_end.py
+@@ -431,28 +431,62 @@ class payroll_period_end_1(models.Model):
+ 
+     @api.multi
+     def lock_period(self):
+-        self.ensure_one()
+         period_id = self._context.get('active_id', False)
+         if not period_id:
++            raise Warning(_('Unable to get the period ID!!!'))
+             return
+-
+         # XXX - should not be necessary any more
+         # Make sure to re-calculate alerts first. Just in case.
++        # self._do_recalc_alerts(cr, uid, ids, context=context)
+ 
+         if self.alert_critical != 0:
+-            raise Warning(_('Unable to Lock the Payroll Period. There are '
+-                            'one or more Critical Severity Exceptions. Please '
+-                            'correct them before proceeding.'))
++            raise Warning(
++                _('Unable to Lock the Payroll Period There'
++                  ' are one or more Critical Severity'
++                  ' Exceptions. Please correct'
++                  ' them before proceeding.'))
++
++        pp_obj = self.env['hr.payroll.period']
++        for record in pp_obj.browse([period_id]):
++            record.set_state_locked()
++            if record.state != 'locked':
++                record.set_state_ended()
++                record.set_state_locked()
++                if record.state != 'locked':
++                    raise Warning(_('lock 2 Failed to lock 2'))
++        return {
++            'view_type': 'form',
++            'view_mode': 'form',
++            'res_model': 'hr.payroll.period.end.1',
++            'type': 'ir.actions.act_window',
++            'target': 'inline',
++            'context': self._context
++        }
+ 
+-        period_rec = self.env['hr.payroll.period'].browse(period_id)
+-        period_rec.set_state_locked()
+-        # return {
+-        #     'view_type': 'form',
+-        #     'view_mode': 'form',
+-        #     'res_model': 'hr.payroll.period.end.1',
+-        #     'type': 'ir.actions.act_window',
+-        #     'target': 'inline',
+-        # }
++    # @api.multi
++    # def lock_period(self):
++    #     self.ensure_one()
++    #     period_id = self._context.get('active_id', False)
++    #     if not period_id:
++    #         return
++    #
++    #     # XXX - should not be necessary any more
++    #     # Make sure to re-calculate alerts first. Just in case.
++    #
++    #     if self.alert_critical != 0:
++    #         raise Warning(_('Unable to Lock the Payroll Period. There are
++    #  one or more Critical Severity Exceptions. Please
++    #  correct them before proceeding.'))
++    #
++    #     period_rec = self.env['hr.payroll.period'].browse(period_id)
++    #     period_rec.set_state_locked()
++    #     # return {
++    #     #     'view_type': 'form',
++    #     #     'view_mode': 'form',
++    #     #     'res_model': 'hr.payroll.period.end.1',
++    #     #     'type': 'ir.actions.act_window',
++    #     #     'target': 'inline',
++    #     # }
+ 
+     @api.multi
+     def _remove_register(self):
+@@ -479,16 +513,14 @@ class payroll_period_end_1(models.Model):
+         period_rec = self.env['hr.payroll.period'].browse(period_id)
+         if period_rec.state == 'generate':
+             self._remove_register()
+-
+         period_rec.set_state_ended()
+-
+-        # return {
+-        #     'view_type': 'form',
+-        #     'view_mode': 'form',
+-        #     'res_model': 'hr.payroll.period.end.1',
+-        #     'type': 'ir.actions.act_window',
+-        #     'target': 'inline',
+-        # }
++        return {
++            'view_type': 'form',
++            'view_mode': 'form',
++            'res_model': 'hr.payroll.period.end.1',
++            'type': 'ir.actions.act_window',
++            'target': 'inline',
++        }
+ 
+     @api.multi
+     def create_payroll_register(self):
+diff --git a/custom/hr_payslip_addtion/hr_payslip.py b/custom/hr_payslip_addtion/hr_payslip.py
+index 63acd62..ea7dd27 100644
+--- a/custom/hr_payslip_addtion/hr_payslip.py
++++ b/custom/hr_payslip_addtion/hr_payslip.py
+@@ -8,6 +8,7 @@
+ 
+ from datetime import datetime
+ from odoo import api, fields, models
++from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as OE_DFORMAT
+ 
+ 
+ class hr_payslip(models.Model):
+@@ -60,20 +61,20 @@ class hr_payslip(models.Model):
+             if date_list:
+                 smallest_date = min(date_list)
+                 delta_30 = \
+-                    datetime.strptime(date_to, "%Y-%m-%d") - \
+-                    datetime.strptime(date_start, "%Y-%m-%d")
++                    datetime.strptime(date_to, OE_DFORMAT) - \
++                    datetime.strptime(date_start, OE_DFORMAT)
+                 delta_30_days = delta_30.days + 1
+                 delta_30_days = 30 - delta_30_days
+                 if smallest_date > date_start:
+                     delta = \
+-                        datetime.strptime(date_to, "%Y-%m-%d") - \
+-                        datetime.strptime(smallest_date, "%Y-%m-%d")
++                        datetime.strptime(date_to, OE_DFORMAT) - \
++                        datetime.strptime(smallest_date, OE_DFORMAT)
+                     number_of_days = \
+                         (delta.days and delta.days) + 1 + delta_30_days
+                 else:
+                     delta = \
+-                        datetime.strptime(date_to, "%Y-%m-%d") - \
+-                        datetime.strptime(date_start, "%Y-%m-%d")
++                        datetime.strptime(date_to, OE_DFORMAT) - \
++                        datetime.strptime(date_start, OE_DFORMAT)
+                     number_of_days = \
+                         (delta.days and delta.days) + 1 + delta_30_days
+                 if number_of_days <= 0:
+diff --git a/custom/hr_payslip_amendment/hr_payslip_amendment.py b/custom/hr_payslip_amendment/hr_payslip_amendment.py
+index aa16263..1dee29a 100644
+--- a/custom/hr_payslip_amendment/hr_payslip_amendment.py
++++ b/custom/hr_payslip_amendment/hr_payslip_amendment.py
+@@ -34,8 +34,8 @@ class hr_payslip_amendment(models.Model):
+     def onchange_employee(self):
+         if self.employee_id:
+             name = "Pay Slip Amendment: " + self.employee_id.name
+-            if self.employee_id.employee_no:
+-                name += ' (' + self.employee_id.employee_no + ')'
++            if self.employee_id.f_employee_no:
++                name += ' (' + self.employee_id.f_employee_no + ')'
+             self.name = name
+ 
+     @api.multi
+diff --git a/custom/hr_recruitment_stages_movement/models/hr_recruitment_new.py b/custom/hr_recruitment_stages_movement/models/hr_recruitment_new.py
+index b88f739..d6bdb6f 100755
+--- a/custom/hr_recruitment_stages_movement/models/hr_recruitment_new.py
++++ b/custom/hr_recruitment_stages_movement/models/hr_recruitment_new.py
+@@ -3,6 +3,7 @@ from openerp.tools import config
+ import threading
+ from datetime import datetime
+ import time
++from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as OE_DTFORMAT
+ 
+ 
+ def duplication_check(method):
+@@ -102,8 +103,8 @@ class hr_applicant(models.Model):
+             # Add Log Record
+             approval_log_obj = self.env['hr.applicant.logs']
+             today = datetime.strptime(
+-                time.strftime("%Y-%m-%d %H:%M:%S"),
+-                "%Y-%m-%d %H:%M:%S")
++                time.strftime(OE_DTFORMAT),
++                OE_DTFORMAT)
+             approval_log_obj.create({'applicant_id': applicant_rec.id,
+                                      'name': 'Sr. Manager, TA',
+                                      'approval': 'Approved',
+@@ -130,8 +131,8 @@ class hr_applicant(models.Model):
+             # Add Log Record
+             approval_log_obj = self.env['hr.applicant.logs']
+             today = datetime.strptime(
+-                time.strftime("%Y-%m-%d %H:%M:%S"),
+-                "%Y-%m-%d %H:%M:%S")
++                time.strftime(OE_DTFORMAT),
++                OE_DTFORMAT)
+             approval_log_obj.create({'applicant_id': applicant_rec.id,
+                                      'name': 'Head of Unit',
+                                      'approval': 'Approved',
+@@ -148,8 +149,8 @@ class hr_applicant(models.Model):
+         for applicant_rec in self:
+             approval_log_obj = self.env['hr.applicant.logs']
+             today = datetime.strptime(
+-                time.strftime("%Y-%m-%d %H:%M:%S"),
+-                "%Y-%m-%d %H:%M:%S")
++                time.strftime(OE_DTFORMAT),
++                OE_DTFORMAT)
+             approval_log_obj.create({'applicant_id': applicant_rec.id,
+                                      'name': 'CEO', 'approval': 'Approved',
+                                      'user_id': self._uid, 'date': today})
+@@ -176,8 +177,8 @@ class hr_applicant(models.Model):
+                 action = 'CEO'
+             # Add Log Record
+             today = datetime.strptime(
+-                time.strftime("%Y-%m-%d %H:%M:%S"),
+-                "%Y-%m-%d %H:%M:%S")
++                time.strftime(OE_DTFORMAT),
++                OE_DTFORMAT)
+             approval_log_obj.create({'applicant_id': applicant_rec.id,
+                                      'name': action,
+                                      'approval': 'Rejected',
+diff --git a/custom/hr_saudi_filed/models/hr_saudi.py b/custom/hr_saudi_filed/models/hr_saudi.py
+index bf847fc..b39de60 100644
+--- a/custom/hr_saudi_filed/models/hr_saudi.py
++++ b/custom/hr_saudi_filed/models/hr_saudi.py
+@@ -21,17 +21,22 @@ class hr_holidays_status(models.Model):
+ class hr_employee(models.Model):
+     _inherit = 'hr.employee'
+ 
++    # @api.multi
++    # def _get_annual_leave_balance(self):
++    #     for sub_id in self:
++    #         holi_status_obj = self.env['hr.holidays.status']
++    #         holiday_status_id = holi_status_obj.search([('code', '=',
++    #                                                      'ANNLV')])
++    #         if holiday_status_id:
++    #             leaves_bal = holiday_status_id.get_days(self.id)
++    #             sub_id.remaining_leaves = leaves_bal['remaining_leaves']
++    #         else:
++    #             sub_id.remaining_leaves = 0
++
+     @api.multi
+     def _get_annual_leave_balance(self):
+         for sub_id in self:
+-            holi_status_obj = self.env['hr.holidays.status']
+-            holiday_status_id = holi_status_obj.search([('code', '=',
+-                                                         'ANNLV')])
+-            if holiday_status_id:
+-                leaves_bal = holiday_status_id.get_days(self.id)
+-                sub_id.remaining_leaves = leaves_bal['remaining_leaves']
+-            else:
+-                sub_id.remaining_leaves = 0
++            sub_id.remaining_leaves = 0
+ 
+     @api.multi
+     def _leaves_count(self):
+diff --git a/custom/hr_saudi_filed/views/hr_saudi_view.xml b/custom/hr_saudi_filed/views/hr_saudi_view.xml
+index 19adc95..f6e296d 100644
+--- a/custom/hr_saudi_filed/views/hr_saudi_view.xml
++++ b/custom/hr_saudi_filed/views/hr_saudi_view.xml
+@@ -1,94 +1,94 @@
+ <?xml version="1.0"?>
+ <odoo>
+-	<data>
+-		<record id="hr_holidays.act_hr_employee_holiday_request"
+-				model="ir.actions.act_window">
+-			<field name="domain">
+-				[('type','=','remove'),('state','=','validate')]
+-			</field>
+-		</record>
+-
+-		<record id="remove_bank_account_id" model="ir.ui.view">
+-			<field name="name">hr.employee.remove</field>
+-			<field name="model">hr.employee</field>
+-			<field name="inherit_id"
+-				   ref="hr_contract.hr_hr_employee_view_form2" />
+-			<field name="arch" type="xml">
+-				<data>
+-					<xpath expr="//field[@name='bank_account_id']"
+-						   position="replace">
+-					</xpath>
+-
+-					<xpath expr="//button[@name='%(hr_contract.act_hr_employee_2_hr_contract)d']" position="attributes">
+-						<attribute name="groups">hr.group_hr_user</attribute>
+-					</xpath>
+-				</data>
+-			</field>
+-		</record>
+-
+-		<record model="ir.ui.view" id="hr_saudi_inherit">
+-			<field name="name">hr.employee.saudi</field>
+-			<field name="model">hr.employee</field>
+-			<field name="inherit_id" ref="hr.view_employee_form" />
+-			<field name="arch" type="xml">
+-				<field name="name" position="after">
+-					<field name="current_country_code" invisible="1"/>
+-					<label for="name_eng" class="oe_edit_only">
+-						Arabic name
+-					</label>
+-					<field name="name_eng" required="1"/>
+-				</field>
+-				<field name="category_ids" position="replace"/>
+-				<xpath expr="//h1" position="after">
+-					<label for="category_ids" class="oe_edit_only">
+-						Tags
+-					</label>
+-					<field name="category_ids" widget="many2many_tags"
+-						   placeholder="e.g. Part Time"
+-						   options="{'no_create_edit': True}"
+-						   groups="hr.group_hr_user"/>
++    <data>
++        <record id="hr_holidays.act_hr_employee_holiday_request"
++                model="ir.actions.act_window">
++            <field name="domain">
++                [('type','=','remove'),('state','=','validate')]
++            </field>
++        </record>
++
++        <record id="remove_bank_account_id" model="ir.ui.view">
++            <field name="name">hr.employee.remove</field>
++            <field name="model">hr.employee</field>
++            <field name="inherit_id"
++                   ref="hr_contract.hr_hr_employee_view_form2" />
++            <field name="arch" type="xml">
++                <data>
++                    <xpath expr="//field[@name='bank_account_id']"
++                           position="replace">
++                    </xpath>
++
++                    <xpath expr="//button[@name='%(hr_contract.act_hr_employee_2_hr_contract)d']" position="attributes">
++                        <attribute name="groups">hr.group_hr_user</attribute>
++                    </xpath>
++                </data>
++            </field>
++        </record>
++
++        <record model="ir.ui.view" id="hr_saudi_inherit">
++            <field name="name">hr.employee.saudi</field>
++            <field name="model">hr.employee</field>
++            <field name="inherit_id" ref="hr.view_employee_form" />
++            <field name="arch" type="xml">
++                <field name="name" position="after">
++                    <field name="current_country_code" invisible="1"/>
++                    <label for="name_eng" class="oe_edit_only">
++                        Arabic name
++                    </label>
++                    <field name="name_eng" required="1"/>
++                </field>
++                <field name="category_ids" position="replace"/>
++                <xpath expr="//h1" position="after">
++                    <label for="category_ids" class="oe_edit_only">
++                        Tags
++                    </label>
++                    <field name="category_ids" widget="many2many_tags"
++                           placeholder="e.g. Part Time"
++                           options="{'no_create_edit': True}"
++                           groups="hr.group_hr_user"/>
+                     <label for="f_employee_no" class="oe_edit_only" />
+                     <h2>
+                         <field name="f_employee_no" />
+                     </h2>
+-				</xpath>
+-				<xpath expr="//field[@name='job_id']" position="attributes">
+-					<attribute name="readonly">True</attribute>
+-				</xpath>
+-				<field name="passport_id" position="replace">
+-				</field>
+-
+-				<field name="coach_id" position="attributes">
+-				<attribute name="invisible">1</attribute>
+-				</field>
+-
+-				<field name="identification_id" position="attributes">
+-					<attribute
+-							name="attrs">{'required':
+-						[('current_country_code','=','SA')],
+-						'invisible':[('current_country_code','!=','SA')]}
+-					</attribute>
+-				</field>
++                </xpath>
++                <xpath expr="//field[@name='job_id']" position="attributes">
++                    <attribute name="readonly">True</attribute>
++                </xpath>
++                <field name="passport_id" position="replace">
++                </field>
++
++                <field name="coach_id" position="attributes">
++                    <attribute name="invisible">1</attribute>
++                </field>
+ 
+-				<xpath expr="//field[@name='identification_id']" position="after">
+-					<field name="id_exp_date" attrs="{'required':
++                <field name="identification_id" position="attributes">
++                    <attribute
++                            name="attrs">{'required':
++                        [('current_country_code','=','SA')],
++                        'invisible':[('current_country_code','!=','SA')]}
++                    </attribute>
++                </field>
++
++                <xpath expr="//field[@name='identification_id']" position="after">
++                    <field name="id_exp_date" attrs="{'required':
+ 						[('current_country_code','=','SA')],
+ 						'invisible':[('current_country_code','!=','SA')]}"/>
+-					<field name="id_exp_date_hijri" placeholder="e.g: 1417-10-20" attrs="{'required':
++                    <field name="id_exp_date_hijri" placeholder="e.g: 1417-10-20" attrs="{'required':
+ 						[('current_country_code','=','SA')],
+ 						'invisible':[('current_country_code','!=','SA')]}"/>
+-					<field name="gosi_number"
+-						   attrs="{'invisible':[('current_country_code','!=','SA')]}"/>
+-					<field name="bankorcash" />
+-					<field name="bank_locked" />
+-					<field name="bank_locked_start_date" attrs="{'invisible':[('bank_locked','=',False)],'required':[('bank_locked','=',True)]}"/>
+-					<field name="bank_id" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
+-					<field name="bank_account" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
+-				</xpath>
+-
+-				<xpath expr="//page[2]/group/group" position="after">
+-					<group string="Passport Information">
+-						<field name="passport_id" attrs="{'required':
++                    <field name="gosi_number"
++                           attrs="{'invisible':[('current_country_code','!=','SA')]}"/>
++                    <field name="bankorcash" />
++                    <field name="bank_locked" />
++                    <field name="bank_locked_start_date" attrs="{'invisible':[('bank_locked','=',False)],'required':[('bank_locked','=',True)]}"/>
++                    <field name="bank_id" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
++                    <field name="bank_account" attrs="{'invisible':[('bankorcash','not in',['intrabank','thirdparty'])]}" />
++                </xpath>
++
++                <xpath expr="//page[2]/group/group" position="after">
++                    <group string="Passport Information">
++                        <field name="passport_id" attrs="{'required':
+ 						[('current_country_code','!=','SA')]}" groups="hr.group_hr_user"/>
+                         <field name="passport_exp_date" attrs="{'required':
+ 						[('current_country_code','!=','SA')]}" />
+@@ -154,24 +154,24 @@
+                     <field name="spouse_iqama_exp_date" />
+                 </xpath>
+                 <!--<xpath expr="//field[@name='fam_father']" position="before">-->
+-                    <!--<separator string="Father" colspan="4"/>-->
++                <!--<separator string="Father" colspan="4"/>-->
+                 <!--</xpath>-->
+                 <xpath expr="//field[@name='fam_father']" position="after">
+-                        <field name="fam_father_arabic" />
+-                        <field name="fam_father_passport_id" />
+-                        <field name="fam_father_passport_exp_date" />
+-                        <field name="fam_father_iqama_number" />
+-                        <field name="fam_father_iqama_exp_date" />
++                    <field name="fam_father_arabic" />
++                    <field name="fam_father_passport_id" />
++                    <field name="fam_father_passport_exp_date" />
++                    <field name="fam_father_iqama_number" />
++                    <field name="fam_father_iqama_exp_date" />
+                 </xpath>
+                 <!--<xpath expr="//field[@name='fam_mother']" position="before">-->
+-                    <!--<separator colspan="4" string="Mother" />-->
++                <!--<separator colspan="4" string="Mother" />-->
+                 <!--</xpath>-->
+                 <xpath expr="//field[@name='fam_mother']" position="after">
+-                        <field name="fam_mother_arabic" />
+-                        <field name="fam_mother_passport_id" />
+-                        <field name="fam_mother_passport_exp_date" />
+-                        <field name="fam_mother_iqama_number" />
+-                        <field name="fam_mother_iqama_exp_date" />
++                    <field name="fam_mother_arabic" />
++                    <field name="fam_mother_passport_id" />
++                    <field name="fam_mother_passport_exp_date" />
++                    <field name="fam_mother_iqama_number" />
++                    <field name="fam_mother_iqama_exp_date" />
+                 </xpath>
+ 
+                 <xpath expr="//field[@name='fam_children_ids']" position="replace">
+@@ -202,5 +202,6 @@
+                 </xpath>
+             </field>
+         </record>
++
+     </data>
+ </odoo>
+diff --git a/custom/hr_schedule/models/hr_schedule.py b/custom/hr_schedule/models/hr_schedule.py
+index 6402283..a5e64af 100644
+--- a/custom/hr_schedule/models/hr_schedule.py
++++ b/custom/hr_schedule/models/hr_schedule.py
+@@ -90,16 +90,16 @@ class HrScheduleAlert(models.Model):
+         # XXX - Someone who cares about DST should fix ths
+         #
+         dtToday = datetime.strptime(
+-            datetime.now().strftime('%Y-%m-%d') +
++            datetime.now().strftime(OE_DFORMAT) +
+             ' 00:00:00',
+-            '%Y-%m-%d %H:%M:%S')
++            OE_DTFORMAT)
+         lcldtToday = timezone(
+             self.env.user.tz and self.env.user.tz or 'UTC').localize(
+             dtToday, is_dst=False)
+         utcdtToday = lcldtToday.astimezone(utc)
+         utcdtYesterday = utcdtToday + relativedelta(days=-1)
+-        strToday = utcdtToday.strftime('%Y-%m-%d %H:%M:%S')
+-        strYesterday = utcdtYesterday.strftime('%Y-%m-%d %H:%M:%S')
++        strToday = utcdtToday.strftime(OE_DTFORMAT)
++        strYesterday = utcdtYesterday.strftime(OE_DTFORMAT)
+         dept_rec = dept_obj.search([])
+         for dept in dept_rec:
+             for employee in dept.member_ids:
+@@ -184,13 +184,13 @@ class HrScheduleAlert(models.Model):
+         detail_obj = self.env['hr.schedule.detail']
+         # XXX - Someone who cares about DST should fix ths
+         #
+-        dt = datetime.strptime(strDay + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
++        dt = datetime.strptime(strDay + ' 00:00:00', OE_DTFORMAT)
+         if self.env.user and self.env.user.tz:
+             lcldt = timezone(self.env.user.tz).localize(dt, is_dst=False)
+             utcdt = lcldt.astimezone(utc)
+             utcdtNextDay = utcdt + relativedelta(days=+1)
+-            strToday = utcdt.strftime('%Y-%m-%d %H:%M:%S')
+-            strNextDay = utcdtNextDay.strftime('%Y-%m-%d %H:%M:%S')
++            strToday = utcdt.strftime(OE_DTFORMAT)
++            strNextDay = utcdtNextDay.strftime(OE_DTFORMAT)
+ 
+             # Get schedule and attendance records for the employee for the day
+             sched_detail_rec = detail_obj.search(
+@@ -426,20 +426,20 @@ class HrSchedule(models.Model):
+     def onchange_employee_start_date(self):
+         dStart = False
+         if self.date_start:
+-            dStart = datetime.strptime(self.date_start, '%Y-%m-%d').date()
++            dStart = datetime.strptime(self.date_start, OE_DFORMAT).date()
+             # The schedule must start on a Monday
+             if dStart.weekday() != 0:
+                 self.date_start = False
+                 self.date_end = False
+             else:
+                 dEnd = dStart + relativedelta(days=+6)
+-                self.date_end = dEnd.strftime('%Y-%m-%d')
++                self.date_end = dEnd.strftime(OE_DFORMAT)
+         if self.employee_id:
+             if self.employee_id.name:
+                 self.name = self.employee_id.name
+                 if dStart:
+                     self.name += ': ' + \
+-                                 dStart.strftime('%Y-%m-%d') + ' Wk ' + \
++                                 dStart.strftime(OE_DFORMAT) + ' Wk ' + \
+                                  str(dStart.isocalendar()[1])
+             if self.employee_id.contract_id and \
+                     self.employee_id.contract_id.schedule_template_id:
+@@ -500,8 +500,8 @@ class HrSchedule(models.Model):
+                                          'subtype_id': subtype_id.id or False,
+                                          })
+                 local_tz = timezone(self.env.user.tz)
+-                dCount = datetime.strptime(rec.date_start, '%Y-%m-%d').date()
+-                dCountEnd = datetime.strptime(rec.date_end, '%Y-%m-%d').date()
++                dCount = datetime.strptime(rec.date_start, OE_DFORMAT).date()
++                dCountEnd = datetime.strptime(rec.date_end, OE_DFORMAT).date()
+                 dWeekStart = dCount
+                 dSchedStart = dCount
+                 while dCount <= dCountEnd:
+@@ -531,13 +531,13 @@ class HrSchedule(models.Model):
+                         # XXX - Someone affected by DST should fix this
+                         #
+                         dtStart = datetime.strptime(
+-                            dWeekStart.strftime('%Y-%m-%d') +
++                            dWeekStart.strftime(OE_DFORMAT) +
+                             ' ' +
+                             hour +
+                             ':' +
+                             minute +
+                             ':00',
+-                            '%Y-%m-%d %H:%M:%S')
++                            OE_DTFORMAT)
+                         locldtStart = local_tz.localize(dtStart, is_dst=False)
+                         utcdtStart = locldtStart.astimezone(utc)
+                         if worktime.dayofweek != 0:
+@@ -612,9 +612,9 @@ class HrSchedule(models.Model):
+                                 'dayofweek': worktime.dayofweek,
+                                 'day': dDay,
+                                 'date_start': utcdtStart.strftime(
+-                                    '%Y-%m-%d %H:%M:%S'),
++                                    OE_DTFORMAT),
+                                 'date_end': utcdtEnd.strftime(
+-                                    '%Y-%m-%d %H:%M:%S'),
++                                    OE_DTFORMAT),
+                                 'schedule_id': rec.id,
+                             }
+                             rec.write({'detail_ids': [(0, 0, val)]})
+@@ -660,12 +660,12 @@ class HrSchedule(models.Model):
+                         ee.contract_id.state != 'open':
+                     continue
+                 sched = {
+-                    'name': ee.name + ': ' + dStart.strftime('%Y-%m-%d') +
++                    'name': ee.name + ': ' + dStart.strftime(OE_DFORMAT) +
+                     ' Wk ' + str(dStart.isocalendar()[1]),
+                     'employee_id': ee.id,
+                     'template_id': ee.contract_id.schedule_template_id.id,
+-                    'date_start': dStart.strftime('%Y-%m-%d'),
+-                    'date_end': dEnd.strftime('%Y-%m-%d'),
++                    'date_start': dStart.strftime(OE_DFORMAT),
++                    'date_end': dEnd.strftime(OE_DFORMAT),
+                 }
+                 self.create(sched)
+ 
+@@ -861,8 +861,8 @@ class schedule_detail(models.Model):
+             # this stage. So, use a fallback and compute the day ourselves.
+             day = sched_detail.day
+             if not sched_detail.day:
+-                day = time.strftime('%Y-%m-%d', time.strptime(
+-                    sched_detail.date_start, '%Y-%m-%d %H:%M:%S'))
++                day = time.strftime(OE_DFORMAT, time.strptime(
++                    sched_detail.date_start, OE_DTFORMAT))
+             key = str(sched_detail.schedule_id.employee_id.id) + day
+             if key not in sched_keys:
+                 scheds.append((sched_detail.schedule_id.employee_id.id, day))
+@@ -886,12 +886,12 @@ class schedule_detail(models.Model):
+ 
+             # XXX - Someone who cares about DST should fix this
+             #
+-            dt = datetime.strptime(strDay + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
++            dt = datetime.strptime(strDay + ' 00:00:00', OE_DTFORMAT)
+             lcldt = timezone(self.env.user.tz).localize(dt, is_dst=False)
+             utcdt = lcldt.astimezone(utc)
+             utcdtNextDay = utcdt + relativedelta(days=+1)
+-            strDayStart = utcdt.strftime('%Y-%m-%d %H:%M:%S')
+-            strNextDay = utcdtNextDay.strftime('%Y-%m-%d %H:%M:%S')
++            strDayStart = utcdt.strftime(OE_DTFORMAT)
++            strNextDay = utcdtNextDay.strftime(OE_DTFORMAT)
+ 
+             alert_rec = alert_obj.search([('employee_id', '=', ee_id),
+                                           '&', (
+@@ -1001,10 +1001,10 @@ class hr_schedule_alert_rule(models.Model):
+                 if punch.check_in:
+                     isMatch = False
+                     dtPunch = datetime.strptime(
+-                        punch.check_in, '%Y-%m-%d %H:%M:%S')
++                        punch.check_in, OE_DTFORMAT)
+                     for detail in sched_details:
+                         dtSched = datetime.strptime(
+-                            detail.date_start, '%Y-%m-%d %H:%M:%S')
++                            detail.date_start, OE_DTFORMAT)
+                         difference = 0
+                         if dtSched >= dtPunch:
+                             difference = abs((dtSched - dtPunch).seconds) / 60
+@@ -1020,11 +1020,11 @@ class hr_schedule_alert_rule(models.Model):
+                 for detail in sched_details:
+                     isMatch = False
+                     dtSched = datetime.strptime(
+-                        detail.date_start, '%Y-%m-%d %H:%M:%S')
++                        detail.date_start, OE_DTFORMAT)
+                     for punch in punches:
+                         if punch.action == 'sign_in':
+                             dtPunch = datetime.strptime(
+-                                punch.name, '%Y-%m-%d %H:%M:%S')
++                                punch.name, OE_DTFORMAT)
+                             difference = 0
+                             if dtSched >= dtPunch:
+                                 difference = (dtSched - dtPunch).seconds / 60
+@@ -1041,17 +1041,17 @@ class hr_schedule_alert_rule(models.Model):
+             sched_hours = 0
+             for detail in sched_details:
+                 dtStart = datetime.strptime(
+-                    detail.date_start, '%Y-%m-%d %H:%M:%S')
+-                dtEnd = datetime.strptime(detail.date_end, '%Y-%m-%d %H:%M:%S')
++                    detail.date_start, OE_DTFORMAT)
++                dtEnd = datetime.strptime(detail.date_end, OE_DTFORMAT)
+                 sched_hours += float((dtEnd - dtStart).seconds / 60) / 60.0
+ 
+             dtStart = False
+             for punch in punches:
+                 if punch.check_in:
+                     dtStart = datetime.strptime(
+-                        punch.check_in, '%Y-%m-%d %H:%M:%S')
++                        punch.check_in, OE_DTFORMAT)
+                 elif punch.check_out:
+-                    dtEnd = datetime.strptime(punch.name, '%Y-%m-%d %H:%M:%S')
++                    dtEnd = datetime.strptime(punch.name, OE_DTFORMAT)
+                     actual_hours += float(
+                         (dtEnd - dtStart).seconds / 60) / 60.0
+                     if actual_hours > 8 and sched_hours <= 8:
+@@ -1060,11 +1060,11 @@ class hr_schedule_alert_rule(models.Model):
+             for detail in sched_details:
+                 isMatch = False
+                 dtSched = datetime.strptime(
+-                    detail.date_start, '%Y-%m-%d %H:%M:%S')
++                    detail.date_start, OE_DTFORMAT)
+                 for punch in punches:
+                     if punch.check_in:
+                         dtPunch = datetime.strptime(
+-                            punch.name, '%Y-%m-%d %H:%M:%S')
++                            punch.name, OE_DTFORMAT)
+                         difference = 0
+                         if dtPunch > dtSched:
+                             difference = (dtPunch - dtSched).seconds / 60
+@@ -1078,11 +1078,11 @@ class hr_schedule_alert_rule(models.Model):
+             for detail in sched_details:
+                 isMatch = False
+                 dtSched = datetime.strptime(
+-                    detail.date_end, '%Y-%m-%d %H:%M:%S')
++                    detail.date_end, OE_DTFORMAT)
+                 for punch in punches:
+                     if punch.check_out:
+                         dtPunch = datetime.strptime(
+-                            punch.check_out, '%Y-%m-%d %H:%M:%S')
++                            punch.check_out, OE_DTFORMAT)
+                         difference = 0
+                         if dtPunch < dtSched:
+                             difference = (dtSched - dtPunch).seconds / 60
+@@ -1096,11 +1096,11 @@ class hr_schedule_alert_rule(models.Model):
+             for detail in sched_details:
+                 isMatch = False
+                 dtSched = datetime.strptime(
+-                    detail.date_start, '%Y-%m-%d %H:%M:%S')
++                    detail.date_start, OE_DTFORMAT)
+                 for punch in punches:
+                     if punch.check_in:
+                         dtPunch = datetime.strptime(
+-                            punch.check_in, '%Y-%m-%d %H:%M:%S')
++                            punch.check_in, OE_DTFORMAT)
+                         difference = 0
+                         if dtPunch < dtSched:
+                             difference = (dtSched - dtPunch).seconds / 60
+@@ -1114,11 +1114,11 @@ class hr_schedule_alert_rule(models.Model):
+             for detail in sched_details:
+                 isMatch = False
+                 dtSched = datetime.strptime(
+-                    detail.date_end, '%Y-%m-%d %H:%M:%S')
++                    detail.date_end, OE_DTFORMAT)
+                 for punch in punches:
+                     if punch.check_out:
+                         dtPunch = datetime.strptime(
+-                            punch.check_out, '%Y-%m-%d %H:%M:%S')
++                            punch.check_out, OE_DTFORMAT)
+                         difference = 0
+                         if dtPunch > dtSched:
+                             difference = (dtPunch - dtSched).seconds / 60
+@@ -1133,9 +1133,9 @@ class hr_schedule_alert_rule(models.Model):
+             for punch in punches:
+                 if punch.check_in:
+                     dtStart = datetime.strptime(
+-                        punch.check_in, '%Y-%m-%d %H:%M:%S')
++                        punch.check_in, OE_DTFORMAT)
+                 elif punch.check_out:
+-                    dtEnd = datetime.strptime(punch.name, '%Y-%m-%d %H:%M:%S')
++                    dtEnd = datetime.strptime(punch.name, OE_DTFORMAT)
+                     leave_ids = leave_obj.search([
+                         ('employee_id', '=', punch.employee_id.id),
+                         ('type', '=', 'remove'),
+@@ -1241,12 +1241,12 @@ class hr_attendance(models.Model):
+ 
+             # XXX - Someone who cares about DST should fix this
+             #
+-            dt = datetime.strptime(strDay + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
++            dt = datetime.strptime(strDay + ' 00:00:00', OE_DTFORMAT)
+             lcldt = timezone(self.env.user.tz).localize(dt, is_dst=False)
+             utcdt = lcldt.astimezone(utc)
+             utcdtNextDay = utcdt + relativedelta(days=+1)
+-            strDayStart = utcdt.strftime('%Y-%m-%d %H:%M:%S')
+-            strNextDay = utcdtNextDay.strftime('%Y-%m-%d %H:%M:%S')
++            strDayStart = utcdt.strftime(OE_DTFORMAT)
++            strNextDay = utcdtNextDay.strftime(OE_DTFORMAT)
+ 
+             alert_ids = alert_obj.search([('employee_id', '=', ee_id), '&',
+                                           ('name', '>=', strDayStart),
+diff --git a/custom/hr_transfer/hr_simplify.py b/custom/hr_transfer/hr_simplify.py
+index 5ea272c..f62058e 100755
+--- a/custom/hr_transfer/hr_simplify.py
++++ b/custom/hr_transfer/hr_simplify.py
+@@ -72,5 +72,5 @@ class hr_contract(models.Model):
+         if self.employee_id:
+             dom['job_id'] = [('department_id', '=',
+                               self.employee_id.department_id.id)]
+-            self.employee_dept_id = self.employee_id.department_id.id
++            # self.employee_dept_id = self.employee_id.department_id.id
+         return {'domain': dom}
+diff --git a/custom/hr_transfer/hr_transfer.py b/custom/hr_transfer/hr_transfer.py
+index bc07339..a61bf93 100644
+--- a/custom/hr_transfer/hr_transfer.py
++++ b/custom/hr_transfer/hr_transfer.py
+@@ -107,7 +107,8 @@ class hr_transfer(models.Model):
+     def _check_state(self, contract_id, effective_date):
+         # check state of contract and also check end date of contract as well
+         data = self.env['hr.contract'].browse(contract_id)
+-        if data and data['state'] not in ['close', 'pending', 'open']:
++        if data and data.state not in\
++                ['trial', 'trial_ending', 'open', 'contract_ending']:
+             raise ValidationError(_('The current state of the contract'
+                                     'does not permit changes.'))
+         if data and data.date_end:
+@@ -121,10 +122,11 @@ class hr_transfer(models.Model):
+                                         'the transfer.'))
+         return True
+ 
+-    @api.model
++    @api.one
+     def transfer_contract(self, contract_id, job_id, xfer_id, effective_date):
+         # Copy the contract and adjust start/end dates, job id,
+         # etc. accordingly.
++        self.ensure_one()
+         contract_obj = self.env['hr.contract']
+         old_comtract_rec = contract_obj.browse(contract_id)
+ 
+@@ -135,21 +137,26 @@ class hr_transfer(models.Model):
+             'message_ids': False,
+             'trial_date_start': False,
+             'trial_date_end': False,
++            'department_id': self.dst_department_id.id,
+         }
+         if old_comtract_rec:
+             data = old_comtract_rec.copy_data(default)
+-            new_contract_rec = contract_obj.create(data[0])
+-            if new_contract_rec:
++            c_id = contract_obj.create(data)
++            if c_id:
++                new_contract_rec = contract_obj.create(data[0])
+                 vals = {}
+                 # Set the new contract to the appropriate state
++                self.state_confirm()
+                 # Terminate the current contract (and trigger appropriate state
+                 # change)
+                 vals['date_end'] = datetime.strptime(
+                     effective_date, '%Y-%m-%d').date() + relativedelta(days=-1)
+                 old_comtract_rec.write(vals)
++                if not self.effective_date_in_future():
++                    self.state_done()
+                 # Link to the new contract
+                 self.write({'dst_contract_id': new_contract_rec.id})
+-                self.employee_id.contract_id.state = 'close'
++                # self.employee_id.contract_id.state = 'close'
+         return
+ 
+     @api.multi
+@@ -218,8 +225,12 @@ class hr_transfer(models.Model):
+     @api.model
+     def try_pending_department_transfers(self):
+         # Completes pending departmental transfers .Called from the scheduler
+-        xfer_ids = self.env['hr.department.transfer'].search([
+-            ('state', '=', 'pending')])
++        today = datetime.now().date()
++        xfer_ids = self.env['hr.department.transfer'].\
++            search([('state', '=', 'pending'),
++                    ('date', '<=',
++                     today.strftime(DEFAULT_SERVER_DATE_FORMAT))])
+         for xfer in xfer_ids:
+-            xfer.signal_confirm()
++            if not self.effective_date_in_future():
++                xfer.signal_done()
+         return True
+diff --git a/custom/hr_wage_increment/models/wage_increment.py b/custom/hr_wage_increment/models/wage_increment.py
+index 51748ba..9ba1879 100755
+--- a/custom/hr_wage_increment/models/wage_increment.py
++++ b/custom/hr_wage_increment/models/wage_increment.py
+@@ -5,6 +5,7 @@ import odoo.addons.decimal_precision as dp
+ from odoo import fields, models, api, _
+ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+ from odoo.tools.translate import _
++from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as OE_DFORMAT
+ 
+ 
+ class wage_increment(models.Model):
+@@ -208,7 +209,7 @@ class wage_increment(models.Model):
+                 # change)
+                 vals['date_end'] = datetime.strptime(
+                     wage_inc_rec.effective_date,
+-                    '%Y-%m-%d').date() + relativedelta(days=-1)
++                    OE_DFORMAT).date() + relativedelta(days=-1)
+                 wage_inc_rec.contract_id.write(vals)
+                 wage_inc_rec.contract_id.state_close()
+                 wage_inc_rec.contract_id.is_active = False
+diff --git a/custom/leaves_workflow_notification/__manifest__.py b/custom/leaves_workflow_notification/__manifest__.py
+index 2b33467..c5de5dc 100644
+--- a/custom/leaves_workflow_notification/__manifest__.py
++++ b/custom/leaves_workflow_notification/__manifest__.py
+@@ -19,7 +19,7 @@
+     'depends': [
+         'base',
+         'base_action_rule',
+-        'hr_holidays',
++        'hr_holidays_extension',
+         # 'hr_holidays_extension'
+     ],
+     'data': [
+diff --git a/custom/leaves_workflow_notification/views/hr_holidays_view.xml b/custom/leaves_workflow_notification/views/hr_holidays_view.xml
+index 3793368..cbfe140 100644
+--- a/custom/leaves_workflow_notification/views/hr_holidays_view.xml
++++ b/custom/leaves_workflow_notification/views/hr_holidays_view.xml
+@@ -5,9 +5,9 @@
+         <record id="view_leave_request_form_notification" model="ir.ui.view">
+             <field name="name">hr.holidays.view.form.inherit</field>
+             <field name="model">hr.holidays</field>
+-            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
++            <field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>
+             <field name="arch" type="xml">
+-                <xpath expr="//field[@name='department_id']" position="after">
++                <xpath expr="//field[@name='ex_leave']" position="after">
+                     <field name="skip_notifications"
+                            groups="hr.group_hr_user"
+                            attrs="{'invisible': [('type', '=', 'add')]}"/>
+diff --git a/custom/login_lockout/models/login_attempt.py b/custom/login_lockout/models/login_attempt.py
+index 3e5cf93..586eab8 100644
+--- a/custom/login_lockout/models/login_attempt.py
++++ b/custom/login_lockout/models/login_attempt.py
+@@ -1,5 +1,6 @@
+ from odoo import api, fields, models
+ import datetime
++from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DTF
+ 
+ 
+ class login_attempt(models.Model):
+@@ -19,7 +20,7 @@ class login_attempt(models.Model):
+         if remote_address:
+             now = datetime.datetime.now()
+             login_attempt_vals = {
+-                'login_datetime': now.strftime("%Y-%m-%d %H:%M:%S"),
++                'login_datetime': now.strftime(DTF),
+                 'remote_address': remote_address,
+                 'failed_user_id': failed_user_id,
+             }
+@@ -39,10 +40,9 @@ class login_attempt(models.Model):
+         # datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+         search_clause = [('remote_address', '=', remote_address),
+                          ('login_datetime', '<=',
+-                          now.strftime("%Y-%m-%d %H:%M:%S")),
++                          now.strftime(DTF)),
+                          ('login_datetime', '>=',
+-                          now_minus_max_attempts_period.strftime(
+-                              "%Y-%m-%d %H:%M:%S"))
++                          now_minus_max_attempts_period.strftime(DTF))
+                          ]
+         login_attempt_ids = self.search(search_clause, order='id desc',
+                                         limit=max_attempts_num)
+diff --git a/custom/purchase_config/models/purchase.py b/custom/purchase_config/models/purchase.py
+index e7c0aee..7763152 100755
+--- a/custom/purchase_config/models/purchase.py
++++ b/custom/purchase_config/models/purchase.py
+@@ -58,6 +58,12 @@ class purchase_order(models.Model):
+             rec.state = 'budget_confirmed'
+ 
+     @api.multi
++    def button_draft(self):
++        for rec in self:
++            rec.button_cancel()
++        super(purchase_order, self).button_draft()
++
++    @api.multi
+     def button_confirm(self):
+         for order in self:
+             order._add_supplier_to_product()
+diff --git a/custom/purchase_customization/views/purchase_view.xml b/custom/purchase_customization/views/purchase_view.xml
+index f3d541c..d5e4286 100755
+--- a/custom/purchase_customization/views/purchase_view.xml
++++ b/custom/purchase_customization/views/purchase_view.xml
+@@ -15,14 +15,14 @@
+                     <attribute name="groups">base.group_user</attribute>
+                 </field>
+ 
+-                <xpath expr="//button[@name='button_cancel']"
+-                       position="attributes">
+-                    <attribute name="states">approved,done</attribute>
+-                </xpath>
+-                <xpath expr="//button[@name='button_draft']"
+-                       position="attributes">
+-                    <attribute name="states">sent,bid,budget_confirmed,confirmed,purchase</attribute>
+-                </xpath>
++                <!--<xpath expr="//button[@name='button_cancel']"-->
++                       <!--position="attributes">-->
++                    <!--<attribute name="states">approved,done</attribute>-->
++                <!--</xpath>-->
++                <!--<xpath expr="//button[@name='button_draft']"-->
++                       <!--position="attributes">-->
++                    <!--<attribute name="states">sent,bid,budget_confirmed,confirmed,purchase</attribute>-->
++                <!--</xpath>-->
+                 <xpath expr="//field[@name='partner_ref']" position="after">
+                     <field name="rfp_ref_num" attrs="{'readonly': [('state','not in',('draft','sent'))]}"/>
+                     <field name="quotation_ref" attrs="{'readonly': [('state','not in',('draft','sent'))]}" />
+diff --git a/custom/purchase_order_report/report/po_parser.py b/custom/purchase_order_report/report/po_parser.py
+index 3bae573..9a8d8d1 100755
+--- a/custom/purchase_order_report/report/po_parser.py
++++ b/custom/purchase_order_report/report/po_parser.py
+@@ -3,6 +3,7 @@ from num2words import num2words
+ from odoo.report import report_sxw
+ from odoo import models, api
+ from odoo.api import Environment
++from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as OE_DFORMAT
+ 
+ 
+ class PurchaseOrderReportParser(report_sxw.rml_parse):
+@@ -11,7 +12,7 @@ class PurchaseOrderReportParser(report_sxw.rml_parse):
+             cr, uid, name, context=context)
+         self.localcontext.update({
+             'get_order_total': self._get_order_total,
+-            'today': datetime.strftime(datetime.now(), '%Y-%m-%d'),
++            'today': datetime.strftime(datetime.now(), OE_DFORMAT),
+             'get_payment_status': self.get_payment_status,
+             'get_related_invoice': self.get_related_invoice,
+             'get_invoice_related_payment': self.get_invoice_related_payment,
+diff --git a/custom/purchase_requisition_config/models/purchase_requisition.py b/custom/purchase_requisition_config/models/purchase_requisition.py
+index 549734b..6c597f9 100755
+--- a/custom/purchase_requisition_config/models/purchase_requisition.py
++++ b/custom/purchase_requisition_config/models/purchase_requisition.py
+@@ -31,6 +31,17 @@ class PurchaseConfigSetting(models.TransientModel):
+ class PurchaseRequisition(models.Model):
+     _inherit = 'purchase.requisition'
+ 
++    @api.multi
++    @api.depends('est_cost', 'currency_id')
++    def _get_estimated_cost(self):
++        for rec in self:
++            amount = rec.est_cost
++            if rec.est_cost and rec.currency_id and rec.currency_id.id != self.env.user.company_id.currency_id.id:
++                from_currency = rec.currency_id
++                to_currency = self.env.user.company_id.currency_id
++                amount = from_currency.compute(amount, to_currency, round=True)
++            rec.estimated_cost = amount
++
+     @api.model
+     def _get_employee(self):
+         employee_rec = self.env['hr.employee'] \
+@@ -53,13 +64,28 @@ class PurchaseRequisition(models.Model):
+         return False
+ 
+     @api.multi
++    def _get_po_name(self):
++        for rec in self:
++            po_name = ''
++            rfq_name = ''
++            for po in rec.purchase_ids:
++                if po and po.po_company_number:
++                    po_name += po.po_company_number + ','
++                if po and po.name:
++                    rfq_name += po.name + ','
++            rec.purchase_order_text = po_name
++            rec.r_f_q_text = rfq_name
++
++    @api.multi
+     def _bid_selection(self):
+         for rec in self:
+             rec.exclusive = 'multiple'
+ 
+     name = fields.Char(string='Agreement Reference', required=True,
+                        copy=False, default='New')
+-    estimated_cost = fields.Float(string='Initial estimated cost')
++    estimated_cost = fields.Float(compute='_get_estimated_cost', string='Estimated cost(Local Curr)', store=True)
++    est_cost = fields.Float(string='Estimated cost')
++    other_details = fields.Text(string='Other Details')
+     subject = fields.Text(string='Subject')
+     contract_manager = fields. \
+         Many2one('hr.employee', string='Contract Manager')
+@@ -77,6 +103,7 @@ class PurchaseRequisition(models.Model):
+                  self.env.user.company_id.currency_id.id,
+                  required=True, readonly=True,
+                  states={'draft': [('readonly', False)]})
++    conversion_factor = fields.Float(related='currency_id.rate', string='Conversion Factor', store=True)
+ 
+     state = fields.Selection([
+         ('draft', 'Draft'),
+@@ -112,6 +139,10 @@ class PurchaseRequisition(models.Model):
+         Many2one('hr.employee',
+                  string="Requester",
+                  readonly=False, default=_get_employee)
++    purchase_order_text = fields.Char(compute='_get_po_name', string='Purchase Order')
++    r_f_q_text = fields.Char(compute='_get_po_name', string='RFQ')
++
++    # remarks = fields.Text(string='Remarks')
+ 
+     @api.model
+     def create(self, vals):
+diff --git a/custom/purchase_requisition_config/views/purchase_requisition_view.xml b/custom/purchase_requisition_config/views/purchase_requisition_view.xml
+index 377c858..51de871 100755
+--- a/custom/purchase_requisition_config/views/purchase_requisition_view.xml
++++ b/custom/purchase_requisition_config/views/purchase_requisition_view.xml
+@@ -23,8 +23,13 @@
+                 <!--<attribute name="required">1</attribute>-->
+                 <!--</field>-->
+                 <xpath expr="//field[@name='company_id']" position="after">
+-                    <field name="estimated_cost" required="1" attrs="{'readonly': [('state','not in',('draft'))]}"/>
++                    <field name="estimated_cost" required="1"/>
+                     <field name="currency_id" groups="base.group_multi_currency" required="1"/>
++                    <field name="est_cost" attrs="{'readonly': [('state','not in',('draft'))]}"/>
++                    <field name="conversion_factor"/>
++                    <field name="other_details" attrs="{'invisible': [('state', '=', 'draft')]}"/>
++                    <field name="purchase_order_text"/>
++                    <field name="r_f_q_text"/>
+                 </xpath>
+                 <!--<field name="account_analytic_id" position="attributes">-->
+                 <!--<attribute name="attrs">{'readonly': [('state', 'not in', (''))]}</attribute>-->
+@@ -46,6 +51,11 @@
+                 </field>
+                 <xpath expr="//field[@name='line_ids']/tree/field[@name='product_id']" position="after">
+                     <field name="description"/>
++                    <!--<field name="remarks"/>-->
++                </xpath>
++                <!-- Hide Price Unit From PR Lines-->
++                <xpath expr="//field[@name='line_ids']/tree/field[@name='price_unit']" position="attributes">
++                    <attribute name="invisible">1</attribute>
+                 </xpath>
+                 <xpath expr="//field[@name='user_id']" position="after">
+                     <field name="employee_ids" readonly="1" />
+@@ -122,6 +132,10 @@
+                 <field name="user_id" position="after">
+                     <field name="budget" groups="purchase_config.group_budget_manager"/>
+                 </field>
++                <field name="state" position="after">
++                    <field name="purchase_order_text" invisible="1"/>
++                    <field name="r_f_q_text" invisible="1"/>
++                </field>
+             </field>
+         </record>
+ 

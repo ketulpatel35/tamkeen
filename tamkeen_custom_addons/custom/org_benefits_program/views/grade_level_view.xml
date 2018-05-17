@@ -1,0 +1,12 @@
+<odoo>
+    <record model="ir.ui.view" id="view_gradelevel_form_for_benefits">
+        <field name="name">grade.level.form.for.benefits</field>
+        <field name="model">grade.level</field>
+        <field name="inherit_id" ref="hr_contract_grade_level.view_gradelevel_form" />
+        <field name="arch" type="xml">
+            <field name="active" position="after" >
+                <field name="education_flexible_one_budget" />
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="hr_payroll_bank_menu" groups="hr_payroll.group_hr_payroll_manager" parent="hr_payroll.menu_hr_payroll_configuration" name="Banks" action="base.action_res_bank_form"/>
+    </data>
+</odoo>

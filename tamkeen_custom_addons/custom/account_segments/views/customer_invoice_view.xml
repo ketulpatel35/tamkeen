@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="invoice_form_inherit" model="ir.ui.view">
+            <field name="name">invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='team_id']" position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                    <field name="account_analytic_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                 </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

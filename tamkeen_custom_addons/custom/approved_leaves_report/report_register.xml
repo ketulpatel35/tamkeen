@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Report Register -->
+        <report id="approved_leaves_report_reg"
+                model="hr.holidays"
+                string="Approved Leaves Report"
+                name="approved_leaves_report.approved_leaves_report_templet"
+                file="approved_leaves_report.approved_leaves_report_templet"
+                report_type="qweb-pdf" />
+
+    </data>
+</odoo>

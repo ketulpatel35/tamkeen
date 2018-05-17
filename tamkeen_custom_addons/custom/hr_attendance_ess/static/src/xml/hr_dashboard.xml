@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="hr_dashboard.dashboard">
+        <t t-jquery='.main-dashboard' t-operation='append'>
+            <!-- Attendance -->
+            <t t-if="widget.employee_data.access_attendance_manager">
+                <div class="col-md-3">
+                    <div class="dash-box dash-box-color-1">
+                        <div class="dash-box-icon">
+                            <i class="fa fa-sign-in"/>
+                        </div>
+                        <div class="dash-box-body">
+                            <span class="dash-box-count">Attendance</span>
+                            <div class="dash-btn">
+                                <button
+                                        class="btn btn-info btn-xs attendance_change_req_to_approved">
+                                    Request to Approve
+                                </button>
+                                <span class="btn btn-info btn-xs-num attendance_change_req_to_approved">
+                                    <t t-esc="widget.employee_data.attendance_change_req_to_approved"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

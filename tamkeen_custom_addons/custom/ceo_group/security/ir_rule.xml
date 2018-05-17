@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="group_ceo" model="res.groups">
+                <field name="name">CEO</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('account.group_account_manager')),(4, ref('hr.group_hr_manager')),(4, ref('project.group_project_manager')), (4, ref('purchase.group_purchase_manager')), (4, ref('sales_team.group_sale_manager')), (4, ref('project.group_project_manager')),(4, ref('stock.group_stock_manager')), (4, ref('hr_admin.group_hr_admin')),(4, ref('survey.group_survey_manager'))]"/>
+            <!--some module are not in dependant so some group can not assign-->
+                <!--<field name="implied_ids" eval="[(4, ref('account.group_account_manager')),(4, ref('request_management.group_request_general_manager')),(4, ref('purchase.group_purchase_manager')),(4, ref('request_management.group_request_manager')),(4, ref('base.group_sale_manager')),(4, ref('purchase_requisition.group_purchase_requisition_manager')),(4, ref('base.group_hr_manager')),(4, ref('project.group_project_manager')),(4, ref('stock.group_stock_manager')),(4, ref('marketing.group_marketing_manager')),(4, ref('hr_admin.group_hr_admin')),(4, ref('base.group_survey_manager'))]"/>-->
+        </record>
+
+        <record model="ir.rule" id="ceo_menus_visibility_rule">
+            <field name="name">CEO Menus Visibility Rule</field>
+            <field name="model_id" ref="base.model_ir_ui_menu"/>
+            <field name="groups" eval="[(4, ref('group_ceo'))]"/>
+            <field name="domain_force">[('appear_to_ceo','=',True)]</field>
+            <field name="global" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="ceo_contracts_visibility_rule">
+            <field name="name">CEO Contracts Rule</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract"/>
+            <field name="groups" eval="[(4, ref('group_ceo'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="global" eval="False"/>
+        </record>
+
+    </data>
+</openerp>
+

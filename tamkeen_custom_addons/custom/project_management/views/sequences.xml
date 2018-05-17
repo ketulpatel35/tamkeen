@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project sequence -->
+    <record id="project_sequence_id_view" model="ir.sequence">
+        <field name="name">Project</field>
+        <field name="code">project.seq</field>
+        <field name="prefix">P</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!--Task sequence-->
+    <record id="project_task_sequence_id_view" model="ir.sequence">
+        <field name="name">Task</field>
+        <field name="code">project.task.seq</field>
+        <field name="prefix">T</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+     <!--Issue sequence-->
+    <record id="project_issue_sequence_id_view" model="ir.sequence">
+        <field name="name">Issue</field>
+        <field name="code">project.issue.seq</field>
+        <field name="prefix">I</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+     <!--Risk sequence-->
+    <record id="project_risk_sequence_id_view" model="ir.sequence">
+        <field name="name">Risk</field>
+        <field name="code">project.risk.seq</field>
+        <field name="prefix">R</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+       <!--Project deliverables-->
+    <record id="project_deliverables_sequence_id_view" model="ir.sequence">
+        <field name="name">Deliverable</field>
+        <field name="code">project.deliverable.seq</field>
+        <field name="prefix">D</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

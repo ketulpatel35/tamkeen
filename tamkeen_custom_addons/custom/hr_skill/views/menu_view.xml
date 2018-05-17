@@ -1,0 +1,11 @@
+<odoo>
+    <menuitem id="menu_hr_skill_emp_view"
+              action="open_view_skill_form" parent="hr.menu_hr_main"
+              name="Skills"/>
+
+    <menuitem id="menu_hr_skill_self_service_view"
+                  action="open_view_skill_form"
+                  parent="emp_self_services.sub_mian_empinfo_menu"
+                  sequence="400"
+                  name="Skills"/>
+</odoo>

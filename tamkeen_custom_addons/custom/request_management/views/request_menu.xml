@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem name="Request" id="menu_request" parent="hr.menu_hr_main" sequence="30" action="request_all"  />
+    <menuitem name="Request Types" id="menu_request_types" action="act_open_request_types_view" parent="hr.menu_human_resources_configuration" sequence="10"/>
+</odoo>
+

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_accrual_manager,access_hr_accrual,model_hr_accrual,hr.group_hr_manager,1,1,1,1
+access_hr_accrual_employee,access_hr_accrual.employee,model_hr_accrual,base.group_user,1,0,0,0
+access_hr_accrual_line_manager,access_hr_accrual_line,model_hr_accrual_line,hr.group_hr_manager,1,1,1,1
+access_hr_accrual_line_employee,access_hr_accrual_line.employee,model_hr_accrual_line,base.group_user,1,0,0,0

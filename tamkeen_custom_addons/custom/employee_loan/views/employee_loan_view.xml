@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Loan Kanban view -->
+    <record model="ir.ui.view" id="hr_employee_loan_kanban_view">
+        <field name="name">hr.employee.loan.request.kanban</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey" quick_create="false" create="true" edit="false">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_project oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <h4 class="text-center">
+                                    <a type="open">
+                                        <span t-if="record.name.value">
+                                            [<field name="name"/>]
+                                        </span>
+                                        <br/>
+                                        <span t-if="record.loan_approval_policy_id.value">
+                                            Loan Type:
+                                            <field name="loan_approval_policy_id"/>
+                                        </span>
+                                    </a>
+                                </h4>
+                                <div class="oe_kanban_partner_categories"/>
+                                <div class="oe_kanban_partner_links"/>
+                                <ul>
+                                    <li t-if="record.employee_id.raw_value">
+                                        Employee:
+                                        <field name="employee_id"/>
+                                    </li>
+                                    <li t-if="record.state.raw_value">
+                                        Status:
+                                        <field name="state"/>
+                                    </li>
+                                    <br/>
+                                    <li
+                                            t-if="record.loan_waiting_time.raw_value">
+                                        Waiting Time: [<field
+                                            name="loan_waiting_time"/>]
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!--Loan Form View-->
+    <record id="hr_employee_loan_form_view" model="ir.ui.view">
+        <field name="name">Employee Loan Form</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="arch" type="xml">
+            <form string="Loan Request">
+                <header>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <field name="stage_id" widget="statusbar"/>
+                    <button name="action_submit_for_loan_approval"
+                            type="object"
+                            string="Submit for Approval "
+                            groups="employee_loan.group_loan_normal_user"
+                            class="btn-primary"
+                            states="draft"/>
+                    <!-- Manager -->
+                    <button name="loan_service_validate1" type="object"
+                            string="Manager Approval " class="btn-primary"
+                            groups="employee_loan.group_loan_manager_approval"
+                            states="mngr_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='mngr_approval'
+                            groups="employee_loan.group_loan_manager_approval"
+                            context="{'trigger': 'Rejected'}"/>
+                    <!-- VP -->
+                    <button name="loan_service_validate2" type="object"
+                            states="vp_approval"
+                            groups="employee_loan.group_loan_vp_approval"
+                            string="VP Approval" class="btn-primary"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            groups="employee_loan.group_loan_vp_approval"
+                            states='vp_approval'
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Budget Approval -->
+                    <button name="loan_service_validate3" type="object"
+                            states="budget_approval"
+                            groups="employee_loan.group_loan_budget_approval"
+                            string="Budget Approval" class="btn-primary"/>
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d" string="Lock"
+                            groups="employee_loan.group_loan_locked_unlocked"
+                            context="{'trigger': 'Locked', 'locked_by': 'budget'}"
+                            states="budget_approval" type="action"/>
+
+                    <!-- HR -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d" string="Lock"
+                            context="{'trigger': 'Locked', 'locked_by': 'hr'}"
+                            groups="employee_loan.group_loan_locked_unlocked"
+                            states="hr_approval" type="action"
+                            class="btn-primary"/>
+                    <button name="loan_service_validate4" type="object"
+                            groups="employee_loan.group_loan_hr_approval"
+                            string="HR Approval" class="btn-primary"
+                            states="hr_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject" class="o_sale_confirm"
+                            states='hr_approval'
+                            groups="employee_loan.group_loan_hr_approval"
+                            context="{'trigger': 'Rejected'}"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Return"
+                            groups="employee_loan.group_loan_hr_approval"
+                            states='hr_approval'
+                            context="{'trigger': 'Returned'}"/>
+
+                    <!-- CEO -->
+                    <button name="loan_service_validate5" type="object"
+                            groups="employee_loan.group_loan_ceo_approval"
+                            string="CEO Approval" class="btn-primary"
+                            states="ceo_approval"/>
+                    <button
+                            name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                            type="action"
+                            string="Reject"
+                            groups="employee_loan.group_loan_ceo_approval"
+                            states='ceo_approval'
+                            context="{'trigger': 'Rejected'}"/>
+
+                    <!-- Financial Statament -->
+                    <button name="%(service_configuration_panel.act_open_service_log_wizard)d" string="Lock"
+                            groups="employee_loan.group_loan_locked_unlocked"
+                            context="{'trigger': 'Locked', 'locked_by': 'finance'}"
+                            states="finance_processing" type="action"
+                            class="btn-primary"/>
+                    <button name="button_finance_processing"
+                            type="object"
+                            groups="employee_loan.group_loan_finance_approval"
+                            string="Generate Journal Entry"
+                            states='finance_processing' class="btn-primary"/>
+                    <button name="button_paid_to_employee"
+                            type="object"
+                            groups="employee_loan.group_loan_finance_approval"
+                            string="Paid to Employee"
+                            states='finance_processing'
+                            class="btn-primary"/>
+                    <!--<button name="button_paid_to_employee"-->
+                    <!--type="object"-->
+                    <!--groups="employee_loan.group_loan_finance_approval"-->
+                    <!--string="Paid to Employee"-->
+                    <!--states='finance_processing'-->
+                    <!--class="btn-primary"/>-->
+                    <!--<button-->
+                    <!--name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"-->
+                    <!--string="Reject"-->
+                    <!--groups="employee_loan.group_loan_finance_approval"-->
+                    <!--states='finance_processing'-->
+                    <!--context="{'trigger': 'Rejected'}"/>-->
+
+                    <!-- Notify -->
+                    <button name="send_notify"
+                            type="object"
+                            string="Notify"
+                            groups="employee_loan.group_loan_finance_approval,employee_loan.group_loan_hr_approval,employee_loan.group_loan_budget_approval,employee_loan.group_loan_ceo_approval"
+                            states='finance_processing,hr_approval,budget_approval,ceo_approval'/>
+
+                    <!-- UnLocked -->
+                    <button name="loan_service_validate8" string="Unlock"
+                            context="{'trigger': 'Unlock'}"
+                            groups="employee_loan.group_loan_locked_unlocked"
+                            states="locked" type="object" class="btn-primary"/>
+
+                </header>
+                <sheet>
+                    <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                        <field name="submit_message" widget="html"
+                               readonly="1"/>
+                    </div>
+                    <div class="oe_button_box">
+                        <button name="action_open_journal_entries"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                string="Accounting Entries"
+                                groups="employee_loan.group_loan_finance_approval"
+                                attrs="{'invisible': [('account_move_id', '=', False)]}"
+                                type="object">
+                        </button>
+                    </div>
+                    <h1 class="mt0">
+                        <field name="name" readonly="1" class="oe_inline"/>
+                    </h1>
+
+                    <group>
+                        <group colspan="4" col="4">
+                            <field name="employee_id"
+                                   readonly="1" required="1"/>
+                            <field name="employee_company_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="cost_center_id" invisible="1"/>
+                            <field name="account_analytic_id" invisible="1"/>
+                            <!--<field name="cost_center_id"-->
+                            <!--options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"-->
+                            <!--attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+                        </group>
+                        <group>
+                            <field name="loan_approval_policy_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                   context="{'valid_loan': True}"
+                                   domain="[('model_id.model', '=', 'hr.employee.loan')]"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"
+                                   required="1"/>
+                        </group>
+                        <group colspan="2" col="2">
+                            <field name="about_loan_type" widget="html"
+                                   readonly="1"/>
+                            <field name="remarks" invisible="1"/>
+                            <field name="proof_required" invisible="1"/>
+                            <field name="company_id" readonly="1"
+                                   invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Installment Calculator">
+                            <group colspan="2" col="2">
+                                <group colspan="2" col="2">
+                                    <div>
+                                        Kindly, Click on the Calculate button
+                                        to
+                                        get more details about the installments
+                                        schedule.
+                                    </div>
+                                </group>
+                                <group colspan="4" col="4">
+                                    <field name="loan_installment_policy" required="1"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="repayment_method"
+                                           readonly="1"/>
+                                </group>
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible': [('loan_installment_policy', '=', False)]}">
+                                    <field name="loan_amount" required="1"
+                                           attrs="{'readonly': ['|', ('loan_installment_policy','=','deserved'), ('state', '!=', 'draft')]}"/>
+                                    <field name="installment_number" required="1"
+                                           attrs="{'readonly': ['|', ('loan_installment_policy','=','deserved'), ('state', '!=', 'draft')]}"/>
+                                    <field name="length_of_service_days"
+                                           groups="employee_loan.group_loan_hr_approval" readonly="1"/>
+                                </group>
+
+                                <group>
+                                    <button name="calculate_loan_amount"
+                                            type="object"
+                                            string="Calculate"
+                                            groups="employee_loan.group_loan_normal_user"
+                                            class="btn-primary"
+                                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                                    <button name="clear_installment_line"
+                                            type="object"
+                                            groups="employee_loan.group_loan_normal_user"
+                                            string="Clear All Lines"
+                                            class="btn-primary"
+                                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                                    <div style="font-size:10pt;">
+                                        The loan amount may be changed once
+                                        you click on calculate button. since
+                                        the calculation depends on the
+                                        employee length of service.
+                                    </div>
+                                </group>
+                                <group col="2" colspan="2"
+                                       string="Loan Installments">
+                                    <field name="loan_installment_ids"
+                                           nolabel="1"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                        <tree string="Loan Installments"
+                                              default_order="due_date"
+                                              create="false" delete="false">
+                                            <field name="loan_id"/>
+                                            <field name="due_date"/>
+                                            <field name="amount"/>
+                                            <field name="remarks"/>
+                                            <field name="payroll_period_id"
+                                                   readonly="1"
+                                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                            <field name="state" readonly="1"
+                                                   required="1"/>
+                                            <button name="ask_for_reschedule"
+                                                    groups="employee_loan.group_loan_normal_user"
+                                                    string="Asked for Rescheduling"
+                                                    type="object"
+                                                    confirm="Please Confirm to Rescheduling Payment !"
+                                                    states="payroll_processing"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                            <group class="oe_subtotal_s oe_right">
+                                <field name="total_paid_installment_amount"
+                                       class="oe_subtotal_footer_separator"
+                                       widget="monetary"/>
+                                <field name="remaining_installments_total_amount"
+                                       class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Endorsement"
+                              attrs="{'invisible':[('endorsement_loan_required','=',False)]}">
+                            <group>
+                                <field name="endorsement_loan_required"
+                                       invisible="1"/>
+                                <field name="endorsement_loan_text" nolabel="1"
+                                       widget="html"/>
+                            </group>
+                            <group>
+                                <field name="endorsement_loan_approved"/>
+                            </group>
+                        </page>
+                        <!--Approvals Page-->
+                        <page string="Approvals" name="approvals">
+                            <div>
+                                The approval/refusal information will be
+                                displayed here.
+                            </div>
+                            <group>
+                                <group
+                                        attrs="{'invisible':[('loan_mngr_user_id','=',False)]}">
+                                    <field name="loan_mngr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_mngr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_vp_user_id','=',False)]}">
+                                    <field name="loan_vp_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_vp_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_budget_user_id','=',False)]}">
+                                    <field name="loan_budget_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_budget_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_hr_user_id','=',False)]}">
+                                    <field name="loan_hr_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_hr_approval_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_rejected_user_id','=',False)]}">
+                                    <field name="loan_rejected_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_rejected_date"/>
+                                </group>
+                                <group attrs="{'invisible':[('loan_locked_user_id','=',False)]}">
+                                    <field name="loan_locked_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_locked_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_cancel_user_id','=',False)]}">
+                                    <field name="loan_cancel_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_cancel_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_return_user_id','=',False)]}">
+                                    <field name="loan_return_user_id"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_return_date"/>
+                                </group>
+                                <group
+                                        attrs="{'invisible':[('loan_final_approval_user_id','=',False)]}"
+                                        colspan="4" col="4">
+                                    <field name="loan_final_approval_user_id"
+                                           colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_final_approval_date"
+                                           colspan="2"/>
+                                </group>
+
+                                <group colspan="4" col="4"
+                                       attrs="{'invisible':[('loan_submitted_by','=',False)]}">
+                                    <field name="loan_submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="loan_submit_date"
+                                           colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('loan_submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="loan_waiting_time"
+                                           colspan="2"/>
+                                    <field name="expected_approval_date_as_sla"
+                                           attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="service_logs" string="Service Logs">
+                            <field name="loan_service_log_ids" readonly="1">
+                                <tree string="Service Logs">
+                                    <field name="loan_request_id"
+                                           invisible="1"/>
+                                    <field name="user_id"/>
+                                    <field name="activity_datetime"
+                                           readonly="1"/>
+                                    <field name="state_from"/>
+                                    <field name="state_to"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="loan_proofs"
+                              string="Loan Proofs"
+                              attrs="{'invisible': [('proof_required', '!=', True)]}">
+                            <group>
+                                <field name="loan_proof_ids" nolabel="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" delete="false"
+                                          create="false">
+                                        <field name="name" readonly="1"/>
+                                        <field name="description"
+                                               readonly="1"/>
+                                        <field name="mandatory" readonly="1"/>
+                                        <field name="document"
+                                               filename="document_file_name"
+                                               attrs="{'required' : [('mandatory', '=', True)]}"/>
+                                        <field name="document_file_name"
+                                               invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Employee Performance Evaluation">
+                            <group colspan="2" col="2">
+                                <field
+                                        name="employee_performance_evaluation"
+                                        attrs="{'required': [('state', '=', 'hr_approval')], 'readonly': [('state', '!=', 'hr_approval')]}"/>
+                            </group>
+                        </page>
+                        <page string="Accounting Information"
+                              groups="employee_loan.group_loan_finance_approval">
+                            <group colspan="4" col="4">
+                                <field name="accounting_date"
+                                       attrs="{'required': [('state', '=', 'finance_processing')], 'readonly': [('state', '!=', 'finance_processing')]}"/>
+                                <field name="loan_journal_id"
+                                       attrs="{'required': [('state', '=', 'finance_processing')], 'readonly': [('state', '!=', 'finance_processing')]}"/>
+                                <field name="debit_account_id"
+                                       attrs="{'required': [('state', '=', 'finance_processing')], 'readonly': [('state', '!=', 'finance_processing')]}"/>
+                                <field name="credit_account_id"
+                                       attrs="{'required': [('state', '=', 'finance_processing')], 'readonly': [('state', '!=', 'finance_processing')]}"/>
+                                <field name="loan_issuing_date"
+                                       attrs="{'required': [('state', '=', 'finance_processing')], 'readonly': [('state', '!=', 'finance_processing')]}"/>
+                                <field name="paid_to_employee" readonly="1"/>
+                                <field name="account_move_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="arrival_time_to_finance"
+                                       string="Arrival Time to Finance"
+                                       readonly="1"
+                                       groups="employee_loan.group_loan_finance_approval"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Loan Form View Send Request behalf of other Employee -->
+    <record id="hr_employee_loan_behalf_form_view" model="ir.ui.view">
+        <field name="name">Employee Loan Form</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="inherit_id" ref="hr_employee_loan_form_view"/>
+        <field name="groups_id"
+               eval="[(4, ref('employee_loan.group_loan_on_behalf_approval_srvs'))]"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="domain">[(1,'=',1)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!--Loan Tree View-->
+    <record id="hr_employee_loan_tree_view" model="ir.ui.view">
+        <field name="name">Loan Request</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Loan Request">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="loan_amount" sum="Loan Amount"/>
+                <field name="installment_number"/>
+                <field name="loan_submit_date"/>
+                <field name="arrival_time_to_finance"
+                       groups="employee_loan.group_loan_finance_approval"/>
+                <field name="arrival_time_to_hr"
+                       groups="employee_loan.group_loan_hr_approval"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="loan_request_form_view_behalf" model="ir.ui.view">
+        <field name="name">hr.employee.loan.request.form.view
+            .behalf
+        </field>
+        <field name="model">hr.employee.loan</field>
+        <field name="inherit_id" ref="hr_employee_loan_form_view"/>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('employee_loan.group_loan_on_behalf_approval_srvs')])]"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="attrs">{'readonly': [('state',
+                    '!=','draft')]}
+                </attribute>
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Loan Search View-->
+    <record id="loan_request_search_view" model="ir.ui.view">
+        <field name="name">loan.request.search.view</field>
+        <field name="model">hr.employee.loan</field>
+        <field name="arch" type="xml">
+            <search string="Loan Requests">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="state"/>
+                <filter icon="terp-go-today"
+                        string="Current Month Submitted Requests"
+                        name="currentmonth"
+                        domain="[('loan_submit_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('loan_submit_date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]"
+                        help="Filter past groups"/>
+                <filter name="exceeds_sla_period"
+                        string="Pending and Exceeds SLA Period"
+                        domain="[('state','not in',['draft','closed','rejected', 'cancelled']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00')) ]"/>
+                <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                <filter string="Pending Budget Approvals"
+                        name="pending_budget_approval"
+                        domain="[('state','in',['budget_approval'])]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_employee_loan_type"
+                            string="Loan Type"
+                            context="{'group_by':'loan_approval_policy_id'}"/>
+                    <filter name="group_department_id" string="Department"
+                            context="{'group_by':'department_id'}"/>
+                    <!--<filter name="group_employee_cost_center_id"-->
+                    <!--string="Cost Center"-->
+                    <!--context="{'group_by':'cost_center_id'}"/>-->
+                    <filter name="state" string="State" icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view"
+            id="view_company_inherit_for_loan_policy">
+        <field name="name">res.company.group_email.inherit.coc</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.view_company_inherit_for_service_panel"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='policies']"
+                   position="inside">
+                <group string="Loan Policy">
+                    <field name="loan_policy_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Loan Installments Form View-->
+    <record id="hr_employee_loan_installments" model="ir.ui.view">
+        <field name="name">Loan Installments</field>
+        <field name="model">loan.installments</field>
+        <field name="arch" type="xml">
+            <form string="Loan Installments">
+                <header>
+                    <!--<button name="button_confirm" string="Confirm"-->
+                    <!--states="draft" type="object" class="btn-primary"/>-->
+                    <button name="ask_for_reschedule"
+                            groups="employee_loan.group_loan_normal_user"
+                            context="{'trigger': 'Ask for Rescheduling'}"
+                            string="Asked for Rescheduling"
+                            states="payroll_processing" type="object"
+                            class="btn-primary"/>
+
+                    <button name="button_reschedule" string="Reschedule"
+                            groups="employee_loan.group_loan_request_reschedule"
+                            context="{'trigger': 'Reschedule'}"
+                            states="ask_for_reschedule" type="object"
+                            class="btn-primary"/>
+                    <button name="button_reject_rescheduling" string="Reject"
+                            groups="employee_loan.group_loan_request_reschedule"
+                            states="ask_for_reschedule" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                groups="employee_loan.group_loan_payroll_processing"
+                                name="generate_pyaslip_amendment"
+                                string="Generate Payslip Amendment"
+                                context="{'trigger': 'Generate Payslip Amendment'}"
+                                attrs="{'invisible': ['|', ('dont_affect_into_payroll', '=', True),('state', '!=', 'payroll_processing')]}"/>
+                        <button type="object"
+                                groups="employee_loan.group_loan_payroll_processing"
+                                name="get_payslip_amendment"
+                                context="{'trigger': 'Amendments'}"
+                                string="Amendments"
+                                attrs="{'invisible': ['|', ('dont_affect_into_payroll', '=', True), ('state', 'not in', ['amendment_created', 'done'])]}"/>
+                    </div>
+                    <group name="loan_installment_info" colspan="4" col="4">
+                        <field name="employee_id" readonly="1" required="1"/>
+                        <field name="due_date" readonly="1" required="1"/>
+                        <field name="amount" readonly="1" required="1"/>
+                        <field name="loan_id" string="Reference"
+                               readonly="1" required="1"/>
+                        <field name="payroll_period_id" readonly="1"
+                               groups="employee_loan.group_loan_payroll_processing" attrs="{'invisible': [('state', '=', 'draft')]}" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                        <field name="amendment_id"
+                               groups="employee_loan.group_loan_payroll_processing" invisible="1" readonly="1"/>
+                    </group>
+                    <group colspan="2" col="2" string="Remarks">
+                        <field name="remarks" nolabel="1"/>
+                    </group>
+                    <group string="Service Logs">
+                        <field name="installments_service_log_ids"
+                               nolabel="1" readonly="1">
+                            <tree string="Service Logs">
+                                <field name="installment_id"
+                                       invisible="1"/>
+                                <field name="user_id"/>
+                                <field name="activity_datetime"
+                                       readonly="1"/>
+                                <field name="state_from"/>
+                                <field name="state_to"/>
+                                <field name="loan_date_from" string="Date"/>
+                                <!--<field name="loan_date_to"/>-->
+                                <field name="reason"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--Loan Installments Tree View-->
+    <record id="hr_employee_loan_installments_tree" model="ir.ui.view">
+        <field name="name">Loan Installments</field>
+        <field name="model">loan.installments</field>
+        <field name="arch" type="xml">
+            <tree string="Loan Installments">
+                <field name="loan_id"/>
+                <field name="employee_id"/>
+                <field name="due_date"/>
+                <field name="amount"/>
+                <field name="remarks"/>
+                <field name="payroll_period_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Loan Installments Search View -->
+    <record id="loan_installments_search_view" model="ir.ui.view">
+        <field name="name">loan.installments.search.view</field>
+        <field name="model">loan.installments</field>
+        <field name="arch" type="xml">
+            <search string="Loan Installments">
+                <field name="employee_id"/>
+                <field name="loan_id"/>
+                <field name="due_date"/>
+                <field name="state"/>
+                <filter string="Payroll Processing"
+                        name="payroll_processing"
+                        domain="[('state','in',['payroll_processing'])]"/>
+                <filter string="Ask for Reschedule"
+                        name="ask_for_reschedule"
+                        domain="[('state','in',['ask_for_reschedule'])]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter string="Loan Request" name="group_loan_request"
+                            context="{'group_by':'loan_id'}"/>
+                    <filter string="Due Date" name="group_month"
+                            context="{'group_by':'due_date'}"/>
+                    <filter name="group_payroll_period" string="Payroll Period"
+                            icon="terp-go-today"
+                            domain="[]" context="{'group_by':'payroll_period_id'}"/>
+                    <filter name="group_status" string="Status"
+                            icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,30 @@
+<odoo>
+    <record id="hr_holidays_inherit_for_add_for_shift_management"
+            model="ir.ui.view">
+        <field name="name">hr.holidays.inherit.for.add.for.shift.management</field>
+        <field name="model">hr.holidays</field>
+        <field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>
+        <field name="arch" type="xml">
+            <field name="date_to" position="after">
+                <field name="leaved_hours"
+                       attrs="{'invisible': [('type', '=', 'add')]}" groups="hr_holidays.group_hr_holidays_user"/>
+            </field>
+            <notebook position="inside">
+                <page string="Montly Partition" groups="hr_holidays.group_hr_holidays_user">
+                    <group>
+                        <field name="monthly_partition_ids" nolabel="1">
+                            <tree string="Monthly Partition"
+                                  editable="bottom">
+                                <field name="name"/>
+                                <field name="days"/>
+                                <field name="hours"/>
+                                <field name="payroll_period_id"/>
+                                <field name="amendment_created"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

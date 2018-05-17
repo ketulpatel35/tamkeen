@@ -1,0 +1,28 @@
+<odoo>
+
+    <!-- ESS Loan Management-->
+    <menuitem id="menu_employee_timesheet_for_ess_main"
+              name="Timesheet Management"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="40"/>
+    <!-- Loan Request -->
+    <menuitem id="menu_timesheet_request_ess"
+              name="Timesheet Request"
+              parent="menu_employee_timesheet_for_ess_main"
+              action="open_timesheet_ess_requests"
+              sequence="25"/>
+
+    <!-- MSS Loan Management -->
+    <menuitem id="menu_manager_timesheet_for_ess_main"
+              name="Timesheet Management"
+              parent="emp_self_services.sub_mian_mss_menu"
+              sequence="1300"/>
+
+    <!-- Loan Request to be Approve -->
+    <menuitem id="menu_timesheet_request_mss"
+              name="Timesheet Requests To Approve"
+              parent="menu_manager_timesheet_for_ess_main"
+              action="open_timesheet_mngr_request_approval"
+              sequence="1"/>
+
+</odoo>

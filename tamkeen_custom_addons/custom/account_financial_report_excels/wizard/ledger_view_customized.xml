@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--Partner Ledger View Customization-->
+    <record id="account_report_partner_ledger_view_inherit" model="ir.ui.view">
+        <field name="name">Partner Ledger</field>
+        <field name="model">account.report.partner.ledger</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='journal_ids']" position="after">
+                    <field name="partner_ids" widget="many2many_tags"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <!--General Ledger View Customization-->
+    <!--<record id="account_report_general_ledger_excel" model="ir.ui.view">-->
+        <!--<field name="name">General Ledger Excel</field>-->
+        <!--<field name="model">account.report.general.ledger</field>-->
+        <!--<field name="inherit_id" ref="account.account_common_report_view"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<data>-->
+                <!--<xpath expr="//field[@name='journal_ids']" position="after">-->
+                    <!--<field name="account_ids" widget="many2many_tags"/>-->
+                <!--</xpath>-->
+            <!--</data>-->
+        <!--</field>-->
+    <!--</record>-->
+
+</odoo>

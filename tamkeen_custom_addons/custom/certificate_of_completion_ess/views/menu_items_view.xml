@@ -1,0 +1,41 @@
+<odoo>
+
+    <!-- COC parent menu group -->
+
+    <menuitem id="procurment_requistion_ess.emp_self_services_call_for_main"
+              name="Procurement Requisition"
+              parent="emp_self_services.sub_mian_ess_menu"
+              groups="purchase_requisition_config.group_normal_user_pr,certificate_of_completion.group_coc_normal_user"
+              sequence="95"/>
+
+    <!-- Menu for COC normal user -->
+    <menuitem id="coc_menu_for_normal_user"
+              name="Certificate of Completion"
+              parent="procurment_requistion_ess.emp_self_services_call_for_main"
+              action="certificate_of_completion_ess.certificate_of_completion_action_normal_user"
+              groups="certificate_of_completion.group_coc_normal_user"
+              sequence="101"/>
+
+    <!-- PR / COC Approvals Menu -->
+    <menuitem id="emp_pr_mngr_approval_main_menu"
+              name="Purchase Requisition"
+              parent="emp_self_services.sub_mian_mss_menu"
+              groups="purchase_requisition_config.group_manager_approval_pr,purchase_requisition_config.group_vp_approval_pr,purchase_requisition_config.group_ceo_approval_pr,certificate_of_completion.group_coc_manager_approval,certificate_of_completion.group_coc_vp_approval,certificate_of_completion.group_coc_procurement_first_review,certificate_of_completion.group_coc_business_owner_approval,certificate_of_completion.group_coc_procurement_second_review,certificate_of_completion.group_coc_pmo_approval,certificate_of_completion.group_coc_finance_processing"
+              sequence="34"/>
+
+    <menuitem id="procurment_requistion_ess.emp_pr_mngr_approval"
+              name="Purchase Requisition to Approve"
+              parent="emp_pr_mngr_approval_main_menu"
+              action="procurment_requistion_ess.purchase_budget_all_emp_action"
+              groups="purchase_requisition_config.group_manager_approval_pr,purchase_requisition_config.group_vp_approval_pr,purchase_requisition_config.group_ceo_approval_pr"
+              sequence="1"/>
+
+    <!-- COC Approval Menu -->
+    <menuitem id="coc_menu_for_approval"
+              name="Certificate of Completion to Approve"
+              parent="emp_pr_mngr_approval_main_menu"
+              action="certificate_of_completion_ess.certificate_of_completion_action_approval_user"
+              groups="certificate_of_completion.group_coc_manager_approval,certificate_of_completion.group_coc_vp_approval,certificate_of_completion.group_coc_procurement_first_review,certificate_of_completion.group_coc_business_owner_approval,certificate_of_completion.group_coc_procurement_second_review,certificate_of_completion.group_coc_pmo_approval,certificate_of_completion.group_coc_finance_processing"
+              sequence="2"/>
+
+</odoo>

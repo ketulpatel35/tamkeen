@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--Loan Installments Form View-->
+        <record id="hr_employee_loan_installments_for_cash" model="ir.ui.view">
+            <field name="name">Loan Installments</field>
+            <field name="model">loan.installments</field>
+            <field name="inherit_id"
+                   ref="employee_loan.hr_employee_loan_installments"/>
+            <field name="arch" type="xml">
+                <field name="loan_id" position="after">
+                    <field name="dont_affect_into_payroll"
+                           attrs="{'readonly': [('state','!=','payroll_processing')]}"/>
+                </field>
+                <xpath expr="//group[@name='loan_installment_info']"
+                       position="after">
+                    <group colspan="2" col="2"
+                           attrs="{'invisible': [('dont_affect_into_payroll','!=', True)]}" string="Justification">
+                        <field name="justification"
+                               attrs="{'required': [('dont_affect_into_payroll','=',True)],'readonly': [('state','!=','payroll_processing')]}" nolabel="1"/>
+                    </group>
+                </xpath>
+                <xpath expr="//button[@name='ask_for_reschedule']"
+                       position="after">
+                    <button name="paid_to_cash"
+                            groups="employee_loan.group_loan_request_reschedule"
+                            string="Forward to Finance"
+                            states="payroll_processing" type="object" class="btn-primary"/>
+                    <button name="mark_as_done"
+                            groups="employee_loan.group_loan_finance_approval"
+                            string="Mark as Done"
+                            states="finance_processing" type="object"
+                            class="btn-primary"/>
+                </xpath>
+                <xpath expr="//button[@name='get_payslip_amendment']"
+                       position="after">
+                    <button name="action_open_journal_entries"
+                            string="Accounting Entries"
+                            states="finance_processing"
+                            groups="employee_loan.group_loan_finance_approval"
+                            type="object"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

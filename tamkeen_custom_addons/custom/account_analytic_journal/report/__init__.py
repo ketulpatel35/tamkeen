@@ -1,0 +1,1 @@
+import analytic_journal_report

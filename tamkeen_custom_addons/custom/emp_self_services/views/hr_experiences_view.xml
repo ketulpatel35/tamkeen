@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Views experience -->
+        <record id="hr_experience_form" model="ir.ui.view">
+            <field name="name">tamkeen.hr.experiences.form</field>
+            <field name="model">tamkeen.hr.experiences</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Experiences">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button name="submit_to_hr" string="Submit"
+                                type="object" class="oe_highlight"
+                                states="draft"/>
+                        <button name="experience_hr_approved" string="Approve"
+                                type="object" class="oe_highlight"
+                                states="hr_approval"
+                                groups="hr_employee_customization.group_update_emp_info"/>
+                        <button name="experience_hr_rejected" string="Reject"
+                                type="object" class="oe_highlight"
+                                groups="hr_employee_customization.group_update_emp_info"
+                                states="hr_approval"/>
+                        <button name="experience_hr_reset"
+                                string="Reset to draft"
+                                type="object" class="oe_highlight"
+                                groups="hr_employee_customization.group_update_emp_info"
+                                states="hr_approval"/>
+                        <field name="active" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="emp_line" readonly="1"/>
+                            <field name="employee_company_id" readonly="1"  attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="company_name"
+                                   attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}" required="1"/>
+                        </group>
+                        <group>
+                            <field name="job_name" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                        </group>
+                        <group colspan="4" col="4">
+                            <field name="date_of_join" required="1"
+                                   attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="date_of_leave" required="1" attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                            <field name="period" readonly="1"/>
+                            <field name="period_month_year" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="responsibility" required="1"
+                                   attrs="{'readonly': [('state', 'in', ('hr_approval', 'approved', 'reject'))]}"/>
+                        </group>
+                        <group>
+                            <field name="reject_reason"
+                                   attrs="{'invisible': [('state', 'not in', ('reject'))]}"/>
+                        </group>
+                        <group>
+                            <field name="requirements" widget="html"
+                                   readonly="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--  Views experience inherit for hr-->
+        <record id="hr_experience_form_inherit_for_hr" model="ir.ui.view">
+            <field name="name">tamkeen.hr.experiences.form.inherit.for.hr</field>
+            <field name="model">tamkeen.hr.experiences</field>
+            <field name="inherit_id" ref="hr_experience_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('hr_employee_customization.group_update_emp_info')])]"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="emp_line" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', '!=','draft')]}</attribute>
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_experience_tree" model="ir.ui.view">
+            <field name="name">tamkeen.hr.experiences.tree</field>
+            <field name="model">tamkeen.hr.experiences</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="experience">
+                    <field name="emp_line"/>
+                    <field name="company_name"/>
+                    <field name="job_name"/>
+                    <field name="date_of_join"/>
+                    <field name="date_of_leave"/>
+                    <field name="period"/>
+                    <field name="period_month_year"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tamkeen_experience_search" model="ir.ui.view">
+            <field name="name">tamkeen.hr.experiences.search</field>
+            <field name="model">tamkeen.hr.experiences</field>
+            <field name="arch" type="xml">
+                <search string="Experiences">
+                    <field name="emp_line"/>
+                    <field name="employee_company_id"/>
+                    <field name="company_name"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                    <group expand="0" string="Group By">
+                        <filter string="Job Name"
+                                icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'job_name'}"/>
+                    </group>
+                    <group expand="0" string="Group By">
+                        <filter string="Company Name"
+                                icon="terp-stock_symbol-selection"
+                                domain="[]" context="{'group_by':'company_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_hr_experience_tree" model="ir.actions.act_window">
+            <field name="name">All Experience</field>
+            <field name="res_model">tamkeen.hr.experiences</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="view_id" ref="hr_experience_tree"/>
+        </record>
+
+        <menuitem id="menu_hr_experience_view" action="action_hr_experience_tree" parent="hr.menu_hr_main" name="Experiences"/>
+        <!-- End experience Views -->
+
+        <record id="tamkeen_hr_experience_reject_form_view" model="ir.ui.view">
+            <field name="name">experienc.reject.reason</field>
+            <field name="model">tamkeen.hr.experiences.reject</field>
+            <field name="arch" type="xml">
+                <form string="Rejection Reason">
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="reject_experience" string="Reject"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

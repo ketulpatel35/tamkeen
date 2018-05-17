@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_usr_employee_appraisal_user,access.usr.employee.appraisal.user,hr_appraisal_evaluation.model_employee_appraisal,base.group_user,1,1,0,0
+access_usr_career_discussion_user,access.usr.career.discussion.user,hr_appraisal_evaluation.model_career_discussion,base.group_user,1,1,1,0
+access_usr_individual_development_plan_user,access.usr.individual.development.plan.user,hr_appraisal_evaluation.model_individual_development_plan,base.group_user,1,1,1,0
+access_usr_requirement_category_user,access.usr.requirement.category.user,hr_appraisal_evaluation.model_requirement_category,base.group_user,1,0,0,0
+access_usr_rating_master_user,access.usr.rating.master.user,hr_appraisal_evaluation.model_rating_master,base.group_user,1,0,0,0
+access_usr_appraisal_year_master_user,access.usr.appraisal.year.master.user,hr_appraisal_evaluation.model_appraisal_year_master,base.group_user,1,0,0,0
+access_usr_hr_employee_appraisal_line_user,access.usr.hr.employee.appraisal.line.user,hr_appraisal_evaluation.model_hr_employee_appraisal_line,base.group_user,1,0,0,0
+access_usr_behaviour_types_user,access.usr.behaviour.types.user,hr_appraisal_evaluation.model_behaviour_types,base.group_user,1,0,0,0
+access_usr_behaviour_competences_user,access.usr.behaviour.competences.user,hr_appraisal_evaluation.model_behaviour_competences,base.group_user,1,1,0,0
+access_usr_objective_types_user,access.usr.objective.types.user,hr_appraisal_evaluation.model_objective_types,base.group_user,1,0,0,0
+access_usr_objective_record_user,access.usr.objective.record.user,hr_appraisal_evaluation.model_objective_record,base.group_user,1,1,1,1
+access_usr_kpi_type,access.usr.kpi.type,hr_appraisal_evaluation.model_kpi_type,base.group_user,1,0,0,0

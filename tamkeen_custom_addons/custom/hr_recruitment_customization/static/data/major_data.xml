@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Applicant Majors -->
+        <record model="hr.applicant.major" id="human_resource">
+            <field name="name">Human Resource Management</field>
+        </record>
+        <record model="hr.applicant.major" id="organizational_development">
+            <field name="name">Organizational Development</field>
+        </record>
+        <record model="hr.applicant.major" id="management">
+            <field name="name">Management</field>
+        </record>
+        <record model="hr.applicant.major" id="business_administration">
+            <field name="name">Business Administration</field>
+        </record>
+        <record model="hr.applicant.major" id="economics">
+            <field name="name">Economics</field>
+        </record>
+        <record model="hr.applicant.major" id="project_management">
+            <field name="name">Project Management</field>
+        </record>
+        <record model="hr.applicant.major" id="operations">
+            <field name="name">Operations</field>
+        </record>
+        <record model="hr.applicant.major" id="supply_chain">
+            <field name="name">Supply Chain</field>
+        </record>
+        <record model="hr.applicant.major" id="marketing">
+            <field name="name">Marketing</field>
+        </record>
+        <record model="hr.applicant.major" id="finance">
+            <field name="name">Finance</field>
+        </record>
+        <record model="hr.applicant.major" id="accounting">
+            <field name="name">Accounting</field>
+        </record>
+        <record model="hr.applicant.major" id="ecommerce_ebusiness">
+            <field name="name">E-commerce/E-business</field>
+        </record>
+        <record model="hr.applicant.major" id="management_information_system">
+            <field name="name">Management Information System</field>
+        </record>
+        <record model="hr.applicant.major" id="industrial_engineering">
+            <field name="name">Industrial Engineering</field>
+        </record>
+        <record model="hr.applicant.major" id="mechanical_engineering">
+            <field name="name">Mechanical Engineering</field>
+        </record>
+        <record model="hr.applicant.major" id="electrical_engineering">
+            <field name="name">Electrical Engineering</field>
+        </record>
+        <record model="hr.applicant.major" id="political_science">
+            <field name="name">Political Science</field>
+        </record>
+        <record model="hr.applicant.major" id="computer_science">
+            <field name="name">Computer Science</field>
+        </record>
+        <record model="hr.applicant.major" id="computer_engineering">
+            <field name="name">Computer Engineering</field>
+        </record>
+        <record model="hr.applicant.major" id="information_systems">
+            <field name="name">Information Systems</field>
+        </record>
+        <record model="hr.applicant.major" id="statistics-data_management">
+            <field name="name">Statistics/Data Management</field>
+        </record>
+        <record model="hr.applicant.major" id="engineering_management">
+            <field name="name">Engineering Management</field>
+        </record>
+        <record model="hr.applicant.major" id="english_literature-Translation">
+            <field name="name">English Literature/Translation</field>
+        </record>
+        <record model="hr.applicant.major" id="law">
+            <field name="name">Law</field>
+        </record>
+        <record model="hr.applicant.major" id="psychology">
+            <field name="name">Psychology</field>
+        </record>
+        <record model="hr.applicant.major" id="other">
+            <field name="name">Other</field>
+        </record>
+    </data>
+</odoo>

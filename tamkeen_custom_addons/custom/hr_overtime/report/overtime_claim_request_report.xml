@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="overtime_claim_request_report">
+            <t
+                    t-call="hr_overtime.overtime_claim_report_header_footer_call_template_id">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <style type="text/css">
+                                    td.text-center{
+                                    align:center;
+                                    }
+                                </style>
+                                <center>
+                                    <!--<span t-if="not o.state in ('validate','leave_approved')">-->
+                                    <!--Draft-->
+                                    <!--</span>-->
+                                    <div style="font-size:20px">Claim
+                                        Request
+                                    </div>
+                                </center>
+                                <br/>
+                                <!-- Employee Info -->
+                                <table class="table table-bordered"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%"><b>1</b>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <b>Employee Information</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%"
+                                                rowspan="4"></td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Name</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Nationality</b>
+                                            </td>
+
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Join Date</b>
+                                            </td>
+                                            <td height="10%" colspan="3"
+                                                class="text-center">
+                                                <b>Employee ID</b>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.name"/>
+                                            </td>
+
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.country_id.name"/>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <!--need to migrate hr_employee_seniority modules-->
+                                                <span t-esc="o.employee_id.initial_employment_date"/>
+                                            </td>
+                                            <td height="10%" colspan="3"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.f_employee_no"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Department</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Job Title</b>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <b>Email Address</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <!--need to migrate hr_employee_seniority modules-->
+                                                <span t-esc="o.employee_id.department_id.name"/>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.job_id.name"/>
+                                            </td>
+                                            <td height="10%" colspan="4"
+                                                class="text-center">
+                                                <span t-esc="o.employee_id.work_email"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Claim Request Information -->
+                                <table class="table table-bordered"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+
+                                        <tr colspan="2">
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%"><b>2</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center"
+                                                colspan="4"> <b>Claim Request
+                                                Information</b></td>
+                                        </tr>
+
+                                        <tr >
+                                            <td></td>
+                                            <td><b>Request Number:</b>
+                                                <t t-if="o.name">
+                                                    <span t-esc="o.name"/>
+                                                </t></td>
+                                            <td><b>Stage:</b>
+                                                <t t-if="o.stage_id">
+                                                    <span t-esc="o.stage_id.name"/>
+                                                </t></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td> <b>Cost Center:</b>
+                                                <t t-if="o.account_analytic_id">
+                                                    <span
+                                                            t-esc="o.account_analytic_id.name"/>
+                                                </t></td>
+                                            <td> <b>Request Date:</b>
+                                                <t t-if="o.request_date">
+                                                    <span
+                                                            t-field="o.request_date" t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                </t></td>
+                                        </tr>
+                                        <tr >
+                                            <td></td>
+                                            <td><b>Pre Approved Request:</b>
+                                                <t
+                                                        t-if="o.pre_approval_request_id">
+                                                    <span
+                                                            t-esc="o.pre_approval_request_id.name"/>
+                                                </t></td>
+                                            <td> <b>Total Actual Hours :</b>
+                                                <t
+                                                        t-if="o.total_actual_hours">
+                                                    <span
+                                                            t-esc="o.total_actual_hours"/>
+                                                </t></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Claim Activity Information -->
+                                <table class="table table-bordered"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+
+                                        <tr colspan="2">
+                                            <td height="10%"
+                                                class="text-center"
+                                                width="3%"><b>3</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center"
+                                                colspan="6"> <b>Claim Activity
+                                            </b></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <b>Date</b>
+                                            </td>
+                                            <td>
+                                                <b>Activity</b>
+                                            </td>
+                                            <td class="text-center">
+                                                <b>Expected Hours(Overtime)</b>
+                                            </td>
+                                            <td class="text-center">
+                                                <b>Actual Hours</b>
+                                            </td>
+                                            <!--<td class="text-center">-->
+                                                <!--<b> Actual Day Cost</b>-->
+                                            <!--</td>-->
+                                            <td>
+                                                <b>Remarks</b>
+                                            </td>
+
+                                        </tr>
+                                        <tr  t-foreach="o.overtime_claim_activity_ids"
+                                             t-as="activity">
+                                            <td></td>
+                                            <td>
+                                                <t
+                                                        t-if="activity.date	">
+                                                    <span
+                                                            t-field="activity.date" t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t
+                                                        t-if="activity.activity_planned">
+                                                    <span
+                                                            t-esc="activity.activity_planned"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-center">
+                                               <t
+                                                        t-if="activity.expected_hours">
+                                                    <span
+                                                            t-esc="activity.expected_hours"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-center">
+                                                <t
+                                                        t-if="activity.actual_hours">
+                                                    <span
+                                                            t-esc="activity.actual_hours"/>
+                                                </t>
+                                            </td>
+                                            <!--<td class="text-center">-->
+                                                <!--<t-->
+                                                        <!--t-if="activity.actual_day_cost">-->
+                                                    <!--<span-->
+                                                            <!--t-esc="activity.actual_day_cost"/>-->
+                                                <!--</t>-->
+                                            <!--</td>-->
+                                            <td>
+                                                <t
+                                                        t-if="activity.remark">
+                                                    <span
+                                                            t-esc="activity.remark"/>
+                                                </t>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="overtime_claim_report_header_footer_call_template_id">
+            <t
+                    t-call="hr_overtime.overtime_claim_report_template_header_template_id"/>
+            <t t-raw="0"/>
+        </template>
+
+        <template id="overtime_claim_report_template_header_template_id">
+            <div class="header">
+                <div align="right">
+                    <img class="img-responsive"
+                         src="/hr_overtime/static/description/icon.png"
+                         width="200px" height="75px"/>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

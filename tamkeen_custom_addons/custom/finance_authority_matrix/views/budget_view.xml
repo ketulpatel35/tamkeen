@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+         <record id="crossovered_budget_view_form_inherit_for_buttons"
+                model="ir.ui.view">
+            <field name="name">crossovered.budget.view.form.inherit.for.buttons</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_budget_confirm']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_validate']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_done']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath><xpath expr="//button[@name='action_budget_cancel']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crossovered_budget_view_form_inherit_for_buttons"
+                model="ir.ui.view">
+            <field name="name">crossovered.budget.view.form.inherit.for.buttons</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_budget_confirm']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_validate']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_done']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_draft']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath><xpath expr="//button[@name='action_budget_cancel']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_journal_master</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- dam.levels -->
+    <record id="dam_level_tree" model="ir.ui.view">
+        <field name="name">dam.levels.tree</field>
+        <field name="model">dam.levels</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="levels"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="dam_level_from" model="ir.ui.view">
+        <field name="name">dam.levels.form</field>
+        <field name="model">dam.levels</field>
+        <field name="arch" type="xml">
+            <form string="Dam Levels">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code" String="Code"/>
+                    </group>
+                    <group>
+                        <field name="levels" required="1"/>
+                    </group>
+                    <!--<notebook>-->
+                    <!--<page string="Control">-->
+                    <!--<group>-->
+                    <!--<group>-->
+                    <!--<field name="stop_flow"/>-->
+                    <!--<field name="is_reject"/>-->
+                    <!--</group>-->
+                    <!--<group>-->
+                    <!--<field name="add_reject_button"-->
+                    <!--attrs="{'invisible':[('is_reject','!=',False)]}"/>-->
+                    <!--</group>-->
+                    <!--</group>-->
+                    <!--</page>-->
+                    <!--</notebook>-->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dam_level_action" model="ir.actions.act_window">
+        <field name="name">DAM Level</field>
+        <field name="res_model">dam.levels</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- dam.conf -->
+    <record id="dam_conf_from" model="ir.ui.view">
+        <field name="name">dam.conf.form</field>
+        <field name="model">dam.conf</field>
+        <field name="arch" type="xml">
+            <form string="Dam Conf">
+                <sheet>
+                    <group col="4" colspan="4">
+                        <field name="name" required="1"/>
+                        <field name="object" required="1"/>
+                    </group>
+                    <group>
+                        <field name="conf_line_ids" colspan="4" mode="tree"
+                               nolabel="1">
+                            <tree editable="bottom">
+                                <field name="sequence" required="1"/>
+                                <field name="name" required="1"/>
+                                <field name="default_state"/>
+                                <field name="end_state"/>
+                                <button type="object"
+                                        name="action_view_stage_conf"
+                                        class="oe_stat_button"
+                                        string="Stage Configuration"/>
+                                <field name="stage_config_ids" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <button name="get_create_view_data" type="object"
+                            string="Apply"/>
+                    <group>
+                        <field name="btn_data" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dam_conf_action" model="ir.actions.act_window">
+        <field name="name">DAM Configure</field>
+        <field name="res_model">dam.conf</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

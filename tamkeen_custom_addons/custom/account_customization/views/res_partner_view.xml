@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_for_account_advance_payment" model="ir.ui.view">
+        <field name="name">view.partner.form.inherit.for.account.advance.payment</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_account_payable_id']" position="after" >
+                <field name="property_account_supplier_advance" domain="[('user_type_id.type','=','payable')]"/>
+            </xpath>
+            <xpath expr="//field[@name='property_account_receivable_id']" position="after" >
+                <field name="property_account_customer_advance" domain="[('user_type_id.type','=','receivable')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

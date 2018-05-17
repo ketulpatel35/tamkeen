@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_set_delegate_user,access.set.delegate.user,model_set_delegate_user,,1,1,1,0
+access_dam_conf_history,access.dam.conf.history,model_dam_conf_history,,1,1,1,0
+access_dam_conf_history_line,access.dam.conf.history.line,model_dam_conf_history_line,,1,1,1,0
+access_stage_config,access.stage.config,model_stage_config,,1,1,1,0
+access_dam_levels,access.dam.levels,model_dam_levels,,1,1,1,0
+access_dam_conf,access.dam.conf,model_dam_conf,,1,1,1,0
+access_dam_conf_line,access.dam.conf.line,model_dam_conf_line,,1,1,1,0
+access_multi_user_allocation,access.multi.user.allocation,model_multi_user_allocation,,1,1,1,0

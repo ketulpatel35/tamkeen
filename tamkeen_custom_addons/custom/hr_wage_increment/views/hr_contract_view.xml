@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="hr_contract_wage_increment_form_view" model="ir.ui.view">
+            <field name="name">hr.contract.wage.increment</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="wage history" string="Contract History">
+                        <field name="is_active" invisible="1"/>
+                        <group string="Wage Increment Contract History">
+                            <field name="wage_inc_history_ids" nolabel="1"
+                                   readonly="1">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <!--<field name="job_id"/>-->
+                                    <field name="from_amend"
+                                           string="Amendment"/>
+                                    <field name="trial_date_start"/>
+                                    <field name="trial_date_end"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="is_active" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!--<record id="hr_contract.act_hr_employee_2_hr_contract"-->
+                <!--model="ir.actions.act_window">-->
+            <!--<field name="name">Contracts</field>-->
+            <!--<field name="res_model">hr.contract</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="domain">[('is_active','=',True)]</field>-->
+            <!--<field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id}</field>-->
+        <!--</record>-->
+
+        <!--<record id="hr_contract.action_hr_contract"-->
+                <!--model="ir.actions.act_window">-->
+            <!--<field name="name">Contracts</field>-->
+            <!--<field name="res_model">hr.contract</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="domain">[('is_active','=',True)]</field>-->
+            <!--<field name="context">{'search_default_current':1, 'search_default_is_active':1}</field>-->
+            <!--<field name="search_view_id"-->
+                   <!--ref="hr_contract.hr_contract_view_search"/>-->
+            <!--<field name="help" type="html">-->
+              <!--<p class="oe_view_nocontent_create">-->
+                <!--Click here to create new contracts.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</odoo>

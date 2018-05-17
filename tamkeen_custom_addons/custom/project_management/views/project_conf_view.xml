@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Project Type form view -->
+    <record id="project_types_form_view" model="ir.ui.view">
+        <field name="name">Project types form view</field>
+        <field name="model">project.type</field>
+        <field name="arch" type="xml">
+            <form string="Project Type">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List view of project type -->
+    <record id="project_types_tree_view" model="ir.ui.view">
+        <field name="name">Project types tree view</field>
+        <field name="model">project.type</field>
+        <field name="arch" type="xml">
+            <tree string="Project Type">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Project state form view -->
+    <record id="project_state_form_view" model="ir.ui.view">
+        <field name="name">Project state form view</field>
+        <field name="model">project.stage</field>
+        <field name="arch" type="xml">
+            <form string="Project Type">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List view of project state -->
+    <record id="project_types_tree_view" model="ir.ui.view">
+        <field name="name">Project state tree view</field>
+        <field name="model">project.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Project Type">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Revenue stream form view -->
+    <record id="project_revenue_streams_form_view" model="ir.ui.view">
+        <field name="name">Revenue streams form view</field>
+        <field name="model">revenue.stream</field>
+        <field name="arch" type="xml">
+            <form string="Revenue stream">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Revenue stream tree view -->
+    <record id="project_revenue_streams_tree_view" model="ir.ui.view">
+        <field name="name">Revenue streams  tree view</field>
+        <field name="model">revenue.stream</field>
+        <field name="arch" type="xml">
+            <tree string="Revenue stream">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action view for Project type -->
+    <record id="project_types_action_view" model="ir.actions.act_window">
+        <field name="name">Project Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create Project type configuration records here
+            </p>
+        </field>
+    </record>
+     <!-- Action view for Project state -->
+    <record id="project_states_action_view" model="ir.actions.act_window">
+        <field name="name">Project Stage</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.stage</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create Project type configuration records here
+            </p>
+        </field>
+    </record>
+
+    <!-- Action view for revenue stream -->
+    <record id="project_revenue_streams_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Revenue Stream</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">revenue.stream</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create Revenue stream configuration records here
+            </p>
+        </field>
+    </record>
+
+</odoo>

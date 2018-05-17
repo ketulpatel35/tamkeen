@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- =============== Number input wizard view==================  -->
+        <record id="hr_get_employee_wizard_view" model="ir.ui.view">
+            <field name="name">hr.get.employee.wizard.view</field>
+            <field name="model">hr.get.employee.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Get Employees">
+                    <group string="Select Employees">
+                        <field name="partner_ids" nolabel="1"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button type="object" name="generate_employee"
+                                    string="Generate" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="hr_get_employee_wizard_action_new">
+            <field name="name">Get Employees</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.get.employee.wizard</field>
+            <field name="view_id" ref="hr_get_employee_wizard_view"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

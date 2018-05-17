@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Project Search View -->
+    <record id="project_management_search_view" model="ir.ui.view">
+        <field name="name">project.management.search.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="replace">
+                <search string="Search Project">
+                    <field name="code" string="Code"/>
+                    <field name="name" string="Project Name"/>
+                    <field name="revenue_stream_id" string="Revenue Stream"/>
+                    <field name="business_unit_id" string="Business Unit"/>
+                    <field name="user_id" string="Primary Project Manager"/>
+                    <field name="secondary_pm_id"
+                           string="Secondary Project Manager"/>
+                    <field name="project_sponsor_id" string="Project Sponsor"/>
+                    <field name="partner_id" string="Customer"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Revenue Stream" name="revenue_stream"
+                                context="{'group_by':'revenue_stream_id'}"/>
+                        <filter string="Business Unit" name="business_unit"
+                                context="{'group_by':'business_unit_id'}"/>
+                        <filter string="Primary Project Manager"
+                                name="primary_project_manager"
+                                context="{'group_by':'user_id'}"/>
+                        <filter string="Secondary Project Manager"
+                                name="secondary_pm"
+                                context="{'group_by':'secondary_pm_id'}"/>
+                        <filter string="Project Sponsor" name="project_sponsor"
+                                context="{'group_by':'project_sponsor_id'}"/>
+                        <filter string="Control Project Manager"
+                                name="project_control_manager"
+                                context="{'group_by':'control_project_manager_id'}"/>
+                        <filter string="Customer" name="customer"
+                                context="{'group_by':'partner_id'}"
+                        />
+                        <!--<filter string="Status" name="status"-->
+                        <!--context="{'group_by':'state'}"/>-->
+                    </group>
+                </search>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project Tree View -->
+    <record id="tree_view_project_management" model="ir.ui.view">
+        <field name="name">tree.view.project.management</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="replace">
+                <tree decoration-bf="message_needaction==True"
+                      decoration-muted="active == False" string="Projects"
+                      default_order="create_date desc">
+                    <field name="sequence" widget="handle"/>
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                    <field name="code" string="Auto Sequence"/>
+                    <field name="revenue_stream_id"/>
+                    <field name="cost_center_id" string="Cost Center Code"/>
+                    <field name="name" string="Project Name"/>
+                    <field name="partner_id"/>
+                    <field name="business_unit_id"/>
+                    <field name="project_sponsor_id"/>
+                    <field name="user_id" string="Primary Project Manager"/>
+                    <field name="secondary_pm_id"/>
+                    <field name="date_start"/>
+                    <field name="date"/>
+                    <field name="excepted_end_date"/>
+                    <field name="spi"/>
+                    <field name="avg_progress_percentage"/>
+                    <!--<field name="spi"/>-->
+                    <field name="type_ids" string="Status" invisible="1"/>
+                    <field name="project_status"/>
+                    <!--<field name="partner_id" string="Contact"/>-->
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_management_rating_status_form" model="ir.ui.view">
+        <field name="name">project.management.rating.status.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id"
+               ref="rating_project.view_project_project_rating_form"/>
+        <field name="arch" type="xml">
+            <label for="rating_status" position="replace"/>
+            <field name="rating_status" position="replace"/>
+            <p class="text-muted oe_edit_only" position="replace"/>
+            <field name="rating_status_period" position="replace"/>
+        </field>
+    </record>
+
+    <!-- Project Management Form View -->
+    <record id="project_management_form_view" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@name='options_active']/div/span"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+            <xpath expr="//div[@name='options_active']/div/field[@name='label_tasks']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+            <xpath
+                    expr="//form/sheet/div[@name='button_box']/button[@name='attachment_tree_view']"
+                    position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[2]" position="attributes">
+                <attribute name="groups">base.group_no_one</attribute>
+            </xpath>
+            <xpath
+                    expr="//form/sheet/div[@name='button_box']/button[@name='attachment_tree_view']"
+                    position="after">
+                <button  class="oe_stat_button"
+                         name="%(action_view_project_document_form_view)d" type="action" icon="fa-files-o">
+                    <field string="Documents" name="document_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='toggle_active']"
+                   position="attributes">
+                <attribute name="groups">project.group_project_manager</attribute>
+            </xpath>
+
+            <div name="options_active" position="after" >
+                <field name="project_risks"  nolabel="1"/>
+                <label for="project_risks" class="oe_inline" string="Risks"/>
+            </div>
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="action"
+                        attrs="{'invisible':[('project_risks','!=',True)]}"
+                        name="%(action_view_project_risks_from_project)d"
+                        icon="fa-exclamation-triangle">
+                    <field string="Risks" name="risks_count"
+                           widget="statinfo"/>
+                </button>
+            </div>
+            <field name="name" position="before">
+                <h1>
+                    <field name="code" readonly="1"/>
+                </h1>
+            </field>
+            <field name="name" position="replace">
+                <h1>
+                    <field name="name" placeholder="Project Name"/>
+                </h1>
+            </field>
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <group>
+                    <group>
+                        <field name="project_status" groups="project.group_project_manager"/>
+                        <field name="have_parent_project"/>
+                        <field name="revenue_stream_id"
+                               required="1"
+                               string="Revenue Stream" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                        <field name="project_type"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1"/>
+                        <field name="project_stage"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1"/>
+
+                    </group>
+                    <group>
+                        <field name="parent_project_id"
+                               string="Parent Project" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"
+                               attrs="{'required': [('have_parent_project','=',True)], 'invisible': [('have_parent_project','!=',True)]}"/>
+                        <field name="business_unit_id"
+                               context="{'from_project':True}"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="0"/>
+                        <field name="project_sponsor_id"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1"/>
+
+
+                    </group>
+                </group>
+                <group col="4" colspan="4">
+                    <field name="avg_progress_percentage"/>
+                    <field name="spi"/>
+                </group>
+                <!--<group col="4" colspan="4">-->
+                <!--<field name="is_invoiced" />-->
+                <!--<field name="is_payment_collected"/>-->
+                <!--</group>-->
+            </xpath>
+            <field name="alias_name" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <xpath expr="//notebook/page[1]" position="replace">
+                <page string="Resources" name="settings">
+                    <group>
+                        <group>
+                            <field name="user_id" string="Primary Project Manager"
+                                   attrs="{'readonly':[('active','=',False)]}"  required="1"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" />
+                            <field name="secondary_pm_id"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1" />
+                            <field name="control_project_manager_id"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" required="1"/>
+                            <field name="account_manager_id" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                            <field name="stakeholder_approval_date"
+                                   invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="privacy_visibility" widget="radio"/>
+                            <field name="risks_ids" invisible="1"/>
+                        </group>
+                    </group>
+                    <group name="misc" invisible="1">
+                        <group string="Configuration" groups="base.group_no_one">
+                            <field name="sequence" groups="base.group_no_one"/>
+                        </group>
+                        <group string="Time Scheduling" groups="base.group_no_one">
+                            <field name="resource_calendar_id" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <field name="resource_calendar_id" position="attributes">
+                <attribute name="options">{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}</attribute>
+            </field>
+            <xpath expr="//notebook/page[1]" position="after">
+                <page string="Customer" name="customer">
+                    <group>
+                        <group>
+                            <field name="partner_id" required="1"
+                                   domain="[('customer', '=', True)]"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                        </group>
+                        <group>
+                            <field name="cost_center_id" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                            <label for="rating_status_div"
+                                   string="Customer(s) Ratings"/>
+                            <div name="rating_status_div">
+                                <field name="rating_status" widget="radio"/>
+                                <p attrs="{'invisible': [('rating_status','not in',('periodic','stage'))]}"
+                                   class="text-muted oe_edit_only">
+                                    Edit project's stages and set an email
+                                    template
+                                    on the stages on which you want to activate
+                                    the
+                                    rating.
+                                </p>
+                            </div>
+                            <field name="rating_status_period"
+                                   class="oe_inline" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"
+                                   attrs="{'required': [('rating_status','=','periodic')], 'invisible': [('rating_status','!=','periodic')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="customer_ids"  nolabel="1">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="spoc"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//form/sheet" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!--inherited form for hide as part in form-->
+    <record id="view_project_form_inherited_for_hide_as_text"
+            model="ir.ui.view">
+        <field name="name">project.project.view.form.simplified.inherit.issue</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_issue.view_project_form_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options_active']/div[2]/span"
+                   position="attributes">
+                <attribute name="attrs">{'invisible':['|', ('use_issues',
+                    '=', False),('use_issues', '=', True)]}</attribute>
+
+            </xpath>
+            <xpath expr="//div[@name='options_active']/div/field[@name='label_issues']"
+                   position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="attrs">{}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_management_form_view_inherit" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_management.project_management_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='settings']" position="before">
+                <page string="Schedule" name="schedule">
+                    <group col="4" colspan="4">
+                        <field name="date_start" required="True"/>
+                        <field name="date" required="True"/>
+                        <field name="actual_start_date"/>
+                        <field name="actual_end_date"/>
+                        <field name="excepted_end_date" required="True"/>
+                        <field name="days_of_delay"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//notebook/page[@name='customer']" position="after">
+                <page string="PO and Contract Details" name="po_and_contract">
+                    <group col="4" colspan="4">
+                        <field string="Purchase Order # "
+                               name="purchase_order"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                        <field name="po_date_order"/>
+                        <field name="po_amount_total"/>
+                        <field name="po_currency_id" string="Currency" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <field name="contract"/>
+                        <field name="contract_signing_date"/>
+                        <field name="contract_value"/>
+                        <field name="contract_currency_id" options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                    </group>
+                    <group>
+                        <field name="file_name_contract" invisible="1"/>
+                        <field name="contract_copy"
+                               filename="file_name_contract" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project Management Action -->
+    <record id="action_project_management" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="tree_view_project_management"/>
+    </record>
+
+    <!-- Assigned Project filter action -->
+    <record id="action_assigned_project_management"
+            model="ir.actions.act_window">
+        <field name="name">Assigned Project</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|', '|', '|', '|', ('user_id','=',uid),
+            ('secondary_pm_id','=',uid), ('project_sponsor_id','=',uid),
+            ('control_project_manager_id','=',uid), ('account_manager_id','=',uid)]
+        </field>
+        <field name="view_id" ref="tree_view_project_management"/>
+    </record>
+
+
+    <!-- all this form view inherited For not update group inherit-->
+    <record id="project_management_not_update_form_view" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project_management.group_project_not_update_information')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='use_tasks']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- all this form view inherited For not update group inherit-->
+    <record id="project_management_not_update_form_view_date_start"
+            model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_management.project_management_form_view_inherit"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project_management.group_project_not_update_information')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_start']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="project_management_inherited_update_form_view" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_management.project_management_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project_management.group_project_not_update_information')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='revenue_stream_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_project_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_risks']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='project_type']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='business_unit_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='project_sponsor_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='secondary_pm_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='control_project_manager_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='account_manager_id']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="project_project_view_form_simplified_inherit_issue" model="ir.ui.view">
+        <field name="name">project.project.view.form.simplified.inherit.issue</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+            <group name="options" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </group>
+            <field name="use_tasks" position="after">
+                <field name="use_issues"/>
+            </field>
+        </field>
+    </record>
+    <record id="project.open_create_project" model="ir.actions.act_window">
+        <field name="view_id" ref="project_management.project_management_form_view"/>
+        <field name="target">current</field>
+    </record>
+
+    <record id="project_management_inherited_issue_update_form_view" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_issue.project_project_view_form_simplified_inherit_issue"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project_management.group_project_not_update_information')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='use_issues']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="project_management_inherited_timesheet_update_form_view" model="ir.ui.view">
+        <field name="name">project.management.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="hr_timesheet.project_invoice_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project_management.group_project_not_update_information')])]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allow_timesheets']"  position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

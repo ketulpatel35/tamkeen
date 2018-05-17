@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+
+        <record model="ir.module.category" id="overtime_management">
+            <field name="name">Overtime Management</field>
+            <field name="sequence">18</field>
+        </record>
+
+        <record id="group_overtime_normal_user" model="res.groups">
+            <field name="name">Normal User</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_view_all_overtime" model="res.groups">
+            <field name="name">View All Overtime Requests</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_manager_approval" model="res.groups">
+            <field name="name">Manager Approval</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_vp_approval" model="res.groups">
+            <field name="name">VP Approval</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_manager_approval'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_ceo_approval" model="res.groups">
+            <field name="name">CEO Approval</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_manager_approval'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_hr_approval" model="res.groups">
+            <field name="name">HR Approval</field>
+            <field name="category_id" ref="overtime_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_overtime_normal_user'))]"/>
+        </record>
+        <record id="group_overtime_budget_approval" model="res.groups">
+            <field name="name">Budget Approval</field>
+            <field name="category_id" ref="overtime_management"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('group_overtime_normal_user'))]"/>
+        </record>
+
+        <record id="group_overtime_self_approval_srvs" model="res.groups">
+            <field name="name">Can Approve/Refuse His/Her Requests</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_manager_approval'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+
+        <record id="group_service_on_behalf_approval_srvs" model="res.groups">
+            <field name="name">Can Request on Behalf of Others</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_lock" model="res.groups">
+            <field name="name">Lock/Unlock Overtime Requests</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_cancel" model="res.groups">
+            <field name="name">Cancel Overtime Requests</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_close" model="res.groups">
+            <field name="name">Close Overtime Requests</field>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_generate_amendment" model="res.groups">
+                <field name="name">Generate Overtime Amendment</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_view_amendment" model="res.groups">
+                <field name="name">View Amendment</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_config" model="res.groups">
+            <field name="name">Overtime Configuration</field>
+            <field name="category_id" ref="overtime_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_overtime_normal_user'))]"/>
+        </record>
+        <record id="group_display_overtime_cost" model="res.groups">
+                <field name="name">Display Overtime Cost</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+        <record id="group_overtime_xls_report" model="res.groups">
+            <field name="name">Overtime Report</field>
+            <field name="category_id" ref="overtime_management"/>
+        </record>
+    </data>
+</odoo>

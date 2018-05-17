@@ -1,0 +1,82 @@
+<odoo>
+    <data>
+
+        <record id="loan_report_print_link_view" model="ir.ui.view">
+            <field name="name">loan.report.print.link</field>
+            <field name="model">loan.report.print.link</field>
+            <field name="arch" type="xml">
+                <form string="Excel Output">
+                    <separator colspan="4" string="Please save file as .xls excel format"/>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <field name="loan_xls_output" filename='name' readonly='1'/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--=============== loan XLS Report Wizard==================-->
+        <record id="hr_loan_report_xls_view" model="ir.ui.view">
+            <field name="name">hr.loan.report.xls.view</field>
+            <field name="model">loan.management.report.xls</field>
+            <field name="arch" type="xml">
+                <form string="loan Report Generation Wizard">
+                    <group colspan="2" col="4">
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+                        <field name="sort_by"/>
+                    </group>
+                    <separator string="Columns To Display"/>
+                    <group colspan="4" col="4">
+                        <field name="is_request_number"/>
+                        <field name="is_loan_amount"/>
+
+                        <field name="is_paid_installments_amount"/>
+                        <field name="is_emp_performance_evaluation"/>
+
+                        <field name="is_cost_center"/>
+                        <field name="is_loan_installments_number"/>
+
+                        <field name="is_remaining_amount"/>
+                        <field name="is_status"/>
+                    </group>
+                    <notebook>
+                        <page string="Filter By Employee">
+                            <field name="employee_ids"/>
+                        </page>
+                        <page string="Filter By Cost Center">
+                            <field name="cost_center_ids"/>
+                        </page>
+                        <page string="Filter By Stages">
+                            <field name="stage_ids" options="{'no_create': True}"/>
+                        </page>
+                    </notebook>
+                    <group>
+                        <footer>
+                            <button type="object" name="print_loan_report"
+                                    string="Generate XLS Report" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--loan Report Menu Action-->
+        <record model="ir.actions.act_window"
+                id="wizard_print_loan_xls_report">
+            <field name="name">loan Report Generation Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">loan.management.report.xls</field>
+            <field name="view_id" ref="hr_loan_report_xls_view"/>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+    </data>
+</odoo>

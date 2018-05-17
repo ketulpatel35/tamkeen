@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_form_inherit_seg" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.seg</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="cost_centre_id" readonly="1"
+                           context="{'p_cost':True}"
+                           groups="account.group_account_manager,account.group_account_user"/>
+                    <field name="account_analytic_id"
+                           context="{'p_cost':True}"
+                           groups="account.group_account_manager,account.group_account_user"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="context">
+                        {'order_line':order_line, 'cost_centre_id':cost_centre_id}
+                    </attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_order_form_segments_line" model="ir.ui.view">
+            <field name="name">purchase.order.form.segment.line</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('account_segments.acc_seg_line_level')])]" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                    <field name="cost_centre_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='account_analytic_id']"
+                       position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']"
+                       position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

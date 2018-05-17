@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Loan Main Menu Root -->
+    <menuitem id="loan_management_view_id"
+              name="Loan Management"
+              groups="employee_loan.group_loan_view_all_loan,employee_loan.group_loan_hr_approval,employee_loan.group_loan_budget_approval,employee_loan.group_loan_config,employee_loan.group_loan_xls_report,employee_loan.group_loan_finance_approval,employee_loan.group_loan_request_reschedule,employee_loan.group_loan_payroll_processing"
+              web_icon="employee_loan,static/description/icon_image.png"/>
+
+    <!-- Loan Management main Menu -->
+    <menuitem id="loan_management_main_menu"
+              name="Loan Management"
+              parent="loan_management_view_id"
+              groups="employee_loan.group_loan_view_all_loan,employee_loan.group_loan_hr_approval,employee_loan.group_loan_budget_approval,employee_loan.group_loan_finance_approval"
+              sequence="1"/>
+
+    <!-- Loan Request Sub main menu -->
+    <menuitem id="loan_request_sub_main_menu"
+              name="Loan Request"
+              parent="loan_management_main_menu"
+              groups="employee_loan.group_loan_view_all_loan,employee_loan.group_loan_hr_approval,employee_loan.group_loan_budget_approval,employee_loan.group_loan_finance_approval"
+              sequence="1"/>
+
+    <!-- Hr Approval -->
+    <menuitem id="loan_request_hr_approval_menu"
+              action="open_loan_request_for_hr_approval"
+              parent="loan_request_sub_main_menu"
+              groups="employee_loan.group_loan_hr_approval"
+              name="HR Approval"
+              sequence="1"/>
+
+    <!-- Finance Approval -->
+    <menuitem id="loan_request_finance_approval_menu"
+              action="open_loan_request_for_finance_approval"
+              parent="loan_request_sub_main_menu"
+              groups="employee_loan.group_loan_finance_approval"
+              name="Finance Approval"
+              sequence="2"/>
+
+    <!-- Budget Approval -->
+    <menuitem id="loan_request_budget_approval_menu"
+              action="open_loan_request_for_budget_approval"
+              parent="loan_request_sub_main_menu"
+              groups="employee_loan.group_loan_budget_approval"
+              name="Budget Approval"
+              sequence="3"/>
+
+    <!-- View All Request-->
+    <menuitem id="loan_management_view_id_call_action"
+              action="hr_employee_loan_action"
+              parent="loan_request_sub_main_menu"
+              name="View All Requests"
+              groups="employee_loan.group_loan_view_all_loan"
+              sequence="4"/>
+
+    <!-- Loan Installment sub main menu -->
+    <menuitem id="loan_installment_sub_main_menu"
+              name="Installments"
+              parent="loan_management_main_menu"
+              groups="employee_loan.group_loan_hr_approval,employee_loan.group_loan_request_reschedule,employee_loan.group_loan_payroll_processing"
+              sequence="1"/>
+
+    <!-- Payroll Processing -->
+    <menuitem id="loan_installment_payroll_processing"
+              name="Payroll Processing"
+              action="loan_installments_payroll_processing_action"
+              groups="employee_loan.group_loan_hr_approval,employee_loan.group_loan_request_reschedule,employee_loan.group_loan_payroll_processing"
+              parent="loan_installment_sub_main_menu"
+              sequence="1"/>
+
+    <!-- All Loan Installments -->
+    <menuitem name="View All Installments"
+              id="loan_installments_menu"
+              action="loan_installments_action"
+              groups="employee_loan.group_loan_hr_approval,employee_loan.group_loan_request_reschedule,employee_loan.group_loan_payroll_processing"
+              sequence="2"
+              parent="loan_installment_sub_main_menu"/>
+
+    <!--Loan Configuration -->
+    <!-- Configuration main menu -->
+    <menuitem name="Configuration" id="loan_configration"
+              sequence="2" parent="loan_management_view_id"
+              groups="employee_loan.group_loan_config"
+    />
+
+    <!-- Loan type -->
+    <menuitem name="Loan Type"
+              id="loan_configration_panel"
+              sequence="1"
+              action="act_open_loan_configuration_panels_view"
+              parent="loan_configration" groups="employee_loan.group_loan_config"/>
+
+    <!-- Loan Stages -->
+    <menuitem name="Stages" id="loan_configuration_stages"
+              sequence="2"
+              action="act_open_loan_panel_displayed_stages_view"
+              parent="loan_configration" groups="employee_loan.group_loan_config"/>
+
+    <!-- Loan Proofs -->
+    <menuitem name="Loan Proofs" id="loan_configuration_proofs_loan"
+              sequence="3"
+              action="act_open_loan_proof_new"
+              parent="loan_configration" groups="employee_loan.group_loan_config"/>
+
+    <!-- Loan Service Proof -->
+    <menuitem name="Service Proof"
+              id="loan_proof_menu"
+              action="loan_proof_action"
+              sequence="28"
+              parent="service_configuration_panel.services_config_panel_child"
+              groups="employee_loan.group_loan_config"/>
+
+    <!-- Loan Report -->
+    <!-- Report main menu -->
+    <menuitem name="Reports" id="loan_reports_menu"
+              parent="loan_management_view_id" sequence="3"
+              groups="employee_loan.group_loan_xls_report"/>
+
+    <!-- loan report sub menu -->
+    <menuitem name="Loan Report Generation" id="loan_excel_report"
+              parent="loan_reports_menu" sequence="1"
+              action="wizard_print_loan_xls_report"
+              groups="employee_loan.group_loan_xls_report"/>
+
+</odoo>

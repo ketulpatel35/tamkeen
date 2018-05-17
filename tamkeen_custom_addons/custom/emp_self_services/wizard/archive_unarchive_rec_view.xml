@@ -1,0 +1,52 @@
+<odoo>
+
+    <record id="employee_archive_unarchive_wizard_view" model="ir.ui.view">
+        <field name="name">employee.archive.unarchive/wizard.view</field>
+        <field name="model">emp.archive.unarchive</field>
+        <field name="arch" type="xml">
+            <form string="Archive/Unarchive">
+                <p class="oe_grey">
+                    Are you sure you want to perform this action ?
+                </p>
+                <footer>
+                    <button string="Archive"
+                            name="action_archive_rec" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Unarchive"
+                            name="action_unarchive_rec" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Experiences -->
+    <act_window id="action_archive_unarchive_experiences"
+                multi="True"
+                key2="client_action_multi" name="Archive/Unarchive"
+                res_model="emp.archive.unarchive"
+                src_model="tamkeen.hr.experiences"
+                groups="hr_employee_customization.group_create_emp_profile"
+                view_mode="form" target="new" view_type="form"/>
+
+    <!-- Training -->
+    <act_window id="action_archive_unarchive_trainings"
+                multi="True"
+                key2="client_action_multi" name="Archive/Unarchive"
+                res_model="emp.archive.unarchive"
+                src_model="tamkeen.hr.trainings"
+                groups="hr_employee_customization.group_create_emp_profile"
+                view_mode="form" target="new" view_type="form"/>
+
+    <!-- qualifications -->
+    <act_window id="action_archive_unarchive_qualifications"
+                multi="True"
+                key2="client_action_multi" name="Archive/Unarchive"
+                res_model="emp.archive.unarchive"
+                src_model="tamkeen.hr.qualifications"
+                groups="hr_employee_customization.group_create_emp_profile"
+                view_mode="form" target="new" view_type="form"/>
+
+</odoo>

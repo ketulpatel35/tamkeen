@@ -1,0 +1,87 @@
+<odoo>
+    <data>
+        <!-- Root Menu -->
+        <menuitem name="Sales Management"
+            id="sales_team.menu_base_partner"
+            groups="sales_team.group_sale_salesman,sales_team.group_sale_manager" sequence="6"/>
+        <!-- Opportunity -->
+        <menuitem
+            id="sales_team.menu_sales"
+            name="Opportunity Management"
+            parent="sales_team.menu_base_partner"
+            sequence="5"/>
+        
+        <menuitem
+            id="crm.menu_crm_opportunities"
+            action="crm.action_your_pipeline"
+            name="Opportunity"
+            parent="sales_team.menu_sales"
+            sequence="1"/>
+        <!-- Lead Management -->
+        <menuitem
+            id="menu_crm_leads"
+            name="Lead Management"
+            parent="sales_team.menu_base_partner"
+            sequence="4"
+            groups="crm.group_use_lead"/>
+
+        <menuitem
+            id="crm.menu_crm_leads"
+            name="Leads"
+            parent="menu_crm_leads"
+            sequence="1"
+            action="crm.crm_lead_all_leads"
+            groups="crm.group_use_lead"/>
+        <!-- Customer -->
+        <menuitem name="Customers" id="menu_partner_main" parent="sales_team.menu_base_partner" sequence="3"/>
+        <!-- crm.lead.source -->
+        <record id="crm_lead_source_action" model="ir.actions.act_window">
+            <field name="name">Lead Sources</field>
+            <field name="res_model">crm.lead.source</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to define a new lead source.
+                </p><p>
+                
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_crm_lead_source"
+            name="Lead Sources"
+            action="crm_lead_source_action"
+            parent="crm.menu_crm_config_lead"
+            sequence="3"
+            groups="base.group_no_one"/>
+
+
+        <!-- Activities -->
+        <menuitem
+            id="menu_crm_activity"
+            name="Activities"
+            parent="sales_team.menu_base_partner"
+            sequence="2" />
+        
+
+        <record id="crm_activity_log_action" model="ir.actions.act_window">
+            <field name="name">Activity Logs</field>
+            <field name="res_model">crm.activity.log</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">                </p><p>
+                
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="crm.crm_lead_menu_activities"
+            name="Activities"
+            parent="menu_crm_activity"
+            sequence="1"
+            action="crm_activity_log_action" />
+
+    </data>
+</odoo>

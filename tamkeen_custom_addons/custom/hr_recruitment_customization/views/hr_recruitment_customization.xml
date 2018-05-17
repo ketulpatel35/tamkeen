@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hr_applicant_custom">
+            <field name="name">hr.applicant.custom</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id"
+                   ref="hr_recruitment.crm_case_form_view_job"/>
+            <field name="arch" type="xml">
+
+                <field name="type_id" position="before">
+                    <field name="gender"/>
+                    <field name="marital"/>
+                    <field name="date_of_birth"/>
+                    <field name="date_of_birth_hijri"/>
+                    <field name="country_id"/>
+                    <field name="identification_type"/>
+                    <field name="identification_number"/>
+                    <field name="university"/>
+                    <field name="uni_location"/>
+                </field>
+                <field name="type_id" position="after">
+                    <field name="major"/>
+                    <field name="other_major"
+                           attrs="{'invisible': [('major', '!=', '26')]}"/>
+                    <field name="minor"/>
+                    <field name="gpa"/>
+                    <field name="gpa_max"/>
+                    <field name="expect_grad_year"/>
+                    <field name="expect_grad_month"/>
+                </field>
+                <xpath expr="//form/sheet/group[1]/group[3]" position="before">
+                    <!--<group string="Job" position="before" >-->
+                    <group string="References" colspan="4">
+                        <field name="reference_ids" nolabel="1" colspan="4"
+                               mode="tree">
+                            <tree editable="bottom">
+                                <field name="reference"/>
+                                <field name="specification"/>
+                                <field name="name"/>
+                                <field name="job_title"/>
+                                <field name="company"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                                <field name="date"/>
+                                <field name="feedback"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <!--</group>-->
+                </xpath>
+
+                <field name="categ_ids" position="after">
+                    <group colspan='2'>
+                        <field name="question_1"/>
+                        <field name="question_2"/>
+                        <field name="relative_name"
+                               attrs="{'invisible': [('question_2', '!=', 'yes')]}"/>
+                        <field name="relative_degree"
+                               attrs="{'invisible': [('question_2', '!=', 'yes')]}"/>
+                        <field name="relative_department"
+                               attrs="{'invisible': [('question_2', '!=', 'yes')]}"/>
+                    </group>
+                </field>
+
+                <field name="partner_phone" position="after">
+                    <field name="current_location"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

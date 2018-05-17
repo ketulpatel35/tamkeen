@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+
+        <record model="ir.module.category" id="performance_management">
+            <field name="name">Performance Management</field>
+            <field name="sequence">17</field>
+        </record>
+
+        <!-- configuration view -->
+        <record id="group_app_view_all" model="res.groups">
+            <field name="name">View Appraisal</field>
+            <!--<field name="implied_ids" eval="[(4, ref('hr_department_extension.group_view_all_departments'))]"/>-->
+            <field name="category_id" ref="performance_management"/>
+        </record>
+
+        <!-- conf Update, view -->
+        <record id="group_app_update_view_all"
+                model="res.groups">
+            <field name="name">Update Appraisal</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('hr_appraisal_evaluation.group_app_view_all'))]"/>
+            <field name="category_id" ref="performance_management"/>
+        </record>
+
+        <!-- conf create, update and read -->
+        <record id="group_all_app_conf" model="res.groups">
+            <field name="name">Appraisal Configuration</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('hr_appraisal_evaluation.group_app_update_view_all')),
+                   (4, ref('hr_appraisal_evaluation.group_app_view_all'))]"/>
+            <field name="category_id" ref="performance_management"/>
+        </record>
+
+        <record id="group_app_manager_approval"
+                model="res.groups">
+            <field name="name">Manager Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('base.group_user')), (4, ref('hr_appraisal_evaluation.group_app_update_view_all'))]"/>
+            <field name="category_id" ref="performance_management"/>
+        </record>
+
+        <record id="group_app_hr_approval"
+                model="res.groups">
+            <field name="name">HR Approval</field>
+            <field name="implied_ids"
+                   eval="[(4, ref('base.group_user')), (4, ref('hr_appraisal_evaluation.group_app_update_view_all')), (4, ref('hr_appraisal_evaluation.group_all_app_conf'))]"/>
+            <field name="category_id" ref="performance_management"/>
+        </record>
+
+    </data>
+</odoo>

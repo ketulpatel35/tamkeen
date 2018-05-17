@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+
+        <!-- overtime main menu -->
+        <menuitem name="Overtime Management" id="overtime_menu_root"
+                  groups="hr_overtime.group_overtime_view_all_overtime,hr_overtime.group_overtime_hr_approval,hr_overtime.group_overtime_budget_approval,hr_overtime.group_overtime_config,hr_overtime.group_overtime_xls_report"
+                  web_icon="hr_overtime,static/description/overtime_icon.png"/>
+
+        <!-- categories -->
+        <menuitem name="Overtime Management" id="overtime_management_menu"
+                  parent="overtime_menu_root" sequence="1"
+                  groups="hr_overtime.group_overtime_view_all_overtime,hr_overtime.group_overtime_hr_approval,hr_overtime.group_overtime_budget_approval,hr_overtime.group_overtime_config,hr_overtime.group_overtime_xls_report"/>
+
+        <!-- overtime pre request hr approval-->
+        <menuitem name="Overtime Pre-Approval Requests"
+                  id="overtime_pre_request_menu_child"
+                  parent="overtime_management_menu" sequence="2"
+                  groups="hr_overtime.group_overtime_view_all_overtime,hr_overtime.group_overtime_hr_approval,hr_overtime.group_overtime_budget_approval"/>
+        <menuitem name="HR Approval" id="overtime_pre_request_menu_for_hr"
+                  parent="overtime_pre_request_menu_child" sequence="2"
+                  action="open_overtime_pre_request_for_hr"
+                  groups="hr_overtime.group_overtime_hr_approval"/>
+        <menuitem name="Budget Approval" id="overtime_pre_request_menu_budget"
+                  parent="overtime_pre_request_menu_child" sequence="3"
+                  action="open_overtime_pre_request_for_budget"
+                  groups="hr_overtime.group_overtime_budget_approval"/>
+        <menuitem name="View All Requests" id="overtime_pre_menu_view_all"
+                  parent="overtime_pre_request_menu_child" sequence="4"
+                  action="open_overtime_pre_request_for_view_all"
+                  groups="hr_overtime.group_overtime_view_all_overtime"/>
+
+        <!-- overtime statement request -->
+        <menuitem name="Overtime Claims"
+                  id="overtime_request_menu"
+                  parent="overtime_management_menu" sequence="5"
+                  groups="hr_overtime.group_overtime_view_all_overtime,hr_overtime.group_overtime_hr_approval,hr_overtime.group_overtime_budget_approval"/>
+
+        <menuitem name="HR Approval" id="overtime_request_for_hr"
+                  parent="overtime_request_menu" sequence="2"
+                  action="open_overtime_request_for_hr"
+                  groups="hr_overtime.group_overtime_hr_approval"/>
+        <menuitem name="Budget Approval" id="overtime_request_menu_budget"
+                  parent="overtime_request_menu" sequence="3"
+                  action="open_overtime_request_for_budget"
+                  groups="hr_overtime.group_overtime_budget_approval"/>
+        <menuitem name="View All Requests"
+                  id="overtime_request_menu_view_all"
+                  parent="overtime_request_menu" sequence="4"
+                  action="open_overtime_request_for_view_all"
+                  groups="hr_overtime.group_overtime_view_all_overtime"/>
+
+        <!-- Configuration menu -->
+        <menuitem name="Configuration" id="overtime_configration"
+                  groups="hr_overtime.group_overtime_config"
+                  sequence="2" parent="overtime_menu_root"/>
+
+        <menuitem name="Overtime Configuration Panel"
+                  id="overtime_configration_panel"
+                  sequence="1"
+                  action="act_open_overtime_configuration_panels_view"
+                  groups="hr_overtime.group_overtime_config"
+                  parent="overtime_configration"/>
+
+        <menuitem name="Stages" id="overtime_configuration_stages"
+                  sequence="2"
+                  action="act_open_overtime_panel_displayed_stages_view"
+                  groups="hr_overtime.group_overtime_config"
+                  parent="overtime_configration"/>
+
+        <!-- Overtime Report -->
+        <!-- Report main menu -->
+        <menuitem name="Reports" id="overtime_reports_menu"
+                  parent="overtime_menu_root" sequence="3"
+                  groups="hr_overtime.group_overtime_xls_report"/>
+
+        <!-- overtime report sub menu -->
+        <menuitem name="Overtime Report Generation" id="overtime_excel_report"
+                  parent="overtime_reports_menu" sequence="1"
+                  action="wizard_print_overtime_xls_report"
+                  groups="hr_overtime.group_overtime_xls_report"/>
+        <!--&lt;!&ndash; Settings &ndash;&gt;-->
+        <!--<menuitem id="menu_overtime_approval_configuration"-->
+                  <!--name="Overtime Configuration"-->
+                  <!--parent="overtime_configration"-->
+                  <!--sequence="0"-->
+                  <!--action="act_open_overtime_approval_configuration_view" />-->
+    </data>
+</odoo>

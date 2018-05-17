@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mss_service_request_search" model="ir.ui.view">
+            <field name="name">Pending Approvals</field>
+            <field name="model">service.request</field>
+            <field name="inherit_id"
+                   ref="service_management.view_service_request_search"/>
+            <field name="arch" type="xml">
+                <filter name="pending_hr_approvals" position="after">
+                    <filter string="Pending Approvals" name="pending_approvals"
+                            domain="['|','&amp;',('employee_id.service_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.service_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.service_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')
+            ]"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="service_mngr_request_approval"
+                model="ir.actions.act_window">
+            <field name="name">General Services Requests To Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">
+                {'search_default_pending_approvals':1,'default_service_provider':
+                'hr'}
+            </field>
+            <field name="domain">
+                ['|',('employee_id.service_manager_id.user_id.id','=',uid),'|',('employee_id.service_vp_id.user_id.id','=',uid),('employee_id.service_ceo_id.user_id.id','=',uid)
+                ]
+            </field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    For approval only.
+                </p>
+                <p>
+                    For approval only.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_service_ess_requests" model="ir.actions.act_window">
+            <field name="name">HR Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">
+                [('employee_id.user_id.id','=',uid),('service_provider','=','hr')]
+            </field>
+            <field name="context">{'default_service_provider': 'hr'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new request.
+                </p>
+                <p>
+                    Press create button to apply for any hr service, The system
+                    will take care from the approval.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_rcrtmnt_service_ess_requests"
+                model="ir.actions.act_window">
+            <field name="name">Recruitment Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">
+                [('employee_id.user_id.id','=',uid),('service_provider','=','recruitment')]
+            </field>
+            <field name="context">{'default_service_provider': 'recruitment'}
+            </field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new request.
+                </p>
+                <p>
+                    Press create button to apply for any recruitment service,
+                    The system will take care from the approval.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_admns_service_ess_requests"
+                model="ir.actions.act_window">
+            <field name="name">Administration Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">
+                [('employee_id.user_id.id','=',uid),('service_provider','=','administration')]
+            </field>
+            <field name="context">{'default_service_provider':
+                'administration'}
+            </field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new request.
+                </p>
+                <p>
+                    Press create button to apply for any administration
+                    service, The system will take care from the approval.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="service_request_kanban_view">
+            <field name="name">service.request.kanban</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_project
+oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <h4 class="text-center">
+                                        <a type="open">
+                                            <span t-if="record.reference.value">
+                                                [<field name="reference"/>]
+                                            </span>
+                                            <br/>
+                                            <span t-if="record.service_type_id.value">
+                                                Service:
+                                                <field name="service_type_id"/>
+                                            </span>
+                                        </a>
+                                    </h4>
+                                    <div class="oe_kanban_partner_categories"/>
+                                    <div class="oe_kanban_partner_links"/>
+                                    <ul>
+                                        <li t-if="record.service_category_id.raw_value">
+                                            Category:
+                                            <field name="service_category_id"/>
+                                        </li>
+                                        <li t-if="record.state.raw_value">
+                                            Status:
+                                            <field name="state"/>
+                                        </li>
+                                        <br/>
+                                        <li t-if="record.waiting_time.raw_value">
+                                            Waiting Time: [<field
+                                                name="waiting_time"/>]
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_service_request_form_view"
+                model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="service_request_kanban_view"/>
+            <field name="act_window_id" ref="action_service_ess_requests"/>
+        </record>
+
+        <record id="action_rcrtmnt_service_request_form_view"
+                model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="service_request_kanban_view"/>
+            <field name="act_window_id"
+                   ref="action_rcrtmnt_service_ess_requests"/>
+        </record>
+
+        <record id="action_admins_service_request_form_view"
+                model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="service_request_kanban_view"/>
+            <field name="act_window_id"
+                   ref="action_admns_service_ess_requests"/>
+        </record>
+
+    </data>
+</odoo>

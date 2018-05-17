@@ -1,0 +1,960 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Mail Template -->
+
+        <!-- Compensation  and Benefit -->
+
+        <record id="email_template_application_comp_benefit"
+                model="mail.template">
+            <field name="name">Compensation and Benefit Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to"></field>
+            <field name="report_template" ref="send_offer_letter_draft"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email }
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p><strong>Dear Sr. Manager of Compensation and Benefits, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif	
+<p><strong>&nbsp;</strong></p>
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <!-- Rec Manager -->
+
+        <record id="email_template_application_rec_manager"
+                model="mail.template">
+            <field name="name">Recruitment Manager Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to"></field>
+            <field name="report_template" ref="send_offer_letter_draft"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email }
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   			       
+<p><strong>Dear Recruitment Manager, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif
+<p><strong>&nbsp;</strong></p>
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <record id="email_template_application_hr_manager"
+                model="mail.template">
+            <field name="name">HR Manager Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to"></field>
+            <field name="report_template" ref="send_offer_letter_draft"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email }
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p><strong>Dear HR Manager, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <record id="email_template_application_dep_manager"
+                model="mail.template">
+            <field name="name">Department Manager Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${object.department_id.manager_id.work_email | safe}
+            </field>
+            <field name="report_template"
+                   ref="send_offer_letter_draft_department_manager"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p><strong>Dear ${object.department_id.manager_id.name}, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif
+<p><strong>&nbsp;</strong></p>
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_application_unit_head"
+                model="mail.template">
+            <field name="name">Unit Head Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${object.department_id.manager_id.parent_id.work_email | safe}
+            </field>
+            <field name="report_template"
+                   ref="send_offer_letter_draft_department_manager"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p><strong>Dear ${object.department_id.manager_id.parent_id.name}, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif
+<p><strong>&nbsp;</strong></p>
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <record id="email_template_application_ceo_manager"
+                model="mail.template">
+            <field name="name">CEO Template</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to"></field>
+            <field name="report_template" ref="send_offer_letter_draft"/>
+            <field name="report_name">Employment Summary</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="subject">Application Approval
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+ <p><strong>Dear CEO, </strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>${object.user_id.name} has requested your approval for the offer of the candidate ${object.partner_name} 
+of the ${object.job_id.name} position.
+</strong></p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>Kindly review the attached employment summary and access the link below to confirm your decision:</strong></p>
+% if object.get_web_base_url():
+<strong>
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+</strong>
+% endif
+<p><strong>&nbsp;</strong></p>
+<p><strong>Regards,</strong></p>
+<p><strong>Talent Acquisition </strong></p>
+<p><strong>Tamkeen Technologies Company</strong></p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <!-- Send Offer Letter email Template -->
+
+        <!-- Saudi Candidate -->
+        <record id="email_template_send_offer_letter_saudi"
+                model="mail.template">
+            <field name="name">Send Offer Letter (Saudi)</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="reply_to">recruitment@tamkeentech.sa</field>
+            <field name="report_template" ref="print_offer_letter_for_local"/>
+            <field name="report_name">Offer Letter</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="subject">Employment Offer – Tamkeen Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p>Dear <strong>${object.partner_name},</strong></p>
+<p>&nbsp;</p>
+<p>We hope this finds you well.</p>
+<p>&nbsp;</p>
+<p>It is with great pleasure that we are sharing the attached employment offer with you.</p>
+<p>&nbsp;</p>
+<p>Shall you have any inquiries, you may communicate with <strong>${object.user_id.name}
+(${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email})</strong>.</p>
+<p>&nbsp;</p>
+<p>We are looking forward to hearing from you and welcoming you to the Tamkeen family.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Human Resources Department</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <!-- Non-Saudi Candidate -->
+        <record id="email_template_send_offer_letter_non_saudi"
+                model="mail.template">
+            <field name="name">Send Offer Letter (Non-Saudi)</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="reply_to">recruitment@tamkeentech.sa</field>
+            <field name="report_template" ref="print_offer_letter_for_expat"/>
+            <field name="report_name">Offer Letter</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="subject">Employment Offer – Tamkeen Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p>Dear <strong>${object.partner_name},</strong></p>
+<p>&nbsp;</p>
+<p>We hope this finds you well.</p>
+<p>&nbsp;</p>
+<p>It is with great pleasure that we are sharing the attached employment offer with you.</p>
+<p>&nbsp;</p>
+<p>Shall you have any inquiries, you may communicate with <strong>${object.user_id.name}
+(${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email})</strong>.</p>
+<p>&nbsp;</p>
+<p>We are looking forward to hearing from you and welcoming you to the Tamkeen family.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Human Resources Department</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_job_application" model="mail.template">
+            <field name="name">Job Application</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc"></field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Thank you for applying</field>
+            <field name="body_html"><![CDATA[
+   		
+<p>Dear <strong>${object.partner_name}</strong>,</p>
+<p>&nbsp;</p>
+<p>Thank you for your interest in Tamkeen Technologies. We have received your application to the job below:</p>
+<p>Job Title: <strong>${object.job_id and object.job_id.name}</strong></p>
+<p>Department: <strong>${object.department_id and object.department_id.name}</strong></p>
+<p>&nbsp;</p>
+<p>We will review all received applications and select those whose qualifications and experience meet those required for the role. We will carefully consider your application during the initial screening process and you will be receiving an update accordingly.</p>
+<p>&nbsp;</p>
+<p>We wish you all the best.</p>
+<p>&nbsp;</p>
+<p>Regards,<br /> Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>	       
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_cv_screening" model="mail.template">
+            <field name="name">CV Screening</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Job Application Update – Tamkeen
+                Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p>Dear <strong>${object.partner_name}</strong>,</p>
+<p>This email is to update you on the status of your application to the <strong>${object.job_id and object.job_id.name}</strong> role at Tamkeen Technologies.</p>
+<p>&nbsp;</p>
+<p>We are currently reviewing your application. Should you pass initial screening, you will be contacted for the next step in our assessment process.</p>
+<p>&nbsp;</p>
+<p>We wish you all the best.</p>
+<p>&nbsp;</p>
+<p>Regards,<br />Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>     
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_interview_in_progress"
+                model="mail.template">
+            <field name="name">Interview in Progress</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Job Application Update – Tamkeen
+                Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+<p>&nbsp;</p>
+<p>This email is to update you on the status of your application to the <strong>${object.job_id and object.job_id.name}</strong> role at Tamkeen Technologies.</p>
+<p>&nbsp;</p>
+<p>We are glad to inform you that we have reviewed your application and have found your qualifications and experience initially fit for what we are looking for. You will be contacted by a member of our team to arrange an interview with you.</p>
+<p>&nbsp;</p>
+<p>We are looking forward to meeting you.</p>
+<p>&nbsp;</p>
+<p>Regards,<br /> Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>    
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_gia_assessment" model="mail.template">
+            <field name="name">ASSESSMENT</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject"></field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+
+		       
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <record id="email_template_under_ref_check" model="mail.template">
+            <field name="name">UNDER REFERENCE CHECK</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Reference Contacts – Tamkeen Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>
+<p>&nbsp;</p>
+<p>To complete our recruitment process, kindly provide us with the full names, job titles, and contact information of the following people for reference check:</p>
+<ol>
+<li>Your previous or current direct manager.</li>
+<li>A colleague with whom you worked at the same company.</li>
+</ol>
+<p>&nbsp;</p>
+<table border="2" style="width: 100%;">
+<tbody>
+<tr style="height: 51px;">
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="80">
+<p><strong><span style="color: #000000;">Reference</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="124">
+<p><strong><span style="color: #000000;">Specification</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="78">
+<p><strong><span style="color: #000000;">Name</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="72">
+<p><strong><span style="color: #000000;">Job Title</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="84">
+<p><strong><span style="color: #000000;">Company</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="87">
+<p><strong><span style="color: #000000;">Mobile Number</span></strong></p>
+</td>
+<td style="height: 51px; text-align: center;" bgcolor="#D3D3D3" width="77">
+<p><strong><span style="color: #000000;">Email</span></strong></p>
+</td>
+</tr>
+<tr style="height: 61px;">
+<td style="height: 61px; text-align: center;" width="80">
+<p>Manager&nbsp;</p>
+</td>
+<td style="height: 61px; text-align: center;" width="124">
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Previous</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current</p>
+</td>
+<td style="height: 61px; text-align: center;" width="78">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 61px; text-align: center;" width="72">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 61px; text-align: center;" width="84">
+<p>&nbsp;</p>
+</td>
+<td style="height: 61px; text-align: center;" width="87">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 61px; text-align: center;" width="77">
+<p>&nbsp;&nbsp;</p>
+</td>
+</tr>
+<tr style="height: 62px;">
+<td style="height: 62px; text-align: center;" width="80">
+<p>Colleague&nbsp;</p>
+</td>
+<td style="height: 62px; text-align: center;" width="124">
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Previous</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current</p>
+</td>
+<td style="height: 62px; text-align: center;" width="78">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 62px; text-align: center;" width="72">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 62px; text-align: center;" width="84">
+<p>&nbsp;</p>
+</td>
+<td style="height: 62px; text-align: center;" width="87">
+<p>&nbsp;&nbsp;</p>
+</td>
+<td style="height: 62px; text-align: center;" width="77">
+<p>&nbsp;&nbsp;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>Please send your reply to <strong>${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email}</strong>.</p>
+<p>We wish you the utmost success.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_offer_accepted" model="mail.template">
+            <field name="name">JOB OFFER ACCEPTED</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Welcome to Tamkeen Technologies</field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+<p>Thank you for your email and for accepting our job offer. This is great news for Tamkeen.</p>
+<p>&nbsp;</p>
+<p>You will be contacted by our HR Onboarding Team soon regarding your onboarding and the required documents.</p>
+<p>&nbsp;</p>
+<p>We are looking forward to welcoming you to the Tamkeen family.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <!-- Onboarding Email Templates -->
+
+        <record id="email_template_hr_operation" model="mail.template">
+            <field name="name">HR Operations Action Items</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${object.get_email('HR-Operations@tamkeentech.sa') | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <!-- <field name="email_to">${object.employee_id.parent_id.parent_id.work_email}</field> -->
+            <!-- <field name="email_cc">${object.employee_id.work_email},${object.employee_id.parent_id.work_email}</field> -->
+            <field name="subject">New Joiner Action Items – HR Operations
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p>
+Dear Operations Team,
+</p>
+<p>
+We are expecting ${object.partner_name} of the ${object.job_id and object.job_id.name} position to join Tamkeen on ${object.joining_date}.
+This candidate will be working under ${object.department_id.manager_id and object.department_id.manager_id.name} 
+within the ${object.department_id and object.department_id.name} department.
+</p>
+<br>
+<p>&nbsp;</p>
+<p>The items below are for your action:</p>
+<ul>
+<li>Signing the Employment Contract</li>
+<li>Issuing the business cards</li>
+<li>Activating Uber and Careem</li>
+<li>Office access card/fingerprint</li>
+</ul>
+<p>&nbsp;</p>
+<p>You may access the new joiner&rsquo;s profile through the 
+% if object.get_web_base_url():
+<a href="${object.get_web_base_url()}/web#id=${object.id}&view_type=form&model=hr.applicant">Direct Link</a>
+% endif
+<p>&nbsp;</p>
+<p>We appreciate your usual support.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>	       
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_job_offer_accepted " model="mail.template">
+            <field name="name">Job Offer Accepted</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${';'.join(filter(None, [object.department_id.manager_id.work_email,object.department_id.parent_id.manager_id.work_email])) | safe}
+            </field>
+            <field name="reply_to">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Job Offer Accepted</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Manager,
+</p>
+<p>
+Kindly note that <b>${object.partner_name}, ${object.job_id.name}</b> has accepted the job offer.</b>
+</p>
+<p>Regards,</p>
+<b>
+<p>Recruitment Team</p>
+</b>       
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+        <record id="email_template_hr_lear_dev" model="mail.template">
+            <field name="name">HR Learning and Development Action Items</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${object.get_email('HR-LD@tamkeentech.sa') | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <!-- 			<field name="report_template" ref="print_offer_letter_local"/>
+                        <field name="report_name">Offer Letter</field>	 -->
+            <field name="subject">New Joiner Action Items- HR Learning and
+                Development
+            </field>
+            <field name="body_html"><![CDATA[
+   		
+<p>
+Dear L&D Team,
+</p>
+<p>
+We are expecting ${object.partner_name} of the ${object.job_id and object.job_id.name} position to join Tamkeen on ${object.joining_date}.
+This candidate will be working under ${object.department_id.manager_id and object.department_id.manager_id.name} 
+within the ${object.department_id and object.department_id.name} department.
+</p>
+<br>
+The items below are for your action:
+<ul>
+  <li>Sending the joining announcement</li>
+  <li>Conducting the orientation session</li>
+  <li>Introducing the new joiner to his/her colleagues</li>
+  <li>Arranging a meeting with the new joiner’s direct manager after the orientation</li>
+</ul>
+<br>
+</p>
+
+<br />
+<br />
+We appreciate your usual support.
+<br />
+<br />
+Regards,
+<br />
+Recruitment Team
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_admin_facilities" model="mail.template">
+            <field name="name">Administration and Facilities Management Action
+                Items
+            </field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">
+                ${object.get_email('Admin@tamkeentech.sa') | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <!-- 			<field name="report_template" ref="print_offer_letter_local"/>
+                        <field name="report_name">Offer Letter</field>	 -->
+            <field name="subject">New Joiner Action Items- Admin</field>
+            <field name="body_html"><![CDATA[
+   		
+<p>
+Dear Administration Team,
+</p>
+<p>
+We are expecting ${object.partner_name} of the ${object.job_id and object.job_id.name} position to join Tamkeen on ${object.joining_date}. 
+within the ${object.department_id and object.department_id.name} department.
+
+</p>
+<br>
+The items below are for your action:
+<ul>
+  <li>Arranging an office space and work station</li>
+</ul>
+<br>
+</p>
+
+We appreciate your usual support.
+<br />
+<br />
+Regards,
+<br />
+Recruitment Team
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_it_support" model="mail.template">
+            <field name="name">IT Support Action Items</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.get_email('IT@tamkeentech.sa') | safe}
+            </field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <!-- 			<field name="report_template" ref="print_offer_letter_local"/>
+                        <field name="report_name">Offer Letter</field>	 -->
+            <field name="subject">New Joiner Action Items- IT Support</field>
+            <field name="body_html"><![CDATA[
+   		
+<p>
+Dear IT Support,
+</p>
+<p>
+We are expecting ${object.partner_name} of the ${object.job_id and object.job_id.name} position to join Tamkeen on ${object.joining_date}. 
+within the ${object.department_id and object.department_id.name} department.
+
+</p>
+<br>
+The items below are for your action:
+<ul>
+  <li>Laptop and telephone setup</li>
+  <li>Creating an email and adding the new joiner to the employee directory and distribution lists</li>
+</ul>
+<br>
+</p>
+
+We appreciate your usual support.
+<br />
+<br />
+Regards,
+<br />
+Talent Acquisition Teem
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_candidate_rejected_before_int"
+                model="mail.template">
+            <field name="name">REJECTED BEFORE BEING INTERVIEW</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe};
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Your Job Application at Tamkeen
+                Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+<p>&nbsp;</p>
+<p>We would like to thank you for your interest in Tamkeen Technologies and in the <strong>${object.job_id and object.job_id.name}</strong> role.</p>
+<p>&nbsp;</p>
+<p>We have reviewed all applications and selected the applicants whose qualifications and experience best matched the requirements of the role to be interviewed. We regret to inform you that you have not been selected.</p>
+<p>&nbsp;</p>
+<p>We are honored to have applicants such as yourself and would greatly encourage you to apply for other roles that better match your qualifications and experience in the future. We wish you all the best in your job search and in your career.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_candidate_rejected_after_int"
+                model="mail.template">
+            <field name="name">REJECTED AFTER BEING INTERVIEW</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_emai | safel}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Your Job Application at Tamkeen
+                Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+<p>&nbsp;</p>
+<p>We would like to thank you for your interest in Tamkeen Technologies and in the <strong>${object.job_id and object.job_id.name}</strong> role.</p>
+<p>&nbsp;</p>
+<p>We appreciate the time and effort you have put our process and are pleased to have met you. After careful consideration of all interviewed candidates, other candidates whose qualifications and experience were more suitable for the role have been selected.</p>
+<p>&nbsp;</p>
+<p>We are honored to have applicants such as yourself and would greatly encourage you to apply for other roles in the future. We wish you all the best in your job search and in your career.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+        <record id="email_template_future_talent" model="mail.template">
+            <field name="name">FUTURE TALENT PIPELINE</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="email_from">recruitment@tamkeentech.sa</field>
+            <field name="email_to">${object.email_from | safe}</field>
+            <field name="email_cc">
+                ${object.user_id.employee_ids[0] and object.user_id.employee_ids[0].work_email | safe}
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="subject">Your Job Application at Tamkeen
+                Technologies
+            </field>
+            <field name="body_html"><![CDATA[
+
+<p>Dear <strong>${object.partner_name}</strong>,</p>   		
+<p>&nbsp;</p>
+<p>We would like to thank you for your interest in Tamkeen Technologies and in the <strong>${object.job_id and object.job_id.name}</strong> role.</p>
+<p>&nbsp;</p>
+<p>We appreciate the time and effort you have put into our process. After careful consideration of your application, we found that your qualifications and experience did not fit our current needs. However, we are honored to have applicants such as yourself and have added your resume to our talent pipeline to revisit in the future.</p>
+<p>&nbsp;</p>
+<p>We wish you all the best in your job search and in your career.</p>
+<p>&nbsp;</p>
+<p>Regards,</p>
+<p>Recruitment Team</p>
+<p>Tamkeen Technologies Company</p>
+<p>&nbsp;</p>
+<p><img src="http://tamkeentech.sa/sites/all/themes/tamkeen/assets/img/logo-en.png" alt="" width="122" height="67" /></p>
+		    		       ]]>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="reschedule_issuing_date_view" model="ir.ui.view">
+            <field name="name">reschedule.issuing.date.view</field>
+            <field name="model">reschedule.issuing.date</field>
+            <field name="arch" type="xml">
+                <form string="Reschedule Issuing Date">
+                    <group col="2" colspan="2">
+                        <field name="reschedule_due_date" required="1"/>
+                        <field name="loan_issuing_date" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="button_confirm"
+                                string="Confirm"
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default"
+                                special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_open_reschedule_issuing_date">
+            <field name="name">Reschedule Issuing Date</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reschedule.issuing.date</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

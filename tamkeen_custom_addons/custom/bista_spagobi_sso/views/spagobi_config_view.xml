@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <!-- Form view of SpagoBI Web Application Configuration wizard #RMB -->
+        <record id="view_spagobi_config_form" model="ir.ui.view">
+            <field name="name">spagobi.config.form</field>
+            <field name="model">spagobi.config</field>
+            <field name="arch" type="xml">
+                <form string="SpagoBI Web Application Configuration">
+                <!-- <form string="SapgoBI Web Application Configuration"> -->
+                    <sheet>                        
+                        <group>
+                            <field name="url" widget="url" help="Enter SpagoBI Web Application url here"/>
+                            <p style="color:red;">SpagoBI URL field needs to be a sub domain like http://odoo.bistasolutions.com for odoo and http://spagobi.bistasolutions.com for spagobi</p>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="dbname" help="Enter SpagoBI Web Application postgres db name here"/>
+                            </group>
+                            <group>
+                                <field name="host" help="Enter SpagoBI Web Application postgres host name here"/>
+                            </group>
+                            <group>
+                                <field name="port" help="Enter SpagoBI Web Application postgres port here"/>
+                            </group>
+                            <group>
+                                <field name="user" help="Enter SpagoBI Web Application postgres user is here"/>
+                            </group>
+                            <group>
+                                <field name="password" help="Enter SpagoBI Web Application postgres password here" password="True"/>
+                            </group>
+                            <group>
+                                <field name="admin_user" help="Enter SpagoBI Web Application admin user is here"/>
+                            </group>
+                            <group>
+                                <field name="admin_password" help="Enter SpagoBI Web Application admin password here" password="True"/>
+                            </group>
+                            <group>
+                                <field name="auto_spagobi_active"/>
+                            </group>
+                            <group>
+                                <field name="default_password" help="Enter SpagoBI Web Application user default password here" password="True" attrs="{'invisible': [('auto_spagobi_active', '=', False)], 'required': [('auto_spagobi_active', '=', True)]}"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('auto_spagobi_active', '=', False)]}">
+                            <field name="default_role" help="SpagoBI default role will be assign on SpagoBI" attrs="{'required': [('auto_spagobi_active', '=', True)]}"/>
+                            <p style="color:red;">SpagoBI server create testing role and check required details on ext_role table and add on SpagoBI role dashboard</p>
+                        </group>
+                        <footer>
+                            <button name="action_role_syncup" type="object" string="Role Syncup"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>  
+
+        <record id="view_spagobi_config_tree" model="ir.ui.view">
+            <field name="name">spagobi.config.tree</field>
+            <field name="model">spagobi.config</field>
+            <field name="arch" type="xml">
+                <!-- <tree string="SpagoBI Web Application Configuration" create="false" delete="false"> -->
+                <tree string="SpagoBI Web Application Configuration">
+                    <field name="url" widget="url" help="Enter SpagoBI Web Application url here"/>
+                    <field name="dbname" help="Enter SpagoBI Web Application postgres db name here"/>
+                    <field name="host" help="Enter SpagoBI Web Application postgres host name here"/>
+                    <field name="port" help="Enter SpagoBI Web Application postgres port here"/>
+                    <field name="user" help="Enter SpagoBI Web Application postgres user is here"/>
+                    <field name="password" help="Enter SpagoBI Web Application postgres password here" password="True"/>
+                    <field name="admin_user" help="Enter SpagoBI Web Application admin user is here"/>
+                    <field name="admin_password" help="Enter SpagoBI Web Application admin password here" password="True"/>
+                    <field name="default_password" help="Enter SpagoBI Web Application user default password here" password="True"/>
+                    <field name="default_role" help="SpagoBI default role will be assign on SpagoBI"/>
+                </tree>
+            </field>
+        </record> 
+
+    <!-- action for of SpagoBI Web Application Configuration wizard #RMB -->
+
+        <record id="action_spagobi_config" model="ir.actions.act_window">
+            <field name="name">SpagoBI Application Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spagobi.config</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    <!-- Form view of SpagoBI Role wizard #RMB -->
+        <record id="view_spagobi_role_form" model="ir.ui.view">
+            <field name="name">spagobi.role.form</field>
+            <field name="model">spagobi.role</field>
+            <field name="arch" type="xml">
+                <form string="SpagoBI Roles Form" create="false" delete="false">
+                    <group>
+                        <field name="ext_role_id" help="Enter Third Party Web Application EXT Role ID here"/>
+                        <field name="name" help="Enter Third Party Web Application role name here"/>
+                        <field name="role_type_cd" help="Enter Third Party Web Application Role Type CD here"/>
+                    </group>
+                </form>
+            </field>
+        </record>  
+
+        <record id="view_spagobi_role_tree" model="ir.ui.view">
+            <field name="name">spagobi.role.tree</field>
+            <field name="model">spagobi.role</field>
+            <field name="arch" type="xml">
+                <tree string="SpagoBI Roles" create="false" delete="false">
+                    <field name="ext_role_id" help="Enter Third Party Web Application EXT Role ID here"/>
+                    <field name="name" help="Enter Third Party Web Application role name here"/>
+                    <field name="role_type_cd" help="Enter Third Party Web Application Role Type CD here"/>
+                </tree>
+            </field>
+        </record> 
+
+    <!-- action for of SpagoBI Roles wizard #RMB -->
+
+        <record id="action_spagobi_role" model="ir.actions.act_window">
+            <field name="name">SpagoBI Roles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spagobi.role</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    
+        <menuitem id="spagobi_config_menu" name="SpagoBI Application Configuration" parent="base.menu_administration" groups="base.group_no_one" />
+        <menuitem action="action_spagobi_config" id="menu_action_spagobi_config" parent="spagobi_config_menu" sequence="1"/> 
+        <menuitem action="action_spagobi_role" id="menu_action_spagobi_role" parent="spagobi_config_menu" sequence="2"/>   
+
+    </data>
+</openerp>

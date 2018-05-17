@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- end of service for manager approval -->
+    <record id="eos_request_send_to_manager" model="mail.template">
+        <field name="name">End of Service Manager Approval</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.employee_id.eos_manager_id.work_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.eos_manager_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service for VP approval -->
+    <record id="eos_request_send_to_vp" model="mail.template">
+        <field name="name">End of Service VP Approval</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.employee_id.eos_vp_id.work_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.eos_vp_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service for HR Review -->
+    <record id="eos_request_send_to_hr_approval" model="mail.template">
+        <field name="name">End of Service HR Approval</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.end_of_service_policy_id.hr_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service for CEO approval -->
+    <record id="eos_request_send_to_ceo" model="mail.template">
+        <field name="name">End of Service CEO Approval</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.employee_id.eos_ceo_id.work_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.eos_ceo_id.user_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service for Final HR Review -->
+    <record id="eos_request_send_to_final_hr_approval" model="mail.template">
+        <field name="name">End of Service Final HR Approval</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.end_of_service_policy_id.hr_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service for Finance Processing -->
+    <record id="eos_request_send_to_final_finance_processing"
+            model="mail.template">
+        <field name="name">End of Service Final Finance Processing</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.end_of_service_policy_id.finance_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear Finance Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending End of Service request.
+<br/>
+<b>End of Service #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service approved -->
+    <record id="eos_request_approved"
+            model="mail.template">
+        <field name="name">End of Service Approved</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.employee_id.work_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your End of Service request has been approved.
+<br/>
+<b>End of Service #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- end of service return -->
+    <record id="eos_request_return"
+            model="mail.template">
+        <field name="name">End of Service Return</field>
+        <field name="model_id"
+               ref="org_end_of_service.model_org_end_of_service"/>
+        <field name="email_from">${user.email | safe}</field>
+        <field name="email_to">${object.employee_id.work_email | safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">End of Service Request Return</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your End of Service request has been returned back to draft state.
+<br/>
+<b>End of Service #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+
+</odoo>

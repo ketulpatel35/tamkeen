@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Project Milestones View -->
+    <record id="search_view_project_milestones" model="ir.ui.view">
+        <field name="name">search.view.project.milestones.schedule</field>
+        <field name="model">project.milestones.schedule</field>
+        <field name="arch" type="xml">
+            <search string="Search Project Milestone">
+                <field name="name" string="Milestone Name"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="purchase_order_no"/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="milestone_project_id"
+                            context="{'group_by':'project_id'}"/>
+                    <filter string="Vendor"
+                            name="milestone_partner_id"
+                            context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Project Milestones Tree View -->
+    <record id="tree_view_project_milestones" model="ir.ui.view">
+        <field name="name">tree.view.project.milestones.schedule</field>
+        <field name="model">project.milestones.schedule</field>
+        <field name="arch" type="xml">
+            <tree string="Projects Milestone">
+                <field name="code"/>
+                <field name="name" string="Milestone Name"/>
+                <field name="project_id" string="Project"/>
+                <field name="start_date"/>
+                <field name="due_date"/>
+                <field name="estimated_percentage"
+                       string="Progress completion(%)"/>
+                <field name="payment_involved"/>
+                <field name="estimated_value"/>
+                <field name="is_coc_obtained"/>
+                <field name="payment_invoiced"/>
+                <field name="payment_collected"/>
+                <field name="partner_id"/>
+                <field name="purchase_order_no"
+                       string="Vendor Purchase Order#"/>
+                <field name="vendor_contract_value"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Milestone From View -->
+    <record id="form_view_project_milestone" model="ir.ui.view">
+        <field name="name">form.view.project.milestone</field>
+        <field name="model">project.milestones.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Milestone" >
+                <header>
+                    <field name="stage_id" widget="statusbar" clickable="True"/>
+                </header>
+                <sheet string="Milestone">
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="action"
+                                context="{'project_id': project_id}"
+                                name="%(act_project_project_task_milestones)d" icon="fa-tasks">
+                            <field string="Tasks" name="task_count" widget="statinfo" />
+                        </button>
+                        <button class="oe_stat_button" type="action"
+                                context="{'project_id': project_id}"
+                                name="%(action_view_project_risks_from_milestone)d"
+                                icon="fa-exclamation-triangle">
+                            <field string="Risks" name="risks_count"
+                                   widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="action"
+                                name="%(action_view_project_issue_from_milestone)d"
+                                context="{'project_id': project_id}"
+                                icon="fa-exclamation-triangle">
+                            <field string="Issues" name="issue_count"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <!-- <field name="sn_number"/> -->
+                        <field name="name" required='1'
+                               string="Milestone Name"/>
+                    </group>
+                    <group>
+                        <field name="project_id"
+                               options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}" readonly="1" required="1"/>
+                        <field name="start_date"/>
+                        <field name="due_date"/>
+                        <field name="actual_completion_date"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="weightage"/>
+                            <field name="estimated_percentage"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"
+                                   domain="[('supplier', '=', True)]"
+                                   options="{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}"/>
+                            <newline />
+                            <field name="purchase_order_no"/>
+                            <!-- <field name="po_order_line_id"/> -->
+                            <field name="vendor_contract_value"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="payment_involved"/>
+                            <field name="is_coc_obtained"
+                                   attrs="{'required':[('payment_involved','=', 'yes')], 'invisible': [('payment_involved','!=', 'yes')]}"/>
+                            <field name="payment_invoiced"/>
+                            <field name="invoiced_value" attrs="{'required':[('payment_invoiced','=', 'yes')], 'invisible': [('payment_invoiced','!=', 'yes')]}"/>
+                        </group>
+
+                        <group>
+                            <field name="estimated_value" attrs="{'required':[('payment_involved','!=', 'no')], 'invisible': [('payment_involved','!=', 'yes')]}"/>
+                            <field name="coc_justification"
+                                   attrs="{'required':[('is_coc_obtained','=','no')], 'invisible': [('is_coc_obtained','!=', 'no')]}"/>
+                            <field name="payment_collected"/>
+                            <field name="collected_payment"
+                                   attrs="{'required':[('payment_collected','=','yes')], 'invisible': [('payment_collected','!=', 'yes')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_project_milestones" model="ir.actions.act_window">
+        <field name="name">Milestone</field>
+        <field name="res_model">project.milestones.schedule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="search_view_project_milestones"/>
+        <!--<field name="context">{'search_default_milestone_project_id': 1}</field>-->
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the pipeline of
+                your milestones efficiently. You can track progress.
+            </p>
+        </field>
+    </record>
+
+    <!-- action for milestone smart button -->
+    <record id="action_view_project_milestones_from_project"
+            model="ir.actions.act_window">
+        <field name="name">Milestone</field>
+        <field name="res_model">project.milestones.schedule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            'search_default_project_id': [active_id],
+            'default_project_id': active_id,
+            }</field>
+        <field name="search_view_id" ref="search_view_project_milestones"/>
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the pipeline of
+                your milestones efficiently. You can track progress.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Employment Certificate report print wizard form view -->
+    <record id="salary_certificates_report_wizard_form_view"
+            model="ir.ui.view">
+        <field name="name">salary.certificates.report.wizard.from.view</field>
+        <field name="model">salary.certificates.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Employment Certificate Report">
+                <group>
+                    <field name="language" required="1"/>
+                </group>
+                <footer>
+                    <button string="Print"
+                            name="generate_salary_certificates_report"
+                            type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="salary_certificate_qweb_output_view" model="ir.ui.view">
+         <field name="name">Employment Certificate Qweb Output</field>
+         <field name="model">salary.certificates.report.download</field>
+         <field name="arch" type="xml">
+             <form string="Employment Certificate Report">
+                   <separator colspan="4"
+                              string="Kindly, Click on the file to download."/>
+                   <field name="name" invisible="1"/>
+                   <field name="qweb_output" filename='name' readonly='1'/>
+                   <footer>
+                       <button string="Cancel" class="oe_link" special="cancel"/>
+                   </footer>
+             </form>
+         </field>
+       </record>
+
+    <!-- Action -->
+    <act_window id="action_salary_certificates_report_wizard"
+                multi="False"
+                key2="client_action_multi" name="Print Employment Certificate"
+                res_model="salary.certificates.report.wizard"
+                src_model="emp.salary.certificates"
+                view_mode="form" target="new" view_type="form"
+                groups="hr_salary_certificates.emp_salary_certificates_normal_user"/>
+
+</odoo>

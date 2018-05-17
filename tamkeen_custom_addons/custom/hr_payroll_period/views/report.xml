@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<odoo>
+<data noupdate="1">
+
+
+    <report id="hr_payroll_bank_transfer_report_id"
+            string="HR Payroll Bank Transfer Report"
+            model="hr.payroll.register"
+            report_type="qweb-pdf"
+            file="hr_payroll_period.report_hr_payroll_bank_transfer"
+            name="hr_payroll_period.report_hr_payroll_bank_transfer"/>
+
+    <record id="hr_payroll_bank_transfer_paper_format"
+            model="report.paperformat">
+<field name="name">Payroll Bank Paper Format</field>
+<field name="default" eval="True"/>
+<field name="format">A4</field>
+<field name="page_height">0</field>
+<field name="page_width">0</field>
+<field name="orientation">Landscape</field>
+<field name="margin_top">55</field>
+<field name="margin_bottom">20</field>
+<field name="margin_left">3</field>
+<field name="margin_right">3</field>
+<field name="header_line" eval="False"/>
+<field name="header_spacing">50</field>
+<field name="dpi">90</field>
+<field name="report_ids"
+       eval="[(4, ref(
+       'hr_payroll_period.hr_payroll_bank_transfer_report_id'))]"/>
+</record>
+
+</data>
+</odoo>
+

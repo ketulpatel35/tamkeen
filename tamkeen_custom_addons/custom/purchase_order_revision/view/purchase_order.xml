@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"></field>
+            <field name="arch" type="xml">
+                <button name="button_cancel" position="after" >
+                    <button name="new_revision" string="New revision"
+                            type="object"
+                            attrs="{'invisible': [('state', 'not in', ('purchase'))]}" groups="purchase_order_revision.group_purchase_revision"/>
+                </button>
+                <!--<button name="button_cancel" position="attributes" >-->
+                    <!--<attribute name="invisible">1</attribute>-->
+                <!--</button>-->
+                <notebook position="inside">
+                    <page string="Revisions">
+                        <group invisible="1">
+                            <field name="old_revision_number" invisible="1"/>
+                            <field name="is_revision" invisible="1"/>
+                        </group>
+                        <field name="old_revision_ids"></field>
+                        <group attrs="{'invisible': [('active', '=', True)]}">
+                            <field name="current_revision_id"></field>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </page>
+                </notebook>
+
+                <xpath expr="//field[@name='origin']"
+                       position="attributes">
+                    <attribute name="attrs">{'readonly':[('is_revision', '!=', False)]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_order_form_Revision_update" model="ir.ui.view">
+            <field name="name">purchase.order.form.revision.update</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id"
+                   ref="purchase_customization.purchase_order_form_inherit_add_readonly"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state','not in', ('draft','sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="partner_ref" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state','in', ('purchase')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="rfp_ref_num" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state','not in', ('draft','sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="quotation_ref" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state','not in', ('draft','sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="requisition_id" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state', 'not in', ('draft','sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="currency_id" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state', 'not in', ('draft', 'sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+                <field name="date_order" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('state', 'not in', ('draft', 'sent')), ('is_revision', '!=', False)]}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view"
+                id="purchase_order_search_inherit_revision_update">
+            <field name="name">purchase.order.list.select.revision.update</field>
+            <field name="model">purchase.order</field>
+            <field name="groups_id" eval="[(6, 0, [ref('purchase_config.group_budget_approval_po')])]"/>
+            <field name="inherit_id"
+                   ref="purchase_customization.purchase_order_search_inherit_2" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']" position="replace">
+                    <field name="order_line" attrs="{'readonly': [('state','not in',('draft'))]}">
+                        <tree string="Purchase Order Lines" editable="bottom">
+                            <field name="state" invisible="1"/>
+                            <field name="is_revision" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id"
+                                   attrs="{'readonly': ['|',('state', 'in', ('purchase', 'to approve','done', 'cancel')), ('is_revision', '!=', True)]}"
+                                   context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}"/>
+                            <field name="name"
+                                   attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="date_planned"
+                                   attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="account_analytic_id"
+                                   context="{'default_partner_id':parent.partner_id}"
+                                   groups="purchase.group_analytic_accounting"/>
+                            <field name="analytic_tag_ids"
+                                   groups="purchase.group_analytic_accounting"
+                                   widget="many2many_tags" attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="product_qty"
+                                   attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="qty_received"
+                                   invisible="not context.get('show_purchase', False)"/>
+                            <field name="qty_invoiced"
+                                   invisible="not context.get('show_purchase', False)"/>
+                            <field name="product_uom"
+                                   groups="product.group_uom"
+                                   attrs="{'readonly': ['|', ('state', 'in', ('purchase', 'done', 'cancel')), ('is_revision', '!=', True)]}"/>
+                            <field name="price_unit"/>
+                            <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" attrs="{'readonly': [('is_revision', '!=', True)]}"/>
+                            <field name="price_subtotal" widget="monetary" readonly="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

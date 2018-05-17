@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Sequences for expense -->
+        <record id="seq_expense_management" model="ir.sequence">
+            <field name="name">Expense Management</field>
+            <field name="code">hr.expense.sheet</field>
+            <field name="prefix">EXP</field>
+            <field name="padding">6</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,188 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="objective_types_tree">
+            <field name="name">objective.types.list</field>
+            <field name="model">objective.types</field>
+            <field name="arch" type="xml">
+                <tree string="Objective Types">
+                    <field name="objective_type_id" invisible="1"/>
+                    <field name="objective_name"/>
+                    <field name="kpi_measurement"/>
+                    <!--<field name="department_id"-->
+                    <!--options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                    <field name="weightage"/>
+                    <field name="expected_level"
+                           options="{'no_quick_create':True,'no_create_edit':True}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="objective_types_form">
+            <field name="name">objective.types.form</field>
+            <field name="model">objective.types</field>
+            <field name="arch" type="xml">
+                <form string="Objective types">
+                    <sheet>
+                        <group string="Objective Types">
+                            <group>
+                                <field name="objective_type_id" invisible="1"/>
+                                <field name="objective_name"/>
+                                <field name="kpi_measurement" height="10px"/>
+                                <field name="obj_description"/>
+                            </group>
+                            <group>
+                                <!--<field name="department_id"-->
+                                <!--options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                                <field name="weightage"/>
+                                <field name="expected_level"
+                                       domain="[('type','=','objective')]"
+                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="objective_types_action">
+            <field name="name">Objective types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">objective.types</field>
+            <field name="view_id" ref="objective_types_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the Objective Types. This will be used \
+                    in the Objective Form to select from the Objective Types that are being created \
+                    by The Manager or HR or CEO.
+                </p>
+            </field>
+        </record>
+
+
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="objective_tree">
+            <field name="name">objective.list</field>
+            <field name="model">objective.record</field>
+            <field name="arch" type="xml">
+                <tree string="Objectives">
+                    <field name="objective_id" invisible="1"/>
+                    <field name="temp_objective"/>
+                    <field name="objectives"/>
+                    <field name="kpi_measurement"/>
+                    <!--<field name="department_id" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                    <field name="weightage"/>
+                    <field name="achievement_date"/>
+                    <field name="self_rating"
+                           options="{'no_quick_create':True,'no_create_edit':True}" invisible="1"/>
+                    <field name="manager_rating" options="{'no_quick_create':True,'no_create_edit':True}"
+                           groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager" invisible="1"/>
+                    <field name="emp_evidence"/>
+                    <field name="check_emp_comment"/>
+                    <field name="emp_comments" height="10px" attrs="{'invisible':[('check_emp_comment', '=', False)]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="objective_form">
+            <field name="name">objective.form</field>
+            <field name="model">objective.record</field>
+            <field name="arch" type="xml">
+                <form string="Objectives">
+                    <sheet>
+                        <group string="Objectives">
+                            <field name="temp_objective"/>
+                            <field name="objective_id" invisible="1"/>
+                            <field name="objectives"/>
+                            <!--<field name="department_id" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                            <field name="kpi_measurement" height="10px"/>
+                            <field name="weightage"/>
+                            <field name="expected_level" readonly="1"/>
+                            <field name="achievement_date"/>
+                            <field name="emp_evidence"/>
+                        </group>
+                        <group string="Ratings">
+                            <group>
+                                <field name="self_rating"
+                                       domain="[('type','=','rating')]"
+                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <!--<field name="obj_self_rating"/>-->
+                                <!--<field name="emp_mid_year_date"  options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                                <!--<field name="emp_end_year_date" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                            </group>
+                            <group
+                                    groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager">
+                                <field name="manager_rating"
+                                       domain="[('type','=','rating')]"
+                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <!--<field name="obj_manager_rating"/>-->
+                                <!--<field name="manager_mid_year_date" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                                <!--<field name="manager_end_year_date" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                            </group>
+                        </group>
+                        <group string="Comments">
+                            <group>
+                                <field name="check_emp_comment"/>
+                                <field name="emp_comments" height="10px" attrs="{'invisible':[('check_emp_comment', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="check_manager_comment" groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager"/>
+                                <field name="manager_comments" height="10px"
+                                       attrs="{'invisible':[('check_manager_comment', '=', False)]}"
+                                       groups="hr.group_hr_manager,hr_employee_customization.group_employee_manager"
+                                />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="objectives_action">
+            <field name="name">Objectives</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">objective.record</field>
+            <field name="view_id" ref="objective_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- KPI Action -->
+        <record model="ir.actions.act_window" id="kpi_action">
+            <field name="name">KPI Measurement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kpi.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- actions -->
+        <!--<menuitem name="Objectives" id="objectives" parent="hr_appraisal_evaluation_report"-->
+                  <!--action="objectives_action"-->
+                  <!--groups="hr.group_hr_manager,hr_admin.group_hr_admin"/>-->
+
+        <!-- Objective Tree View for employee see manager objective -->
+        <record model="ir.ui.view" id="manager_objective_tree">
+            <field name="name">manager.objective.list</field>
+            <field name="model">objective.record</field>
+            <field name="arch" type="xml">
+                <tree string="Manager Objectives" create="false" edit="false">
+                    <field name="objective_id" invisible="1"/>
+                    <field name="temp_objective"/>
+                    <field name="kpi_description"/>
+                    <!--<field name="department_id" options="{'no_quick_create':True,'no_create_edit':True}"/>-->
+                    <field name="weightage"/>
+                    <field name="expected_level" readonly="1"/>
+                    <field name="self_rating" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                    <field name="manager_rating"  options="{'no_quick_create':True,'no_create_edit':True}"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- HR Employee Group Tree View-->
+    <record id="hr_employee_group_tree_view" model="ir.ui.view">
+        <field name="name">hr.employee.group.tree.view</field>
+        <field name="model">hr.employee.group</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Group">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="short_name"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="parent_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- HR Employee Group Search view -->
+    <record id="hr_employee_group_search_view" model="ir.ui.view">
+        <field name="name">hr.employee.group.search.view</field>
+        <field name="model">hr.employee.group</field>
+        <field name="arch" type="xml">
+            <search string="Employee Group">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="short_name"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="parent_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- HR Employee Group Form View-->
+    <record id="hr_employee_group_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.group.form.view</field>
+        <field name="model">hr.employee.group</field>
+        <field name="arch" type="xml">
+            <form string="Employee Group">
+                <sheet string="Employee Group">
+                    <group colspan="4" col="4">
+                        <field name="name" required="1"/>
+                        <field name="short_name" required="1"/>
+                        <field name="code"/>
+                        <field name="parent_id"/>
+                        <field name="valid_from" required="1"/>
+                        <field name="valid_to" required="1"/>
+                        <field name="company_id"
+                               groups="base.group_multi_company"
+                               readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- hr.position Action -->
+    <record id="action_hr_employee_group_template"
+            model="ir.actions.act_window">
+        <field name="name">Employee Group</field>
+        <field name="res_model">hr.employee.group</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

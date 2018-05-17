@@ -1,0 +1,45 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+    <!--<data>-->
+        <!--<record id="department_form_view" model="ir.ui.view">-->
+            <!--<field name="name">department.form</field>-->
+            <!--<field name="model">bs.department</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<sheet>-->
+                      <!--<group col="4" colspan="2">-->
+                          <!--<field name="code"/>-->
+                          <!--<field name="name"/>-->
+                          <!--<field name="division_id"/>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<field name="note"/>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="department_tree_view" model="ir.ui.view">-->
+            <!--<field name="name">bs.department.tree</field>-->
+            <!--<field name="model">bs.department</field>-->
+            <!--<field name="arch" type="xml">-->
+              <!--<tree>-->
+                  <!--<field name="code"/>-->
+                  <!--<field name="name"/>-->
+                   <!--<field name="division_id"/>-->
+              <!--</tree>-->
+          <!--</field>-->
+        <!--</record>-->
+        <!--<record id="action_department" model="ir.actions.act_window">-->
+            <!--<field name="name">Department</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">bs.department</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="view_id" ref="department_tree_view"/>-->
+        <!--</record>-->
+
+        <!--<menuitem id="menu_department" action="action_department" name="Department" parent="account.menu_finance_configuration"/>-->
+    <!--</data>-->
+<!--</odoo>-->

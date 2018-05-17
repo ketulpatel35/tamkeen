@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Project documents View -->
+    <record id="search_view_project_documents" model="ir.ui.view">
+        <field name="name">search.view.project.documents</field>
+        <field name="model">project.documents</field>
+        <field name="arch" type="xml">
+            <search string="Search Project Documents">
+                <field name="name" string="Document Name"/>
+                <field name="date_upload"/>
+                <field name="uploaded_by" string="Uploaded By"/>
+                <!--<field name="" string="Status"/>-->
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="project"
+                            context="{'group_by':'project_id'}"/>
+                    <filter string="Uploaded by" name="uploaded_by"
+                            context="{'group_by':'uploaded_by'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Project documents Tree View -->
+    <record id="tree_view_project_documents" model="ir.ui.view">
+        <field name="name">tree.view.project.documents</field>
+        <field name="model">project.documents</field>
+        <field name="arch" type="xml">
+            <tree string="Project Documents">
+                <field name="name" string="Document Name"/>
+                <field name="date_upload"/>
+                <field name="uploaded_by"/>
+                <field name="file_content"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Project documents From View -->
+    <record id="form_view_project_documents" model="ir.ui.view">
+        <field name="name">form.view.project.documents</field>
+        <field name="model">project.documents</field>
+        <field name="arch" type="xml">
+            <form string="Project Documents" class="o_form_project_tasks">
+                <header>
+                    <field name="stage_id" widget="statusbar"
+                           clickable="True"/>
+                </header>
+                <sheet string="Documents">
+                    <div class="oe_title">
+                        <h1>
+                                <field name="name"
+                                       required="1"
+                                       placeholder="Document Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="1"
+                                   required="1"/>
+                            <field name="date_upload" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="file_name" invisible="1"/>
+                            <field name="document_type" required="1"
+                                   string="Document Type"/>
+                            <field name="file_content" filename='file_name'
+                                   attrs="{'invisible': [('document_type','!=','file')], 'required':[('document_type','=','file')]}"/>
+                            <field name="url"
+                                   attrs="{'invisible': [('document_type','!=','url')], 'required':[('document_type','=','url')]}" widget="url"/>
+                            <field name="uploaded_by" invisible="1"/>
+                        </group>
+                        <field name="remarks"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Project Documents -->
+    <record id="action_view_project_documents" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">project.documents</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="search_view_project_documents"/>
+        <field name="context">{
+            'search_default_project': 1,
+            }</field>
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the Documents.
+            </p>
+        </field>
+    </record>
+
+    <!--action for project form view document smart button-->
+     <record id="action_view_project_document_form_view"
+            model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">project.documents</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            'default_project_id': active_id,
+            }</field>
+        <field name="domain">[('project_id','=',[active_id])]</field>
+        <field name="help" type="html">
+            <p>
+                Project management allows you to manage the pipeline of
+                your documents efficiently. You can track progress.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

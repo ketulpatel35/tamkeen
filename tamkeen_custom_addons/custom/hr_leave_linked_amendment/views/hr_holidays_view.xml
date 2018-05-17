@@ -1,0 +1,40 @@
+<odoo>
+    <record id="edit_holiday_new_inherit_for_linked_with_payroll" model="ir.ui.view">
+        <field name="name">edit.holiday.new.inherit.for.linked.with.payroll</field>
+        <field name="model">hr.holidays</field>
+        <field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']//field[@name='display_name']"
+                   position="before">
+                <field name='linked_with_payroll' invisible="1"/>
+            </xpath>
+            <xpath expr="//form//sheet/div[@name='submit_message']"
+                   position="before">
+                <div class="oe_button_box" name="button_box"
+                     attrs="{'invisible': ['|', '|', ('state', '!=', 'validate'), ('linked_with_payroll', '!=', True), ('type', '=', 'add')]}"
+                     groups="hr_holidays.group_hr_holidays_user">
+                    <button type="action"
+                            name="%(action_leave_linked_amendment_wizard)d"
+                            icon="fa-calendar" class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">
+                                Create Amendment/s
+                            </span>
+                        </div>
+                    </button>
+                    <button type="object"
+                            name="action_payslip_amendment_request"
+                            icon="fa-calendar" class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <field name="amendment_request_count"
+                                   class="o_stat_value"/>
+                            <span class="o_stat_text">
+                                Amendment/s
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

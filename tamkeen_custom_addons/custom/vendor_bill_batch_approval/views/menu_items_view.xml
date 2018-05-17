@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- ESS -->
+        <menuitem name="Vendor Bill Batch Approval"
+                  id="vendor_bill_batch_approval_menu"
+                  parent="account.menu_finance_payables"
+                  action="bill_batch_approval_action"
+                  sequence="9"/>
+
+    </data>
+</odoo>

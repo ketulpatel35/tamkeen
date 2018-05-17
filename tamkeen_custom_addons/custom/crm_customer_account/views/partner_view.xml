@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        
+
+        <!-- Search View -->
+
+        <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                <filter name="type_company" position="after">
+                   <filter string="Prospects" name="type_prospect" domain="[('prospect','=',1)]"/>
+                </filter>
+            </field>
+        </record>
+    </data>
+</odoo>

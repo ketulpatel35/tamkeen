@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- overtime pre request -->
+        <record id="overtime_sequence_id_view" model="ir.sequence">
+            <field name="name">Overtime Pre Request</field>
+            <field name="code">pre.overtime</field>
+            <field name="prefix">PREOVR</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- overtime claim request -->
+        <record id="overtime_claim_request_view" model="ir.sequence">
+            <field name="name">Overtime Claim Request</field>
+            <field name="code">claim.overtime</field>
+            <field name="prefix">OV</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

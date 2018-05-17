@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="SpagoBI_App_Template">
+    	<div>          
+			<iframe id="spagobi_app_id"></iframe>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,6 @@
+<odoo>
+    <record id="hr_holidays_extension.email_template_holidays_update_mgt" model="mail.template">
+        <field name="email_cc">${object.alternative_emp_id.work_email,object.external_manager_user_id.login |
+            safe}</field>
+    </record>
+</odoo>

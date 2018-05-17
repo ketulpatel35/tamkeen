@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Analytic Account for ORG Structure -->
+    <record id="view_account_analytic_inherit_for_org_structure"
+            model="ir.ui.view">
+        <field name="name">view.account.analytic.inherit.for.org.structure</field>
+        <field name="model">account.analytic.account</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="analytic.view_account_analytic_account_form"/>
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main']" position="after">
+                <group colspan="4" col="4">
+                    <field name="holder_position_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                    <field name="analytic_account_owner_id" readonly="1" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                    <field name="valid_from" required="1"/>
+                    <field name="valid_to" required="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="before">
+                <field name="type" required="1"/>
+            </xpath>
+            <field name="tag_ids" position="after">
+                <field name="parent_id" string="Parent Analytic Account"
+                       domain="[('type', '=', 'add')]"/>
+            </field>
+            <xpath expr="//group[@name='main']" position="inside">
+                <group string="Sub Analytic Account" col="2" colspan="2">
+                    <field name="child_ids" nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

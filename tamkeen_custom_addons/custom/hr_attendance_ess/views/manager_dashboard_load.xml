@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- HR Dashboard Assests. We are making changes on assets backend -->
+        <template id="attendance_change_req_dashbord_assets_backend"
+                  name="Hr assets"
+                  inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/hr_attendance_ess/static/src/js/hr_dashboard.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

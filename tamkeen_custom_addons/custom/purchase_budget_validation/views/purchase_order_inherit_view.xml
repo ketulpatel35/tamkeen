@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="purchase_order_form_view_inherit_budget"
+                model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_order_report.purchase_order_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group[1]"
+                       position="after">
+                    <group>
+                        <group>
+                            <field name="allowed_budget" groups="purchase_config.group_budget_approval_po"/>
+                            <field name="commited_budget" groups="purchase_config.group_budget_approval_po"/>
+                            <field name="remaining_budget" groups="purchase_config.group_budget_approval_po"/>
+                        </group>
+                        <group>
+                            <button type="object" name="budget_po_action"
+                                    class="oe_link"
+                                    string="View Budget"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

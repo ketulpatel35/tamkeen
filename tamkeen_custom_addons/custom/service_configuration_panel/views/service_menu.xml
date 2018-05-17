@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <!-- <menuitem name="Services Management" id="services_mgmnt_menu" sequence="17" groups="group_service_hr_approval,group_service_administration_approval,group_service_config,group_service_all_requests,group_service_oe_approval,group_service_ta_approval,group_service_finance_approval,group_service_prcrmnt_approval,group_service_audit_all_requests,group_service_ss_vp_approval"/> -->
+
+        <menuitem name="Service Panel" id="services_config_panel_menu"
+                  sequence="17"
+                  web_icon="service_configuration_panel,static/description/icon.png"
+                  groups="group_service_config_panel"/>
+        <!--  -->
+        <!--<menuitem id="service_config_panel_child"-->
+                  <!--name="Service Panel"-->
+                  <!--parent="services_config_panel_menu" sequence="1" />-->
+
+        <!--  -->
+        <menuitem id="services_config_panel_child" name="Configuration"
+                  parent="services_config_panel_menu" sequence="2"/>
+
+        <menuitem name="Service Configuration Panel" id="menu_service_panel"
+                  action="act_open_service_configuration_panels_view" parent="services_config_panel_child" sequence="21" />
+
+        <menuitem name="Service Stages" id="menu_services_panel_stages"
+                  action="act_open_service_panel_displayed_states_view" parent="services_config_panel_child" sequence="23"/>
+
+    </data>
+</openerp>

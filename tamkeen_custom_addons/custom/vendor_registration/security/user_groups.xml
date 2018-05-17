@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- vendor management -->
+        <record model="ir.module.category" id="grp_vendor_registration">
+            <field name="name">Vendor Management</field>
+            <field name="sequence">17</field>
+        </record>
+
+        <!-- normal user vendor -->
+        <record id="group_vendor_management_normal_user" model="res.groups">
+            <field name="name">Normal User</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('base.group_user')])]" />
+        </record>
+
+        <!-- View All -->
+        <record id="group_vendor_management_view_all" model="res.groups">
+            <field name="name">View all</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- can review vendor -->
+        <record id="group_vendor_management_can_review" model="res.groups">
+            <field name="name">Can Review</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- can evaluated vendor -->
+        <record id="group_vendor_management_can_evaluated" model="res.groups">
+            <field name="name">Can Evaluated</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- can register vendor -->
+        <record id="group_vendor_management_can_register" model="res.groups">
+            <field name="name">Can Register Vendor</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- can create / update Vendor -->
+        <record id="group_manage_vendor" model="res.groups">
+            <field name="name">Can create/update Vendor</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_can_register'))]"/>
+        </record>
+
+        <!-- can cancel -->
+        <record id="group_vendor_cancel" model="res.groups">
+            <field name="name">Can Cancel</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- can create / update Vendor -->
+        <record id="group_vendor_return_to_draft" model="res.groups">
+            <field name="name">Can Return</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+        <!-- Vendor management configuration -->
+        <record id="group_manage_vendor_conf" model="res.groups">
+            <field name="name">Configuration</field>
+            <field name="category_id" ref="grp_vendor_registration"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('vendor_registration.group_vendor_management_normal_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

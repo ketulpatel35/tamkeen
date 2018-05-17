@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payslip_report_inherited"
+              inherit_id="hr_payroll.report_payslip">
+        <xpath expr="//t[@t-call='report.html_container']" position="replace">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="org_payslip_monthly_report_ess.payslip_report_header_footer_new">
+                        <div class="page">
+                            <style>
+                                #employee th {
+                                background-color: #999999;
+                                color: #990000;
+                                }
+                                #employee td{
+                                font-weight: bold;
+                                }
+                                .salary_tab{
+                                background-color: #B7B7B7;
+                                color: #990000;
+                                }
+                                .total_amount {
+                                background-color:#B6D7A8;
+                                }
+                                .total_deduction{
+                                background-color:#E06666;
+                                color: #050000;
+                                }
+                                .final_total{
+                                background-color:#B6D7A8;
+                                color: #050000;
+                                }
+                            </style>
+                            <div class="oe_structure"/>
+                            <div class="row">
+
+                                <!-- Employee Info -->
+                                <table class="table table-bordered"  id="employee"
+                                       width="100%" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <tbody>
+                                        <tr>
+                                            <th height="10%"  style="width:60%"
+                                                colspan="2"
+                                                class="text-center">
+                                                <b><font color="#990000">Employee
+                                                    Information</font></b>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <b>Name</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <span t-esc="o.employee_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <b>Join Date</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <span t-esc="o.employee_id.initial_employment_date"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <b>Position</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <!--need to migrate hr_employee_seniority modules-->
+                                                <span
+                                                        t-esc="o.employee_id.job_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <b>Department</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <span t-esc="o.employee_id.department_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <b>Nationality</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left">
+                                                <span t-esc="o.employee_id.country_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <t
+                                                    t-if="o.employee_id.current_country_code != 'SA'">
+                                                <td height="10%"
+                                                    class="text-left">
+                                                    <b>Iqama Number</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-left">
+                                                    <span
+                                                            t-esc="o.employee_id.iqama_number"/>
+                                                </td>
+                                            </t>
+
+                                            <t
+                                                    t-if="o.employee_id.current_country_code == 'SA'">
+                                                <td height="10%"
+                                                    class="text-left">
+                                                    <b>Identification Number</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-left">
+                                                    <span
+                                                            t-esc="o.employee_id.identification_number"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Salary Detail -->
+                                <br/>
+                                <t t-set="first" t-value="0.0"/>
+                                <t t-set="second" t-value="0.0"/>
+                                <t t-set="third" t-value="0.0"/>
+                                <t t-set="final_total" t-value="0"/>
+                                <table class="table table-bordered"
+                                       id="employee"
+                                       width="100%" height="100%">
+                                    <thead>
+                                        <tr>
+                                            <th height="10%" colspan="2"
+                                                class="text-center">
+                                                <b><font color="#990000">Salary Details</font></b>
+                                            </th>
+                                        </tr>
+                                        <tr class="salary_tab">
+                                            <td height="10%" style="width:60%"
+                                                class="text-center">
+                                                <b>Salary Structure</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Amount</b>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="line">
+                                            <t
+                                                    t-if="line.category_id.code in ['ALW', 'BASIC']">
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t t-esc="line.name"/>
+                                                    </td>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t t-esc="line.amount"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <t t-if="len(o.line_ids) &gt; 1">
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-left total_amount">
+                                                    <b>Total</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-left total_amount">
+                                                    <t t-set="first_one"
+                                                       t-value="sum(l.total for l in o.line_ids.filtered(lambda x: x.category_id.code in ['ALW', 'BASIC']))"
+                                                    />
+                                                    <t t-set="first"
+                                                       t-value="first_one +first"/>
+                                                    <span t-esc="first_one" />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <!-- Changing Salary Detail -->
+                                <table class="table table-bordered"
+                                       id="employee"
+                                       width="200px" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <thead>
+                                        <tr>
+                                            <th height="10%" colspan="2"
+                                                class="text-center">
+                                                <b><font
+                                                        color="#990000">Changing
+                                                    Salary Details</font></b>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th height="10%" colspan="2"
+                                                class="text-center">
+                                                <b><font
+                                                        color="#990000">Benefits
+                                                </font></b>
+                                            </th>
+                                        </tr>
+                                        <tr class="salary_tab">
+                                            <td height="10%"
+                                                class="text-center"  style="width:60%" >
+                                                <b>Salary Structure</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Amount</b>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                                t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="rule_rec">
+                                            <t
+                                                    t-if="rule_rec.category_id.code in ['GEN']">
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t t-esc="rule_rec.name"/>
+                                                    </td>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t
+                                                                t-esc="rule_rec.amount"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tr>
+                                        <t t-if="len(o.line_ids) &gt; 1">
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-left total_amount">
+                                                    <b>Total Benefits</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-left total_amount">
+                                                    <t t-set="second_second"
+                                                       t-value="sum(l.total for l in o.line_ids.filtered(lambda x: x.category_id.code in ['GEN'])) " />
+                                                    <t t-set="second"
+                                                       t-value="second_second +second"/>
+                                                    <span t-esc="second_second" />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <!-- Deduction Detail -->
+                                <table class="table table-bordered"
+                                       id="employee"
+                                       width="200px" height="100%"
+                                       style="border: 1px solid #000000;font-size:13px">
+                                    <thead>
+                                        <tr>
+                                            <th height="10%" colspan="2"
+                                                class="text-center">
+                                                <b><font
+                                                        color="#990000">Deductions</font></b>
+                                            </th>
+                                        </tr>
+                                        <tr class="salary_tab">
+                                            <td height="10%"
+                                                class="text-center"  style="width:60%" >
+                                                <b>Salary Structure</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-center">
+                                                <b>Amount</b>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)"
+                                            t-as="rule_rec">
+                                            <t
+                                                    t-if="rule_rec.category_id.code in ['DED']">
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t t-esc="rule_rec.name"/>
+                                                    </td>
+                                                    <td height="10%"
+                                                        class="text-left">
+                                                        <t
+                                                                t-esc="rule_rec.amount"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tr>
+                                        <t
+                                                t-if="len(o.line_ids) &gt; 1">
+                                            <tr class="salary_tab">
+                                                <td height="10%"
+                                                    class="text-left total_deduction">
+                                                    <b>Total Deduction</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-left total_deduction">
+                                                    <t t-set="third_third"
+                                                       t-value="sum(l.total for l in o.line_ids.filtered(lambda x: x.category_id.code in ['DED'])) " />
+                                                    <t t-set="third"
+                                                       t-value="third_third +third"/>
+                                                    <span t-esc="third_third" />
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="salary_tab">
+                                            <td height="10%"
+                                                class="text-left final_total">
+                                                <b>Final Total</b>
+                                            </td>
+                                            <td height="10%"
+                                                class="text-left final_total">
+                                                <b>
+                                                    <t t-set="final_total"
+                                                       t-value="first + second - third"/>
+                                                    <span t-esc="final_total" /></b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <t t-if="o.employee_id.company_id.payslip_certificate_signature">
+                                <div class="simple_text"><img width="220px" style="padding-left:70px;" height="200px" class="img-responsive" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.payslip_certificate_signature"/>
+
+                                    <!--<img class="img-responsive"-->
+                                    <!--src="/hr_salary_certificates/static/description/icon.png" width="200px" height="75px"/>-->
+                                </div>
+                            </t>
+                            <div>
+                                <b class="signature">
+                                    Signature of Authorised Official: <t t-if="o.employee_id">
+                                    <span class="simple_text"
+                                          t-esc="o.employee_id.company_id.authorised_employee_id.name"/>
+                                </t>
+                                </b>
+                                <br/>
+                                <b class="signature">
+                                    <div class="simple_text"
+                                         style="float:left;">
+                                        Position Held:
+                                        <t t-if="o.employee_id">
+                                            <span class="simple_text" t-esc="o.employee_id.company_id.authorised_employee_id.job_id.name"/>
+                                        </t>
+                                        <br/>
+                                        <b style="padding-bottom:150px;">Date:
+                                            <t t-esc="o.get_current_date()"/>
+                                        </b>
+                                    </div>
+                                    <div class="text-right"
+                                         style="float:center;">
+                                        <t t-if="o.employee_id.company_id.payslip_certificate_stamp">
+                                            <img width="220px" height="200px" style="padding-top: 28px;" class="img-responsive" t-att-src="'data:image/png;base64,%s' %o.employee_id.company_id.payslip_certificate_stamp"/>
+                                        </t>
+                                    </div>
+                                </b>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>
+

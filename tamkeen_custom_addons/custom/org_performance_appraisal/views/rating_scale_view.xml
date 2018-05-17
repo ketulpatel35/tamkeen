@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- rating scale Form View -->
+    <record id="rating_scale_form_views" model="ir.ui.view">
+        <field name="name">rating.scale.form.view</field>
+        <field name="model">rating.scale</field>
+        <field name="arch" type="xml">
+            <form string="Rating Scale" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="sequence"/>
+                            <field name="points"/>
+                        </group>
+                        <group>
+                            <field name="code" required="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- rating scale Tree View -->
+    <record id="rating_scale_tree_view" model="ir.ui.view">
+        <field name="name">rating.scale.tree.view</field>
+        <field name="model">rating.scale</field>
+        <field name="arch" type="xml">
+            <tree string="Rating Scale" delete="false">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="points"/>
+                <field name="active"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- rating scale Action -->
+    <record id="rating_scale_action_view"
+            model="ir.actions.act_window">
+        <field name="name">Rating Scale</field>
+        <field name="res_model">rating.scale</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'readonly_by_pass': True}</field>
+    </record>
+
+</odoo>

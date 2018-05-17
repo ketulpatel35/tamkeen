@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form view pdf.template.generator-->
+        <record id="view_form_pdf_generator" model="ir.ui.view">
+            <field name="name">pdf.template.generator</field>
+            <field name="model">pdf.template.generator</field>
+            <field name="arch" type="xml">
+                <form string="Pdf Generator">
+                    <sheet>
+                         <div class="oe_button_box" name="button_box">
+                            <button name="create_action"
+                                    string="Add in the 'Print' menu"
+                                    type="object"
+                                    attrs="{'invisible':['|',('ir_values_id','!=',False),('report_action_id','=',False)]}" icon="fa-plus-square" help="Display an option on related documents to print this report" class="oe_stat_button"/>
+                            <button name="unlink_action"
+                                    string="Remove from the 'Print' menu"
+                                    type="object" attrs="{'invisible':['|',('ir_values_id','=',False),('report_action_id','=',False)]}" icon="fa-minus-square" help="Remove the contextual action related this report" class="oe_stat_button"/>
+                        </div>
+                        <field name="name"/>
+                        <separator string="General"/>
+                        <group colspan="4" col="4">
+                            <field name="template_name"/>
+                            <field name="model_id"/>
+                            <field name="report_format_id"/>
+                            <field name="report_action_id" readonly="1"/>
+                            <field name="ir_values_id" invisible="1"/>
+                        </group>
+                        <separator string="Template"/>
+                        <group>
+                            <field name="template" nolabel="1" widget="html"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view pdf.template.generator-->
+        <record id="view_tree_pdf_generator" model="ir.ui.view">
+            <field name="name">pdf.template.generator.tree</field>
+            <field name="model">pdf.template.generator</field>
+            <field name="arch" type="xml">
+                <tree string="Pdf Generator">
+                    <field name="name"/>
+                    <field name="template_name"/>
+                    <field name="model_id"/>
+                    <field name="report_format_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action for pdf.template.generator -->
+        <record id="action_pdf_generator" model="ir.actions.act_window">
+            <field name="name">Pdf Generator</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pdf.template.generator</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+               Create your own Pdf
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_pdf_generator"
+                  action="action_pdf_generator"
+                  parent="report.reporting_menuitem"
+                  sequence="4"
+                  groups="base.group_no_one"
+                  name="PDF Generator"/>
+    </data>
+</odoo>
+

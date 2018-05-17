@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Report for Expat Candidate -->
+        <report
+            string="Expat Candidate"
+            id="print_offer_letter_for_expat"
+            model="hr.applicant"
+            name="hr_recruitment_stages_movement.expat_candidate_template"
+            file="hr_recruitment_stages_movement.expat_candidate_template"
+            report_type="qweb-pdf"
+        />
+
+        <!-- Report for local candidate -->
+        <report
+            string="Local Candidate"
+            id="print_offer_letter_for_local"
+            model="hr.applicant"
+            name="hr_recruitment_stages_movement.local_candidate_template"
+            file="hr_recruitment_stages_movement.local_candidate_templete"
+            report_type="qweb-pdf"
+        />
+
+        <!-- Report for Employment Summary -->
+        <!--             groups_id="[(4,ref('groups_rules.group_recuitement_officer')),
+        	(4,ref('group_ceo_manager')), (4,ref('group_compensation'))]" -->
+        <report
+            id="send_offer_letter_draft"
+            string="Employment Summary"
+            model="hr.applicant"
+            name="hr_recruitment_stages_movement.employment_summary_temp"
+            file="hr_recruitment_stages_movement.employment_summary_temp"
+            report_type="qweb-pdf"
+        />
+
+        <!-- Report for Employment Summary Dept Manager -->
+        <report
+            id="send_offer_letter_draft_department_manager"
+            string="Emp Summary Dept Manager"
+            model="hr.applicant"
+            name="hr_recruitment_stages_movement.emp_sum_dep_manager_temp"
+            file="hr_recruitment_stages_movement.emp_sum_dep_manager_temp"
+            report_type="qweb-pdf"
+        />
+    </data>
+</odoo>

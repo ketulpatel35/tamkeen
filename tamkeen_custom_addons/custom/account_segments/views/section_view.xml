@@ -1,0 +1,42 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+    <!--<data>-->
+        <!--&lt;!&ndash;<record id="section_form_view" model="ir.ui.view">&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="name">section.form.view</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="model">bs.section</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="arch" type="xml">&ndash;&gt;-->
+                <!--&lt;!&ndash;<form>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<sheet>&ndash;&gt;-->
+                      <!--&lt;!&ndash;<group col="4" colspan="2">&ndash;&gt;-->
+                          <!--&lt;!&ndash;<field name="code"/>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<field name="name"/>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<field name="department_id"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</group>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</sheet>&ndash;&gt;-->
+                <!--&lt;!&ndash;</form>&ndash;&gt;-->
+            <!--&lt;!&ndash;</field>&ndash;&gt;-->
+        <!--&lt;!&ndash;</record>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<record id="section_tree_view" model="ir.ui.view">&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="name">section.tree.view</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="model">bs.section</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="arch" type="xml">&ndash;&gt;-->
+              <!--&lt;!&ndash;<tree>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<field name="code"/>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<field name="name"/>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<field name="department_id"/>&ndash;&gt;-->
+              <!--&lt;!&ndash;</tree>&ndash;&gt;-->
+          <!--&lt;!&ndash;</field>&ndash;&gt;-->
+        <!--&lt;!&ndash;</record>&ndash;&gt;-->
+        <!--&lt;!&ndash;<record id="action_section" model="ir.actions.act_window">&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="name">Section</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="type">ir.actions.act_window</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="res_model">bs.section</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="view_type">form</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="view_mode">tree,form</field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<field name="view_id" ref="section_tree_view"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</record>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<menuitem id="menu_section" action="action_section" name="Section" parent="account.menu_finance_configuration"/>&ndash;&gt;-->
+    <!--</data>-->
+<!--</odoo>-->

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_bank_auditor,access.res.bank.auditor,base.model_res_bank,hr_payroll_customization.group_payroll_auditor,1,0,0,0
+access_res_bank_manager,access.res.bank.manager,base.model_res_bank,hr_payroll.group_hr_payroll_manager,1,1,1,1
+
+
+
+
+

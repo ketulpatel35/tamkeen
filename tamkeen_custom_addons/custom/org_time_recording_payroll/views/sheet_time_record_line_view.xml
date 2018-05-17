@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sheet_time_record_line_form_view" model="ir.ui.view">
+        <field name="name">sheet.time.record.line</field>
+        <field name="model">sheet.time.recording.line</field>
+        <field name="arch" type="xml">
+            <form string="Time Recording Line">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="employee_id" required="1"
+                                   readonly="1"/>
+                            <field name="schedule_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="working_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <!--<field name="public_holiday_hours" required="1"-->
+                                   <!--readonly="1" widget="float_time"/>-->
+                            <!--<field name="leave_hours" required="1"-->
+                                   <!--readonly="1" widget="float_time"/>-->
+                            <field name="unpaid_leave_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="absence_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="off_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="day_status" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="additional_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="overtime_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="total_paid_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="total_unpaid_hours" required="1"
+                                   readonly="1" widget="float_time"/>
+                            <field name="adjusted_hours"/>
+                            <field name="payroll_locked" readonly="1" />
+                            <field name="payroll_locked_date" readonly="1" />
+                            <field name="affected_payroll" readonly="1"/>
+                            <field name="color"  invisible="1"/>
+                            <field name="previous_state" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Service Log" name="service_log">
+                            <group>
+                                <field name="log_ids" readonly="1"
+                                       nolabel="1">
+                                    <tree string="Leave Logs">
+                                        <field name="time_record_id"
+                                               invisible="1"/>
+                                        <field name="user_id"/>
+                                        <field name="activity_datetime"
+                                               readonly="1"/>
+                                        <field name="state_from"/>
+                                        <field name="state_to"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sheet_time_record_line_tree_view" model="ir.ui.view">
+        <field name="name">sheet.time.record.line.tree.view</field>
+        <field name="model">sheet.time.recording.line</field>
+        <field name="arch" type="xml">
+            <tree string="Time Recording Line">
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="day_status" readonly="1"/>
+                <field name="schedule_hours" widget="float_time"/>
+                <field name="working_hours" widget="float_time"/>
+                <!--<field name="public_holiday_hours" widget="float_time"/>-->
+                <!--<field name="leave_hours" widget="float_time"/>-->
+                <field name="off_hours" widget="float_time"/>
+                <field name="adjusted_hours" widget="float_time"/>
+                <field name="unpaid_leave_hours" widget="float_time"/>
+                <field name="absence_hours" widget="float_time"/>
+                <field name="additional_hours" widget="float_time"/>
+                <field name="overtime_hours" widget="float_time"/>
+                <field name="total_paid_hours" widget="float_time"/>
+                <field name="total_unpaid_hours" widget="float_time"/>
+                <field name="affected_payroll"/>
+                <field name="state"/>
+                <field name="color" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="sheet_time_record_line_search_view" model="ir.ui.view">
+        <field name="name">sheet_time_record_line_search_view</field>
+        <field name="model">sheet.time.recording.line</field>
+        <field name="arch" type="xml">
+            <search string="Time Recording Line">
+                <field name="employee_id"/>
+                <filter string="Confirm" name="time_record_confirm"
+                        domain="[('state','=','confirm')]"/>
+                <filter string="Assign to Payroll Period"
+                        name="assign_to_payroll_period"
+                        domain="[('state','=','assign_to_payroll')]"/>
+                <filter string="On Hold"
+                        name="on_hold"
+                        domain="[('state','=','on_hold')]"/>
+                <filter string="New Joiner"
+                        name="new_joiner"
+                        domain="[('state','=','new_joiner')]"/>
+                <filter string="Simulated"
+                        name="simulated"
+                        domain="[('state','=','simulated')]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee" context="{'group_by':'employee_id'}"/>
+                    <filter name="groupby_name" string="Month"
+                            context="{'group_by':'date'}"/>
+                    <filter name="state" string="State" icon="terp-go-today" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

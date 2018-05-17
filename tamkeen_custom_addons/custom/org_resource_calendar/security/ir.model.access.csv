@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_schedule_weekday_employee,access.hr.schedule.weekday.employee,model_hr_schedule_weekday,base.group_user,1,0,0,0

@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- coc request send for Manager Approval -->
+        <record id="coc_request_send_manager" model="mail.template">
+            <field name="name">Certificate of Completion Manager Approval
+            </field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.department_id
+            .manager_id.work_email | safe}</field>
+            <field name="email_cc"></field>
+            <field name="subject">Certificate of Completion Request To Be
+                Approval
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.department_id.manager_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name}</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- coc request send for VP Approval -->
+        <record id="coc_pre_req_send_to_vp" model="mail.template">
+            <field name="name">Certificate of Completion VP Approval</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">
+                ${object.employee_id.department_id.vice_president_id.work_email
+                 | safe}
+            </field>
+            <field name="email_cc"></field>
+            <field name="subject">Certificate of Completion Request To Be
+                Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.department_id.vice_president_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Budget -->
+        <!--<record id="coc_pre_req_send_to_budget" model="mail.template">-->
+            <!--<field name="name">Certificate of Completion Budget Approval-->
+            <!--</field>-->
+            <!--<field name="model_id"-->
+                   <!--ref="certificate_of_completion.model_certificate_of_completion"/>-->
+            <!--<field name="email_from">${user.email | safe}</field>-->
+            <!--<field name="email_to">${object.coc_approval_policy_id-->
+            <!--.budget_email | safe}</field>-->
+            <!--<field name="subject">Certificate of Completion Budget Approval-->
+            <!--</field>-->
+            <!--<field name="body_html"><![CDATA[-->
+<!--<p>-->
+<!--Dear Budget Team,-->
+<!--<br>-->
+<!--<p style="padding-left: 4em;">-->
+<!--Kindly, Approve the pending Certificate of completion request.-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Vendor Name: </b>${object.partner_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Requester Name: </b>${object.employee_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Cost Center: </b>${object.account_analytic_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<span><b>Purchase Order: </b></span>-->
+<!--% if object.purchase_order_id:-->
+    <!--<span>${object.purchase_order_id.name},</span>-->
+<!--% endif-->
+<!--</p>-->
+<!--</p>-->
+<!--<br/>-->
+<!--<br/>-->
+<!--% if ctx["display_link"]:-->
+   <!--To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>-->
+<!--% endif-->
+<!--<br/>-->
+<!--<p> Kind Regards </p>-->
+<!--<br/>-->
+<!--<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>-->
+			   <!--]]>-->
+            <!--</field>-->
+
+        <!--</record>-->
+
+        <!-- coc request send for HR Approval -->
+        <!--<record id="coc_pre_req_send_to_hr" model="mail.template">-->
+            <!--<field name="name">Certificate of Completion HR Approval</field>-->
+            <!--<field name="model_id"-->
+                   <!--ref="certificate_of_completion.model_certificate_of_completion"/>-->
+            <!--<field name="email_from">${user.email | safe}</field>-->
+            <!--<field name="email_to">${object.coc_approval_policy_id.hr_email | -->
+            <!--safe}</field>-->
+            <!--<field name="subject">Certificate of Completion Request To Be -->
+                <!--Approval</field>-->
+            <!--<field name="body_html"><![CDATA[-->
+<!--<p>-->
+<!--Dear HR Team,-->
+<!--<br/>-->
+<!--<p style="padding-left: 4em;">-->
+<!--Kindly, Approve the pending Certificate of completion request.-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Vendor Name: </b>${object.partner_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Requester Name: </b>${object.employee_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Cost Center: </b>${object.account_analytic_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<span><b>Purchase Order: </b></span>-->
+<!--% if object.purchase_order_id:-->
+    <!--<span>${object.purchase_order_id.name},</span>-->
+<!--% endif-->
+<!--</p>-->
+<!--</p>-->
+<!--<br/>-->
+<!--<br/>-->
+<!--% if ctx["display_link"]:-->
+   <!--To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>-->
+<!--% endif-->
+<!--<br/>-->
+<!--<p> Kind Regards </p>-->
+<!--<br/>-->
+<!--<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>-->
+			   <!--]]>-->
+            <!--</field>-->
+
+        <!--</record>-->
+
+
+        <!-- pre request send for CEO Approval -->
+        <record id="coc_pre_req_send_to_ceo" model="mail.template">
+            <field name="name">Certificate of Completion CEO Approval</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.department_id.ceo_id
+            .work_email | safe}</field>
+            <field name="subject">Certificate of completion To Be Approval
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.department_id.ceo_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+
+        <!-- coc Request Approved -->
+        <record id="coc_pre_req_approved" model="mail.template">
+            <field name="name">Certificate of Completion to be Approved</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}
+            </field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Certificate of Completion to be
+                Approved
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.name or '')|safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Certificate of Completion has been approved.
+<br/><br/>
+<b>Certificate of Completion Request Number:</b> ${object.name}
+<br/><br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- coc Rejected -->
+        <record id="email_template_coc_request_reject" model="mail.template">
+            <field name="name">Certificate of Completion Request Rejected
+            </field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}
+            </field>
+            <field name="email_cc"></field>
+            <field name="subject">Certificate of Completion Request
+                Rejected
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<p style="padding-left: 4em;">
+Your Certificate of Completion  request has been rejected.
+<br/><br/>
+<b>Certificate of Completion Request Number:</b> ${object.name}
+<br/><br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+
+        </record>
+
+        <!-- coc Cancelled -->
+        <!--<record id="email_template_coc_request_cancelled"-->
+                <!--model="mail.template">-->
+            <!--<field name="name">Certificate of Completion Request-->
+                <!--Cancelled-->
+            <!--</field>-->
+            <!--<field name="model_id"-->
+                   <!--ref="certificate_of_completion.model_certificate_of_completion"/>-->
+            <!--<field name="email_from">${user.email | safe}</field>-->
+            <!--<field name="email_to">${object.employee_id.work_email | safe}-->
+            <!--</field>-->
+            <!--<field name="email_cc"></field>-->
+            <!--<field name="subject">Certificate of Completion Request-->
+                <!--Cancelled-->
+            <!--</field>-->
+            <!--<field name="body_html"><![CDATA[-->
+<!--<p>-->
+<!--Dear ${object.employee_id.name},-->
+<!--<br/>-->
+<!--<p style="padding-left: 4em;">-->
+<!--Your pre-approval request has been cancelled.-->
+<!--<br/><br/>-->
+<!--<b>Certificate of Completion Request Number: </b>${object.name}-->
+<!--<br/><br/>-->
+<!--<b>Vendor Name: </b>${object.partner_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Requester Name: </b>${object.employee_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<b>Cost Center: </b>${object.account_analytic_id.name}-->
+<!--<br/>-->
+    <!--<br/>-->
+<!--<span><b>Purchase Order: </b></span>-->
+<!--% if object.purchase_order_id:-->
+    <!--<span>${object.purchase_order_id.name},</span>-->
+<!--% endif-->
+<!--</p>-->
+<!--</p>-->
+<!--<br/>-->
+<!--<br/>-->
+<!--% if ctx["display_link"]:-->
+   <!--To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>-->
+<!--% endif-->
+<!--<br/>-->
+<!--<p> Kind Regards </p>-->
+<!--<br/>-->
+<!--<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>-->
+			   <!--]]>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--coc Draft -->
+        <record id="email_template_coc_request_draft" model="mail.template">
+            <field name="name">Certificate of Completion Request Return</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.employee_id.work_email | safe}
+            </field>
+            <!-- <field name="email_cc"></field> -->
+            <field name="subject">Certificate of Completion Request
+                Returned
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br>
+<p style="padding-left: 4em;">
+Your service request has been returned back to draft state.
+<br/><br/>
+<b>Certificate of Completion Request Number:</b> ${object.name}
+<br/><br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Business Owner -->
+        <record id="coc_business_owner_approval" model="mail.template">
+            <field name="name">Certificate of Completion Business Owner
+                Approval
+            </field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.business_owner.partner_id
+            .work_email | safe}</field>
+            <field name="subject">Certificate of completion Business Owner
+                Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.business_owner.partner_id.name or '')|safe},
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Procurement First Review Approval -->
+        <record id="coc_procurement_first_review_approval" model="mail.template">
+            <field name="name">Certificate of Completion Procurement First
+                Review Approval
+            </field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.coc_approval_policy_id
+            .procurement_email | safe}</field>
+            <field name="subject">Certificate of completion Procurement First
+                Review Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Procurement Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Procurement Second Review Approval -->
+        <record id="coc_procurement_second_review_approval" model="mail.template">
+            <field name="name">Certificate of Completion Procurement Second
+                Review Approval
+            </field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.coc_approval_policy_id
+            .procurement_second_review_email | safe}</field>
+            <field name="subject">Certificate of completion Procurement Second
+                Review Approval</field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Procurement Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+
+        <!-- PMO Approval -->
+        <record id="email_coc_pmo_approval" model="mail.template">
+            <field name="name">Certificate of Completion PMO Approval</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.coc_approval_policy_id
+            .pmo_approval_email | safe}</field>
+            <field name="subject">Certificate of completion PMO Approval
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear PMO,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+        <!-- Finance Processing -->
+        <record id="email_coc_finance_processing" model="mail.template">
+            <field name="name">Certificate of Completion Finance Processing</field>
+            <field name="model_id"
+                   ref="certificate_of_completion.model_certificate_of_completion"/>
+            <field name="email_from">${user.email | safe}</field>
+            <field name="email_to">${object.coc_approval_policy_id
+            .finance_processing_email | safe}</field>
+            <field name="subject">Certificate of completion Finance Processing
+            </field>
+            <field name="body_html"><![CDATA[
+<p>
+Dear Finance Team,
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Processed the pending Certificate of completion request.
+</p>
+<br/>
+    <br/>
+<b>Vendor Name: </b>${object.partner_id.name}
+<br/>
+    <br/>
+<b>Requester Name: </b>${object.employee_id.name}
+<br/>
+    <br/>
+<b>Cost Center: </b>${object.account_analytic_id.name}
+<br/>
+    <br/>
+<span><b>Purchase Order: </b></span>
+% if object.purchase_order_id:
+    <span>${object.purchase_order_id.name},</span>
+% endif
+</p>
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

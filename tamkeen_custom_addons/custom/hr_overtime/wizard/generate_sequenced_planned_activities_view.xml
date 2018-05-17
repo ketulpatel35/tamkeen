@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="generate_sequenced_planned_activities_wizard"
+                model="ir.ui.view">
+            <field name="name">generate.sequenced.planned.activities.wizard</field>
+            <field name="model">generate.sequence.planned.activities</field>
+            <field name="arch" type="xml">
+                <form string="Generate Sequenced Planned Activities">
+                    <sheet string="Generate Sequenced Planned Activities">
+                        <group>
+                            <group colspan="4" col="4">
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                                <field name="expected_hours" required="1"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <field name="activity_planned" required="1"/>
+                                <field name="remark"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button name="generate_sequenced_planned_activities"
+                                    string="Generate Sequenced Planned Activities"
+                                    type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_generate_sequenced_planned_activities_wizard">
+            <field name="name">Generate Sequenced Planned Activities</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">generate.sequence.planned.activities</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

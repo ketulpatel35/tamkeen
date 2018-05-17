@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view"
+            id="hr_holidays_inherit_for_external_user">
+        <field name="name">hr.holidays.inherit.for.external.user</field>
+        <field name="model">hr.holidays</field>
+        <field name="inherit_id"
+               ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='manager_approval']"
+                   position="after">
+                <group attrs="{'invisible':[('external_manager_user_id','=',False)]}"
+                       name="external_manager_approval">
+                    <field name="external_manager_user_id"
+                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}" readonly="1"/>
+                    <field name="external_manager_approval_date" readonly="1"/>
+                </group>
+            </xpath>
+            <group name="skip" position="before">
+                <group attrs="{'invisible': [('type', '=', 'add')]}">
+                    <field name="external_manager_response" readonly="1"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

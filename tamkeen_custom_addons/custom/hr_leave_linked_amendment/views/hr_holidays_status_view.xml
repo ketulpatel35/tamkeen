@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_holiday_status_inherit_for_extension" model="ir.ui.view">
+        <field name="name">hr.holidays.extension.status.form.inherit</field>
+        <field name="model">hr.holidays.status</field>
+        <field name="inherit_id" ref="hr_holidays_extension.view_holiday_status_inherit_for_extension"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']" position="before">
+                <page string="Payroll" groups="hr_holidays.group_hr_holidays_user">
+                    <group>
+                        <field name="linked_with_payroll"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

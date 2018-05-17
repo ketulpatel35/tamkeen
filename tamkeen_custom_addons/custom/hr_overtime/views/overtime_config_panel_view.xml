@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <!--&lt;!&ndash; Overtime Panel Configuration &ndash;&gt;-->
+        <!--<record id="overtime_approval_configuration_view" model="ir.ui.view">-->
+            <!--<field name="name">overtime.approval.configuration.form</field>-->
+            <!--<field name="model">overtime.approval.configuration</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Overtime Approval Configuration">-->
+                    <!--<sheet string="Overtime Approval Configuration">-->
+                        <!--<group>-->
+                            <!--<group string="Overtime Pre-Approval">-->
+                                <!--<field name="pre_mngr_approval"/>-->
+                                <!--<field name="pre_vp_approval"/>-->
+                                <!--<field name="pre_ceo_approval"/>-->
+                                <!--<field name="pre_hr_approval"/>-->
+                                <!--<field name="pre_hr_email"/>-->
+                                <!--<field name="pre_budget_approval"/>-->
+                                <!--<field name="pre_open"/>-->
+                                <!--<field name="pre_statement_prepared"/>-->
+                            <!--</group>-->
+                            <!--<group string="Overtime Claim">-->
+                                <!--&lt;!&ndash;<field name="pre_mngr_approval"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_vp_approval"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_ceo_approval"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_hr_approval"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_hr_email"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_budget_approval"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_open"/>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<field name="pre_statement_prepared"/>&ndash;&gt;-->
+                            <!--</group>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record model="ir.actions.act_window"-->
+                <!--id="act_open_overtime_approval_configuration_view">-->
+            <!--<field name="name">Overtime Approval Configuration</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">overtime.approval.configuration</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="help" type="html">-->
+                <!--<p class="oe_view_nocontent_create">-->
+                    <!--Click to create a Approval for Overtime.-->
+                <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record model="ir.ui.view"
+                id="service_configuration_panel_form_inherit_for_overtime">
+            <field name="name">service.configuration.panel.form.inherit.for.overtime</field>
+            <field name="model">service.configuration.panel</field>
+            <field name="inherit_id" ref="service_configuration_panel.service_configuration_panel_form" />
+            <field name="arch" type="xml">
+                <field name="valid_to_date" position="after">
+                    <field name="is_overtime" invisible="1"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Overtime Calculation"
+                          attrs="{'invisible':[('is_overtime','=',False)]}">
+                        <group colspan="4" col="4">
+                            <field name="maximum_hours_per_month"/>
+                            <field name="maximum_hours_per_year"/>
+                            <field name="overtime_pre_approval_type"/>
+                            <field name="pre_request_id"
+                                   attrs="{'invisible': [('overtime_pre_approval_type', '=', 'not_available')],
+                                   'required': [('overtime_pre_approval_type', '=', 'required')]}"/>
+                            <field name="hr_attendance_verification"/>
+                        </group>
+                        <group>
+                            <separator string="Overtime Calculation"/>
+                            <newline/>
+                            <field name="overtime_calculation_line_ids"
+                                   nolabel="1">
+                                <form string="Overtime Calculation">
+                                    <group colspan="4" col="4">
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="type"/>
+                                        <field name="rate"/>
+                                        <field name="maximum_hour"/>
+                                        <field name="active_from_time"
+                                               attrs="{'invisible': [('type', '!=', 'daily')]}" placeholder="Time in 24 hours time format" invisible="1"/>
+                                        <field name="active_to_time"
+                                               attrs="{'invisible': [('type', '!=', 'daily')]}" placeholder="Time in 24 hours time format" invisible="1"/>
+                                        <field name="active_after"
+                                               placeholder="Minutes after which this policy applies" invisible="1"/>
+                                        <field name="service_configuration_panel_id"
+                                               invisible="1"/>
+                                        <field name="weekly_working_days" invisible="1"/>
+                                    </group>
+                                </form>
+                                <tree string="Overtime Calculation">
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="rate"/>
+                                    <field name="maximum_hour"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Payroll Rules">
+                            <field name="overtime_salary_rule_input"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        <record model="ir.actions.act_window"
+                id="act_open_overtime_configuration_panels_view">
+            <field name="name">Service Congifuration Panel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.configuration.panel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'overtime_rquest': 1}</field>
+            <!--<field name="domain">[('model_id.model','in',['overtime.statement.request', 'overtime.pre.request'])]</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new service.
+                </p>
+                <p>
+                    Press create button to create a new service.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window"
+                id="act_open_overtime_panel_displayed_stages_view">
+            <field name="name">Stages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.panel.displayed.states</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_model_id': 1,
+                'overtime_request': True
+                }</field>
+            <!--<field name="domain">[('model_id.model','in',['overtime.statement.request', 'overtime.pre.request'])]</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new stage.
+                </p>
+                <p>
+                    Press create button to create a new stage.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

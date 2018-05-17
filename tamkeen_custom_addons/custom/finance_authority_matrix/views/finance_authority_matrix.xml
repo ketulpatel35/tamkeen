@@ -1,0 +1,402 @@
+<odoo>
+    <data>
+        <!-- Main Accounting Menu-->
+        <record id="account.menu_finance" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_receipts_entries')),
+             (4, ref('groups_view_all_budget_entries')),
+              (4, ref('groups_view_all_journal_entries')),
+               (4, ref('groups_view_all_sale_account_payment')),
+                (4, ref('groups_view_all_customer_invoice')),
+                 (4, ref('groups_view_all_vendor_invoice')),
+                  (4, ref('groups_view_all_asset')),
+                   (4, ref('groups_view_all_purchase_account_payment')),
+                    (4, ref('finance_authority_matrix.group_account_reporting')),
+                     (4, ref('group_chart_of_account_view_all')),
+                     (4, ref('group_generate_asset_entries')),
+                     (4, ref('group_account_configuration')),
+            ]"/>
+        </record>
+
+        <!-- Journal Entries-->
+        <record id="account.menu_action_move_journal_line_form" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_journal_entries'))
+            ]"/>
+        </record>
+        <!-- Journal Items-->
+        <record id="account.menu_action_account_moves_all" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_journal_entries'))
+            ]"/>
+        </record>
+        <!-- Adviser -->
+        <record id="account.menu_finance_entries" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_journal_entries')),
+             (4, ref('groups_view_all_budget_entries')),
+              (4, ref('groups_view_all_asset')),
+               (4, ref('group_chart_of_account_view_all')),
+               (4, ref('group_generate_asset_entries')),
+            ]"/>
+        </record>
+        <!--Purchase -->
+        <record id="account.menu_finance_payables" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_receipts_entries')), (4, ref('groups_view_all_sale_account_payment')), (4, ref('groups_view_all_vendor_invoice')),(4, ref('groups_view_all_purchase_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Purchase Receipt-->
+        <record id="account_voucher.menu_action_purchase_receipt" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_receipts_entries')), (4, ref('groups_view_all_sale_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Sales -->
+        <record id="account.menu_finance_receivables" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_receipts_entries')), (4, ref('groups_view_all_customer_invoice')), (4, ref('groups_view_all_sale_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Sale Receipt-->
+        <record id="account_voucher.menu_action_sale_receipt" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_receipts_entries'))
+            ]"/>
+        </record>
+
+        <record id="account_budget.menu_act_crossovered_budget_view" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_budget_entries'))
+            ]"/>
+        </record>
+
+        <!-- Sale Payment -->
+        <record id="account.menu_action_account_payments_receivable" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_sale_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Purchase Payment -->
+        <record id="account.menu_action_account_payments_payable" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_purchase_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Customer Invoice -->
+        <record id="account.menu_action_invoice_tree1" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_customer_invoice'))
+            ]"/>
+        </record>
+
+        <!-- Supplier Invoice -->
+        <record id="account.menu_action_invoice_tree2" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_vendor_invoice'))
+            ]"/>
+        </record>
+
+        <!-- Chart Of Account -->
+        <record id="account.menu_action_account_form"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('group_chart_of_account_view_all'))
+            ]"/>
+        </record>
+
+        <!-- Manual Payments & Invoices Matching -->
+        <record id="account.menu_action_manual_reconciliation"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_invoice_master')), (4, ref('groups_master_account_payment'))
+            ]"/>
+        </record>
+
+        <!-- Make Manual Tax Adjustments -->
+        <record id="account.menu_action_tax_adjustment"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('base.group_erp_manager'))
+            ]"/>
+        </record>
+
+        <!-- Asset -->
+        <record id="account_asset.menu_action_account_asset_asset_form"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('groups_view_all_asset'))
+            ]"/>
+        </record>
+
+        <!-- Procurement Requisition -->
+        <record id="purchase_requisition_config.account_purchase_budget"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.groups_view_all_budget_entries'))
+            ]"/>
+        </record>
+
+        <!-- Procurement Budget -->
+        <record id="purchase_requisition_config.account_purchase"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.groups_view_all_budget_entries'))
+            ]"/>
+        </record>
+
+        <!-- Trial Balance Report -->
+        <record id="account_financial_report_qweb.menu_trial_balance_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- General Ledger Report -->
+        <record id="account_financial_report_qweb.menu_general_ledger_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Open Items Report -->
+        <record id="account_financial_report_qweb.menu_open_items_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Open Items Report -->
+        <record id="account_financial_report_qweb.menu_open_items_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Aged Partner Report -->
+        <record id="account_financial_report_qweb.menu_aged_partner_balance_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Sale/Partner Journal -->
+        <record id="account.menu_print_journal"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Partner Ledger -->
+        <record id="account.menu_partner_ledger"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- General Ledger -->
+        <record id="account.menu_general_ledger"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('base.group_erp_manager'))
+            ]"/>
+        </record>
+
+        <!-- Trial Balance -->
+        <record id="account.menu_general_Balance_report"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('base.group_erp_manager'))
+            ]"/>
+        </record>
+
+        <!-- Balance Sheet-->
+        <record id="account.menu_account_report_bs"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_all_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Profit and Loss-->
+        <record id="account.menu_account_report_pl"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_all_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Aged Partner Balance -->
+        <record id="account.menu_aged_trial_balance"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('base.group_erp_manager'))
+            ]"/>
+        </record>
+
+        <!-- Financial Report-->
+        <record id="account.menu_account_report"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_all_reporting'))
+            ]"/>
+        </record>
+
+        <!-- OCA Accounting Reports -->
+        <record id="account_financial_report_qweb.menu_oca_reports"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- PDF Reports -->
+        <record id="account.menu_finance_legal_statement"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Reports -->
+        <record id="account.menu_finance_reports"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting')),
+             (4, ref('finance_authority_matrix.groups_view_all_budget_entries')),
+              (4, ref('finance_authority_matrix.groups_view_all_asset'))
+            ]"/>
+        </record>
+
+        <!-- Management -->
+        <record id="account.account_reports_management_menu"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.groups_view_all_budget_entries')),
+             (4, ref('finance_authority_matrix.groups_view_all_asset'))
+            ]"/>
+        </record>
+
+        <!-- Budgets -->
+        <record id="account_budget.menu_act_crossovered_budget_lines_view"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.groups_view_all_budget_entries'))
+            ]"/>
+        </record>
+
+        <!-- Assets -->
+        <record id="account_asset.menu_action_asset_asset_report"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.groups_view_all_asset'))
+            ]"/>
+        </record>
+
+        <!-- Business Intelligence -->
+        <record id="account.account_reports_business_intelligence_menu"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Analytic Entries -->
+        <record id="account.menu_action_analytic_lines_reporting"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Invoices -->
+        <record id="account.menu_action_account_invoice_report_all"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_account_reporting'))
+            ]"/>
+        </record>
+
+        <!-- Generate Assets Entries -->
+        <record id="account_asset.menu_asset_depreciation_confirmation_wizard"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_generate_asset_entries'))
+            ]"/>
+        </record>
+
+        <!-- Accounting Dashboard -->
+        <record id="account.menu_board_journal_1"
+                model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_accounting_dashboard'))
+            ]"/>
+        </record>
+
+        <!-- Customer Refund -->
+        <record id="account_invoice_refund.menu_invoice_refund" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_customer_refund_invoice'))
+            ]"/>
+        </record>
+
+        <!-- Vendor Refund -->
+        <record id="account_invoice_refund.menu_vender_bill_refund" model="ir.ui.menu">
+            <field name="groups_id" eval="[
+            (4, ref('finance_authority_matrix.group_vendor_refund_invoice'))
+            ]"/>
+        </record>
+
+
+        <!-- Journal Entry Form -->
+        <record id="account_move_form_manager_post" model="ir.ui.view">
+            <field name="name">account.move.form.manager.post</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='post']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_post_journal_entries,account.group_account_invoice</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_cancel']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_cancel_journal_entries,account.group_account_manager</attribute>
+                </xpath>
+                <xpath
+                        expr="//button[@name='%(account.action_view_account_move_reversal)d']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.groups_reverse_journal_entries,account.group_account_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inheerit Product view for Accounting -->
+        <record id="product_template_form_view_inherit_for_product"
+                model="ir.ui.view">
+            <field name="name">product.template.form.view.inherit.for.product</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <page name="invoicing" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_account_normal_user</attribute>
+                </page>
+                <xpath expr="//page[@name='invoicing']//field[@name='property_account_income_id']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_account_normal_user</attribute>
+                </xpath>
+                <xpath expr="//page[@name='invoicing']//field[@name='property_account_expense_id']" position="attributes">
+                    <attribute name="groups">finance_authority_matrix.group_account_normal_user</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

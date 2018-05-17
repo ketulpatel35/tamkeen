@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- EoS Main Menu Root -->
+    <menuitem id="org_end_of_service_root_menu"
+              name="End of Service"
+              groups="org_end_of_service.group_eos_hr_approval,org_end_of_service.group_eos_finance_approval,org_end_of_service.group_eos_view_all,org_end_of_service.group_eos_configuration"
+              web_icon="org_end_of_service,static/description/root_icon.png"/>
+
+    <!-- EoS main Menu -->
+    <menuitem id="org_end_of_service_main_menu"
+              name="End of Service"
+              groups="org_end_of_service.group_eos_hr_approval,org_end_of_service.group_eos_finance_approval,org_end_of_service.group_eos_view_all,org_end_of_service.group_eos_configuration"
+              parent="org_end_of_service_root_menu"
+              sequence="1"/>
+
+    <!-- EOS Sub main menu -->
+    <menuitem id="org_end_of_service_request_menu"
+              name="End of Service Request"
+              groups="org_end_of_service.group_eos_hr_approval,org_end_of_service.group_eos_finance_approval,org_end_of_service.group_eos_view_all,org_end_of_service.group_eos_configuration"
+              parent="org_end_of_service_main_menu"
+              sequence="1"/>
+    <!--action="org_end_of_service_action_view"-->
+
+    <!-- Hr Approval -->
+    <menuitem id="eos_request_hr_approval_menu"
+              action="open_eos_request_for_hr_approval"
+              parent="org_end_of_service_request_menu"
+              groups="org_end_of_service.group_eos_hr_approval"
+              name="HR Approval"
+              sequence="1"/>
+
+    <!-- Finance Approval -->
+    <menuitem id="eos_request_finance_approval_menu"
+              action="open_eos_request_for_finance_approval"
+              parent="org_end_of_service_request_menu"
+              groups="org_end_of_service.group_eos_finance_approval"
+              name="Finance Approval"
+              sequence="2"/>
+    <!-- View All -->
+    <menuitem id="eos_view_all_menu"
+              action="org_end_of_service_action_view_all"
+              parent="org_end_of_service_request_menu"
+              name="View All Requests"
+              groups="org_end_of_service.group_eos_view_all"
+              sequence="3"/>
+
+    <!-- Configuration -->
+    <!-- Org End of Service Configuration main menu -->
+    <menuitem name="Configuration"
+              id="org_end_of_service_configuration_menu"
+              groups="org_end_of_service.group_eos_configuration"
+              sequence="2"
+              parent="org_end_of_service_root_menu"/>
+
+    <!-- Configuration End of Service type -->
+    <menuitem id="org_end_of_service_type_menu"
+              name="Request Type"
+              groups="org_end_of_service.group_eos_configuration"
+              action="org_end_of_service_type_action_view"
+              parent="org_end_of_service_configuration_menu"
+              sequence="1"/>
+
+    <!-- Configuration service panel -->
+    <menuitem id="org_end_of_service_panel_menu"
+              name="Service Configuration Panel"
+              groups="org_end_of_service.group_eos_configuration"
+              action="end_of_service_service_panels_action"
+              parent="org_end_of_service_configuration_menu"
+              sequence="2"/>
+
+    <!-- Configuration stages -->
+    <menuitem id="org_end_of_service_stages_menu"
+              name="Stages"
+              groups="org_end_of_service.group_eos_configuration"
+              action="end_of_service_displayed_stages_action"
+              parent="org_end_of_service_configuration_menu"
+              sequence="3"/>
+
+</odoo>

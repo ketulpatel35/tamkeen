@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_management_project_issue_form_view_inherit" model="ir.ui.view">
+        <field name="name">project_management_project_issue_form_view_inherit</field>
+        <field name="model">project.issue</field>
+        <field name="inherit_id"
+               ref="project_issue.project_issue_form_view"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="is_related_to_task"
+                       required="1" widget="radio"/>
+                <field name="severity"/>
+            </field>
+            <field name="task_id" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_related_to_task', '!=', 'yes')], 'required': [('is_related_to_task', '=', 'yes')]}</attribute>
+                <attribute name="string">Project Task</attribute>
+                <attribute name="context">{'project_id':
+                    project_id}</attribute>
+                <attribute name="domain">[('project_id', '=', project_id)
+                    ]</attribute>
+            </field>
+
+            <field name="kanban_state" position="after">
+                <div class="oe_title">
+                    <h1> <field name="code" readonly="1"/></h1>
+                </div>
+            </field>
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="required">1</attribute>
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="main_assignment" />
+                 <field name="assigned_to_external"
+                        attrs="{'required': [('main_assignment','=','external')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']"
+                   position="attributes">
+                <attribute name="string">Assigned To (Internal)</attribute>
+                <attribute name="required">1</attribute>
+                <attribute name="options">{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']"
+                   position="attributes">
+                <attribute name="options">{'no_create': True,'no_quick_create':True,'no_create_edit':True,'limit':1000}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='working_hours_open']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='working_hours_close']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <field name="user_id" position="after">
+            <field name="required_action"/>
+            </field>
+
+            <xpath expr="//form/sheet/notebook/page[1]" position="before">
+                <page string="Schedule" name="schedule">
+                    <group col="4" colspan="4">
+                        <field name="excepted_end_date"/>
+                        <field name="actual_end_date"/>
+                        <field name="days_of_delay"/>
+                    </group>
+
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+         <!-- Project issue Search View -->
+    <record id="view_issue_search_form_inherited" model="ir.ui.view">
+        <field name="name">project.issue.search.form</field>
+        <field name="model">project.issue</field>
+        <field name="inherit_id" ref="project_issue.view_project_issue_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="code" string="Code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project_management_project_issue_tree_view_inherit"
+            model="ir.ui.view">
+        <field name="name">project_management_project_issue_tree_view_inherit
+        </field>
+        <field name="model">project.issue</field>
+        <field name="inherit_id"
+               ref="project_issue.project_issue_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='id']" position="before">
+                <field name="code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_issue.project_issue_categ_act0"
+            model="ir.actions.act_window">
+        <field name="context">{'search_default_project': 1}</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('project_issue.project_issue_tree_view')}),
+                          (1, 0, {'view_mode': 'form', 'view_id': ref('project_issue.project_issue_form_view')}),
+                          (2, 0, {'view_mode': 'kanban', 'view_id': ref('project_issue.project_issue_view_kanban_inherit_no_group_create')}),
+                           (3, 0, {'view_mode': 'calendar', 'view_id': ref('project_issue.project_issue_calendar_view')}),
+                           (4, 0, {'view_mode': 'graph', 'view_id': ref('project_issue.project_issue_graph_view')}),
+                          ]"/>
+    </record>
+
+    <!-- project issues smart button default tree view -->
+    <record id="project_issue.act_project_project_2_project_issue_all"
+            model="ir.actions.act_window">
+        <field name="view_mode">tree,kanban,form,calendar,graph,pivot</field>
+    </record>
+
+</odoo>

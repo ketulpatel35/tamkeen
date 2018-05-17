@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="employee_manager_see_data_calendar" model="ir.rule">
+        <field name="name">Employee Calendar Manager</field>
+        <field name="model_id"
+               ref="org_time_recording_payroll.model_sheet_time_recording_line"/>
+        <field name="domain_force">['|',('employee_id.user_id','=',user.id), ('employee_id.parent_id.user_id','=',user.id)]</field>
+    </record>
+
+    <record id="view_employee_advance_view_calendar_new" model="ir.ui.view">
+        <field name="name">Employee Calendar</field>
+        <field name="model">sheet.time.recording.line</field>
+        <field name="arch" type="xml">
+            <calendar string="Employee Calendar" color="sheet_id"
+                      date_start="date" mode="month" quick_add="False"
+                      avatar_model="hr.employee"
+                      event_open_popup="%(org_time_recording_payroll.sheet_time_record_line_form_view)s">
+                <field name="date" invisible="1"/>
+                <!--<label for="employee_id" string="Employee"-->
+                <!--class="oe_edit_only"/>-->
+                <field name="employee_id"/>
+                <field name="schedule_hours"/>
+                <field name="working_hours"/>
+                <!--<field name="public_holiday_hours"/>-->
+                <!--<field name="leave_hours"/>-->
+                <field name="unpaid_leave_hours"/>
+                <field name="absence_hours"/>
+            </calendar>
+        </field>
+    </record>
+
+
+    <!--EMployee Calendar Kanban view-->
+
+
+    <!--<record model="ir.ui.view" id="view_employee_advance_view_kanban_view">-->
+        <!--<field name="name">sheet.time.recording.line.kanban</field>-->
+        <!--<field name="model">sheet.time.recording.line</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<kanban class="o_kanban_mobile">-->
+                <!--<field name="employee_id"/>-->
+                <!--<field name="date"/>-->
+                <!--<field name="schedule_hours"/>-->
+                <!--<field name="working_hours"/>-->
+                <!--<field name="public_holiday_hours"/>-->
+                <!--<field name="leave_hours"/>-->
+                <!--<field name="unpaid_leave_hours"/>-->
+                <!--<field name="absence_hours"/>-->
+                <!--<field name="additional_hours"/>-->
+                <!--<field name="overtime_hours"/>-->
+                <!--<field name="total_paid_hours"/>-->
+                <!--<field name="total_unpaid_hours"/>-->
+                <!--<field name="payroll_locked_date"/>-->
+                <!--<field name="color"/>-->
+                <!--<templates>-->
+                    <!--<t t-name="kanban-box">-->
+                        <!--<div-->
+                                <!--t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click" class="oe_product_vignette oe_kanban_global_click">-->
+                            <!--<div class="row oe_product_vignette oe_kanban_global_click">-->
+                                <!--<a type="edit">-->
+                                    <!--<div class="col-xs-6">-->
+                                        <!--<a type="open">-->
+                                            <!--<field name="employee_id"/>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</a>-->
+                                <!--<div class="col-xs-6 pull-right text-right">-->
+                                    <!--<strong><field name="working_hours"/></strong>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="row">-->
+                                <!--<div class="col-xs-6">-->
+                                    <!--<span><t t-esc="record.schedule_hours.value"/> <t t-esc="record.date.value and record.date.value.split(' ')[0] or False"/></span>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-6">-->
+                                    <!--&lt;!&ndash;<span class="pull-right text-right">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<field name="state" widget="kanban_label_selection" options="{'classes': {'draft': 'default', 'cancel': 'default', 'done': 'success', 'approved': 'warning'}}"/>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</t>-->
+                <!--</templates>-->
+            <!--</kanban>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record model="ir.ui.view" id="view_employee_advance_view_kanban_view">
+        <field name="name">sheet.time.recording.line.kanban</field>
+        <field name="model">sheet.time.recording.line</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="employee_id"/>
+                <field name="date"/>
+                <field name="schedule_hours"/>
+                <field name="working_hours"/>
+                <!--<field name="public_holiday_hours"/>-->
+                <!--<field name="leave_hours"/>-->
+                <field name="unpaid_leave_hours"/>
+                <field name="absence_hours"/>
+                <field name="additional_hours"/>
+                <field name="overtime_hours"/>
+                <field name="total_paid_hours"/>
+                <field name="total_unpaid_hours"/>
+                <field name="payroll_locked_date"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click_edit  oe_kanban_card">
+
+                            <div class="oe_kanban_details " t-attf-class="#{kanban_color(record.color.raw_value)}">
+                                <a type="open">
+                                    <strong>
+                                        <span t-if="record.employee_id.value"><field name="employee_id"/></span>
+                                    </strong>
+                                </a>
+                                <ul>
+                                    <li>Date: <field name="date" /></li>
+                                    <li>Scheduled Hours: <field name="schedule_hours" /></li>
+                                    <li>Working Hours (Attendance, Onsite): <field name="working_hours" /></li>
+                                    <!--<li>Public Holiday Hours: <field name="public_holiday_hours" /></li>-->
+                                    <!--<li>Paid Leave Hours: <field name="leave_hours" /></li>-->
+                                    <li>Unpaid Leave Hours: <field name="unpaid_leave_hours" /></li>
+                                    <li>Absence Hours: <field name="absence_hours" /></li>
+                                    <li>Additional Hour: <field name="additional_hours" /></li>
+                                    <li>Overtime Hours: <field name="overtime_hours" /></li>
+                                    <li>Total Paid Hours: <field name="total_paid_hours" /></li>
+                                    <li>Total UnPaid Hours: <field name="total_unpaid_hours" /></li>
+                                    <li>Lock Date: <field name="payroll_locked_date" /></li>
+                                </ul>
+                                <div name="tags"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action for Menu Employee Calendar view -->
+    <record id="action_employee_calendar_view_new" model="ir.actions.act_window">
+        <field name="name">Employee Calendar</field>
+        <field name="res_model">sheet.time.recording.line</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="view_employee_advance_view_kanban_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to schedule a new calendar.
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- Menu Employee Calendar view -->
+    <menuitem id="menu_hr_employee_calendar_view_new"
+              name="Employee Calendar"
+              action="org_employee_advanced_view.action_employee_calendar_view_new"
+              sequence="1"
+              web_icon="org_employee_advanced_view,static/description/icon.png"/>
+</odoo>

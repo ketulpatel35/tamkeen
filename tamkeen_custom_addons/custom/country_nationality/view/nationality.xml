@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_country_inhret_form_view" model="ir.ui.view">
+        <field name="name">res.country.form</field>
+        <field name="model">res.country</field>
+        <field name="inherit_id" ref="base.view_country_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="name_eng" required="1"/>
+                <field name="nationality" />
+                <field name="continent" required="1"/>
+            </xpath>
+            <field name="state_ids" position="replace">
+                <field name="state_ids">
+                    <tree editable="bottom">
+                        <field name="sequence"/>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </tree>
+                </field>
+            </field>
+        </field>
+    </record>
+
+    <record id="res_country_inhret_tree_view_1" model="ir.ui.view">
+        <field name="name">res.country.tree</field>
+        <field name="model">res.country</field>
+        <field name="inherit_id" ref="base.view_country_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="nationality" />
+                <field name="continent"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_country_state_inherit_form" model="ir.ui.view">
+        <field name="name">res.country.state.inherit.form</field>
+        <field name="model">res.country.state</field>
+        <field name="inherit_id" ref="base.view_country_state_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="sequence" />
+                <field name="active" required="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

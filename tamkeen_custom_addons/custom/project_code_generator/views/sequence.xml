@@ -1,0 +1,9 @@
+<odoo>
+    <record id="project_code_generator_sequence" model="ir.sequence">
+        <field name="name">Project Code</field>
+        <field name="code">project.project.code</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

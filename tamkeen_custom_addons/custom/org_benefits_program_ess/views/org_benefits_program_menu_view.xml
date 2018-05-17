@@ -1,0 +1,33 @@
+<odoo>
+
+    <!-- ESS Benefits Program Management-->
+    <menuitem id="bp_ess_main_menu"
+              name="Benefits Program Management"
+              groups="org_benefits_program.group_bp_normal_user"
+              parent="emp_self_services.sub_mian_ess_menu"
+              sequence="46"/>
+
+    <!-- Benefits Program Request -->
+    <menuitem id="bp_request_ess_menu"
+              name="Benefits Program Request"
+              groups="org_benefits_program.group_bp_normal_user"
+              parent="bp_ess_main_menu"
+              action="action_bp_requests_ess"
+              sequence="25"/>
+
+    <!-- MSS Benefits Program -->
+    <menuitem id="bp_mss_approval_main_menu"
+              name="Benefits Program Management"
+              groups="org_benefits_program.group_bp_manager_approval,org_benefits_program.group_bp_vp_approval,org_benefits_program.group_bp_ceo_approval"
+              parent="emp_self_services.sub_mian_mss_menu"
+              sequence="1301"/>
+
+    <!-- Benefits Program Request to be Approve -->
+    <menuitem id="bp_request_mss_approval_menu"
+              name="Benefits Program Requests To Approve"
+              groups="org_benefits_program.group_bp_manager_approval,org_benefits_program.group_bp_vp_approval,org_benefits_program.group_bp_ceo_approval"
+              parent="bp_mss_approval_main_menu"
+              action="action_bp_requests_approval_mss"
+              sequence="1"/>
+
+</odoo>

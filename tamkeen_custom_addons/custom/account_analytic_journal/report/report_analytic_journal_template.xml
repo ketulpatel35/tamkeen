@@ -1,0 +1,163 @@
+<odoo>
+
+    <report string="Analytic Journal"
+            id="report_analytic_journal"
+            model="account.analytic.journal"
+            name="account_analytic_journal.report_journal_analytic"
+            file="account_analytic_journal.report_journal_analytic"
+            report_type="qweb-pdf"
+            menu="False"/>
+
+    <!-- Analytic Journal Report -->
+    <template id="report_journal_analytic">
+        <!--<t t-call="report.html_container">-->
+        <t t-foreach="docs" t-as="o">
+            <tr t-call="report.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2>Analytic Journal</h2>
+                    <t t-esc="o.name"/>
+                    <div class="row">
+                        <table>
+                            <tr>
+                                <td width="18%">
+                                    <strong>Period From:</strong>
+                                </td>
+                                <td width="18%">
+                                    <strong>Period To:</strong>
+                                </td>
+                                <td width="18%">
+                                    <strong>Currency:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="18%">
+                                    <p t-esc="date_from"/>
+                                </td>
+                                <td width="18%">
+                                    <p t-esc="date_to"/>
+                                </td>
+                                <td width="18%">
+                                    <p t-field="res_company.currency_id"/>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table  class="table table-condensed">
+                                <tr>
+                                    <td width="16%"> <strong>Date</strong></td>
+                                    <td width="16%"> <strong>Code</strong></td>
+                                    <td width="18%"> <strong>Move Name</strong></td>
+                                    <td width="18%"> <strong>Account n°</strong></td>
+                                    <td width="16%"> <strong>General</strong></td>
+                                    <td width="16%"> <strong>Analytic</strong></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">
+                                        <t t-if="o.code">
+                                            <strong> <span t-esc="o.code"/></strong>
+                                        </t>
+                                        -
+                                        <strong><span t-esc="o.name"/></strong>
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <strong> <span
+                                            t-esc="sum_general(o, date_from, date_to)"/></strong>
+                                    </td>
+                                    <td>
+                                        <strong> <span
+                                            t-esc="sum_analytic(o, date_from, date_to)"/></strong>
+                                    </td>
+                                </tr>
+                                <t t-foreach="lines(o, date_from, date_to)"
+                                   t-as="move">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <span t-esc="move.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move.account_id.code"/>
+                                            <span t-esc="move.account_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move.debit-move.credit"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr t-foreach="lines_a(move.id, o, date_from, date_to)"
+                                        t-as="move_a">
+                                        <td>
+                                            <span t-esc="move_a.date"/>
+                                        </td>
+                                        <td>
+                                            <p t-if="move_a.code">
+                                                <span t-esc="move_a.code"/>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move_a.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move_a.account_id.code"/>
+                                            -
+                                            <span t-esc="move_a.account_id.name"/>
+                                        </td>
+                                        <td></td>
+                                        <td align="center">
+                                            <span t-esc="move_a.amount"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-foreach="lines_a(False, o, date_from, date_to)"
+                                    t-as="move_a">
+                                    <td>
+                                        <span t-esc="move_a.date"/>
+                                    </td>
+                                    <td>
+                                        <p t-if="move_a.code">
+                                            <span t-esc="move_a.code"/>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <span t-esc="move_a.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="move_a.account_id.code"/>
+                                        -
+                                        <span t-esc="move_a.account_id.name"/>
+                                    </td>
+                                    <td></td>
+                                    <td  align="center">
+                                        <span t-esc="move_a.amount"/>
+                                    </td>
+                                </tr>
+                        </table>
+                        <!--<div class="col-xs-4">-->
+                        <!--<strong>Period From:</strong>-->
+                        <!--<p t-esc="date_from"/>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-4">-->
+                        <!--<strong>Period To:</strong>-->
+                        <!--<p t-esc="date_to"/>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-4">-->
+                        <!--<strong>Currency:</strong>-->
+                        <!--&lt;!&ndash;<p t-field="res_company.currency_id"/>&ndash;&gt;-->
+                        <!--</div>-->
+                    </div>
+                    <br/>
+                    <div class="col-xs-12">
+
+                    </div>
+                </div>
+            </tr>
+        </t>
+        <!--</t>-->
+    </template>
+
+</odoo>

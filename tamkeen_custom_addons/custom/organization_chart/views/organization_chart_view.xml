@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="action_organization_chart" model="ir.actions.client">
+            <field name="name">Organization Structure</field>
+            <!-- <field name="tag">organization_chart.organization_chart</field> -->
+            <field name="tag">act_organization_chart_tag</field>
+            <field name="target">new</field>
+        </record>
+        
+        <record id="action_organization_chart_url" model="ir.actions.act_url">
+            <field name="name">Organization Structure</field>
+            <field name="url">/organization_chart/web/</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- <record id="web_settings_dashboard_action" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        organization_chart.organization_chart
+        <field name="tag">web_settings_dashboard.main</field>
+    </record> -->
+       
+        <menuitem name="Organization Structure" action="action_organization_chart_url" id="organization_chart_menu" parent="hr.menu_human_resources_configuration"/>
+    </data>
+</odoo>

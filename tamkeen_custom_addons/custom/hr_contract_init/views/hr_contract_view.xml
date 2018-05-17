@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_contract_init_tree" model="ir.ui.view">
+        <field name="name">hr.contract.init.tree</field>
+        <field name="model">hr.contract.init</field>
+        <field name="arch" type="xml">
+            <tree string="Contract Initial Values">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="trial_period"/>
+                <field name="struct_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_contract_init_form" model="ir.ui.view">
+        <field name="name">hr.contract.init.form</field>
+        <field name="model">hr.contract.init</field>
+        <field name="arch" type="xml">
+            <form string="Contract Initial Values" >
+                <header>
+                    <button name="state_approve" type="object" states="draft" string="Approve" class="oe_highlight" />
+                    <button name="state_decline" type="object" states="draft,approve" string="Decline" class="oe_highlight" />
+                    <button string="Reset to New" name="set_to_draft" states="decline" type="object" groups="hr_admin.group_hr_admin"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approve" readonly="1"/>
+                </header>
+                <h1>
+                    <field name="name" required="1" attrs="{'readonly': [('state','not in',('draft'))]}" placeholder="Name"/>
+                </h1>
+                <group>
+                    <group>
+                        <field name="date" required="1" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                        <field name="trial_period"/>
+                    </group>
+                    <group>
+                        <field name="struct_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                    </group>
+                </group>
+                <group string="Initial Wages">
+                    <field name="wage_ids" nolabel="1" attrs="{'readonly': [('state','not in',('draft'))]}">
+                        <tree string="Initial Wages" editable="bottom">
+                            <field name="category_ids" widget="many2many_tags"/>
+                            <field name="job_id"/>
+                            <field name="starting_wage" required="1"/>
+                            <field name="is_default"/>
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_contract_init" model="ir.actions.act_window">
+        <field name="name">Contract Starting Values</field>
+        <field name="res_model">hr.contract.init</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menus -->
+
+    <!--<menuitem name="Contracts" id="submenu_hr_contracts"-->
+    <!--parent="hr.menu_hr_main"-->
+    <!--sequence="100" groups="hr.group_hr_user"/>-->
+
+    <!--&lt;!&ndash; Remove stock Contracts menuitem and put it in the submenu &ndash;&gt;-->
+
+    <!--<menuitem-->
+            <!--id="hr_menu_contract_type"-->
+            <!--action="action_hr_contract_type"-->
+            <!--parent="hr.menu_human_resources_configuration"-->
+            <!--sequence="3"-->
+            <!--groups="base.group_no_one"/>-->
+
+    <menuitem
+            id="hr_contract.hr_menu_contract"
+            name="Contracts"
+            sequence="12"
+            web_icon="hr_contract_init,static/description/contract.png"
+            groups="hr_contract_init.group_view_all_contracts"/>
+
+    <menuitem
+            id="hr_contract_init_configuration"
+            name="Configuration"
+            sequence="100"
+            parent="hr_contract.hr_menu_contract"
+            groups="hr_contract_init.group_contracts_configuration"/>
+
+    <menuitem
+            id="hr_sub_menu_contract"
+            name="Employees Contracts"
+            action="hr_contract.action_hr_contract"
+            parent="hr_contract.hr_menu_contract"
+            sequence="3"
+            groups="hr_contract_init.group_view_all_contracts"/>
+
+    <menuitem id="hr_contracts_configuration"
+                  parent="hr_contract_init.hr_contract_init_configuration" name="Contracts" sequence="10"
+                  groups="hr_contract_init.group_contracts_configuration"/>
+
+    <menuitem
+            id="hr_contract.hr_menu_contract_type"
+            action="hr_contract.action_hr_contract_type"
+            parent="hr_contracts_configuration"
+            sequence="3"
+            groups="hr_contract_init.group_contracts_configuration"/>
+
+    <menuitem action="open_contract_init"
+              id="menu_hr_contract_init"
+              parent="hr_contracts_configuration"
+              sequence="10"
+              groups="hr_contract_init.group_contracts_configuration"/>
+
+    <!-- Initial Wages -->
+    <record id="view_init_wage_tree" model="ir.ui.view">
+        <field name="name">hr.contract.init.wage.tree</field>
+        <field name="model">hr.contract.init.wage</field>
+        <field name="arch" type="xml">
+            <tree string="Initial Wages">
+                <field name="category_ids" widget="many2many_tags"/>
+                <field name="job_id"/>
+                <field name="starting_wage"/>
+                <field name="is_default"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_init_wage_form" model="ir.ui.view">
+        <field name="name">hr.contract.init.wage.form</field>
+        <field name="model">hr.contract.init.wage</field>
+        <field name="arch" type="xml">
+            <form string="Intial Wages">
+                <group>
+                    <group>
+                        <field name="job_id"/>
+                        <field name="starting_wage"/>
+                        <field name="is_default"/>
+                    </group>
+                    <group>
+                        <field name="category_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Contract -->
+    <record id="hr_contract_view_inherit_for_date" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.contract_init</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='trial_date_start']" position="replace">
+                <field name="trial_date_start" class="oe_inline" attrs="{'readonly': [('state','in',('close'))]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_employees_contracts_filter_inherit" model="ir.ui.view">
+        <field name="name">Contracts</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_search" />
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <filter string="Ongoing Contracts" name="ongoing_contracts" domain="[('state','!=','close')]"/>
+                <filter string="Completed Contracts" name="completed_contracts" domain="[('state','=','close')]"/>
+                <filter string="Trial Period" name="trial_period_contracts" domain="[('state','in',['trial','trial_ending'])]"/>
+                <filter string="Waiting Action" name="waiting_action_contracts" domain="[('state','in',['draft','trial','open'])]"/>
+                <separator/>
+                <filter string="Active Employees Contracts" name="active_employees_contracts" domain="[('employee_id.active','=',True)]"/>
+                <filter string="Terminated Employees Contracts" name="terminated_employees_contracts" domain="[('employee_id.active','=',False)]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_contract.action_hr_contract" model="ir.actions.act_window">
+        <field name="context">
+                {'search_default_ongoing_contracts':1}
+            </field>
+    </record>
+
+    <record id="remove_bank_account_id_for_group" model="ir.ui.view">
+        <field name="name">hr.employee.remove.group</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id"
+               ref="hr_contract.hr_hr_employee_view_form2" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//button[@name='%(hr_contract.act_hr_employee_2_hr_contract)d']" position="attributes">
+                    <attribute name="groups">hr_contract_init.group_view_all_contracts</attribute>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- hide templet field from mail.compose.message form view -->
+        <record model="ir.ui.view" id="email_compose_form_hide_template_id">
+            <field name="name">mail.compose.message.form.hide.temp.id</field>
+            <field name="model">mail.compose.message</field>
+            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='template_id']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

@@ -1,0 +1,45 @@
+<odoo>
+
+    <record id="pa_objectives_locked_wizard_view" model="ir.ui.view">
+        <field name="name">pa.objectives.locked.wizard.view</field>
+        <field name="model">pa.objectives.locked.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Objectives Locked">
+                <field name="unlock" invisible="1"/>
+                <p class="oe_grey"
+                   attrs="{'invisible':[('unlock', '=', True)]}">
+                    Are you sure you want to lock the selected records?
+                </p>
+                <p class="oe_grey"
+                   attrs="{'invisible':[('unlock', '=', False)]}">
+                    Are you sure you want to unlock the selected records?
+                </p>
+                <footer>
+                    <button string="Confirm"
+                            name="action_pa_objectives_locked" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_pa_objectives_locked_wizard"
+                multi="True"
+                key2="client_action_multi" name="Lock"
+                res_model="pa.objectives.locked.wizard"
+                src_model="pa.objectives"
+                view_mode="form" target="new" view_type="form"
+                groups="org_performance_appraisal.group_pa_locked_unlocked_objectives"/>
+
+    <act_window id="action_pa_objectives_unlock_wizard"
+                multi="True"
+                key2="client_action_multi" name="Unlock"
+                res_model="pa.objectives.locked.wizard"
+                src_model="pa.objectives"
+                context="{'default_unlock': True}"
+                view_mode="form" target="new" view_type="form"
+                groups="org_performance_appraisal.group_pa_locked_unlocked_objectives"/>
+
+</odoo>

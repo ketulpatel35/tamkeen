@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- tree view employee objective  -->
+        <record id="employee_objective_tree_view" model="ir.ui.view">
+            <field name="name">employee.objective.tree.view</field>
+            <field name="model">employee.objective</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Objective">
+                    <field name="employee_id"/>
+                    <field name="objective_year"/>
+                    <field name="agreed_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="emp_objective_form_view" model="ir.ui.view">
+            <field name="name">emp.objective.year.form.view</field>
+            <field name="model">employee.objective</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="submit_for_approval" type="object" string="Submit for Approval " class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="to_manager_approval" type="object" groups="hr_appraisal_evaluation.group_app_manager_approval"
+                                string="Manager Approval" class="btn-primary" attrs="{'invisible': [('state', 'in', ['draft', 'cancel', 'mutual_agreed'])]}"/>
+                        <button name="%(act_emp_obj_can_wizard)d" type="action"
+                                groups="hr_appraisal_evaluation.group_app_manager_approval,hr_appraisal_evaluation.group_app_hr_approval"
+                                string="Cancel " class="btn-primary"
+                                attrs="{'invisible': [('state', 'in', ['draft', 'cancel', 'mutual_agreed'])]}"/>
+                        <button name="to_draft" type="object"
+                                groups="hr_appraisal_evaluation.group_app_manager_approval"
+                                string="Set to draft"
+                                class="btn-primary"
+                                attrs="{'invisible': [('state', 'not in', ['cancel'])]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group string="Employee Objctive">
+                            <group>
+
+                                <field name="employee_id" readonly="1"/>
+                                <field name="immediate_manager_id"
+                                       readonly="1"/>
+                                <field name="can_date" readonly="1"/>
+                                <field name="remarks"/>
+                            </group>
+                            <group>
+                                <field name="objective_year"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                                <field name="objective_agreed"
+                                       string="Agreed Date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="agreed_status" attrs="{'invisible': [('state', '!=', 'mutual_agreed')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="emp_obj_line_ids" nolabel="1" attrs="{'readonly': [('state', 'not in', ('draft'))]}">
+                                <tree editable="bottom">
+                                    <!--<field name="select"/>-->
+                                    <field name="number" readonly="1"/>
+                                    <field name="objective_id" required="1"/>
+                                    <field name="obj_std_description"/>
+                                    <field name="emp_obj_text"
+                                           string="Details Narration"/>
+                                    <field name="kpi_measurement_ids" widget="many2many_tags"/>
+                                    <field name="weightage"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_obj_weight" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_employee_objective" model="ir.actions.act_window">
+            <field name="name">Employee Objective</field>
+            <field name="res_model">employee.objective</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+        </record>
+
+
+        <!--Employee objective menu ess-->
+        <menuitem
+                id="menu_employee_objective_for_ess"
+                name="My Objective"
+                parent="emp_self_services.sub_mian_ess_menu"
+                groups="base.group_user"
+                action="hr_appraisal_evaluation.action_employee_objective"
+                sequence="11"/>
+
+        <menuitem name="Employee Objective"
+                  id="emp_objective_sub_menu"
+                  parent="hr_appraisal_evaluation_configuration"
+                  action="objective_types_action"
+                  groups="hr_appraisal_evaluation.group_all_app_conf"
+        />
+
+    </data>
+</openerp>

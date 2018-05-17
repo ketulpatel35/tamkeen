@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="approved_leaves_report_templet">
+            <t t-call="approved_leaves_report.approved_leaves_report_header_footer_call_template_id">
+                <t t-foreach="docs" t-as="o">
+                    <t t-if="o.check_state()">
+                        <t t-call="report.external_layout">
+                            <div class="page">
+                                <div class="oe_structure"/>
+                                <div class="row">
+                                    <style type="text/css">
+                                        td.text-center{
+                                        align:center;
+                                        }
+                                    </style>
+                                    <center>
+                                        <span t-if="not o.state in ('validate','leave_approved')">
+                                            Draft
+                                        </span>
+                                        <div style="font-size:20px">Leave
+                                            Request
+                                        </div>
+                                    </center>
+                                    <br/>
+                                    <!-- Employee Info -->
+                                    <table class="table table-bordered"
+                                           width="100%" height="100%"
+                                           style="border: 1px solid #000000;font-size:13px">
+                                        <tbody>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%">1
+                                                </td>
+                                                <td height="10%" colspan="4"
+                                                    class="text-center">
+                                                    <b>Employee Information</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%"
+                                                    rowspan="4"></td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Name</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Nationality</b>
+                                                </td>
+
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Join Date</b>
+                                                </td>
+                                                <td height="10%" colspan="3"
+                                                    class="text-center">
+                                                    <b>Employee ID</b>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span t-esc="o.employee_id.name"/>
+                                                </td>
+
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span t-esc="o.employee_id.country_id.name"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <!--need to migrate hr_employee_seniority modules-->
+                                                    <span t-esc="o.employee_id.initial_employment_date"/>
+                                                </td>
+                                                <td height="10%" colspan="3"
+                                                    class="text-center">
+                                                    <span t-esc="o.employee_id.f_employee_no"/>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Department</b>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Job Title</b>
+                                                </td>
+                                                <td height="10%" colspan="4"
+                                                    class="text-center">
+                                                    <b>Email Address</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <!--need to migrate hr_employee_seniority modules-->
+                                                    <span t-esc="o.employee_id.department_id.name"/>
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <span t-esc="o.employee_id.job_id.name"/>
+                                                </td>
+                                                <td height="10%" colspan="4"
+                                                    class="text-center">
+                                                    <span t-esc="o.employee_id.work_email"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <!-- Leave Information -->
+                                    <table class="table table-bordered"
+                                           width="100%" height="100%"
+                                           style="border: 1px solid #000000;font-size:13px">
+                                        <tbody>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%">2
+                                                </td>
+                                                <td height="10%"
+                                                    class="text-center">
+                                                    <b>Leave Information</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%"
+                                                    class="text-center"
+                                                    width="3%"
+                                                    rowspan="2"></td>
+                                                <td height="10%">
+                                                    <b>Leave Type:</b>
+                                                    <span t-esc="o.holiday_status_id.name"/>
+                                                    <br/>
+                                                    <br/>
+                                                    <b>Number of days:</b>
+                                                    <span
+                                                            t-esc="int(o.number_of_days_temp)"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10%">
+                                                    <b>Leave Start Date:</b>
+                                                    <t t-if="o.date_from">
+                                                        <span t-field="o.date_from"
+                                                              t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                    </t>
+                                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                                    <b>Leave End Date:</b>
+                                                    <t t-if="o.date_to">
+                                                        <span
+                                                                t-field="o.date_to"
+                                                                t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                    </t>
+                                                    <br/>
+                                                    <br/>
+                                                    <b>Alternative Employee:
+                                                    </b>
+                                                    <!--for get this 'alternative_emp_id' fields need to migrate module-->
+                                                    <!--'hr_holidays_extension'-->
+                                                    <span t-esc="o.alternative_emp_id.name"/>
+                                                    <br/>
+                                                    <br/>
+                                                    <b>Remarks:</b>
+                                                    <span t-esc="o.notes"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <!-- Manager Approval -->
+                                    <t t-if="o.mngr_user_id">
+                                        <table class="table table-bordered"
+                                               width="100%" height="100%"
+                                               style="border: 1px solid #000000;font-size:13px">
+                                            <tbody>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%">3
+                                                    </td>
+                                                    <td height="10%"
+                                                        colspan="2"
+                                                        class="text-center">
+                                                        <b>Manager Approval</b>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%"
+                                                        rowspan="2"></td>
+                                                    <td height="10%">
+                                                        <b>Approved By:</b>
+                                                        <span t-esc="o.mngr_user_id.name"/>
+                                                    </td>
+                                                    <t t-if="o.mngr_approval_date">
+                                                        <td height="10%">
+                                                            <b>Approval Date:
+                                                            </b>
+                                                            <span
+                                                                    t-esc="o.mngr_approval_date"
+                                                                    t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                        </td>
+                                                    </t>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+
+                                    <!-- HR Department Approval -->
+                                    <t t-if="o.hr_user_id">
+                                        <table class="table table-bordered"
+                                               width="100%" height="100%"
+                                               style="border: 1px solid #000000;font-size:13px">
+                                            <tbody>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%">4
+                                                    </td>
+                                                    <td height="10%"
+                                                        colspan="2"
+                                                        class="text-center">
+                                                        <b>HR Approval</b>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%"
+                                                        rowspan="2"></td>
+                                                    <td height="10%">
+                                                        <b>Approved By:</b>
+                                                        <span t-esc="o.hr_user_id.name"/>
+                                                    </td>
+                                                    <t t-if="o.hr_approval_date">
+                                                        <td height="10%">
+                                                            <b>Approval Date:
+                                                            </b>
+                                                            <span
+                                                                    t-esc="o.hr_approval_date"
+                                                                    t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                    <!--CEO Approval-->
+                                    <t t-if="o.ceo_user_id">
+                                        <table class="table table-bordered"
+                                               width="100%" height="100%"
+                                               style="border: 1px solid #000000;font-size:13px">
+                                            <tbody>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%">
+                                                        5
+                                                    </td>
+                                                    <td height="10%"
+                                                        colspan="2"
+                                                        class="text-center">
+                                                        <b>CEO Approval</b>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="10%"
+                                                        class="text-center"
+                                                        width="3%"
+                                                        rowspan="2"></td>
+                                                    <td height="10%">
+                                                        <b>Approved By:</b>
+                                                        <span t-esc="o.ceo_user_id.name"/>
+                                                    </td>
+                                                    <t t-if="o.ceo_approval_date">
+                                                        <td height="10%">
+                                                            <b>Approval Date:
+                                                            </b>
+                                                            <span
+                                                                    t-esc="o.ceo_approval_date"
+                                                                    t-field-options='{"format": "YYYY-MM-dd"}'/>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                    <div>
+                                        <br/>
+                                        <br/>
+                                        * This document is approved by the
+                                        system and no need for any further
+                                        approval.
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-if="not o.check_state()">
+                        <h2>
+                            <t t-call="report.external_layout">
+                                <div class="page">
+                                    <div class="oe_structure"/>
+                                    <div class="row">
+                                        You are not allowed to view this
+                                        report data unless your leave
+                                        request is approved or validated!
+                                    </div>
+                                </div>
+                            </t>
+                        </h2>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="approved_leaves_report_header_footer_call_template_id">
+            <t t-call="approved_leaves_report.approved_leaves_report_template_header_template_id"/>
+            <t t-raw="0"/>
+            <!--<t t-call="approved_leaves_report.approved_leaves_report_template_footer_template_id"/>-->
+        </template>
+
+        <template id="approved_leaves_report_template_header_template_id">
+            <t t-foreach="docs" t-as="o">
+                <div class="header">
+                    <div align="right">
+                        <img class="img-responsive"
+                             src="/approved_leaves_report/static/description/icon.png"
+                             width="200px" height="75px"/>
+                    </div>
+
+                </div>
+                <div class="footer">
+                    <br/>
+                    <div style="border-top: 1px solid #808080;font-size:12px;color:#808080;">
+                        <t t-if="o.employee_id.company_id">
+                            <b>Address:</b>
+                            <span>
+                                <t t-if="o.employee_id.company_id.street">
+                                    <span t-field="o.employee_id.company_id.street"/>
+                                </t>
+                                -
+                                <t t-if="o.employee_id.company_id.street2">
+                                    <span t-field="o.employee_id.company_id.street2"/>
+                                </t>
+                            </span>
+                            &#160;&#160;<b>City:</b>
+                            <span>
+                                <t t-if="o.employee_id.company_id.city">
+                                    <span t-field="o.employee_id.company_id.city"/>
+                                </t>
+                            </span>
+                            &#160;&#160;<b>Tel:</b>
+                            <span>
+                                <t t-if="o.employee_id.company_id.phone">
+                                    <span t-field="o.employee_id.company_id.phone"/>
+                                </t>
+                            </span>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--<template-->
+                <!--id="approved_leaves_report_template_footer_template_id"-->
+                <!--name="approved_leaves_report_template_footer_template_id">-->
+            <!--<t t-foreach="docs" t-as="o">-->
+                <!---->
+            <!--</t>-->
+        <!--</template>-->
+
+    </data>
+</odoo>

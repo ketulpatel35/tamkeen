@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Appraisal Performance Request for manager approval -->
+    <record id="pa_request_send_to_manager" model="mail.template">
+        <field name="name">Appraisal Performance Request Manager Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.pa_manager_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.pa_manager_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for VP approval -->
+    <record id="pa_request_send_to_vp" model="mail.template">
+        <field name="name">Appraisal Performance Request VP Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.pa_vp_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.pa_vp_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance vp calibrate request -->
+    <record id="vp_calibration_pa_request_send_to_manager" model="mail.template">
+        <field name="name">Appraisal Performance Request Manager Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.pa_manager_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.pa_manager_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+<br/>
+% if ctx["reason"]:
+<b>Reason: </b>${ctx["reason"]}
+% endif
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for HR Review -->
+    <record id="pa_request_send_to_hr_approval" model="mail.template">
+        <field name="name">Appraisal Performance Request HR Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.performance_appraisal_policy_id.hr_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for HR Review -->
+    <record id="pa_request_send_to_budget_approval" model="mail.template">
+        <field name="name">Appraisal Performance Request Budget Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.performance_appraisal_policy_id.budget_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear Budget Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for CEO approval -->
+    <record id="pa_request_send_to_ceo" model="mail.template">
+        <field name="name">Appraisal Performance Request CEO Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.pa_ceo_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${(object.employee_id.pa_ceo_id.name or '') |safe},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for Final HR Review -->
+    <record id="pa_request_send_to_final_hr_approval" model="mail.template">
+        <field name="name">Appraisal Performance Request HR Approval</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.performance_appraisal_policy_id.hr_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear HR Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance for Finance Processing -->
+    <record id="pa_request_send_to_final_finance_processing"
+            model="mail.template">
+        <field name="name">Appraisal Performance Request Finance Processing</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.performance_appraisal_policy_id.finance_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request To Be Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear Finance Team,
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Kindly, Approve the pending Appraisal Performance request.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+<br/>
+<b>Employee Name: </b>${object.employee_id.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To proceed, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance approved -->
+    <record id="pa_request_approved"
+            model="mail.template">
+        <field name="name">Appraisal Performance Request Approved</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request Approved</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Appraisal Performance request has been approved.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance return -->
+    <record id="pa_request_return"
+            model="mail.template">
+        <field name="name">Appraisal Performance Request Return</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request Return</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Appraisal Performance request has been returned back to draft state.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+    <!-- Appraisal Performance Rejected -->
+    <record id="pa_request_rejected"
+            model="mail.template">
+        <field name="name">Appraisal Performance Request Rejected</field>
+        <field name="model_id"
+               ref="org_performance_appraisal.model_performance_appraisal"/>
+        <field name="email_from">${user.email |safe}</field>
+        <field name="email_to">${object.employee_id.work_email |safe}</field>
+        <field name="email_cc"></field>
+        <field name="subject">Appraisal Performance Request Rejected</field>
+        <field name="body_html"><![CDATA[
+<p>
+Dear ${object.employee_id.name},
+<br/>
+<br/>
+<p style="padding-left: 4em;">
+Your Appraisal Performance request has been Rejected.
+<br/>
+<b>Appraisal Performance #: </b>${object.name}
+</p>
+<br/>
+<br/>
+% if ctx["display_link"]:
+   To review, Kindly <a href="${ctx["base_url"]}/web#id=${object.id}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}">Click Here</a>
+% endif
+<br/>
+<p> Kind Regards </p>
+<br/>
+<p style="font-size:13px; color:blue; border: 1px solid red; width:350px;"> Auto generated message through the ERP System. </p>
+			   ]]>
+        </field>
+    </record>
+
+</odoo>

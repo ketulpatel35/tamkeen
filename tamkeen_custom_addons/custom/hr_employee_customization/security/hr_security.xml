@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+    <record id="group_view_emp_info" model="res.groups">
+        <field name="name">View All Employee Information</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">the user will be able to View Employee Information.</field>
+    </record>
+
+    <record id="group_employee_manager" model="res.groups">
+        <field name="name">Employee Manager</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_update_emp_info" model="res.groups">
+        <field name="name">Update Employee Information</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="implied_ids" eval="[(4, ref('hr_employee_customization.group_view_emp_info'))]"/>
+        <field name="comment">the user will be able to Update Employee Information.</field>
+    </record>
+
+    <record id="group_create_emp_profile" model="res.groups">
+        <field name="name">Employee Master</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="implied_ids" eval="[(4, ref('hr_employee_customization.group_update_emp_info'))]"/>
+        <field name="comment">the user will be able to Create Employee Profile.</field>
+    </record>
+</data>
+</odoo>

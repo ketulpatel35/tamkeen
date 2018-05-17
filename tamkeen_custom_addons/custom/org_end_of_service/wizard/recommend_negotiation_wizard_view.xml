@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- recommend negotiation wizard Form View -->
+    <record id="recommend_negotiation_wizard_form_view" model="ir.ui.view">
+        <field name="name">recommend.negotiation.wizard.form.view</field>
+        <field name="model">recommend.negotiation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Recommend for Negotiation">
+                <group>
+                    <field name="is_recommend"/>
+                    <field name="reason"
+                           string="Justification"
+                           attrs="{'invisible':[('is_recommend', '=', False)], 'required':[('is_recommend', '!=', False)]}"/>
+                </group>
+                <footer>
+                    <button string="Submit"
+                            name="submit_button"
+                            type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- recommend negotiation wizard Action -->
+    <record id="recommend_negotiation_wizard_action_view"
+            model="ir.actions.act_window">
+        <field name="name">End of Service Type</field>
+        <field name="res_model">recommend.negotiation.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

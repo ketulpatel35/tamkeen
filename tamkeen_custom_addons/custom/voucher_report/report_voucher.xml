@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <report
+                id="report_account_move_form"
+                model="account.move"
+                string="Voucher Report"
+                report_type="qweb-pdf"
+                name="voucher_report.report_voucher_template_form"
+                file="voucher_report.report_voucher_template_form"
+        />
+
+    </data>
+</odoo>
+

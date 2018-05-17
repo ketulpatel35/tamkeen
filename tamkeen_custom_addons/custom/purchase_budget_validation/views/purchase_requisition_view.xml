@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Purchase Order Inherit -->
+        <record model="ir.ui.view" id="purchase_req_inherit_budget">
+            <field name="name">purchase.req.inherit</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition_config.purchase_req_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='other_details']" position="after">
+                    <field name="allowed_budget" groups="purchase_requisition_config.group_budget_approval_pr"/>
+                    <field name="commited_budget" groups="purchase_requisition_config.group_budget_approval_pr"/>
+                    <field name="remaining_budget" groups="purchase_requisition_config.group_budget_approval_pr"/>
+                    <button type="object" name="budget_action"
+                            class="oe_link"
+                            attrs="{'invisible': [('account_analytic_id','=',False)]}"
+                            string="View Budget"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

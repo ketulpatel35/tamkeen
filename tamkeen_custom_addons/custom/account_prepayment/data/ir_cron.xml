@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data noupdate="1">
+
+        <record model="ir.cron" id="account_prepayment_auto_generation">
+            <field name="name">Auto Generate Prepayment Entry</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="model" eval="'account.prepayment'"/>
+            <field name="function" eval="'generate_automatic_entry'"/>
+            <field name="args" eval="'()'"/>
+        </record>
+
+    </data>
+</openerp>

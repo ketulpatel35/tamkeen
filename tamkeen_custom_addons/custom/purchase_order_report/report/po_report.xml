@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="minimal_layout" inherit_id="report.minimal_layout">
+            <xpath expr="//t[@t-if='subst is True']" position="replace">
+                <t t-if="subst is True">
+                    <script>
+                        function subst() {
+                        var vars = {};
+                        var x = document.location.search.substring(1).split('&amp;');
+                        for (var i in x) {
+                        var z = x[i].split('=', 2);
+                        vars[z[0]] = unescape(z[1]);
+                        }
+                        var x=['frompage', 'topage', 'page', 'webpage', 'section', 'subsection', 'subsubsection'];
+                        for (var i in x) {
+                        var y = document.getElementsByClassName(x[i]);
+                        for (var j=0; j&lt;y.length; ++j)
+                        y[j].textContent = vars[x[i]];
+                        }
+                        var operations = {
+                        'ksa-not-first-page': function (elt) {
+                        elt.style.visibility = (vars.page === vars.frompage) ? "hidden" : "visible";
+                        },
+                        'ksa-not-last-page': function (elt) {
+                        elt.style.visibility = (vars.page === vars.topage) ? "hidden" : "visible";
+                        },
+                        'ksa-first-page': function (elt) {
+                        elt.style.visibility = (vars.page === vars.frompage) ? "visible" : "hidden";
+                        },
+                        'ksa-last-page': function (elt) {
+                        elt.style.visibility = (vars.page === vars.topage) ? "visible" : "hidden";
+                        },
+                        };
+                        for (var klass in operations) {
+                        var y = document.getElementsByClassName(klass);
+                        for (var j=0; j&lt;y.length; ++j)
+                        operations[klass](y[j]);
+                        }
+                        }
+                    </script>
+                </t>
+            </xpath>
+        </template>
+        <template id="po_view_report">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="purchase_order_report.po_view_report_report_template_header_footer_call_template_id">
+                        <div class="page">
+                            <t t-if="o.state == 'draft' or o.state == 'sent'">
+                                <h1><center>This Report has NO Detail to Print as it is in <span t-field="o.state"/> State</center></h1>
+                            </t>
+                            <t t-if="o.state != 'draft' and o.state != 'sent'">
+
+                                <div class="oe_structure"/>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <style type="text/css">
+                                            td, tr, th {
+                                            border: 1px solid black;
+                                            padding:2px;
+                                            font-size:15px;
+                                            font-family:Sakkal Majalla;
+
+                                            }
+                                            span,p{
+                                            font-size:15px;
+                                            font-family:Sakkal Majalla;
+                                            }
+                                            div{
+                                            font-size:19px;
+                                            font-family:Sakkal Majalla;
+                                            }
+                                        </style>
+                                        <t t-set="count" t-value='0' />
+                                        <br/>
+                                        <table style="border: 1px solid black; width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th style="text-align:center;">Item description</th>
+                                                    <th style="text-align:center;">Qty</th>
+                                                    <th style="text-align:center;">UOM</th>
+                                                    <th style="text-align:center;">Unit price</th>
+                                                    <th style="text-align:center;">Total price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr t-foreach = "o.order_line" t-as="orderline" >
+                                                    <t t-set="count" t-value='count + 1' />
+                                                    <td><t t-esc="count"/></td>
+                                                    <td><span t-field="orderline.name"/></td>
+                                                    <t t-set="product_qty" t-value="orderline.product_qty"/>
+                                                    <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(product_qty))"/></td>
+                                                    <td style="text-align:right;"><span t-field="orderline.product_uom"/></td>
+                                                    <t t-set="price_unit" t-value="orderline.price_unit"/>
+                                                    <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(price_unit))"/></td>
+                                                    <t t-set="co" t-value="orderline.product_qty"/>
+                                                    <t t-set="this_count" t-value="orderline.price_unit"/>
+                                                    <t t-set="total" t-value="co * this_count"/>
+                                                    <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(total))"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <div class="ksa-last-page" style="padding-bottom: 7px;page-break-inside: avoid!important; page-break-after:auto!important;">
+                                    <div align="right">
+
+                                        <table width="30%">
+                                            <tr>
+                                                <td colspan="4">
+                                                    Untaxed Amount
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    <span t-field="o.amount_untaxed"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    Discount
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    0.00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <Tax>Taxes</Tax>
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    <span t-field="o.amount_tax"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    Total
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    <span t-field="o.amount_total"/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                        <br/>
+                                    </div>
+                                    <div>
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <td>Only <span t-if="o.amount_total" t-esc="num2words(o.amount_total)"/>
+                                                    <span t-field="o.currency_id.name"/></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6"
+                                             style="text-align:left;font-size:17px;">
+                                            <t>
+                                                <strong><h3>Instructions to Supplier:<br/>
+                                                    General terms and conditions:</h3></strong><br/>
+                                                <t
+                                                        t-if="o.name != 'False'">
+                                                    - This PO# (<span
+                                                        t-field="o.name"/>) </t>should be
+                                                written in all invoices and
+                                                correspondents.
+                                            </t>
+                                            <br/>
+                                            - All invoices should be sent to the finance department.<br/>
+                                            <t
+                                                    t-if="o.buyer_name != 'False'">
+                                                - In case of any questions, Kindly
+                                                contact: <span
+                                                    t-field="o.buyer_name.name"/>
+                                            </t>
+                                        </div>
+                                        <div  class="col-xs-6"
+                                              style="text-align:left;font-size:17px;">
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                            <p style="margin-top:11px;">
+                                                E-mail: <span t-field="o.buyer_name.partner_id.email"/><br/>
+                                                Date:<![CDATA[&nbsp;&nbsp;]]><span
+                                                    t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/><br/>
+                                                Signature:
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            </t>
+                        </div>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template
+                id="po_view_report_report_template_header_footer_call_template_id">
+            <t t-call="purchase_order_report.po_view_report_report_template_header_template_id"/>
+            <t t-raw="0"/>
+            <t t-call="purchase_order_report.po_view_report_report_template_footer_template_id"/>
+        </template>
+
+        <template id="po_view_report_report_template_header_template_id">
+            <div class="header">
+                <t t-if="o.state == 'draft' or o.state == 'sent'">
+                </t>
+                <t t-if="o.state != 'draft' and o.state != 'sent'">
+                    <style type="text/css">
+                        td, tr, th {
+                        border: 1px solid black;
+                        padding:4px;
+                        font-family:Sakkal Majalla;
+                        }
+                    </style>
+                    <div class="row">
+                        <div class="col-xs-8"
+                             style="padding-top: 8%;overflow:hidden;text-overflow: ellipsis;">
+                            P.O.#:<t t-if="o.name != 'False'"><span
+                                t-field="o.name"/></t>
+                        </div>
+                        <div class="col-xs-4 text-right"
+                             style="padding-bottom:15px;">
+                            <img class="img-responsive"
+                                 src="/purchase_order_report/static/description/Logo_English.jpg" width="230px" height="75px"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-1-5" align="center">
+                            <div class="text-center">
+                                <h3><b>Purchase Order</b></h3>
+                            </div>
+                        </div>
+                        <div class="col-xs-4"/>
+                    </div>
+                    <br/>
+                    <table style="width:100%; border: 0px;">
+                        <tr style="border: 0px;">
+                            <td style="border: 0px;">
+
+                                Printing Date: <span
+                                    t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+
+                            </td>
+                            <td style="border: 0px; text-align:right;">
+                                Order Date:<![CDATA[&nbsp;&nbsp;]]><span
+                                    t-field="o.date_order"
+                                    t-field-options='{"format": "dd-MM-YYYY"}'/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="border: 1px solid black; width:100%;">
+                        <tr>
+                            <th width="50%">Deliver To: <t
+                                    t-esc="o.company_id.name"/></th>
+                            <th width="50%">Supplier Information</th>
+                        </tr>
+                        <tr>
+                            <td><t t-esc="o.company_id.street"/></td>
+                            <td><span t-field="o.partner_id"/></td>
+                        </tr>
+                        <tr>
+                            <td>Phone:<t t-esc="o.company_id.phone"/></td>
+                            <td><span t-field="o.partner_id.street"/> <br/> <span t-field="o.partner_id.city"/> <br/> <span t-field="o.partner_id.country_id"/> </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="border: 1px solid black; width:100%;">
+                        <tr>
+                            <th style="text-align:center;">Payment terms</th>
+                            <th style="text-align:center;">Delivery terms</th>
+                            <th style="text-align:center;">Supplier reference</th>
+                            <th style="text-align:center;">PR#</th>
+                        </tr>
+                        <tr>
+                            <td><t t-if="o.payment_term_id"><span t-field="o.payment_term_id"/></t></td>
+                            <td></td>
+                            <td><t t-if="o.partner_ref"><span t-field="o.partner_ref"/></t></td>
+                            <td><t t-if="o.requisition_id"><span t-field="o.requisition_id"/></t></td>
+                        </tr>
+                    </table>
+                </t>
+            </div>
+        </template>
+
+
+        <template id="po_view_report_report_template_footer_template_id">
+            <t t-foreach="docs" t-as="o">
+                <div class="footer">
+                    <style type="text/css">
+                        div {
+                        font-family:Sakkal Majalla;
+                        }
+                        td, tr, th {
+                        border: 1px solid black;
+                        padding:2px;
+                        font-size:15px;
+                        font-family:Sakkal Majalla;
+                        }
+                        span{
+                        font-family:Sakkal Majalla;
+                        font-size:15px;
+                        }
+                    </style>
+
+                    <div class="row"
+                         style="border-top: 1px solid #808080; padding-bottom:-7px;">
+                        <div class="col-xs-6" style="text-align:left;">
+                            <t t-if="o.company_id">
+                                <b>Address:</b>
+                                <span>
+                                    <t t-if="o.company_id.street">
+                                        <span t-field="o.company_id.street"/>
+                                    </t>
+                                    -
+                                    <t t-if="o.company_id.street2">
+                                        <span t-field="o.company_id.street2"/>
+                                    </t>
+                                </span>
+                                  <b>City:</b>
+                                <span>
+                                    <t t-if="o.company_id.city">
+                                        <span t-field="o.company_id.city"/>
+                                    </t>
+                                </span>
+                                  <b>Tel:</b>
+                                <span>
+                                    <t t-if="o.company_id.phone">
+                                        <span t-field="o.company_id.phone"/>
+                                    </t>
+                                </span>
+                            </t>
+                            <br/>
+                            <div>
+                                <t t-if="o.company_id.website"><b>Website:</b>
+                                    <t t-esc="o.company_id.website"/>
+                                </t>
+                                <![CDATA[&nbsp;&nbsp;]]> <t t-if="o.company_id.vat"> <b>VAT Reg.# :</b><![CDATA[&nbsp;&nbsp;]]>
+                                <t t-esc="o.company_id.vat"/>
+                            </t>
+                            </div>
+                        </div>
+                        <div class="col-xs-6"  style="text-align:right;">
+                            <small>
+                                <span>Page</span>
+                                <span class="page" />
+                                of
+                                <span class="topage" />
+                            </small>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

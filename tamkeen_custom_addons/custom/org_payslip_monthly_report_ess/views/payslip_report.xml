@@ -1,0 +1,44 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+    <!--&lt;!&ndash; Employment Certificate report print wizard form view &ndash;&gt;-->
+    <!--<record id="payslip_detail_report_wizard_form_view"-->
+            <!--model="ir.ui.view">-->
+        <!--<field name="name">payslip.detail.report.wizard.from.view</field>-->
+        <!--<field name="model">payslip.detail.report.wizard</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form string="Employment Certificate Report">-->
+                <!--<footer>-->
+                    <!--<button string="Print"-->
+                            <!--name="generate_payslip_detail_report"-->
+                            <!--type="object"-->
+                            <!--default_focus="1" class="btn-primary"/>-->
+                    <!--<button string="Cancel" class="btn-default"-->
+                            <!--special="cancel"/>-->
+                <!--</footer>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+    <!--&lt;!&ndash; Action &ndash;&gt;-->
+    <!--<act_window id="action_payslip_detail_report_wizard"-->
+                <!--multi="False"-->
+                <!--key2="client_action_multi" name="Print Payslip Details"-->
+                <!--res_model="payslip.detail.report.wizard"-->
+                <!--src_model="hr.payslip"-->
+                <!--view_mode="form" target="new" view_type="form"/>-->
+
+    <!--<record id="payslip_detail_qweb_output_view" model="ir.ui.view">-->
+        <!--<field name="name">Payslip Detail Qweb Output</field>-->
+        <!--<field name="model">payslip.detail.report.download</field>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<form string="Payslip Detail Report">-->
+                <!--<separator colspan="4"-->
+                           <!--string="Kindly, Click on the file to download."/>-->
+                <!--<field name="name" invisible="1"/>-->
+                <!--<field name="qweb_output" filename='name' readonly='1'/>-->
+                <!--<footer>-->
+                    <!--<button string="Cancel" class="oe_link" special="cancel"/>-->
+                <!--</footer>-->
+            <!--</form>-->
+        <!--</field>-->
+    <!--</record>-->
+<!--</odoo>-->

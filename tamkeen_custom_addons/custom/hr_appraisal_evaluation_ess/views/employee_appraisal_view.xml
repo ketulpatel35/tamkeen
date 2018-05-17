@@ -1,0 +1,26 @@
+<odoo>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="employee_appraisal_action_ess">
+        <field name="name">Performance Management</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.appraisal</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('emp_id.user_id.id','=',uid),('current_app_year_rec','!=',False)]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Employee Appraisal
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="manager_appraisal_action_ess">
+        <field name="name">Employee Appraisal To Approve</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.appraisal</field>
+        <field name="domain">[('state','!=','draft')]</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

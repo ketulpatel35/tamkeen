@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_tree_chart_config_form" model="ir.ui.view">
+            <field name="name">tree.chart.config.form</field>
+            <field name="model">tree.chart.config</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Tree Chart Configuration">
+                    <header>
+                        <button string="Generate Link" class="oe_stat_button" 
+                        icon="fa fa-sitemap fa-5x"
+                        name="generate_link" 
+                        type="object"/>
+                        <button string="Generate Menu" class="oe_stat_button" 
+                        icon="fa fa-sitemap fa-5x"
+                        name="generate_menu_item" 
+                        type="object"/>
+                        <!-- link -->
+                    </header>
+                    <sheet>
+                        <group colspan="4" cols="4">
+                            <field name="name" colspan="2"/>
+                            <field name="model_id" colspan="2"
+                            options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="related_url" widget="url" class="oe_read_only" colspan="2"/>
+                            <field name="related_menu_id" colspan="2"/>
+                            <field name="active" colspan="2"/>
+                        </group>
+                        <group string="Theme Configuration" col="4" colspan="4">
+                            <field name="theme_type" colspan="2"/>
+                            <field name="color" colspan="2"/>
+                            <field name="linkType" colspan="2"/>
+                            <field name="orientation" colspan="2"/>
+                            <field name="expandToLevel" colspan="2"/>
+                            <field name="enableEdit" colspan="2"/>
+                            <field name="enableZoom" colspan="2"/>
+                            <field name="enableSearch" colspan="2"/>
+                            <field name="enableGridView" colspan="2"/>
+                            <field name="enableDetailsView" colspan="2"/>
+                            <field name="enablePrint" colspan="2"/>
+                        </group>
+                        <group string="Data To be Displayed">
+                            <field name="line_ids" context="{'model_id': model_id}" nolabel="1">
+                                <tree string="Fields" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="model_id" invisible="True" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="field_id" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                                    <field name="field_usage" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_tree_chart_config_tree" model="ir.ui.view">
+            <field name="name">tree.chart.config.tree</field>
+            <field name="model">tree.chart.config</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Tree Chart Configuration">
+                    <field name="name" />
+                    <field name="model_id"/>
+                    <field name="theme_type"/>
+                    <field name="color" />
+                    <field name="related_url"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="act_open_tree_chart_config_view">
+            <field name="name">Tree Chart Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tree.chart.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new Tree Chart Configuration. 
+              </p><p>
+                Press create button to create a new Tree Chart Configuration.
+              </p>
+            </field>
+        </record>
+        
+        <menuitem name="Tree Charts" id="tree_chart_mgmnt_menu" sequence="7"/>
+        
+        <menuitem id="configuration_menu" name="Configuration" parent="tree_chart_mgmnt_menu" sequence="1" />
+
+        <menuitem id="general_tree_chart_menu" name="Generic Tree Charts" action="act_open_tree_chart_config_view" parent="configuration_menu" sequence="20" />
+        
+        <!-- <menuitem id="organization_chart_menu" name="Preview Chart" action="organization_chart.action_organization_chart_url" parent="configuration_menu" sequence="30" /> -->
+
+        
+    </data>
+</odoo>

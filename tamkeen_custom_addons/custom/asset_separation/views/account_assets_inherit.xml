@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="account_asset_category_form_view_inherit"
+                model="ir.ui.view">
+            <field name="name">account.asset.category</field>
+            <field name="model">account.asset.category</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='method_time']" position="before">
+                        <field name="is_month_last_date"/>
+                </xpath>
+                 <xpath expr="//field[@name='group_entries']" position="after">
+                    <field name="asset_consideration_value"/>
+
+                </xpath>
+            </field>
+        </record>
+        <record id="view_company_form_inhrit_for_analytic" model="ir.ui.view">
+            <field name="name">res.company.form.for.analytic</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id"
+                   ref="base.view_company_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='website']" position="after">
+                    <field name="allow_analytic"/>
+                </xpath>
+            </field>
+        </record>
+        <!--Inherit assets depreciation wizard-->
+        <record id="view_asset_depreciation_confirmation_wizard_inherit"
+                model="ir.ui.view">
+            <field name="name">asset.depreciation.confirmation.wizard</field>
+            <field name="model">asset.depreciation.confirmation.wizard</field>
+            <field name="inherit_id" ref="account_asset.view_asset_depreciation_confirmation_wizard"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after">
+                    <field name="category_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

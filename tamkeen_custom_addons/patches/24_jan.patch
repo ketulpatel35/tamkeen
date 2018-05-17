@@ -1,0 +1,275 @@
+diff --git a/custom/employee_leave_summary/models/employee_leave_summary.py b/custom/employee_leave_summary/models/employee_leave_summary.py
+index 415289a..3f759e4 100644
+--- a/custom/employee_leave_summary/models/employee_leave_summary.py
++++ b/custom/employee_leave_summary/models/employee_leave_summary.py
+@@ -23,21 +23,10 @@ class EmployeeLeaveSummary(models.Model):
+     @api.multi
+     def _get_allocate_leave(self):
+         for rec in self:
+-            holidays_rec = self.env['hr.holidays'].search(
+-                [
+-                    ('employee_id',
+-                     '=',
+-                     rec.employee_id.id),
+-                    ('holiday_status_id',
+-                     '=',
+-                     rec.holiday_status_id.id),
+-                    ('state',
+-                     '=',
+-                     'validate'),
+-                    ('type',
+-                     '=',
+-                     'add'),
+-                ])
++            holidays_rec = self.env['hr.holidays'].search([
++                ('employee_id', '=', rec.employee_id.id),
++                ('holiday_status_id', '=', rec.holiday_status_id.id),
++                ('state', '=', 'validate'), ('type', '=', 'add')])
+             for holidays in holidays_rec:
+                 if holidays.number_of_days_temp:
+                     rec.allocate_leave += holidays.number_of_days_temp
+@@ -46,31 +35,15 @@ class EmployeeLeaveSummary(models.Model):
+     def _get_approved_leave(self):
+         for rec in self:
+             holidays_rec = self.env['hr.holidays'].search(
+-                [
+-                    ('employee_id',
+-                     '=',
+-                     rec.employee_id.id),
+-                    ('holiday_status_id',
+-                     '=',
+-                     rec.holiday_status_id.id),
+-                    ('state',
+-                     '=',
+-                     'validate'),
+-                    ('type',
+-                     '=',
+-                     'remove'),
+-                ])
++                [('employee_id', '=', rec.employee_id.id),
++                 ('holiday_status_id', '=', rec.holiday_status_id.id),
++                 ('state', '=', 'validate'),
++                 ('type', '=', 'remove'),
++                 ('work_resumption_done', '=', False)])
+             availed_leave = self.env['work.resumption'].search(
+-                [
+-                    ('holiday_status_id',
+-                     '=',
+-                     rec.holiday_status_id.id),
+-                    ('employee_id',
+-                     '=',
+-                     rec.employee_id.id),
+-                    ('state',
+-                     '=',
+-                     'validate')])
++                [('holiday_status_id', '=', rec.holiday_status_id.id),
++                 ('employee_id', '=', rec.employee_id.id),
++                 ('state', '=', 'validate')])
+             for availed in availed_leave:
+                 if availed.actual_number_of_leave_days:
+                     rec.availed_leave += availed.actual_number_of_leave_days
+@@ -82,22 +55,10 @@ class EmployeeLeaveSummary(models.Model):
+     def _get_applied_leave(self):
+         for rec in self:
+             holidays_rec = self.env['hr.holidays'].search(
+-                [
+-                    ('employee_id',
+-                     '=',
+-                     rec.employee_id.id),
+-                    ('holiday_status_id',
+-                     '=',
+-                     rec.holiday_status_id.id),
+-                    ('state',
+-                     'not in',
+-                     ('validate',
+-                      'draft',
+-                      'cancel')),
+-                    ('type',
+-                     '=',
+-                     'remove'),
+-                ])
++                [('employee_id', '=', rec.employee_id.id),
++                ('holiday_status_id', '=', rec.holiday_status_id.id),
++                ('state', 'not in', ('validate', 'draft', 'cancel')),
++                ('type', '=', 'remove')])
+             for holidays in holidays_rec:
+                 if holidays.number_of_days_temp:
+                     rec.applied_leave += holidays.number_of_days_temp
+diff --git a/custom/employee_leave_summary/models/hr_holiday.py b/custom/employee_leave_summary/models/hr_holiday.py
+index 06c1d9c..462bcac 100644
+--- a/custom/employee_leave_summary/models/hr_holiday.py
++++ b/custom/employee_leave_summary/models/hr_holiday.py
+@@ -15,12 +15,23 @@ class HrHolidays(models.Model):
+         """
+         res = super(HrHolidays, self).action_approve()
+         work_resumption_obj = self.env['work.resumption']
+-        work_resumption_obj.create({
+-            'employee_id': self.employee_id.id,
+-            'date_from': self.date_from,
+-            'date_to': self.date_to,
+-            'actual_date_from': self.date_from,
+-            'hr_holiday_id': self.id,
+-            'holiday_status_id': self.holiday_status_id.id
+-        })
++        for rec in self:
++            if rec.type == 'remove':
++                work_resumption_obj.create({
++                    'employee_id': rec.employee_id.id,
++                    'date_from': rec.date_from,
++                    'date_to': rec.date_to,
++                    'actual_date_from': rec.date_from,
++                    'hr_holiday_id': rec.id,
++                    'holiday_status_id': rec.holiday_status_id.id
++                })
++        return res
++
++    @api.multi
++    def button_cancel(self):
++        res = super(HrHolidays, self).button_cancel()
++        for rec in self:
++            resumption_rec = self.env['work.resumption'].search([('hr_holiday_id', '=', rec.id)])
++            for resumption in resumption_rec:
++                resumption.unlink()
+         return res
+diff --git a/custom/employee_leave_summary/models/hr_work_resumption.py b/custom/employee_leave_summary/models/hr_work_resumption.py
+index 41b2d5f..d37bb2a 100755
+--- a/custom/employee_leave_summary/models/hr_work_resumption.py
++++ b/custom/employee_leave_summary/models/hr_work_resumption.py
+@@ -155,6 +155,7 @@ class WorkResumption(models.Model):
+                 rec.state = 'ceo'
+             else:
+                 rec.state = 'validate'
++                rec.hr_holiday_id.write({'work_resumption_done': True})
+         return True
+ 
+     @api.multi
+@@ -172,6 +173,7 @@ class WorkResumption(models.Model):
+                 rec.state = 'ceo'
+             else:
+                 rec.state = 'validate'
++                rec.hr_holiday_id.write({'work_resumption_done': True})
+         return True
+ 
+     @api.multi
+@@ -188,6 +190,7 @@ class WorkResumption(models.Model):
+                 rec.state = 'ceo'
+             else:
+                 rec.state = 'validate'
++                rec.hr_holiday_id.write({'work_resumption_done': True})
+         return True
+ 
+     @api.multi
+@@ -202,6 +205,7 @@ class WorkResumption(models.Model):
+                 rec.state = 'ceo'
+             else:
+                 rec.state = 'validate'
++                rec.hr_holiday_id.write({'work_resumption_done': True})
+         return True
+ 
+     @api.multi
+@@ -210,5 +214,6 @@ class WorkResumption(models.Model):
+         :return:
+         """
+         for rec in self:
+-            rec.state = 'validate'
++            rec.state = 'hr_holiday_id'
++            rec.holiday_status_id.write({'work_resumption_done': True})
+         return True
+diff --git a/custom/employee_leave_summary/views/employee_leave_summary_view.xml b/custom/employee_leave_summary/views/employee_leave_summary_view.xml
+index 01882fc..bcae769 100644
+--- a/custom/employee_leave_summary/views/employee_leave_summary_view.xml
++++ b/custom/employee_leave_summary/views/employee_leave_summary_view.xml
+@@ -110,5 +110,7 @@
+             action="employee_leave_summary_tree_action"
+             sequence="35"/>
+ 
++
++
+     </data>
+ </odoo>
+\ No newline at end of file
+diff --git a/custom/hr_holidays_extension/models/hr_holidays_extend.py b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+index 37405ab..8324a4a 100644
+--- a/custom/hr_holidays_extension/models/hr_holidays_extend.py
++++ b/custom/hr_holidays_extension/models/hr_holidays_extend.py
+@@ -319,6 +319,7 @@ class HrHolidays(models.Model):
+              " balance if this leave"
+              " type support calculation"
+              " in the future.")
++    amend = fields.Boolean(string='Amend')
+ 
+     @api.onchange(
+         'future_balance_value',
+@@ -1235,6 +1236,17 @@ class HrHolidays(models.Model):
+                                         ' the leaves waiting'
+                                         ' for validation.'))
+ 
++    @api.multi
++    def button_amend(self):
++        for rec in self:
++            rec.write({'state': 'draft',
++                       'amend': True})
++
++    @api.multi
++    def button_cancel(self):
++        for rec in self:
++            rec.write({'state': 'cancel'})
++
+ 
+ class hr_attendance(models.Model):
+     _inherit = 'hr.attendance'
+diff --git a/custom/hr_holidays_extension/views/hr_holidays_view.xml b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+index 40c6df4..9589943 100644
+--- a/custom/hr_holidays_extension/views/hr_holidays_view.xml
++++ b/custom/hr_holidays_extension/views/hr_holidays_view.xml
+@@ -67,6 +67,8 @@
+                             <button string="Refuse" name="action_refuse_wizard"
+                                     states="ceo" type="object"
+                                     groups="ceo_group.group_ceo"/>
++                            <button name="button_amend" string="Amend" type="object" states="validate" />
++                            <button name="button_cancel" string="Cancel" type="object" states="validate" />
+                             <field name="state" widget="statusbar"
+                                    statusbar_visible="draft,confirm,validate1,validate"
+                                    statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}'/>
+@@ -77,11 +79,15 @@
+                                     <field name="display_name"/>
+                                 </h1>
+                             </div>
++                            <div attrs="{'invisible': [('state', 'not in', ('cancel'))]}">
++                                <p style="font-weight: bold;font-color: red">How account type affects your reports?</p>
++                            </div>
+                             <group>
+                                 <group>
+                                     <field name="name"
+                                            attrs="{'readonly':[('state','!=','draft'),('state','!=','confirm')]}"/>
+                                     <field name="flag_saudi" invisible="1"/>
++                                    <field name="amend"/>
+                                     <field name="holiday_status_id"
+                                            context="{'employee_id':employee_id}"/>
+                                     <label for="number_of_days_temp"
+@@ -89,7 +95,7 @@
+                                     <div>
+                                         <div attrs="{'invisible': [('type', '=', 'add')]}">
+                                             <field name="date_from"
+-                                                   attrs="{'required':[('type', '=', 'remove')]}"
++                                                   attrs="{'required':[('type', '=', 'remove')], 'readonly': [('amend', '=', True)]}"
+                                                    class="oe_inline"/>
+                                             <label string="-"
+                                                    class="oe_inline"/>
+diff --git a/custom/hr_policy_accrual/models/hr_policy_accrual.py b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+index 5663e4a..7593c34 100644
+--- a/custom/hr_policy_accrual/models/hr_policy_accrual.py
++++ b/custom/hr_policy_accrual/models/hr_policy_accrual.py
+@@ -94,9 +94,12 @@ class hr_policy(models.Model):
+ 
+         employed_days = 0
+         dCount = dHire
++        print dCount, dToday, employee
+         while dCount < dToday:
+             employed_days += 1
+             dCount += timedelta(days=+1)
++        print line.minimum_employed_days, employed_days
++        efjk
+         if line.minimum_employed_days > employed_days:
+             return
+ 

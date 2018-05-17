@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- destination org purpose form_view -->
+    <record id="destination_org_purpose_form_view" model="ir.ui.view">
+        <field name="name">destination.org.purpose.from.view</field>
+        <field name="model">destination.org.purpose</field>
+        <field name="arch" type="xml">
+            <form string="Destination Organization Purpose">
+                <sheet>
+                    <group colspan="4" col="4" name="employee_info">
+                        <field name="name" required="1"/>
+                        <field name="arabic_name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <!-- destination_org_purpose tree view-->
+    <record id="destination_org_purpose_tree_view" model="ir.ui.view">
+        <field name="name">destination.org.purpose.tree.view</field>
+        <field name="model">destination.org.purpose</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Destination Organization Purpose">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="destination_organization_purpose_action"
+            model="ir.actions.act_window">
+        <field name="name">Destination Organization Purpose</field>
+        <field name="res_model">destination.org.purpose</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+</odoo>

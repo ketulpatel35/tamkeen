@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <record id="purchase_budget_action" model="ir.actions.act_window">
+            <field name="name">Procurement Requisition</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_type">form</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','in',['budget'])]</field>
+
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new Calls for Bids.
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+
+
+
+        <menuitem id="account_purchase" name="Purchase Budget "
+                  parent="account.menu_finance" groups="account.group_account_user"
+                  sequence="1" />
+
+        <menuitem id="account_purchase_budget" name="Procurement Requisition"
+                  parent="account_purchase" action="purchase_budget_action" groups="account.group_account_user"
+                  sequence="2" />
+
+        <record id="purchase_requisition.action_report_purchase_requisitions" model="ir.actions.report.xml">
+            <!--<field name="groups_id" eval="[(6,0,[ref('purchase_requisition_config.group_procurement_officer_pr')])]" />-->
+            <field name="groups_id" eval="[(4, ref('base.group_erp_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="paperformat_purchase_requisition" model="report.paperformat">
+            <field name="name">European A4 Custom</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="purchase_requisition_action_template"
+                model="purchase.requisition"
+                string="Purchase Requisition"
+                report_type="qweb-pdf"
+                name="purchase_customization.purchase_requisition_template"
+                file="purchase_customization.purchase_requisition_template"
+                paperformat="purchase_customization.paperformat_purchase_requisition"/>
+
+        <template id="purchase_requisition_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="purchase_customization.purchase_requisition_header_footer">
+                        <div class="page">
+                            <style>
+                                .detail
+                                {
+                                width:100%;
+                                }
+                                .table tr, td, th
+                                {
+                                border:1px solid black;
+                                padding:5px;
+                                }
+                                .row
+                                {
+                                border-bottom:1px solid black;
+                                }
+                            </style>
+                            <table class="detail">
+                                <tr>
+                                    <th width="20%">Subject:</th>
+                                    <td width="25%"><t t-if="o.subject"><span t-field="o.subject"/></t></td>
+                                    <th width="20%">Requester:</th>
+                                    <td width="35%">
+                                        <t t-if="o.employee_ids">
+                                            <span t-field="o.employee_ids.name"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="20%">Analytic Distibution:</th>
+                                    <td width="25%">
+                                        <t t-if="o.account_analytic_id">
+                                            <span t-field="o.account_analytic_id.name"/>
+                                        </t>
+                                    </td>
+                                    <th width="20%">Estimated cost(Local Curr):</th>
+                                    <td width="35%">
+                                        <t t-if="o.estimated_cost">
+                                            <span t-field="o.estimated_cost"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="20%">Estimated Cost:</th>
+                                    <td width="35%"><t t-if="o.est_cost"><span t-field="o.est_cost"/></t></td>
+                                    <th width="20%">Currency:</th>
+                                    <td width="35%">
+                                        <t t-if="o.currency_id">
+                                            <span t-field="o.currency_id.name"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="20%">Contract Manager:</th>
+                                    <td width="25%"><t t-if="o.contract_manager"><span t-field="o.contract_manager"/></t></td>
+                                    <th width="20%">Approved by:</th>
+                                    <td width="35%"><t t-if="o.vp_user_id"><span t-field="o.vp_user_id.name"/></t></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="detail">
+                                <tr>
+                                    <th width="20%">Budget Status:</th>
+                                    <td width="25%"><t t-if="o.budget"><span t-field="o.budget"/></t></td>
+                                    <th width="20%">Budget Exception Reason:</th>
+                                    <td width="35%">
+                                        <t t-if="o.budget == 'exceptional_out_budget'">
+                                            <span t-field="o.budget_exception_reason"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="20%">Other Details:</th>
+                                    <td colspan="3" width="80%"><t t-if="o.other_details"><span t-field="o.other_details"/></t></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%" class="table table-bordered">
+                                <thead>
+                                    <tr style="background-color:#f4f5f7">
+                                        <th>#</th>
+                                        <th>Item</th>
+                                        <th>Description</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="count" t-value='0' />
+                                    <tr t-foreach="o.line_ids" t-as="line">
+                                        <tr>
+                                            <t t-set="count" t-value='count + 1' />
+                                            <td style="background-color:#f9fbff">
+                                                <t t-esc="count"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="line.product_id">
+                                                    <span t-field="line.product_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-if="line.description">
+                                                    <span t-field="line.description"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-if="line.product_qty">
+                                                    <span t-field="line.product_qty"/>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-if="line.product_uom_id">
+                                                    <span t-field="line.product_uom_id.name"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <h3>Product/Service Description</h3><br/>
+                                    <t t-if="o.product_service_description">
+                                        <span t-field="o.product_service_description"/>
+                                    </t>
+                                </div>
+                                <div class="row">
+                                    <h3>Remarks</h3><br/>
+                                    <t t-if="o.remark">
+                                        <span t-field="o.remark"/>
+                                    </t>
+                                </div>
+                                <div class="row">
+                                    <h3>Terms And Conditions</h3><br/>
+                                    <t t-if="o.description">
+                                        <span t-field="o.description"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="purchase_requisition_header_footer">
+            <t t-call="purchase_customization.purchase_requisition_header"/>
+            <t t-raw="0"/>
+            <t t-call="purchase_customization.purchase_requisition_footer"/>
+        </template>
+
+        <template id="purchase_requisition_header">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="text-left">
+                            <img class="img-responsive"
+                                 src="/purchase_customization/static/description/icon.png" width="100%" height="40px"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div style="margin-top:10px">
+                            <center><h2>Purchase Requisition</h2></center>
+                        </div>
+                    </div>
+                    <div class="col-xs-3"/>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 text-left">
+                        <h4><b>P.R#:</b><t t-if="o.name"><span t-field="o.name"></span></t></h4>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <h4><b>Created on:</b><t t-if="o.create_date">
+                            <span t-field="o.create_date" t-field-options='{"format": "dd-MM-yyyy"}'></span></t></h4>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="purchase_requisition_footer">
+            <div class="footer">
+                <div class="container-fluid" style="border-top:1px solid black;">
+                    <div class="row text-center">
+                        <span>Page </span><span class="page" /> of <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</openerp>

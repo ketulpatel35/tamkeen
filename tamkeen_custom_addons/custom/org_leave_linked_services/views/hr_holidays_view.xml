@@ -1,0 +1,49 @@
+<odoo>
+    <record id="hr_holidays_inherit_for_add_for_linked_service"
+            model="ir.ui.view">
+        <field name="name">hr.holidays.inherit.for.add.for.linked.service</field>
+        <field name="model">hr.holidays</field>
+        <field name="inherit_id" ref="hr_holidays_extension.hr_holidays_inherit_for_add_reason"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/div[@name='submit_message']"
+                   position="before">
+                <div class="oe_button_box">
+                    <button class="oe_stat_button" type="object"
+                            name="action_service_management_request"
+                            icon="fa-calendar" context="{'leave': True}">
+                        <div class="o_stat_info">
+                            <field name="service_request_count"
+                                   class="o_stat_value"/>
+                            <span class="o_stat_text">
+                                Service Request
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </xpath>
+            <!--<xpath expr="//header" position="inside">-->
+            <!--<button name="%(service_management.act_all_services_with_reference)d" string="View Service Request" type="action" states="draft"-->
+            <!--context="{'default_reference_id':'hr.holidays,'+str(id), 'leave':True}"/>-->
+            <!--<button name="%(service_management.act_all_services_with_reference)d" string="View Service Request" type="action"-->
+            <!--attrs="{'invisible':[('state','=','draft')]}"-->
+            <!--context="{'default_reference_id':'hr.holidays,'+str(id), 'leave':True, 'create':False,'edit':False,'delete':False}"/>-->
+            <!--</xpath>-->
+            <!--<xpath expr="//notebook" position="before">-->
+                <!--<group colspan="4" col="2">-->
+                    <!--<field name="id" invisible="1"/>-->
+                    <!--<field name="additional_service_needed" attrs="{'invisible': [('type', '=', 'add')]}"/>-->
+                <!--</group>-->
+            <!--</xpath>-->
+            <!--<xpath expr="//notebook/page[@name='approvals']"-->
+                   <!--position="before">-->
+                <!--<page string="General Service"-->
+                      <!--attrs="{'invisible': [('additional_service_needed', '!=', True)], 'default_focus': [('additional_service_needed', '=', True)]}">-->
+                    <!--<group>-->
+                        <!--<field name="additional_services" nolabel="1"-->
+                               <!--context="{'leave': True}"/>-->
+                    <!--</group>-->
+                <!--</page>-->
+            <!--</xpath>-->
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="overtime_claim_activity_search_view" model="ir.ui.view">
+            <field name="name">overtime.request.activity.search.view</field>
+            <field name="model">overtime.claim.activity</field>
+            <field name="arch" type="xml">
+                <search string="Overtime Claim Activity">
+                    <field name="employee_id"/>
+                    <field name="overtime_claim_id"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_employee" string="Employee"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter name="group_state"
+                                string="Status"
+                                context="{'group_by':'state'}"/>
+                        <filter name="group_date" string="Month"
+                                context="{'group_by':'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- tree view Overtime statement -->
+        <record id="overtime_claim_activity_tree" model="ir.ui.view">
+            <field name="name">overtime.claim.activity.tree.view</field>
+            <field name="model">overtime.claim.activity</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime Claim Activity"
+                      default_order='date desc' editable="bottom"
+                      create="false" edit="false">
+                    <field name="overtime_claim_id"/>
+                    <field name="employee_id"/>
+                    <field name="date"/>
+                    <field name="activity_planned"/>
+                    <field name="expected_hours" sum="Expected Hours(Overtime"/>
+                    <field name="actual_hours" sum="Actual Hours"/>
+                    <field name="actual_day_cost"
+                           group="group_display_overtime_cost" sum="Actual Day Cost"/>
+                    <field name="attendance_hours"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="open_overtime_claim_activity_action"
+                model="ir.actions.act_window">
+            <field name="name">Overtime Claim Activity</field>
+            <field name="res_model">overtime.claim.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">
+                {
+                'search_default_employee_id': context.get('employee_id'),
+                'default_employee_id': context.get('employee_id'),
+                'search_default_group_employee': 1,
+                'search_default_group_state': 1,
+                'search_default_group_date': 1,
+                }
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!-- tree view Overtime statement -->
+        <record id="overtime_statement_request_tree_view" model="ir.ui.view">
+            <field name="name">overtime.statement.tree.view</field>
+            <field name="model">overtime.statement.request</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime Statement Request"
+                      default_order='create_date desc'>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="cost_center_id" readonly="1"/>
+                    <field name="account_analytic_id"/>
+                    <field name="expected_approval_date_as_sla"/>
+                    <field name="request_date"/>
+                    <field name="total_actual_hours" sum="Total Actual Hours"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- form view for overtime pre req -->
+        <record id="overtime_statement_form_view" model="ir.ui.view">
+            <field name="name">Overtime Claim</field>
+            <field name="model">overtime.statement.request</field>
+            <field name="arch" type="xml">
+                <form string="Overtime Claim">
+                    <header>
+                        <button name="action_submit_for_approval" type="object"
+                                string="Submit for Approval "
+                                class="btn-primary"
+                                states="draft"/>
+                        <!-- Manager -->
+                        <button name="service_validate1" type="object"
+                                string="Manager Approval " class="btn-primary"
+                                states="mngr_approval"
+                                groups="hr_overtime.group_overtime_manager_approval"/>
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Return" class="o_sale_confirm"
+                                states='mngr_approval' context="{'trigger': 'Returned'}"
+                                groups="hr_overtime.group_overtime_manager_approval"/>
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Reject"
+                                states='mngr_approval'
+                                groups="hr_overtime.group_overtime_manager_approval" context="{'trigger': 'Rejected'}"/>
+
+                        <!-- VP -->
+                        <button name="service_validate2" type="object"
+                                states="vp_approval"
+                                string="VP Approval" class="btn-primary"
+                                groups="hr_overtime.group_overtime_vp_approval" />
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Return" class="o_sale_confirm"
+                                states='vp_approval' context="{'trigger': 'Returned'}"
+                                groups="hr_overtime.group_overtime_vp_approval"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Reject"
+                                states='vp_approval'
+                                groups="hr_overtime.group_overtime_vp_approval" context="{'trigger': 'Rejected'}"/>
+
+                        <!-- HR -->
+                        <!-- hr attendance verify -->
+                        <button name="attendance_verify" type="object"
+                                string="Attendance Verify" class="btn-primary"
+                                attrs="{'invisible': ['|', ('verify_attendance','!=',True), ('state','!=','hr_approval')]}"
+                                groups="hr_overtime.group_overtime_hr_approval"/>
+
+                        <button name="service_validate3" type="object"
+                                string="HR Approval" class="btn-primary"
+                                attrs="{'invisible': ['|', ('verify_attendance','!=',False), ('state','!=','hr_approval')]}"
+                                states="hr_approval"
+                                groups="hr_overtime.group_overtime_hr_approval"/>
+
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Return" class="o_sale_confirm"
+                                states='hr_approval' context="{'trigger': 'Returned'}"
+                                groups="hr_overtime.group_overtime_hr_approval"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Reject"
+                                states='hr_approval'
+                                groups="hr_overtime.group_overtime_hr_approval" context="{'trigger': 'Rejected'}"/>
+
+                        <!-- Budget Approval -->
+                        <button name="service_validate4" type="object"
+                                states="budget_approval"
+                                string="Budget Approval" class="btn-primary"
+                                groups="hr_overtime.group_overtime_budget_approval"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Reject"
+                                states='budget_approval'
+                                groups="hr_overtime.group_overtime_budget_approval" context="{'trigger': 'Rejected'}"/>
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Return"
+                                states='budget_approval' context="{'trigger': 'Returned'}"
+                                groups="hr_overtime.group_overtime_budget_approval"/>
+                        <!--<button name="to_reject" type="object"-->
+                                <!--string="Set to Draft" class="btn-primary"-->
+                                <!--states='budget_approval'-->
+                                <!--invisible="1"-->
+                                <!--groups="hr_overtime.group_overtime_budget_approval"/>-->
+
+                        <!-- CEO -->
+                        <button name="service_validate5" type="object"
+                                    string="CEO Approval" class="btn-primary" states="ceo_approval"
+                                groups="hr_overtime.group_overtime_ceo_approval"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Return"
+                                states='ceo_approval'
+                                groups="hr_overtime.group_overtime_ceo_approval" context="{'trigger': 'Returned'}"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Reject"
+                                states='ceo_approval'
+                                groups="hr_overtime.group_overtime_ceo_approval" context="{'trigger': 'Rejected'}"/>
+
+                        <!-- Approved -->
+                        <button
+                                name="%(service_configuration_panel.act_open_service_log_wizard)d" type="action"
+                                string="Lock" class="btn-primary"
+                                states='approved'
+                                groups="hr_overtime.group_overtime_lock"
+                                confirm="Are you sure you want to lock this request?" context="{'trigger': 'Locked'}"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                                type="action"
+                                string="Cancel"
+                                states='approved'
+                                groups="hr_overtime.group_overtime_cancel"
+                                context="{'trigger': 'Cancelled'}"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                                type="action"
+                                string="Close"
+                                states='approved'
+                                groups="hr_overtime.group_overtime_close"
+                                context="{'trigger': 'Closed'}"/>
+
+                        <!-- Notification -->
+                        <button name="send_notify" string="Notify"
+                                type="object"
+                                states="hr_approval"/>
+                        <button name="send_notify" string="Notify"
+                                type="object"
+                                states="ceo_approval"/>
+                        <button name="send_notify" string="Notify"
+                                type="object"
+                                states="budget_approval"/>
+
+                        <!-- Lock -->
+                        <button name="service_validate11" type="object"
+                                string="Un-Lock" class="btn-primary"
+                                states='locked'
+                                groups="hr_overtime.group_overtime_lock"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                                type="action"
+                                string="Cancel"
+                                states='locked'
+                                context="{'trigger': 'Cancelled'}"
+                                groups="hr_overtime.group_overtime_cancel"/>
+                        <button name="%(service_configuration_panel.act_open_service_log_wizard)d"
+                                type="action"
+                                string="Close"
+                                states='locked'
+                                groups="hr_overtime.group_overtime_close"
+                                context="{'trigger': 'Closed'}"/>
+
+                        <field name="stage_id" widget="statusbar"/>
+                        <field name="state" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <div attrs="{'invisible': [('state', '!=', 'draft')]}">
+                            <field name="submit_message" widget="html" readonly="1"/>
+                        </div>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="action"
+                                    name="%(open_overtime_claim_activity_action)d"
+                                    string="Review Requested Hours"
+                                    context="{'employee_id': employee_id}"/>
+                            <button type="object"
+                                    name="generate_pyaslip_amendment"
+                                    string="Generate Payslip Amendment"
+                                    context="{'default_employee_id': employee_id}"
+                                    groups="hr_overtime.group_overtime_generate_amendment"
+                                    attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                            <button type="object"
+                                    name="get_payslip_amendment"
+                                    string="Amendments"
+                                    groups="hr_overtime.group_overtime_view_amendment"
+                                    attrs="{'invisible': [('state', 'not in', ['payroll_processing', 'closed'])]}"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group colspan="4" col="4">
+                                <field name="employee_id" readonly="1" required="1"
+                                       options="{'no_open': True, 'no_quick_create':True,'no_create_edit':True}"/>
+                                <field name="employee_company_id" readonly="1"/>
+                                <field name="department_id" readonly="1"/>
+                                <field name="request_date" readonly="1"/>
+                                <field name="cost_center_id" readonly="1"
+                                       attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                       options="{'no_open': True, 'no_quick_create':True,'no_create_edit':True}" required="1"/>
+                                <field name="account_analytic_id"
+                                       attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                       options="{'no_open': True, 'no_quick_create':True,'no_create_edit':True}" required="1"/>
+                                <field name="pre_approval_request_id"
+                                           domain="[('employee_id.user_id', '=', uid), ('state', '=', 'open'), ('cost_center_id', '=', cost_center_id), ('account_analytic_id','=','account_analytic_id'), ('remaining_hours_balance', '>', 0)]"
+                                           attrs="{'readonly': [('state', 'not in', ('draft'))], 'required': [('overtime_pre_approval_type', '=', 'required')], 'invisible': [('overtime_pre_approval_type', '=', 'not_available')]}"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                <field name="consider_in_pre_request"
+                                       readonly="1" invisible="1"/>
+                                <field name="overtime_pre_approval_type"
+                                       invisible="1"/>
+                                <field name="color" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="about_service"
+                                   widget="html"
+                                   attrs="{'invisible':[('overtime_claim_policy_id','=',False)]}"/>
+                            </group>
+                            <group>
+                                <field name="verify_attendance" invisible="1"/>
+                                <field name="compute_overtime" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Overtime Claim Activity">
+                                <group>
+                                    <group
+                                            attrs="{'invisible': ['|', ('pre_approval_request_id', '=', False), ('state', '!=', 'draft')]}">
+                                        <button
+                                                name= 'get_overtime_request'
+                                                string="Get Planned Activities"
+                                                type="object"
+                                                context="{'from_button': True, 'pre_approval_request_id': pre_approval_request_id}"/>
+                                        <button name="reset_claim_lines"
+                                                type="object"
+                                                string="Clear Claim Lines"/>
+                                    </group>
+                                    <field name="overtime_claim_activity_ids"
+                                           attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                           nolabel="1"
+                                           context="{'employee_id': employee_id, 'claim_request': True, 'pre_approval_request_id': pre_approval_request_id}">
+                                        <form
+                                                string="Overtime Request Activity">
+                                            <sheet
+                                                    string="Overtime Request Activity">
+                                                <group col="4"
+                                                       colspan="4">
+                                                    <field name="date" required="1"/>
+                                                    <field name="activity_planned"
+                                                       required="1"/>
+                                                    <field name="remark"/>
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree editable="bottom">
+                                            <field name="date" required="1"/>
+                                            <field name="activity_planned"
+                                                   required="1"/>
+                                            <field name="expected_hours"
+                                                   readonly="1"/>
+                                            <field name="actual_hours"
+                                                   required="1"/>
+                                            <field name="remaining_hours"
+                                                   readonly="1"/>
+                                            <field name="attendance_hours"
+                                                   widget="float_time"
+                                                   readonly="1" groups="hr_overtime.group_overtime_hr_approval"/>
+                                            <field name="calculated_hours"
+                                                   readonly="1" groups="hr_overtime.group_overtime_hr_approval"/>
+                                            <field name="actual_day_cost"
+                                                   attrs="{'invisible': [('state', '=', 'draft')], 'readonly': [('state', '!=', 'draft')]}"
+                                                   widget="monetary" groups="hr_overtime.group_display_overtime_cost"/>
+                                            <field name="remark"/>
+                                            <field name="overtime_claim_id"
+                                                   invisible="1"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right">
+                                        <field name="currency_id"
+                                               invisible="1"/>
+                                        <field name="total_actual_hours"
+                                               class="oe_subtotal_footer_separator"/>
+                                        <field name="total_day_cost"
+                                               readonly="1"
+                                               class="oe_subtotal_footer_separator" widget="monetary" groups="hr_overtime.group_display_overtime_cost"/>
+                                    </group>
+                                </group>
+                            </page>
+                             <page string="Endorsement" attrs="{'invisible':['|',('endorsement_required','=',False),('endorsement_text','=',False)]}">
+                                <group>
+                                    <field name="endorsement_required" invisible="1"/>
+                                    <field name="endorsement_text" nolabel="1" widget="html"/>
+                                </group>
+                                <group>
+                                    <field name="endorsement_approved"/>
+                                </group>
+                            </page>
+
+                            <page string="Approvals">
+                                <div>
+                                    The approval/refusal information will be
+                                    displayed here.
+                                </div>
+                                <group>
+                                    <group attrs="{'invisible':[('mngr_user_id','=',False)]}">
+                                        <field name="mngr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="mngr_approval_date"/>
+                                    </group>
+                                    <group attrs="{'invisible':[('vp_user_id','=',False)]}">
+                                        <field name="vp_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="vp_approval_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('budget_user_id','=',False)]}">
+                                        <field name="budget_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="budget_approval_date"/>
+                                    </group>
+
+                                    <group attrs="{'invisible':[('ceo_user_id','=',False)]}">
+                                        <field name="ceo_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="ceo_approval_date"/>
+                                    </group>
+                                    <group attrs="{'invisible':[('hr_user_id','=',False)]}">
+                                        <field name="hr_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="hr_approval_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('cancel_user_id','=',False)]}">
+                                        <field name="cancel_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="cancel_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('rejected_user_id','=',False)]}">
+                                        <field name="rejected_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="rejected_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('reset_user_id','=',False)]}">
+                                        <field name="reset_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="reset_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('closed_user_id','=',False)]}">
+                                        <field name="closed_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="closed_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('locked_user_id','=',False)]}">
+                                        <field name="locked_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="locked_date"/>
+                                    </group>
+
+                                    <group
+                                            attrs="{'invisible':[('approved_user_id','=',False)]}">
+                                        <field name="approved_user_id"
+                                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                        <field name="approved_date"/>
+                                    </group>
+
+                                </group>
+                                <group attrs="{'invisible':[('final_approval_user_id','=',False)]}" colspan="4" col="4">
+                                    <field name="final_approval_user_id" colspan="2" options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="final_approval_date" colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('submitted_by','=',False)]}"
+                                       colspan="4" col="4">
+                                    <field name="submitted_by" colspan="2"
+                                           options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True, 'limit':1000}"/>
+                                    <field name="submit_date" colspan="2"/>
+                                </group>
+                                <group attrs="{'invisible':[('submitted_by','=',False)]}" colspan="4" col="4">
+                                    <field name="waiting_time" colspan="2"/>
+                                    <field name="expected_approval_date_as_sla" attrs="{'invisible': [('expected_approval_date_as_sla','=', False)]}"/>
+                                </group>
+                            </page>
+                            <page string="Service Log">
+                                <field name="service_log_ids" readonly="1">
+                                    <tree string="Service Logs">
+                                        <field name="overtime_pre_request_id"
+                                               invisible="1"/>
+                                        <field name="user_id"/>
+                                        <field name="activity_datetime"
+                                               readonly="1"/>
+                                        <field name="state_from"/>
+                                        <field name="state_to"/>
+                                        <field name="reason"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Extra">
+                                <group colspan="4" col="4">
+                                    <field name="file_to_fill"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="overtime_claim_policy_id"
+                                           invisible="1"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="overtime_statement_form_view_behalf" model="ir.ui.view">
+            <field name="name">overtime.statement.form.view.behalf</field>
+            <field name="model">overtime.statement.request</field>
+            <field name="inherit_id" ref="overtime_statement_form_view" />
+            <field name="groups_id" eval="[(6, 0, [ref('hr_overtime.group_service_on_behalf_approval_srvs')])]" />
+            <field name="arch" type="xml">
+                <field name="employee_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="overtime_statement_request_active"
+                model="ir.actions.act_window">
+            <field name="name">Overtime Claim</field>
+            <field name="res_model">overtime.statement.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="overtime_request_search_view" model="ir.ui.view">
+            <field name="name">overtime.request.search.view</field>
+            <field name="model">overtime.statement.request</field>
+            <field name="arch" type="xml">
+                <search string="Overtime Request">
+                    <field name="employee_id"/>
+                    <field name="state"/>
+                    <field name="employee_company_id"/>
+                    <field name="department_id"/>
+                    <filter icon="terp-go-today" string="Current Month Submitted Requests" name="currentmonth" domain="[('submit_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('submit_date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]" help="Filter past groups" />
+                    <filter name="exceeds_sla_period" string="Pending and Exceeds SLA Period"
+                domain="[('state','not in',['draft','closed','rejected','approved', 'locked', 'cancelled', 'payroll_processing']), ('expected_approval_date_as_sla','!=',False),('expected_approval_date_as_sla','&lt;',time.strftime('%%Y-%%m-%d 00:00:00')) ]"/>
+                    <filter string="Pending HR Approvals"
+                            name="pending_hr_approval"
+                            domain="[('state','in',['hr_approval'])]"/>
+                    <filter string="Pending Budget Approvals"
+                            name="pending_budget_approval"
+                            domain="[('state','in',['budget_approval'])]"/>
+                    <filter string="Pending Approval" name="pending_approval"
+                        domain="['|','&amp;',('employee_id.overtime_manager_id.user_id.id','=',uid),('state','=','mngr_approval'),'|','&amp;',('employee_id.overtime_vp_id.user_id.id','=',uid),('state','=','vp_approval'),'&amp;',('employee_id.overtime_ceo_id.user_id.id','=',uid),('state','=','ceo_approval')]"/>
+                    <group expand="0" string="Group By...">
+
+                        <filter name="group_employee_id" string="Employee"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter name="group_department_id"
+                                string="Department"
+                                context="{'group_by':'department_id'}"/>
+                        <filter name="group_employee_cost_center_id"
+                                string="Cost Center"
+                                context="{'group_by':'cost_center_id'}"/>
+                        <filter name="group_employee_account_analytic_id"
+                                string="Cost Center"
+                                context="{'group_by':'account_analytic_id'}"/>
+                        <filter name="state" string="State"
+                                icon="terp-go-today"
+                                domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="open_overtime_request_for_view_all"
+                model="ir.actions.act_window">
+            <field name="name">Overtime Requests</field>
+            <field name="res_model">overtime.statement.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'readonly_by_pass': True}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <record id="open_overtime_request_for_hr"
+                model="ir.actions.act_window">
+            <field name="name">HR Approval</field>
+            <field name="res_model">overtime.statement.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_pending_hr_approval':1, 'readonly_by_pass': True}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+        <record id="open_overtime_request_for_budget"
+                model="ir.actions.act_window">
+            <field name="name">Budget Approval</field>
+            <field name="res_model">overtime.statement.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_pending_budget_approval':1}
+            </field>
+            <field name="domain">[]</field>
+        </record>
+
+    </data>
+</openerp>

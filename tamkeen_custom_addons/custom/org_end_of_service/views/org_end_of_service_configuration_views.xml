@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- company for end of service policy -->
+    <record model="ir.ui.view"
+            id="res_company_add_end_of_service_policy">
+        <field name="name">res.company.add.end.of.service.policy</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.view_company_inherit_for_service_panel"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='policies']"
+                   position="inside">
+                <group string="End of Service Policy">
+                    <field name="end_of_service_policy_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- service configuration panel for end of service -->
+    <record model="ir.ui.view"
+            id="service_configuration_panel_for_end_of_service">
+        <field name="name">service.configuration.panel.for.end.of.service
+        </field>
+        <field name="model">service.configuration.panel</field>
+        <field name="inherit_id"
+               ref="service_configuration_panel.service_configuration_panel_form"/>
+        <field name="arch" type="xml">
+            <field name="valid_to_date" position="after">
+                <field name="is_end_of_service" invisible="1"/>
+            </field>
+            <field name="file_to_fill" position="after">
+                <field name="eos_survey_id"
+                       attrs="{'invisible':[('is_end_of_service', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Service Configuration Panel for End of Service -->
+    <record model="ir.actions.act_window"
+            id="end_of_service_service_panels_action">
+        <field name="name">Service Configuration Panel</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.configuration.panel</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'end_of_service_model': 1}</field>
+        <field name="domain">[('model_id.model','=','org.end.of.service')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new service.
+            </p>
+            <p>
+                Press create button to create a new service.
+            </p>
+        </field>
+    </record>
+
+    <!-- org end of service -->
+    <record model="ir.actions.act_window"
+        id="end_of_service_displayed_stages_action">
+        <field name="name">Stages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">service.panel.displayed.states</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'end_of_service_model': 1}</field>
+        <field name="domain">[('model_id.model','=','org.end.of.service')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new stage.
+            </p>
+            <p>
+                Press create button to create a new stage.
+            </p>
+        </field>
+    </record>
+
+</odoo>

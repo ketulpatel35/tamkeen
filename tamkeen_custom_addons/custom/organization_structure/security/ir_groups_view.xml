@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+    <record model="ir.module.category" id="organization_structure">
+            <field name="name">Organization Structure</field>
+            <field name="sequence">7</field>
+        </record>
+
+    <record id="group_planning_head" model="res.groups">
+        <field name="name">Planning Head</field>
+        <field name="category_id" ref="organization_structure"/>
+    </record>
+    </data>
+</odoo>

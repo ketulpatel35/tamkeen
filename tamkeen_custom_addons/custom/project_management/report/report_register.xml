@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="paperformat_project_progress" model="report.paperformat">
+            <field name="name">Project Progress</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">50</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">55</field>
+            <field name="dpi">90</field>
+        </record>
+        <!-- Report Project Management  -->
+        <report id="project_management_project_charter"
+                model="project.project"
+                string="Project Charter"
+                name="project_management.report_project_charter"
+                file="project_management.report_project_charter"
+                report_type="qweb-pdf"
+                menu="False"/>
+
+
+        <report id="project_management_project_progress_report"
+                model="project.project"
+                string="Project Progress Report"
+                name="project_management.report_project_progress_report"
+                file="project_management.report_project_progress_report"
+                report_type="qweb-pdf"
+                paperformat="project_management.paperformat_project_progress"
+                menu="True"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- Calendar Event Form Inherit -->
+        <record model="ir.ui.view" id="view_calendar_event_form1_inherit">
+            <field name="name">calendar.event.form</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="Application">
+                        <group>
+                            <field name="application_id"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//page[4]" position="replace">
+                    <page string="Invitations" name="invitations">
+                        <button name="action_sendmail" type="object"
+                                string="Send mail" icon="fa-envelope"
+                                class="oe_link"/>
+                        <field name="attendee_ids" widget="one2many">
+                            <tree string="Invitation details" editable="top"
+                                  create="false" delete="false">
+                                <field name="partner_id"/>
+                                <field name="state"/>
+                                <field name="email" widget="email"/>
+                                <field name="recommendation"/>
+                                <button name="do_tentative"
+                                        states="needsAction,declined,accepted"
+                                        string="Uncertain" type="object"
+                                        icon="fa-asterisk"/>
+                                <button name="do_accept" string="Accept"
+                                        states="needsAction,tentative,declined"
+                                        type="object"
+                                        icon="fa-check text-success"/>
+                                <button name="do_decline" string="Decline"
+                                        states="needsAction,tentative,accepted"
+                                        type="object"
+                                        icon="fa-times-circle text-danger"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- New action for application -->
+
+        <record id="action_calendar_application_event"
+                model="ir.actions.act_window">
+            <field name="name">Meetings</field>
+            <field name="res_model">calendar.event</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="calendar.view_calendar_event_tree"/>
+            <field name="search_view_id"
+                   ref="calendar.view_calendar_event_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to schedule a new meeting.
+                </p>
+                <p>
+                    The calendar is shared between employees and fully
+                    integrated with
+                    other applications such as the employee holidays or the
+                    business
+                    opportunities.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

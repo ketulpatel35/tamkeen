@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_hr_timesheet_sheet_line_master,access_hr_timesheet_sheet_line_master_name,model_sheet_time_recording_line,,1,1,1,1

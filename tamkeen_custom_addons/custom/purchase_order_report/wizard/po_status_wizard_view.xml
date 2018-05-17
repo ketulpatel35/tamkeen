@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- =============== Number input wizard view==================  -->
+        <record id="purchase_order_status_wizard_view" model="ir.ui.view">
+            <field name="name">purchase.order.status.wizard.view.1</field>
+            <field name="model">purchase.order.status.report</field>
+            <field name="arch" type="xml">
+                <form string="Purhcase Order Status Filter">
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <!--<button type="object" name="get_po_status_detail"-->
+                            <!--string="Print PDF" class="oe_highlight"/>-->
+                            <!--<span>    OR    </span>-->
+                            <button type="object" name="print_report"
+                                    string="Print Excel" class="oe_highlight"/>
+                            <button name="cancel" string="Cancel" class="oe_link"
+                                    special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="wizard_print_pdf_or_excel_po_status">
+            <field name="name">Purchase Order Status</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.status.report</field>
+            <field name="view_id" ref="purchase_order_status_wizard_view"/>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+        <record id="purchase.purchase_report"
+                model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+        <menuitem id="purchase_report" name="Reports"
+                  parent="purchase.menu_purchase_root" sequence="99"
+                  groups="purchase_config.group_purchase_reporting"/>
+        <menuitem id="purchase_report_analysis" name="Purchase Analysis" parent="purchase_order_report.purchase_report" sequence="99"
+                  groups="purchase_config.group_purchase_reporting" action="purchase.action_purchase_order_report_all"/>
+        <menuitem id="po_status_report_1" parent="purchase_order_report.purchase_report" name="PO Status Report"
+                  action="wizard_print_pdf_or_excel_po_status"
+                  sequence="100" groups="purchase_config.group_purchase_reporting"/>
+
+    </data>
+</openerp>

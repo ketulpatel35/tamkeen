@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <!-- Sequences for Benefits Program -->
+        <record id="seq_benefits_program" model="ir.sequence">
+            <field name="name">Benefits Program</field>
+            <field name="code">benefits.program</field>
+            <field name="prefix">BP</field>
+            <field name="padding">6</field>
+        </record>
+
+    </data>
+</openerp>

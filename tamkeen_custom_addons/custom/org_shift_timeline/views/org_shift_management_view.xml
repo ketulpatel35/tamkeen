@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Shift Timeline Tree View-->
+    <record id="shift_timeline_tree_view" model="ir.ui.view">
+        <field name="name">shift.timeline.tree.view</field>
+        <field name="model">shift.timeline</field>
+        <field name="arch" type="xml">
+            <tree string="Shift Timeline">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="position_id"/>
+                <field name="organization_unit_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Shift Timeline Search view -->
+    <record id="shift_timeline_search_view" model="ir.ui.view">
+        <field name="name">shift.timeline.search.view</field>
+        <field name="model">shift.timeline</field>
+        <field name="arch" type="xml">
+            <search string="Personnel Area">
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="position_id"/>
+                <field name="organization_unit_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Shift Timeline Form View-->
+    <record id="shift_timeline_form_view" model="ir.ui.view">
+        <field name="name">shift.timeline.form.view</field>
+        <field name="model">shift.timeline</field>
+        <field name="arch" type="xml">
+            <form string="Shift Timeline">
+                <header>
+                    <button name="button_active" string="Active"
+                            type="object" class="btn btn-sm btn-primary"
+                            states="draft"/>
+                    <button name="button_closed" string="Close"
+                            type="object" states="draft,active"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet string="Shift Timeline">
+                    <group colspan="4" col="4">
+                        <field name="employee_id" required="1"/>
+                        <field name="employee_company_id" readonly="1"/>
+                        <field name="position_id" readonly="1"/>
+                        <field name="organization_unit_id" readonly="1"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="shift_id"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Shift Timeline Action -->
+    <record id="action_shift_timeline_template"
+            model="ir.actions.act_window">
+        <field name="name">Shift Timeline</field>
+        <field name="res_model">shift.timeline</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

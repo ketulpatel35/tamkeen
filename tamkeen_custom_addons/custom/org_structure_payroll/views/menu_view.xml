@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_salary_structure"
+              name="Salary Structure"
+              parent="organization_structure.menu_org_configuration"
+              action="hr_payroll.action_view_hr_payroll_structure_list_form"
+              sequence="50"
+              groups="organization_structure.group_planning_head"/>
+
+    <menuitem id="menu_grade_level"
+              name="Grade Level"
+              parent="organization_structure.menu_org_configuration"
+              action="hr_contract_grade_level.action_gradelevel"
+              sequence="100"
+              groups="organization_structure.group_planning_head"/>
+</odoo>

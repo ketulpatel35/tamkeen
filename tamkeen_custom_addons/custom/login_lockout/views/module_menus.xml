@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <menuitem id="login_attempt_config_wizard_root"
+                  name="Login Attempts Configuration"
+                  parent="base.menu_administration"/>
+
+        <menuitem id="login_attempt_config_wizard_config"
+                  name="Login Attempts Config." sequence="100"
+                  parent="login_attempt_config_wizard_root"
+                  action="action_login_attempt_config_wizard_form_view"/>
+
+        <menuitem id="menu_login_attempt" name="Login attempts Tracking"
+                  sequence="117" parent="login_attempt_config_wizard_root"
+                  action="action_login_attempt"/>
+
+
+    </data>
+</openerp>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Calendar Meeting -->
+    <record id="calendar_event_eos_meeting_search" model="ir.ui.view">
+        <field name="name">calendar.event.end.of.service.search</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="end_of_service_id" string="End of Service"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

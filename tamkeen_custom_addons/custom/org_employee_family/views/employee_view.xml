@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Shift Timeline -->
+    <record id="view_employee_form_for_dependent" model="ir.ui.view">
+        <field name="name">hr.employee.for.dependent</field>
+        <field name="model">hr.employee</field>
+        <field name="type">form</field>
+        <field name="inherit_id"
+               ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" icon="fa-file-o"
+                        name="button_dependent" type="object"
+                        string="Dependent" groups="hr_employee_customization.group_view_emp_info">
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

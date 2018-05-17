@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="hr.menu_hr_root">
+            <field name="groups_id" eval="[(6,0,[ref('hr.group_hr_manager'),ref('hr.group_hr_user')])]" />
+        </record>
+
+        <!-- Top Menu -->
+        <!-- <menuitem name="Self Services" id="mian_ess_menu" sequence="1" /> -->
+
+        <menuitem name="Self Services" id="mian_ess_menu" sequence="1"
+        web_icon="emp_self_services,static/description/icon.png"/>
+
+        <!-- Employee Information -->
+        <menuitem id="sub_mian_empinfo_menu" name=" Employee Information " parent="mian_ess_menu" sequence="1" />
+
+        <menuitem id="emp" name="My Profile" parent="sub_mian_empinfo_menu" action="open_view_employee_only" sequence="1" />
+
+        <menuitem id="emp_my_contract" name="My Contract" parent="sub_mian_empinfo_menu" action="action_hr_my_contract" sequence="2" />
+
+        <menuitem id="emp_colleagues" name="My Colleagues" parent="sub_mian_empinfo_menu"
+                  action="open_view_employee_colleagues" sequence="3"
+                  groups="hr.group_hr_user"/>
+
+        <!-- Employee Self Services -->
+        <menuitem id="sub_mian_ess_menu" name=" Employee Self Services "
+                  parent="mian_ess_menu" sequence="20" />
+
+        <!-- <menuitem id="sub_mian_leaves_menu" name="Leaves" parent="sub_mian_ess_menu"
+            sequence="21" /> -->
+
+        <!--<menuitem id="emp_leave_main_menu" name="Leaves"-->
+                  <!--parent="sub_mian_ess_menu" sequence="20" />-->
+
+        <!--<menuitem id="emp_leave" name="Leaves" parent="emp_leave_main_menu"-->
+                  <!--action="open_ess_ask_holidays" sequence="21" />-->
+
+        <!--<menuitem id="emp_leave_summary" name="Leaves Summary"-->
+                  <!--parent="sub_mian_ess_menu" action="hr_holidays.open_company_allocation"-->
+                  <!--sequence="22" />-->
+
+        <!--<menuitem name="General Services Request" id="ess_menu_general_services" parent="sub_mian_ess_menu"-->
+        <!--sequence="23" action="request_management.request_all" />-->
+
+        <!--             <menuitem name="General Services" id="ess_menu_general_services" parent="sub_mian_ess_menu"
+                        sequence="23" action="request_management.action_request_general_services" />
+
+                    <menuitem name="Administration Services" id="ess_menu_administration_services" parent="sub_mian_ess_menu"
+                        sequence="24" action="request_management.action_request_administration_services" />
+         -->		<!-- Manager Self Services -->
+        <menuitem id="sub_mian_mss_menu" name=" Manager Self Services "
+                  parent="mian_ess_menu" groups="group_mss" sequence="30" />
+        <menuitem id="emp_contract" name="Employees Contracts" parent="sub_mian_mss_menu"
+                  action="action_hr_department_contracts" sequence="31" groups="group_mss"/>
+
+
+        <!--<menuitem id="mngr_gnrl_services_approval" name="Services Requests To Approve" parent="sub_mian_mss_menu"-->
+        <!--action="request_emp_mngr_approve_gnrl_services" sequence="33" />-->
+
+
+    </data>
+</odoo>
+        <!-- groups="group_request_user" -->

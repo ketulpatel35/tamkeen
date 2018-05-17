@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- emp_salary_certificates_form_view -->
+    <record id="emp_salary_certificates_form_view" model="ir.ui.view">
+        <field name="name">emp.salary.certificates.from.view</field>
+        <field name="model">emp.salary.certificates</field>
+        <field name="arch" type="xml">
+            <form string="Employment Certificate">
+                <header>
+                    <button name="confirm_salary_certificates"
+                            string="Confirm" type="object"
+                            class="oe_highlight" states="draft"
+                            groups="hr_salary_certificates.emp_salary_certificates_normal_user"/>
+                    <button name="hr_approve_salary_certificates"
+                            string="Approve"
+                            type="object" class="oe_highlight"
+                            groups="hr_salary_certificates.emp_salary_certificates_category_hr_approval"
+                            states="hr_approval"/>
+                    <button name="hr_reject_salary_certificates"
+                            string="Reject"
+                            context="{'is_reject': True}"
+                            groups="hr_salary_certificates.emp_salary_certificates_category_hr_approval"
+                            type="object"
+                            states="hr_approval"/>
+                    <button name="hr_reject_salary_certificates"
+                            string="Set to Draft"
+                            context="{'is_reject': False}"
+                            groups="hr_salary_certificates.emp_salary_certificates_category_hr_approval"
+                            type="object"
+                            states="hr_approval"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                attrs="{'invisible':['|','|',('payslip_amendment_id','!=',False), ('state', '!=', 'ready_for_printing'),('deduct_fee_from_monthly_salary', '!=', 'yes')]}"
+                                name="generate_payslip_amendment"
+                                groups="hr_payroll.group_hr_payroll_user"
+                                string="Generate Payslip Amendment"/>
+                    </div>
+                    <group class="oe_title">
+                        <h1>
+                            <field name="name"
+                                   readonly="1"
+                                   translate="1"
+                                   attrs="{'invisible':[('name','=','False')]}"/>
+                        </h1>
+                    </group>
+                    <group name="employee_info">
+                        <group>
+                            <field name="employee_id" required="1"
+                                   placeholder="Employee Name"
+                                   readonly="1"
+                                   translate="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+
+                            <field name="employee_company_id"
+                                   translate="1"
+                                   required="1"
+                                   readonly="1"/>
+                            <field name="job_id" translate="1" required="1" readonly="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="current_country_code" translate="1" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="country_id" translate="1"
+                                   required="1" readonly="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"/>
+                            <field name="iqama_number" translate="1"
+                                   readonly="1"
+                                   attrs="{'required':[('current_country_code','!=','SA')], 'invisible':[('current_country_code','=','SA')]}"/>
+                            <field name="identification_number" translate="1"
+                                   readonly="1"
+                                   attrs="{'required':[('current_country_code','=','SA')], 'invisible':[('current_country_code','!=','SA')]}"/>
+                            <field name="date_of_joining" translate="1"
+                                   required="1" readonly="1"/>
+                            <field name="payslip_amendment_id"
+                                   readonly="1" translate="1"
+                                   groups="hr_payroll.group_hr_payroll_user"
+                                   attrs="{'invisible':[('payslip_amendment_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <h4>Destination Organization</h4>
+                    <group name="destination_organization">
+                        <field name="destination_organization_type"
+                               required="1" translate="1"
+                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                               attrs="{'readonly':[('state', '!=', 'draft')]}"
+                               string="Destination Organization Type"/>
+                        <field name="is_bank" translate="1" invisible="1"/>
+                    </group>
+                    <group attrs="{'invisible':[('destination_organization_type','=', False)]}">
+                        <group>
+                            <field name="bank_id" translate="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   attrs="{'invisible':['|' ,('is_bank','=', False), ('need_to_add_missing_destination','=',True)], 'readonly':[('state', '!=', 'draft')], 'required': [('is_bank','=', True), ('need_to_add_missing_destination', '=', False)]}"/>
+                            <field name="destination_organization_id"
+                                   domain="[('dest_org_type', '=', destination_organization_type)]"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   attrs="{'invisible':['|',('is_bank','=', True), ('need_to_add_missing_destination','=',True)], 'readonly':[('state', '!=', 'draft')],'required': [('is_bank','=', False), ('need_to_add_missing_destination', '=', False)]}"
+                                   translate="1"/>
+                        </group>
+                        <group>
+                            <field name="dest_org_purpose_id" translate="1"
+                                   options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                                   attrs="{'invisible':[('need_to_add_missing_purpose', '=', True),('purpose_required', '=', False)], 'readonly':[('state', '!=', 'draft')], 'required': [('need_to_add_missing_purpose', '=', False), ('purpose_required', '=', True)]}"/>
+                            <field name="purpose_required" invisible="1"/>
+                        </group>
+                    </group>
+                    <group name="need_to_add" colspan="4" col="4">
+                        <field name="need_to_add_missing_destination" translate="1"
+                               attrs="{'invisible':['|',('destination_organization_id', '!=', False), ('bank_id', '!=', False)], 'readonly':[('state', '!=', 'draft')]}"/>
+                        <field name="need_to_add_missing_purpose" translate="1"
+                               attrs="{'invisible':[('dest_org_purpose_id', '!=', False)],'readonly':[('state', '!=', 'draft')]}"/>
+                        <field name="other_dest_org" translate="1"
+                               attrs="{'invisible':[('need_to_add_missing_destination', '!=', True)], 'required':[('need_to_add_missing_destination', '=', True)], 'readonly':[('state', '!=', 'draft')]}"/>
+                        <field name="other_purpose" translate="1"
+                               attrs="{'invisible':[('need_to_add_missing_purpose', '!=', True)], 'required':[('need_to_add_missing_purpose', '=', True), ('purpose_required', '=', True)], 'readonly':[('state', '!=', 'draft')]}"/>
+                    </group>
+                    <h4>Information To Be Added in the Certificate</h4>
+                    <group>
+                        <field string="Add Salary Rule"
+                               name="emp_salary_rule_ids" translate="1"
+                               context="{'salary_certi_emp': employee_id, 'salary_rule_ids': emp_salary_rule_ids}"
+                               attrs="{'readonly':[('state', '!=', 'draft')]}"
+                               options="{'no_open': True,'no_create': True,'no_quick_create': True,'no_create_edit': True}"
+                               widget="many2many_tags"/>
+                        <field string="Add Passport Number" translate="1"
+                               attrs="{'readonly':[('state', '!=', 'draft')]}"
+                               name="is_passport_number"/>
+                    </group>
+                    <label for="certificate_notarized_chamber_of_commerce"
+                           string="Would you like to have your certificate authenticated by chamber of commerce?"/>
+                    <field name="certificate_notarized_chamber_of_commerce"
+                           attrs="{'readonly':[('state', '!=', 'draft')]}"
+                           widget="radio" translate="1"/>
+                    <br/>
+                    <label for="hr_dept_to_notarize"
+                           string="Would you like HR Dept. to authenticate it for you?"
+                           attrs="{'invisible':[('certificate_notarized_chamber_of_commerce', '!=', 'yes')]}"/>
+                    <field name="hr_dept_to_notarize"
+                           widget="radio" translate="1"
+                           attrs="{'invisible':[('certificate_notarized_chamber_of_commerce', '!=', 'yes')], 'readonly':[('state', '!=', 'draft')]}"/>
+                    <br/>
+                    <label for="deduct_fee_from_monthly_salary"
+                           string="Deduct fees from my monthly salary?"
+                           attrs="{'invisible':['|',('hr_dept_to_notarize', '!=', 'yes'), ('certificate_notarized_chamber_of_commerce', '!=', 'yes')], 'readonly':[('state', '!=', 'draft')]}"/>
+                    <field name="deduct_fee_from_monthly_salary"
+                           widget="radio" translate="1"
+                           attrs="{'invisible':['|',('hr_dept_to_notarize', '!=', 'yes'), ('certificate_notarized_chamber_of_commerce', '!=', 'yes')], 'readonly':[('state', '!=', 'draft')]}"/>
+                    <notebook>
+                        <page string="Service Log">
+                            <field name="service_log_ids"  readonly="1">
+                                <tree>
+                                    <field name="user_id" translate="1"/>
+                                    <field name='activity_datetime' translate="1"/>
+                                    <field name='state_from' translate="1"/>
+                                    <field name='state_to' translate="1"/>
+                                    <field name='reason' translate="1"/>
+                                    <field name='salary_certificates_id'
+                                           invisible="1" translate="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- emp salary certificates tree view-->
+    <record id="emp_salary_certificates_tree_view" model="ir.ui.view">
+        <field name="name">emp.salary.certificates.tre.view</field>
+        <field name="model">emp.salary.certificates</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Employee Salary Certificates Tree">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="destination_organization_type"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Employment Certificate action -->
+    <record id="emp_salary_certificates_action" model="ir.actions.act_window">
+        <field name="name">Employment Certificate</field>
+        <field name="res_model">emp.salary.certificates</field>
+        <field name="domain">[('employee_id.user_id.id','=',uid)]</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Employment Certificate action for Payroll Process-->
+    <record id="emp_salary_certificates_action_payroll_process"
+            model="ir.actions.act_window">
+        <field name="name">Employment Certificate Payslip
+            Amendment</field>
+        <field name="res_model">emp.salary.certificates</field>
+        <field name="domain">[('payslip_amendment_id','=',False), ('state', '=', 'ready_for_printing'),('deduct_fee_from_monthly_salary', '=', 'yes')]</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--Loan Search view-->
+    <record id="salary_certificates_search_view" model="ir.ui.view">
+        <field name="name">emp.salary.certificate.search.view</field>
+        <field name="model">emp.salary.certificates</field>
+        <field name="arch" type="xml">
+            <search string="Employment Certificate">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="employee_company_id"/>
+                <field name="state"/>
+                <filter string="Pending HR Approvals"
+                        name="pending_hr_approval"
+                        domain="[('state','in',['hr_approval'])]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_employee_id" string="Employee"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_dest_type" string="Organization Type"
+                            icon="terp-go-today"
+                            domain="[]" context="{'group_by':'destination_organization_type'}"/>
+                    <filter name="group_status" string="Purpose"
+                            icon="terp-go-today"
+                            domain="[]" context="{'group_by':'other_purpose'}"/>
+                    <filter name="group_status" string="Status"
+                            icon="terp-go-today"
+                            domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Employment Certificate pending Hr Approvals-->
+    <record id="emp_salary_certificates_action_pending_hr_approvals"
+            model="ir.actions.act_window">
+        <field name="name">Employment Certificate Pending HR
+            Approvals</field>
+        <field name="res_model">emp.salary.certificates</field>
+        <field name="domain">[]</field>
+        <field name="context">
+            {'search_default_pending_hr_approval':1}
+        </field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <data noupdate="1">
+        <!-- emp.salary.certificates Sequence -->
+        <record id="emp_salary_certificates_ref" model="ir.sequence">
+            <field name="name">emp.salary.certificates</field>
+            <field name="code">emp.salary.certificates</field>
+            <field name="prefix">REF</field>
+            <field name="suffix">SC</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <!-- Company watermark image -->
+    <record model="ir.ui.view" id="res_company_watermark_field_add_form">
+        <field name="name">res.company.watermark.field.add.form</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="model">res.company</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='website']" position="after">
+                <field name="watermark_img" widget="image" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

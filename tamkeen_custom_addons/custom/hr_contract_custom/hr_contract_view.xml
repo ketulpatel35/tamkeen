@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_contract_view" model="ir.ui.view">
+            <field name="name">hr.contract.form.view.inherit.ref</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='duration_group']" position="replace">
+                    <group name="duration_group" string="Duration">
+                        <field name="trial_date_start" class="oe_inline"/>
+                        <field name="trial_date_end" class="oe_inline"/>
+                        <field name="date_start" class="oe_inline"/>
+                        <field name="date_end" class="oe_inline"/>
+                        <field name="working_hours" required="1"/>
+                    </group>
+                </xpath>
+                <field name="name" position="replace">
+                    <field name="name" />
+                </field>
+                <xpath expr="//field[@name='wage']"
+                       position="attributes">
+                    <attribute name="string">Basic Salary</attribute>
+                </xpath>
+                <xpath expr="//field[@name='wage']" position="after">
+                    <field name="gosi_wage" required="1"
+                           attrs="{'readonly': [('state','in',('close'))]}" groups="hr_contract_init.group_view_all_contracts"/>
+                    <field name="fixed_allowance" required="1"
+                           attrs="{'readonly':[('state','!=','draft')]}"/>
+                </xpath>
+                <field name="job_id" position="attributes">
+                    <attribute name="domain">[('department_id', '=', department_id)]</attribute>
+                    <attribute name="string">Position</attribute>
+                </field>
+                <field name="type_id" position="after">
+                    <field name="write_uid" readonly="1"/>
+                </field>
+                <field name="employee_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="department_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                    <attribute name="string">Organization Unit</attribute>
+                </field>
+                <field name="advantages" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="notes" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="visa_no" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="permit_no" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="visa_expire" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+                <field name="date_end" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in',('close'))]}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_contract_form_inherit" model="ir.ui.view">
+            <field name="name">hr.contract.form.view.inherit.ref.field</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_account.hr_contract_form_inherit"/>
+            <field name="arch" type="xml">
+                <field name="analytic_account_id" position="replace">
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"
+                           attrs="{'readonly': [('state','in',('close'))]}"/>
+                </field>
+                <field name="journal_id" position="replace">
+                    <field name="journal_id" attrs="{'readonly': [('state','=', 'close')]}"/>
+                </field>
+                <field name="struct_id" position="replace">
+                    <field name="struct_id" required="1" attrs="{'readonly': [('state','=', 'close')]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_contract_view_tree_inherit_for_department" model="ir.ui.view">
+            <field name="name">hr.contract.view.tree.inherit.for.department</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <field name="department_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

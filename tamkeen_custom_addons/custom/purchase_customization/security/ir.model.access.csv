@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+purchase_order_id,purchase_order,purchase.model_purchase_order,base.group_user,1,0,0,0

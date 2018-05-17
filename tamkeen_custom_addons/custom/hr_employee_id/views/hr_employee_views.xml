@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree" />
+            <field name="arch" type="xml">
+                <data>
+                    <field name="name" position="after">
+                        <field name="employee_no" invisible="1" />
+                        <field name="f_employee_no" />
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="f_no_employee_filter" model="ir.ui.view">
+            <field name="name">Employees</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="f_employee_no"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_kanban_view_employees">
+            <field name="name">HR - Employess Kanban</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.hr_kanban_view_employees" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <li>
+                        <field name="f_employee_no" />
+                    </li>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

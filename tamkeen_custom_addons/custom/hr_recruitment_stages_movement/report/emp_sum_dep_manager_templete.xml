@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="emp_sum_dep_manager_temp">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <style type="text/css">
+                                    .light-color{
+                                        background-color: lightgray;
+                                        font-weight: bold;
+                                    }
+                                    .color-hieght{
+                                        color: black;
+                                    }
+                                    table, td, tr, th {
+                                        border: 1px solid black;
+                                    }
+                                    .title{
+                                        font-size:medium;
+                                    }
+                                </style>
+                                <table class="table" width="100%"
+                                       style="font-size:13px;">
+                                    <tbody>
+                                        <tr>
+                                            <th class="text-center title"
+                                                style="background-color: black; color:white"
+                                                colspan="6">Employment Summary
+                                            </th>
+                                        </tr>
+                                        <tr style=" border:1px solid black;">
+                                            <th class="text-center light-color title"
+                                                colspan="6">
+                                                Position Information
+                                            </th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Position Title
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-if="o.job_id">
+                                                    <span t-esc="o.job_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Unit/Project
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-if="o.department_id">
+                                                    <span t-esc="o.department_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Grade
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-if="o.grade">
+                                                    <span t-esc="o.grade"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center light-color title"
+                                                colspan="6">
+                                                Candidate Information
+                                            </th>
+                                        </tr>
+                                        <tr >
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Candidate Name
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.partner_name"/>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Nationality
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-if="o.country_id">
+                                                    <span t-esc="o.country_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Maritial Status
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.marital"/>
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Education
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.type_id.name"/>
+                                            </td>
+                                            <td class="text-center"
+                                                 colspan="2">
+                                                <span t-esc="o.major.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.university"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="o.expect_grad_year"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Current Location
+                                            </td>
+                                            <td class="text-center" colspan="3">
+                                                <span t-esc="o.current_location"/>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Gender
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.gender"/>
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Date of Birth
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.date_of_birth"/>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Actual Experience
+                                            </td>
+                                            <td class="text-center"
+                                                colspan="3">
+                                                <span t-esc="'%.0f'%o.actual_experience_years"/> Y and
+                                                <span t-esc="'%.0f'%o.actual_experience_months"/> M
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Candidate Source
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="o.source_id.name"/>
+                                            </td>
+                                            <td class="light-color"
+                                                style=" color: black;">
+                                                Related Experience
+                                            </td>
+                                            <td class="text-center"
+                                                colspan="3">
+                                                <span t-esc="related_experience"/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="o.assessment_required">
+                                            <tr>
+                                                <td class="light-color"
+                                                    style=" color: black;">
+                                                    GIA Result
+                                                </td>
+                                                <td class="text-center">
+                                                    <span t-esc="'%.0f'%o.overall_gia"/>
+                                                </td>
+                                                <td class="light-color"
+                                                    style=" color: black;">
+                                                    Qeyas Result
+                                                </td>
+                                                <td class="text-center" colspan="3"
+                                                    style="height:41px; ">
+                                                    <span t-esc="'%.0f'%o.qeyas_result"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-set="get_interview_details(o)"
+                                           t-value="int_line"/>
+                                        <t t-if="int_line">
+                                            <tr>
+                                                <th class="text-center light-color title"
+                                                    colspan="6">Interview Details
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center light-color"
+                                                    width="25%">Interview
+                                                </th>
+                                                <th class="text-center light-color"
+                                                    width="25%">Interview
+                                                </th>
+                                                <th class="text-center light-color"
+                                                    width="25%">Interview Date
+                                                </th>
+                                                <th class="text-center light-color"
+                                                    width="25%" colspan="3">
+                                                    Recommendation (1-10)
+                                                </th>
+                                            </tr>
+                                            <t t-foreach="int_line"
+                                               t-as="line">
+                                                <tr>
+                                                    <td class="text-center"
+                                                        width="25%">
+                                                        <span t-esc="line.get('interview','')"/>
+                                                    </td>
+                                                    <td class="text-center"
+                                                        width="25%">
+                                                        <span t-esc="line.get('interviewer','')"/>
+                                                    </td>
+                                                    <td class="text-center"
+                                                        width="25%">
+                                                        <span t-esc="line.get('date','')"/>
+                                                    </td>
+                                                    <td class="text-center" width="25%"
+                                                        colspan="3">
+                                                        <span t-esc="line.get('recommendation','')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <tr>
+                                            <th class="text-center light-color title"
+                                                colspan="6">
+                                                Recent Benefits Details
+                                            </th>
+                                        </tr>
+                                        <t t-set="job_dict"
+                                                   t-value="get_recent_job(o.experience_ids)"/>
+                                        <tr>
+                                            <td class="light-color">
+                                                Recent Job Position
+                                            </td>
+                                            <td>
+                                                <span t-esc="job_dict.get('job','')"/>
+                                            </td>
+                                            <td class="light-color">
+                                                Recent Employer
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="job_dict.get('employer','')"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color">
+                                                Current Total Package
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.0f'%o.current_salary"/>
+                                                <b>SAR</b>
+                                            </td>
+                                            <td class="light-color">
+                                                Expected Total Package
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="'%.0f'%o.salary_expected"/>
+                                                <b>SAR</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center light-color title"
+                                                style="color: black;"
+                                                colspan="6">Proposed Benefits
+                                                Details
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Basic Salary
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.0f'%round(o.basic_salary,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Transportation
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="'%.0f'%round(o.transport_allowance,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Housing
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.0f'%round(o.housing_allowance,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                            <td class="light-color"
+                                                style="color: black;">GOSI
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="'%.0f'%round(o.gosi_salary,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Total Salary
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.0f'%round(o.salary_proposed,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                            <td class="light-color"
+                                                style="color: black;">Net
+                                                Salary
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="'%.0f'%round(o.net_salary,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Total Package
+                                            </td>
+                                            <td>
+                                                <span t-esc="'%.0f'%round(o.salary_proposed,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                            <td class="light-color"
+                                                style="color: black;">Maximum
+                                                Total Package
+                                            </td>
+                                            <td colspan="3">
+                                                <span
+                                                        t-esc="'%.0f'%round(o.maximum_salary,2)"/>
+                                                <b>SAR</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="light-color"
+                                                style="color: black;">
+                                                Contract Validation Period
+                                            </td>
+                                            <td>
+                                                One Year
+                                            </td>
+                                            <td class="light-color"
+                                                style="color: black;">Annual
+                                                Leave
+                                            </td>
+                                            <td colspan="3">
+                                                <span t-esc="'%.0f'%round(o.annual_leave_days,2)"/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="o.reference_ids">
+                                            <tr>
+                                                <th class="text-center title"
+                                                    style="background-color: black; color:white"
+                                                    colspan="6">
+                                                    Reference Check Result
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center light-color">
+                                                    Name
+                                                </th>
+                                                <th class="text-center light-color">
+                                                    Job title
+                                                </th>
+                                                <th class="text-center light-color">
+                                                    Employer
+                                                </th>
+                                                <th class="text-center light-color">
+                                                    Contacted Date
+                                                </th>
+                                                <th class="text-center light-color"
+                                                    colspan="2">Feedback
+                                                </th>
+                                            </tr>
+                                            <t t-foreach="o.reference_ids" t-as="ref_line">
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <span t-esc="ref_line.name"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="ref_line.job_title"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="ref_line.company"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="ref_line.date"/>
+                                                    </td>
+                                                    <td class="text-center" colspan="2">
+                                                        <span t-esc="ref_line.feedback"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <th class="text-center title"
+                                                    style="background-color: black; color:white"
+                                                    colspan="6">
+                                                    Reference Check Result
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center light-color">
+                                                    Approver
+                                                </th>
+                                                <th class="text-center light-color">
+                                                    Name
+                                                </th>
+                                                <th class="text-center light-color">
+                                                    Approval
+                                                </th>
+                                                <th class="text-center light-color"
+                                                    colspan="3">Date
+                                                </th>
+                                            </tr>
+                                            <t t-foreach="o.approval_logs"
+                                               t-as="app_log">
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <span t-esc="app_log.name"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="app_log.user_id.name"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-esc="app_log.approval"/>
+                                                    </td>
+                                                    <td class="text-center"
+                                                        colspan="3">
+                                                        <span t-esc="app_log.date"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+	    <record id="track_export_view_form" model="ir.ui.view">
+            <field name="name">track.export.view.form</field>
+            <field name="model">track.export</field>
+            <field name="arch" type="xml">
+                <form string="Export Log">
+                    <sheet>
+                        <group colspan="4" col="4">
+                        	<field name="user_name" colspan="2"/>
+                        </group>
+                        <group colspan="4" col="4">
+                            <separator string="Export Details" />
+                            <newline />
+                            <field name="export_datetime" colspan="2"/>
+                            <field name="exported_object" colspan="2"/>
+                        </group>
+                        <group>
+                            <field name="exported_fields" />
+                            <field name="exported_records_ids" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="track_export_view_tree" model="ir.ui.view">
+            <field name="name">track.export.view.tree</field>
+            <field name="model">track.export</field>
+            <field name="arch" type="xml">
+                <tree string="Export Logs">
+                	<field name="user_name"/>
+                    <field name="export_datetime"/>
+                    <field name="exported_object" />
+                    <field name="exported_fields" />
+                    <field name="exported_records_ids" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="track_export_view_search" model="ir.ui.view">
+            <field name="name">track.export.view.search</field>
+            <field name="model">track.export</field>
+            <field name="arch" type="xml">
+                <search string="Export Logs">
+                	<field name="user_name"/>
+                    <field name="export_datetime"/>
+                    <field name="exported_object" />
+                    <field name="exported_fields" />
+                    <field name="exported_records_ids" />
+                </search>
+            </field>
+        </record>
+
+        <record id="action_track_export" model="ir.actions.act_window">
+            <field name="name">action.track.export</field>
+            <field name="res_model">track.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="track_export_view_search"/>
+        </record>
+
+        <menuitem id="track_export_root" name="Export Data Tracking" parent="base.menu_administration"/>
+
+        <menuitem id="menu_track_export" name="Export Logs" sequence="7" parent="track_export_root" action="action_track_export"/>
+		
+
+	</data>
+</odoo>

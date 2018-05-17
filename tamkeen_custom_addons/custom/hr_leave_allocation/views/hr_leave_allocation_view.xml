@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_leave_allocation_tree_view" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.tree.view</field>
+        <field name="model">hr.leave.allocation.batch</field>
+        <field name="arch" type="xml">
+            <tree string="HR Leave Allocation">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="leave_type_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_leave_allocation_form_view" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.view</field>
+        <field name="model">hr.leave.allocation.batch</field>
+        <field name="arch" type="xml">
+            <form string="HR Leave Allocation">
+                <header>
+                    <button name="%(action_hr_allocation_by_employees)d"
+                            string="Generate Allocation" type="action"
+                            class="oe_highlight" states="draft"/>
+                    <button name="allocation_confirmed" string="Confirm"
+                            type="object" class="oe_highlight"
+                            states="draft"/>
+                    <button name="allocation_approved" string="Approve"
+                            type="object" class="oe_highlight"
+                            states="confirm"/>
+                    <button name="reset_to_draft" string="Reset To Draft"
+                            type="object" class="oe_highlight"
+                            states="confirm,approved"/>
+                    <button name="allocation_close" string="Close"
+                            type="object"
+                            states="confirmed,approved"/>
+                    <button name="allocation_cancel" string="Cancel"
+                            type="object" states="confirm,approved"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" placeholder="Name..."
+                               attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                    </h1>
+                    <group colspan="4" col="4">
+                        <field name="date_start" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="date_end" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="leave_type_id"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                        <field name="skip_previous_period_allocation"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                    </group>
+                    <group colspn="4" col="4">
+                        <field name="allocation_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="allocation_days"
+                               attrs="{'invisible': [('allocation_type', 'not in', ('manual','adjustment'))], 'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="company_id" invisible="1"/>
+                    </group>
+                    <group colspan="2" col="2" string="Allocation Requests">
+                        <field name="holidays_ids" nolabel="1">
+                            <tree string="Allocation Requests"
+                                  editable="bottom" create="false"
+                                  edit="false" delete="true">
+                                <field name="employee_id"/>
+                                <field name="holiday_status_id"/>
+                                <field name="name"/>
+                                <field name="number_of_days_temp"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_leave_allocation_batch"
+            model="ir.actions.act_window">
+        <field name="name">HR Leave Allocation Batch</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.leave.allocation.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
+

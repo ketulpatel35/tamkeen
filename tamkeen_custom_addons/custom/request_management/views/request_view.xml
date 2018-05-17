@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_request_tree" model="ir.ui.view">
+            <field name="name">request.tree</field>
+            <field name="model">request.general</field>
+            <field name="arch" type="xml">
+                <tree string="Request">
+                    <field name="name" />
+                    <field name="request_number"/>
+                    <field name="employee_id" />
+                    <field name="department_id"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_request_form" model="ir.ui.view">
+            <field name="name">request.form</field>
+            <field name="model">request.general</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Request" >
+                    <header>
+                        <button name="request_confirm" states="draft" type="object" string="Submit for approval" class="oe_highlight"/>
+                        <button name="request_accept" states="dappr" type="object" string="Approve" groups="request_management.group_request_manager" class="oe_highlight"/>
+                        <button name="request_accept2" states="hrappr" type="object" string="Approve" groups="hr.group_hr_user" class="oe_highlight"/>
+                        <button name="request_canceled" states="dappr" type="object" string="Refuse" groups="request_management.group_request_manager" />
+                        <button name="set_to_draft" type="object" states="cancelled,hrappr,accepted" string="Set to Draft" groups="hr.group_hr_user" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,dappr,accepted" statusbar_colors='{"dappr":"blue","hrappr":"blue","refuse":"red"}' readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4">
+                            <field name="request_number" readonly="1"/>
+                        </group>
+                        <group colspan="4">
+                            <field name="name" options="{'limit': 7, 'create': false, 'create_edit': false}" required="1" attrs="{'readonly': [('state','not in',('draft', 'confirm'))]}"/>
+                            <field name="employee_id" groups="hr.group_hr_user" required="1" attrs="{'readonly': [('state','not in',('draft', 'confirm'))]}"/>
+                            <field name="department_id" groups="hr.group_hr_user" readonly="1"/>
+                            <field name="description" placeholder="Please, provide us more details about your request." attrs="{'readonly': [('state','not in',('draft', 'confirm'))]}"/>
+                        </group>
+                        <group colspan="4" >
+                            <field name="date" required="1" attrs="{'readonly': [('state','not in',('draft', 'confirm'))]}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_request_search" model="ir.ui.view">
+            <field name="name">request.search</field>
+            <field name="model">request.general</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <search string="model">
+                    <filter icon="terp-go-today" string="Current Month Requests" name="currentmonth" domain="[('date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00')),('date','&lt;=', time.strftime('%%Y-%%m-31 00:00:00'))]" help="Filter past groups" />
+                    <field name="name" />
+                    <newline />
+                    <group expand="0" string="Group By...">
+                        <filter string="Employee" domain="[]"
+                                context="{'group_by':'employee_id'}" />
+                        <filter string="Department" domain="[]"
+                                context="{'group_by':'department_id'}" />
+                        <filter string="Date" domain="[]"
+                                context="{'group_by':'date'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_request_search" model="ir.ui.view">
+            <field name="name">view.request.search</field>
+            <field name="model">request.general</field>
+            <field name="arch" type="xml">
+                <search string="General Request">
+                    <field name="name" string="Tasks"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="request_all" model="ir.actions.act_window">
+            <field name="name">Services Requests</field>
+            <field name="res_model">request.general</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="view_request_search"/>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new request.
+                </p><p>
+                OPENINSIDE Requests Manager allows the employees to create requests
+                and the managers to approve them.
+            </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.sequence" id="proposal_sequence">
+            <field name="name">CRM Proposal Seuqnce</field>
+            <field name="code">crm.proposal</field>
+            <field name="prefix">RFxRS</field>
+            <field name="padding" eval="7"></field>
+        </record>    
+    </data>
+</odoo>

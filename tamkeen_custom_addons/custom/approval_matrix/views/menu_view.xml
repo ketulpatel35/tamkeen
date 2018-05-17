@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Approval matrix root menus -->
+    <menuitem id="root_menu_approval_matrix"
+              name="Approval Matrix"
+              sequence="200"
+              web_icon="approval_matrix,static/description/icon.png"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+
+    <!-- main menu Approval matrix -->
+    <menuitem id="menu_approval_matrix"
+              name="Approval Matrix"
+              parent="root_menu_approval_matrix"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+
+    <!-- sub menu Approval matrix -->
+    <menuitem id="menu_dam_level_conf" name="Approval Level"
+              action="dam_level_action" parent="menu_approval_matrix"
+              sequence="2"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+    <menuitem id="menu_dam_temp_conf" name="Approval Template"
+              action="dam_conf_action" parent="menu_approval_matrix"
+              sequence="1"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+
+    <!-- main menu approval matrix delegation -->
+    <menuitem id="menu_approval_matrix_delegation"
+              name="Approval Delegation"
+              parent="root_menu_approval_matrix"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+    <menuitem id="menu_dam_history_conf" name="Delegation Records"
+              action="dam_conf_history_action" sequence="1"
+              parent="menu_approval_matrix_delegation"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+    <menuitem id="menu_set_delegate_user" name="Set Delegate Users"
+              action="set_delegate_user_action" sequence="2"
+              parent="menu_approval_matrix_delegation"
+              groups="approval_matrix.group_approval_matrix_administrator"/>
+
+    <!-- Menu for Admin Only -->
+    <menuitem id="dam_conf_main_menu" parent="base.menu_workflow_root"
+              name="Approval Matrix" sequence="1"/>
+
+    <menuitem id="dam_level_sub_menu" parent="dam_conf_main_menu"
+              name="Approval Level" sequence="1"
+              action="dam_level_action"/>
+
+    <menuitem id="dam_conf_sub_menu" name="Approval Template"
+              action="dam_conf_action" parent="dam_conf_main_menu"
+              sequence="2"/>
+
+    <menuitem id="dam_conf_history_menu" name="Approval Delegation"
+              action="dam_conf_history_action" parent="dam_conf_main_menu"
+              sequence="3"/>
+
+    <menuitem id="set_delegate_user_menu" name="Set Delegated User"
+              action="set_delegate_user_action" parent="dam_conf_main_menu"
+              sequence="4"/>
+
+</odoo>

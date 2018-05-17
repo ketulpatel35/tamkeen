@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="service_panel_displayed_states_form" model="ir.ui.view">
+            <field name="name">service.panel.displayed.states.form</field>
+            <field name="model">service.panel.displayed.states</field>
+            <field name="arch" type="xml">
+                <form string="Stages">
+                    <group>
+                        <group>
+                            <field name="model_id"
+                                   attrs="{'readonly': [('is_model_found','=',True)]}"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="is_model_found" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="case_default"/>
+                            <field name="wkf_state"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_service_panel_displayed_states_tree"
+                model="ir.ui.view">
+            <field name="name">service.panel.displayed.states</field>
+            <field name="model">service.panel.displayed.states</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Stages">
+                    <field name="name"/>
+                    <field name="wkf_state"/>
+                    <field name="sequence"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="service_panel_displayed_states_search_view"
+                model="ir.ui.view">
+            <field name="name">service.panel.displayed.states.search.view</field>
+            <field name="model">service.panel.displayed.states</field>
+            <field name="arch" type="xml">
+                <search string="Stages">
+                    <field name="name"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_model_id" string="Add-on"
+                                context="{'group_by':'model_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window"
+                id="act_open_service_panel_displayed_states_view">
+            <field name="name">Stages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.panel.displayed.states</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_model_id': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new stage.
+                </p>
+                <p>
+                    Press create button to create a new stage.
+                </p>
+            </field>
+        </record>
+
+        <!--  -->
+        <record id="service_configuration_panel_tree" model="ir.ui.view">
+            <field name="name">service.configuration.panel.tree</field>
+            <field name="model">service.configuration.panel</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Service Configuration Panel">
+                    <field name="name"/>
+                    <field name="sla_period"/>
+                    <field name="sla_period_unit"/>
+                    <field name="display_sequence"/>
+                </tree>
+            </field>
+        </record>
+        <record id="service_configuration_panel_form" model="ir.ui.view">
+            <field name="name">service.configuration.panel.form</field>
+            <field name="model">service.configuration.panel</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Service Type">
+                    <sheet>
+                        <group>
+                            <field name="model_id"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="about_service" widget="html"/>
+                        </group>
+                        <group colspan="4" col="4">
+                            <field name="valid_from_date"/>
+                            <field name="valid_to_date"/>
+                        </group>
+                        <notebook>
+                            <page string="Approvals">
+                                <group colspan="4">
+                                    <field name="states_to_display_ids"
+                                           widget="many2many_tags"
+                                           domain="[('model_id', '=', model_id)]" context="{'default_model_id': model_id}"/>
+                                </group>
+                                <group colspan="4" col="4">
+                                    <group colspan="2" col="2">
+                                        <separator string="Approvals"/><br/>
+                                        <field name="mngr_approval"/>
+                                        <field name="vp_approval"/>
+                                        <field name="administration_approval"/>
+                                        <field name="administration_email"/>
+                                        <field name="hr_approval"/>
+                                        <field name="hr_email"/>
+                                        <field name="finance_approval"/>
+                                        <field name="finance_email"/>
+                                        <field name="budget_approval"/>
+                                        <field name="budget_email"/>
+                                        <field name="procurement_approval"/>
+                                        <field name="procurement_email"/>
+                                        <field name="ceo_approval"/>
+                                    </group>
+                                    <group/>
+                                </group>
+                            </page>
+                            <page string="Service SLA">
+                                <group>
+                                    <separator string="Service Category/SLA"/>
+                                    <br/>
+                                    <!--<field name="service_provider" colspan="2"/>-->
+                                    <!--<field name="service_category_id" colspan="2"/>-->
+                                    <field name="sla_period"/>
+                                    <field name="sla_period_unit"
+                                           attrs="{'required': [('sla_period','!=', 0)]}"/>
+                                </group>
+                            </page>
+
+                            <page string="Controllers">
+                                <group string="Restrictions" invisible="1">
+                                    <group>
+                                        <field name="employee_role"
+                                               colspan="2"/>
+                                        <!--<field name="group_id" colspan="2"/>-->
+                                    </group>
+                                    <group>
+                                        <field name="gender" colspan="2"/>
+                                    </group>
+                                    <group>
+                                        <field name="nationality" colspan="2"/>
+                                    </group>
+                                </group>
+                                <separator string="Controllers"/>
+                                <group colspan="6" col="6">
+                                    <group col="2" colspan="2">
+                                        <field name="attachment_mandatory"/>
+                                        <field name="priority_required"
+                                               invisible="1"/>
+                                        <field name="details_required" invisible="1"/>
+                                        <field name="file_to_fill"/>
+                                    </group>
+                                    <group col="2" colspan="2">
+                                        <field name="quantity_required" invisible="1"/>
+                                        <field name="request_max_quantity"
+                                               attrs="{'invisible': [('quantity_required','=', False)]}" invisible="1"/>
+                                    </group>
+                                    <group col="2" colspan="2">
+                                        <field name="approval_reminder_line"/>
+                                        <field name="display_sequence"/>
+                                        <field name="active"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Endorsement">
+                                <group>
+                                    <field name="endorsement_required"/>
+                                    <field name="endorsement_text"
+                                           widget="html"
+                                           attrs="{'invisible': [('endorsement_required','=', False)],'required': [('endorsement_required','=', True)]}"/>
+                                </group>
+                            </page>
+                            <page string="Extra">
+                                <group colspan="4" col="4">
+                                    <field name="parent_id"/>
+                                    <field name="company_id"/>
+                                    <field name="tz"/>
+                                    <field name="reply_email"/>
+                                    <field name="payroll_run_day"/>
+                                </group>
+                                <group>
+                                    <field name="submit_message" widget="html"/>
+                                </group>
+                            </page>
+                            <page string="Service Proofs">
+                                <group>
+                                    <field name="proof_required"/>
+                                </group>
+                                <field name="service_proof_ids" nolabel="1"
+                                       context="{'model_id': model_id}"
+                                       attrs="{'invisible': [('proof_required', '=', False)]}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="mandatory"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"
+                                   widget="mail_followers"
+                                   groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_service_configuration_panels_search"
+                model="ir.ui.view">
+            <field name="name">service.configuration.panel.search</field>
+            <field name="model">service.configuration.panel</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <search string="Service Type">
+                    <field name="name"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_model_id" string="Add-on"
+                                context="{'group_by':'model_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="act_open_service_configuration_panels_view">
+            <field name="name">Service Congifuration Panel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.configuration.panel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'search_default_group_model_id': 1}</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new service.
+                </p>
+                <p>
+                    Press create button to create a new service.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

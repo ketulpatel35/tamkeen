@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hr_attendance.access_hr_attendance_system_user,hr.attendance.system.user,hr_attendance.model_hr_attendance,hr_attendance_customization.group_hr_normal_user,1,0,0,0
+access_hr_attendance_system_view_all,hr.attendance.system.user.view.all,hr_attendance.model_hr_attendance,hr_attendance_customization.group_hr_attendance_view_all,1,0,0,0
+access_attendance_report_config_normal_user,access.attendance.report.config.normal.user,model_attendance_report_config,hr_attendance_customization.group_hr_normal_user,1,0,0,0
+access_hr_attendance_system_update_all,hr.attendance.system.user.update.all,hr_attendance.model_hr_attendance,hr_attendance_customization.group_hr_attendance_update_all,1,1,0,0
+access_attendance_report_config,access.attendance.report.config.configuration,model_attendance_report_config,hr_attendance_customization.group_hr_attendance_configuration,1,1,1,1
+access_attendance_manual_attendance,access.attendance.manual.attendance,hr_attendance.model_hr_attendance,hr.group_hr_attendance,1,1,1,0
+
+hr_attendance.access_hr_attendance_user,hr.attendance.user,hr_attendance.model_hr_attendance,hr_attendance.group_hr_attendance_user,1,1,0,1

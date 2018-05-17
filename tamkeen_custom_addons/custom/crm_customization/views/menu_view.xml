@@ -1,0 +1,36 @@
+<odoo>
+    <menuitem groups="crm_customization.group_all_opportunity"
+              action="crm.action_your_pipeline"
+              id="view_all_opportunity"
+              sequence="10" name="Opportunity"/>
+
+    <menuitem id="menu_pre_sales" sequence="4" name="Pre-Sales"
+              parent="sales_team.menu_base_partner"/>
+
+    <record id="crm.menu_crm_leads" model="ir.ui.menu">
+        <field name="parent_id"
+               ref="menu_pre_sales"/>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="sales_team.menu_partner_form" model="ir.ui.menu">
+        <field name="parent_id"
+               ref="sales_team.menu_base_partner"/>
+        <field name="groups_id" eval="[
+        (4, ref('res_partner_extension.group_all_partner'))
+        ]"/>
+        <field name="sequence">3</field>
+    </record>
+    <record id="crm.crm_lead_menu_activities" model="ir.ui.menu">
+        <field name="parent_id"
+               ref="menu_pre_sales"/>
+        <field name="sequence">10</field>
+    </record>
+    <record id="crm.menu_crm_opportunities" model="ir.ui.menu">
+        <field name="name">Opportunity</field>
+        <field name="parent_id"
+               ref="menu_pre_sales"/>
+    </record>
+    <!--<menuitem id="menu_qualification" sequence="1" name="Qualification"-->
+              <!--parent="menu_pre_sales"/>-->
+</odoo> 

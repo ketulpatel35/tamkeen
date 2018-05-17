@@ -1,0 +1,2 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+hr.access_hr_department_user,hr.department.user,hr.model_hr_department,hr_department_extension.group_departments_master,1,1,1,1
